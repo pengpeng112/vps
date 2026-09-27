@@ -1,0 +1,183 @@
+# 路由器管理台订阅黄金模板
+# 提取自 scripts/clash-config-router.yaml（2026-09-13 版），已删除全部节点凭据
+# 与静态节点引用。策略基线见任务书 §3：rules/dns/proxy-groups 顺序不得改乱。
+# 渲染器只允许替换 #{{...}} 标记行：节点列表、节点组成员、节点/管理面直连规则。
+mixed-port: 7890
+redir-port: 7892
+allow-lan: true
+bind-address: "*"
+mode: rule
+log-level: info
+ipv6: false
+unified-delay: true
+tcp-concurrent: true
+keep-alive-interval: 15
+find-process-mode: off
+external-controller: 127.0.0.1:9090
+
+profile:
+  store-selected: true
+  store-fake-ip: true
+
+sniffer:
+  enable: true
+  parse-pure-ip: true
+  override-destination: false
+  sniff:
+    HTTP:
+      ports: [80, 8080-8880]
+    TLS:
+      ports: [443, 8443]
+
+dns:
+  enable: true
+  listen: 0.0.0.0:1053
+  ipv6: false
+  enhanced-mode: fake-ip
+  fake-ip-range: 198.18.0.1/16
+  fake-ip-filter:
+    - "*.lan"
+    - "*.local"
+    - localhost
+    - "+.msftconnecttest.com"
+    - "+.msftncsi.com"
+    - "time.*.com"
+    - "ntp.*.com"
+    - "stun.*.*"
+  default-nameserver:
+    - 223.5.5.5
+    - 119.29.29.29
+  nameserver:
+    - https://doh.pub/dns-query
+    - https://dns.alidns.com/dns-query
+  fallback:
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+  fallback-filter:
+    geoip: true
+    geoip-code: CN
+    ipcidr:
+      - 240.0.0.0/4
+    domain:
+      - "+.google.com"
+      - "+.googleapis.com"
+      - "+.gstatic.com"
+      - "+.youtube.com"
+      - "+.github.com"
+      - "+.telegram.org"
+  proxy-server-nameserver:
+    - 223.5.5.5
+    - 8.8.8.8
+  nameserver-policy:
+    "geosite:cn,private":
+      - https://doh.pub/dns-query
+      - https://dns.alidns.com/dns-query
+
+proxies:
+#{{NODE_PROXIES}}
+
+proxy-groups:
+  - name: "PROXY"
+    type: select
+    proxies:
+      - AUTO
+#{{GROUP_PROXY_MEMBERS}}
+      - DIRECT
+  # AUTO = 容灾（2026-09-25）：正常经 NODE-PICK（节点择优），节点全部失活时回落 DIRECT
+  # （国外流量直连兜底；国内流量本就直连不受影响）。健康检查 URL 必须两条路径都可达：
+  # 经节点（Apple 海外边缘）与直连（Apple 在华可达）。
+  - name: "AUTO"
+    type: fallback
+    url: http://captive.apple.com/hotspot-detect.html
+    interval: 300
+    proxies:
+      - NODE-PICK
+      - DIRECT
+  # NODE-PICK = 节点主备（2026-09-27 M03：url-test 改为有序 fallback）：
+  # fallback 按成员顺序取第一个健康节点——主用腾讯（晚高峰丢包 <1%）、备用 DO
+  # （历史晚高峰 ICMP 丢包 20—24%，但 HTTP 仍偶通，url-test 按延迟会一直选它）。
+  # 成员顺序由绑定关系渲染（primary 在前）；简单 fallback 无外部质量控制器的
+  # 防抖/评分能力，边界与限制见 docs/plans 网络计划 §6.1。
+  - name: "NODE-PICK"
+    type: fallback
+    url: https://www.gstatic.com/generate_204
+    interval: 300
+    proxies:
+#{{GROUP_AUTO_MEMBERS}}
+  - name: "CN-MEDIA"
+    type: select
+    proxies:
+      - DIRECT
+  - name: "DOWNLOAD"
+    type: select
+    proxies:
+      - DIRECT
+      - PROXY
+
+rules:
+#{{NODE_DIRECT_RULES}}
+  - GEOIP,private,DIRECT,no-resolve
+  - IP-CIDR,192.168.0.0/16,DIRECT,no-resolve
+  - IP-CIDR,10.0.0.0/8,DIRECT,no-resolve
+  - IP-CIDR,172.16.0.0/12,DIRECT,no-resolve
+  - IP-CIDR,100.64.0.0/10,DIRECT,no-resolve
+  - IP-CIDR,169.254.0.0/16,DIRECT,no-resolve
+  - IP-CIDR6,fc00::/7,DIRECT,no-resolve
+  - IP-CIDR6,fe80::/10,DIRECT,no-resolve
+  - GEOSITE,private,DIRECT
+
+  # 国内视频/短视频/直播 —— 禁止走节点
+  - GEOSITE,bilibili,CN-MEDIA
+  - GEOSITE,iqiyi,CN-MEDIA
+  - GEOSITE,youku,CN-MEDIA
+  - GEOSITE,bytedance,CN-MEDIA
+  - DOMAIN-SUFFIX,bilivideo.com,CN-MEDIA
+  - DOMAIN-SUFFIX,hdslb.com,CN-MEDIA
+  - DOMAIN-SUFFIX,iqiyi.com,CN-MEDIA
+  - DOMAIN-SUFFIX,iqiyipic.com,CN-MEDIA
+  - DOMAIN-SUFFIX,youku.com,CN-MEDIA
+  - DOMAIN-SUFFIX,ykimg.com,CN-MEDIA
+  - DOMAIN-SUFFIX,v.qq.com,CN-MEDIA
+  - DOMAIN-SUFFIX,video.qq.com,CN-MEDIA
+  - DOMAIN-SUFFIX,mgtv.com,CN-MEDIA
+  - DOMAIN-SUFFIX,hitv.com,CN-MEDIA
+  - DOMAIN-SUFFIX,douyin.com,CN-MEDIA
+  - DOMAIN-SUFFIX,douyinvod.com,CN-MEDIA
+  - DOMAIN-SUFFIX,amemv.com,CN-MEDIA
+  - DOMAIN-SUFFIX,byteimg.com,CN-MEDIA
+  - DOMAIN-SUFFIX,ixigua.com,CN-MEDIA
+  - DOMAIN-SUFFIX,kuaishou.com,CN-MEDIA
+  - DOMAIN-SUFFIX,yximgs.com,CN-MEDIA
+  - DOMAIN-SUFFIX,xiaohongshu.com,CN-MEDIA
+  - DOMAIN-SUFFIX,xhscdn.com,CN-MEDIA
+
+  # 国内互联网
+  - GEOSITE,tencent,DIRECT
+  - GEOSITE,alibaba,DIRECT
+  - GEOSITE,baidu,DIRECT
+  - GEOSITE,netease,DIRECT
+  - GEOSITE,xiaomi,DIRECT
+  - GEOSITE,apple-cn,DIRECT
+  # gstatic 资源域：google-cn 名单把它判 DIRECT，但办公网下 mihomo DNS fallback
+  # 可能给出境外不可达答案（09-27 实测 SN-R1 得 142.251.12.94 直连超时），
+  # 强制走 PROXY 且必须先于 GEOSITE,google-cn 命中（统一优化 M02）
+  - DOMAIN-SUFFIX,gstatic.com,PROXY
+  - GEOSITE,google-cn,DIRECT
+  - GEOSITE,category-games@cn,DIRECT
+  - GEOSITE,cn,DIRECT
+  - GEOIP,CN,DIRECT,no-resolve
+  # 专线/内网业务域名：公网 geosite 清单不收录，GEOIP,no-resolve 对域名不生效，
+  # 不显式直连会落入 MATCH,PROXY 出国回访内网端口被拒（2026-09-26 ydbi.sdent.com.cn:29080 案例）
+  - DOMAIN-SUFFIX,sdent.com.cn,DIRECT
+
+  # 大流量下载默认直连（省钱）；商店打不开再把 DOWNLOAD 切到 PROXY
+  - DOMAIN-SUFFIX,steamcontent.com,DOWNLOAD
+  - DOMAIN-SUFFIX,steamserver.net,DOWNLOAD
+  - DOMAIN-KEYWORD,steampipe,DOWNLOAD
+  - DOMAIN-SUFFIX,windowsupdate.com,DOWNLOAD
+  - DOMAIN-SUFFIX,update.microsoft.com,DOWNLOAD
+  - DOMAIN-SUFFIX,dl.delivery.mp.microsoft.com,DOWNLOAD
+  - DOMAIN-SUFFIX,swcdn.apple.com,DOWNLOAD
+
+  - AND,((NETWORK,UDP),(DST-PORT,443)),REJECT
+  - MATCH,PROXY

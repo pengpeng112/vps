@@ -1,0 +1,2891 @@
+{
+	"action": {
+		"type": "firstchild"
+	},
+	"children": {
+		"admin": {
+			"satisfied": true,
+			"children": {
+				"system": {
+					"satisfied": true,
+					"children": {
+						"argon-config": {
+							"satisfied": true,
+							"action": {
+								"type": "view",
+								"path": "argon-config"
+							},
+							"depends": {
+								"acl": [
+									"luci-app-argon-config"
+								],
+								"uci": {
+									"argon": true
+								}
+							},
+							"order": 90,
+							"title": "Argon Config"
+						},
+						"autoreboot": {
+							"satisfied": true,
+							"action": {
+								"type": "view",
+								"path": "autoreboot"
+							},
+							"depends": {
+								"acl": [
+									"luci-app-autoreboot"
+								],
+								"uci": {
+									"autoreboot": true
+								}
+							},
+							"order": 88,
+							"title": "Scheduled Reboot"
+						},
+						"package-manager": {
+							"satisfied": true,
+							"action": {
+								"type": "view",
+								"path": "package-manager"
+							},
+							"depends": {
+								"acl": [
+									"luci-app-package-manager"
+								]
+							},
+							"order": 30,
+							"title": "Software"
+						},
+						"quickfile": {
+							"satisfied": true,
+							"action": {
+								"type": "view",
+								"path": "system/quickfile"
+							},
+							"depends": {
+								"acl": [
+									"luci-app-quickfile"
+								]
+							},
+							"order": 80,
+							"title": "Quick File Manager",
+							"readonly": true
+						},
+						"ttyd": {
+							"satisfied": true,
+							"action": {
+								"type": "firstchild"
+							},
+							"depends": {
+								"acl": [
+									"luci-app-ttyd"
+								],
+								"uci": {
+									"ttyd": true
+								}
+							},
+							"title": "Terminal",
+							"children": {
+								"ttyd": {
+									"satisfied": true,
+									"action": {
+										"type": "view",
+										"path": "ttyd/term"
+									},
+									"order": 1,
+									"title": "Terminal"
+								},
+								"config": {
+									"satisfied": true,
+									"action": {
+										"type": "view",
+										"path": "ttyd/config"
+									},
+									"order": 2,
+									"title": "Config"
+								}
+							}
+						},
+						"system": {
+							"satisfied": true,
+							"action": {
+								"type": "view",
+								"path": "system/system"
+							},
+							"depends": {
+								"acl": [
+									"luci-mod-system-config"
+								]
+							},
+							"order": 1,
+							"title": "System"
+						},
+						"admin": {
+							"satisfied": true,
+							"action": {
+								"type": "firstchild"
+							},
+							"depends": {
+								"acl": [
+									"luci-mod-system-config",
+									"luci-mod-system-ssh"
+								]
+							},
+							"order": 2,
+							"title": "Administration",
+							"children": {
+								"password": {
+									"satisfied": true,
+									"action": {
+										"type": "view",
+										"path": "system/password"
+									},
+									"depends": {
+										"acl": [
+											"luci-mod-system-config"
+										]
+									},
+									"order": 1,
+									"title": "Router Password"
+								},
+								"dropbear": {
+									"satisfied": true,
+									"action": {
+										"type": "view",
+										"path": "system/dropbear"
+									},
+									"depends": {
+										"acl": [
+											"luci-mod-system-ssh"
+										],
+										"fs": {
+											"/usr/sbin/dropbear": "executable"
+										}
+									},
+									"order": 2,
+									"title": "SSH Access"
+								},
+								"sshkeys": {
+									"satisfied": true,
+									"action": {
+										"type": "view",
+										"path": "system/sshkeys"
+									},
+									"depends": {
+										"acl": [
+											"luci-mod-system-ssh"
+										],
+										"fs": {
+											"/usr/sbin/dropbear": "executable"
+										}
+									},
+									"order": 3,
+									"title": "SSH-Keys"
+								},
+								"uhttpd": {
+									"satisfied": false,
+									"action": {
+										"type": "view",
+										"path": "system/uhttpd"
+									},
+									"depends": {
+										"acl": [
+											"luci-mod-system-uhttpd"
+										],
+										"fs": {
+											"/usr/sbin/uhttpd": "executable"
+										}
+									},
+									"order": 4,
+									"title": "HTTP(S) Access"
+								},
+								"repokeys": {
+									"satisfied": true,
+									"action": {
+										"type": "view",
+										"path": "system/repokeys"
+									},
+									"depends": {
+										"acl": [
+											"luci-mod-system-repokeys"
+										]
+									},
+									"order": 5,
+									"title": "Repo Public Keys"
+								}
+							}
+						},
+						"startup": {
+							"satisfied": true,
+							"action": {
+								"type": "view",
+								"path": "system/startup"
+							},
+							"depends": {
+								"acl": [
+									"luci-mod-system-init"
+								]
+							},
+							"order": 45,
+							"title": "Startup"
+						},
+						"crontab": {
+							"satisfied": true,
+							"action": {
+								"type": "view",
+								"path": "system/crontab"
+							},
+							"depends": {
+								"acl": [
+									"luci-mod-system-cron"
+								]
+							},
+							"order": 46,
+							"title": "Scheduled Tasks"
+						},
+						"mounts": {
+							"satisfied": false,
+							"action": {
+								"type": "view",
+								"path": "system/mounts"
+							},
+							"depends": {
+								"acl": [
+									"luci-mod-system-mounts"
+								],
+								"fs": {
+									"/sbin/block": "executable"
+								}
+							},
+							"order": 50,
+							"title": "Mount Points"
+						},
+						"leds": {
+							"satisfied": true,
+							"action": {
+								"type": "view",
+								"path": "system/leds"
+							},
+							"depends": {
+								"acl": [
+									"luci-mod-system-config"
+								],
+								"fs": {
+									"/sys/class/leds": "directory"
+								}
+							},
+							"order": 60,
+							"title": "LED Configuration"
+						},
+						"flash": {
+							"satisfied": true,
+							"action": {
+								"type": "view",
+								"path": "system/flash"
+							},
+							"depends": {
+								"acl": [
+									"luci-mod-system-flash"
+								]
+							},
+							"order": 70,
+							"title": "Backup / Flash Firmware"
+						},
+						"reboot": {
+							"satisfied": true,
+							"action": {
+								"type": "view",
+								"path": "system/reboot"
+							},
+							"depends": {
+								"acl": [
+									"luci-mod-system-reboot"
+								]
+							},
+							"order": 90,
+							"title": "Reboot"
+						},
+						"athena_led": {
+							"satisfied": true,
+							"action": {
+								"type": "firstchild"
+							},
+							"order": 80,
+							"title": "Athena LED Ctrl",
+							"children": {
+								"general": {
+									"satisfied": true,
+									"action": {
+										"module": "luci.dispatcher",
+										"type": "call",
+										"post": {
+											"cbi.submit": true
+										},
+										"function": "invoke_cbi_action",
+										"parameters": [
+											"athena_led/settings",
+											{
+											}
+										]
+									},
+									"order": 1,
+									"title": "Base Setting"
+								},
+								"status": {
+									"satisfied": true,
+									"action": {
+										"module": "luci.controller.athena_led",
+										"type": "call",
+										"function": "act_status"
+									}
+								}
+							}
+						},
+						"diskman": {
+							"satisfied": true,
+							"children": {
+								"mk_p_table": {
+									"satisfied": true,
+									"action": {
+										"module": "luci.controller.diskman",
+										"type": "call",
+										"function": "mk_p_table"
+									},
+									"wildcard": true
+								},
+								"smartdetail": {
+									"satisfied": true,
+									"action": {
+										"module": "luci.controller.diskman",
+										"type": "call",
+										"function": "smart_detail"
+									},
+									"wildcard": true
+								},
+								"smartattr": {
+									"satisfied": true,
+									"action": {
+										"module": "luci.controller.diskman",
+										"type": "call",
+										"function": "smart_attr"
+									},
+									"wildcard": true
+								},
+								"get_disk_info": {
+									"satisfied": true,
+									"action": {
+										"module": "luci.controller.diskman",
+										"type": "call",
+										"function": "get_disk_info"
+									},
+									"wildcard": true
+								},
+								"btrfs": {
+									"satisfied": true,
+									"action": {
+										"module": "luci.dispatcher",
+										"type": "call",
+										"post": {
+											"cbi.submit": true
+										},
+										"function": "invoke_form_action",
+										"parameters": [
+											"diskman/btrfs"
+										]
+									},
+									"wildcard": true
+								},
+								"partition": {
+									"satisfied": true,
+									"action": {
+										"module": "luci.dispatcher",
+										"type": "call",
+										"post": {
+											"cbi.submit": true
+										},
+										"function": "invoke_form_action",
+										"parameters": [
+											"diskman/partition"
+										]
+									},
+									"wildcard": true
+								},
+								"format_partition": {
+									"satisfied": true,
+									"action": {
+										"module": "luci.controller.diskman",
+										"type": "call",
+										"function": "format_partition"
+									},
+									"wildcard": true
+								},
+								"disks": {
+									"satisfied": true,
+									"action": {
+										"module": "luci.dispatcher",
+										"type": "call",
+										"post": {
+											"cbi.submit": true
+										},
+										"function": "invoke_form_action",
+										"parameters": [
+											"diskman/disks"
+										]
+									},
+									"wildcard": true
+								}
+							},
+							"action": {
+								"path": "admin/system/diskman/disks",
+								"type": "alias"
+							},
+							"order": 55,
+							"title": "Disk Man"
+						}
+					},
+					"action": {
+						"type": "firstchild",
+						"preferred": "system",
+						"recurse": true
+					},
+					"order": 20,
+					"title": "System"
+				},
+				"network": {
+					"satisfied": true,
+					"children": {
+						"firewall": {
+							"satisfied": true,
+							"action": {
+								"type": "alias",
+								"path": "admin/network/firewall/zones"
+							},
+							"depends": {
+								"acl": [
+									"luci-app-firewall"
+								],
+								"fs": {
+									"/sbin/fw3": "executable"
+								},
+								"uci": {
+									"firewall": true
+								}
+							},
+							"order": 60,
+							"title": "Firewall",
+							"children": {
+								"zones": {
+									"satisfied": true,
+									"action": {
+										"type": "view",
+										"path": "firewall/zones"
+									},
+									"order": 10,
+									"title": "General Settings"
+								},
+								"forwards": {
+									"satisfied": true,
+									"action": {
+										"type": "view",
+										"path": "firewall/forwards"
+									},
+									"order": 20,
+									"title": "Port Forwards"
+								},
+								"rules": {
+									"satisfied": true,
+									"action": {
+										"type": "view",
+										"path": "firewall/rules"
+									},
+									"order": 30,
+									"title": "Traffic Rules"
+								},
+								"snats": {
+									"satisfied": true,
+									"action": {
+										"type": "view",
+										"path": "firewall/snats"
+									},
+									"order": 40,
+									"title": "NAT Rules"
+								},
+								"ipsets": {
+									"satisfied": true,
+									"action": {
+										"type": "view",
+										"path": "firewall/ipsets"
+									},
+									"order": 45,
+									"title": "IP Sets"
+								},
+								"custom": {
+									"satisfied": false,
+									"action": {
+										"type": "view",
+										"path": "firewall/custom"
+									},
+									"depends": {
+										"fs": {
+											"/usr/share/fw3/helpers.conf": "file"
+										}
+									},
+									"order": 50,
+									"title": "Custom Rules"
+								}
+							}
+						},
+						"switch": {
+							"satisfied": false,
+							"action": {
+								"type": "view",
+								"path": "network/switch"
+							},
+							"depends": {
+								"acl": [
+									"luci-mod-network-config"
+								],
+								"fs": {
+									"/sbin/swconfig": "executable"
+								},
+								"uci": {
+									"network": {
+										"@switch": true
+									}
+								}
+							},
+							"order": 20,
+							"title": "Switch"
+						},
+						"wireless": {
+							"satisfied": true,
+							"action": {
+								"type": "view",
+								"path": "network/wireless"
+							},
+							"depends": {
+								"acl": [
+									"luci-mod-network-config"
+								],
+								"uci": {
+									"wireless": {
+										"@wifi-device": true
+									}
+								}
+							},
+							"order": 15,
+							"title": "Wireless"
+						},
+						"remote_addr": {
+							"satisfied": true,
+							"wildcard": true,
+							"action": {
+								"type": "call",
+								"module": "luci.controller.admin.network",
+								"function": "remote_addr"
+							}
+						},
+						"network": {
+							"satisfied": true,
+							"action": {
+								"type": "view",
+								"path": "network/interfaces"
+							},
+							"depends": {
+								"acl": [
+									"luci-mod-network-config"
+								]
+							},
+							"order": 10,
+							"title": "Interfaces"
+						},
+						"routes": {
+							"satisfied": true,
+							"action": {
+								"type": "view",
+								"path": "network/routes"
+							},
+							"depends": {
+								"acl": [
+									"luci-mod-network-config"
+								]
+							},
+							"order": 30,
+							"title": "Routing"
+						},
+						"dhcp": {
+							"satisfied": true,
+							"action": {
+								"type": "view",
+								"path": "network/dhcp"
+							},
+							"depends": {
+								"acl": [
+									"luci-mod-network-dhcp"
+								],
+								"fs": [
+									{
+										"/usr/sbin/odhcpd": "executable"
+									},
+									{
+										"/usr/sbin/dnsmasq": "executable"
+									}
+								],
+								"uci": {
+									"dhcp": true
+								}
+							},
+							"order": 40,
+							"title": "DHCP"
+						},
+						"dns": {
+							"satisfied": true,
+							"action": {
+								"type": "view",
+								"path": "network/dns"
+							},
+							"depends": {
+								"acl": [
+									"luci-mod-network-dns"
+								],
+								"fs": {
+									"/usr/sbin/dnsmasq": "executable"
+								},
+								"uci": {
+									"dhcp": true
+								}
+							},
+							"order": 45,
+							"title": "DNS"
+						},
+						"diagnostics": {
+							"satisfied": true,
+							"action": {
+								"type": "view",
+								"path": "network/diagnostics"
+							},
+							"depends": {
+								"acl": [
+									"luci-mod-network-diagnostics"
+								]
+							},
+							"order": 50,
+							"title": "Diagnostics",
+							"readonly": true
+						},
+						"set_app_filter_time": {
+							"satisfied": true,
+							"action": {
+								"module": "luci.controller.appfilter",
+								"type": "call",
+								"function": "set_app_filter_time"
+							},
+							"wildcard": true
+						},
+						"add_app_filter_user": {
+							"satisfied": true,
+							"action": {
+								"module": "luci.controller.appfilter",
+								"type": "call",
+								"function": "add_app_filter_user"
+							},
+							"wildcard": true
+						},
+						"class_list": {
+							"satisfied": true,
+							"action": {
+								"module": "luci.controller.appfilter",
+								"type": "call",
+								"function": "get_class_list"
+							},
+							"wildcard": true
+						},
+						"get_app_filter": {
+							"satisfied": true,
+							"action": {
+								"module": "luci.controller.appfilter",
+								"type": "call",
+								"function": "get_app_filter"
+							},
+							"wildcard": true
+						},
+						"add_whitelist_user": {
+							"satisfied": true,
+							"action": {
+								"module": "luci.controller.appfilter",
+								"type": "call",
+								"function": "add_whitelist_user"
+							},
+							"wildcard": true
+						},
+						"dev_visit_time": {
+							"satisfied": true,
+							"action": {
+								"module": "luci.controller.appfilter",
+								"type": "call",
+								"function": "get_dev_visit_time"
+							},
+							"wildcard": true
+						},
+						"get_whitelist_user": {
+							"satisfied": true,
+							"action": {
+								"module": "luci.controller.appfilter",
+								"type": "call",
+								"function": "get_whitelist_user"
+							},
+							"wildcard": true
+						},
+						"del_app_filter_user": {
+							"satisfied": true,
+							"action": {
+								"module": "luci.controller.appfilter",
+								"type": "call",
+								"function": "del_app_filter_user"
+							},
+							"wildcard": true
+						},
+						"get_app_filter_base": {
+							"satisfied": true,
+							"action": {
+								"module": "luci.controller.appfilter",
+								"type": "call",
+								"function": "get_app_filter_base"
+							},
+							"wildcard": true
+						},
+						"app_class_visit_time": {
+							"satisfied": true,
+							"action": {
+								"module": "luci.controller.appfilter",
+								"type": "call",
+								"function": "get_app_class_visit_time"
+							},
+							"wildcard": true
+						},
+						"user_status": {
+							"satisfied": true,
+							"action": {
+								"module": "luci.controller.appfilter",
+								"type": "call",
+								"function": "user_status"
+							},
+							"wildcard": true
+						},
+						"get_app_filter_user": {
+							"satisfied": true,
+							"action": {
+								"module": "luci.controller.appfilter",
+								"type": "call",
+								"function": "get_app_filter_user"
+							},
+							"wildcard": true
+						},
+						"set_app_filter_adv": {
+							"satisfied": true,
+							"action": {
+								"module": "luci.controller.appfilter",
+								"type": "call",
+								"function": "set_app_filter_adv"
+							},
+							"wildcard": true
+						},
+						"set_app_filter_user": {
+							"satisfied": true,
+							"action": {
+								"module": "luci.controller.appfilter",
+								"type": "call",
+								"function": "set_app_filter_user"
+							},
+							"wildcard": true
+						},
+						"get_app_filter_time": {
+							"satisfied": true,
+							"action": {
+								"module": "luci.controller.appfilter",
+								"type": "call",
+								"function": "get_app_filter_time"
+							},
+							"wildcard": true
+						},
+						"dev_visit_list": {
+							"satisfied": true,
+							"action": {
+								"module": "luci.controller.appfilter",
+								"type": "call",
+								"function": "get_dev_visit_list"
+							},
+							"wildcard": true
+						},
+						"set_app_filter": {
+							"satisfied": true,
+							"action": {
+								"module": "luci.controller.appfilter",
+								"type": "call",
+								"function": "set_app_filter"
+							},
+							"wildcard": true
+						},
+						"set_nickname": {
+							"satisfied": true,
+							"action": {
+								"module": "luci.controller.appfilter",
+								"type": "call",
+								"function": "set_nickname"
+							},
+							"wildcard": true
+						},
+						"get_app_filter_adv": {
+							"satisfied": true,
+							"action": {
+								"module": "luci.controller.appfilter",
+								"type": "call",
+								"function": "get_app_filter_adv"
+							},
+							"wildcard": true
+						},
+						"get_user_list": {
+							"satisfied": true,
+							"action": {
+								"module": "luci.controller.appfilter",
+								"type": "call",
+								"function": "get_user_list"
+							},
+							"wildcard": true
+						},
+						"get_oaf_status": {
+							"satisfied": true,
+							"action": {
+								"module": "luci.controller.appfilter",
+								"type": "call",
+								"function": "get_oaf_status"
+							},
+							"wildcard": true
+						},
+						"get_all_users": {
+							"satisfied": true,
+							"action": {
+								"module": "luci.controller.appfilter",
+								"type": "call",
+								"function": "get_all_users"
+							},
+							"wildcard": true
+						},
+						"upload_file": {
+							"satisfied": true,
+							"action": {
+								"module": "luci.controller.appfilter",
+								"type": "call",
+								"function": "handle_file_upload"
+							},
+							"wildcard": true
+						},
+						"set_app_filter_base": {
+							"satisfied": true,
+							"action": {
+								"module": "luci.controller.appfilter",
+								"type": "call",
+								"function": "set_app_filter_base"
+							},
+							"wildcard": true
+						},
+						"feature_upgrade": {
+							"satisfied": true,
+							"action": {
+								"module": "luci.controller.appfilter",
+								"type": "call",
+								"function": "handle_feature_upgrade"
+							},
+							"wildcard": true
+						},
+						"del_whitelist_user": {
+							"satisfied": true,
+							"action": {
+								"module": "luci.controller.appfilter",
+								"type": "call",
+								"function": "del_whitelist_user"
+							},
+							"wildcard": true
+						}
+					},
+					"action": {
+						"type": "firstchild",
+						"recurse": true
+					},
+					"order": 60,
+					"title": "Network"
+				},
+				"services": {
+					"satisfied": true,
+					"children": {
+						"lucky": {
+							"satisfied": true,
+							"action": {
+								"path": "admin/services/lucky/setting",
+								"type": "alias"
+							},
+							"depends": {
+								"acl": [
+									"luci-app-lucky"
+								],
+								"uci": {
+									"lucky": true
+								}
+							},
+							"order": 57,
+							"title": "Lucky",
+							"children": {
+								"setting": {
+									"satisfied": true,
+									"action": {
+										"module": "luci.dispatcher",
+										"type": "call",
+										"post": {
+											"cbi.submit": true
+										},
+										"function": "invoke_cbi_action",
+										"parameters": [
+											"lucky/lucky",
+											{
+											}
+										]
+									},
+									"order": 20,
+									"title": "Base Setting",
+									"wildcard": true
+								}
+							}
+						},
+						"upnp": {
+							"satisfied": true,
+							"action": {
+								"type": "view",
+								"path": "upnp/upnp"
+							},
+							"depends": {
+								"acl": [
+									"luci-app-upnp"
+								],
+								"uci": {
+									"upnpd": true
+								}
+							},
+							"title": "UPnP IGD & PCP"
+						},
+						"vlmcsd": {
+							"satisfied": true,
+							"action": {
+								"type": "view",
+								"path": "vlmcsd"
+							},
+							"depends": {
+								"acl": [
+									"luci-app-vlmcsd"
+								],
+								"uci": {
+									"vlmcsd": true
+								}
+							},
+							"title": "Vlmcsd KMS Server"
+						},
+						"wol": {
+							"satisfied": true,
+							"action": {
+								"type": "view",
+								"path": "wol"
+							},
+							"depends": {
+								"acl": [
+									"luci-app-wol"
+								]
+							},
+							"order": 90,
+							"title": "Wake on LAN"
+						},
+						"AdGuardHome": {
+							"satisfied": true,
+							"children": {
+								"manual": {
+									"satisfied": true,
+									"action": {
+										"module": "luci.dispatcher",
+										"type": "call",
+										"post": {
+											"cbi.submit": true
+										},
+										"function": "invoke_cbi_action",
+										"parameters": [
+											"AdGuardHome/manual",
+											{
+											}
+										]
+									},
+									"order": 3,
+									"title": "Manual Config",
+									"wildcard": true
+								},
+								"dodellog": {
+									"satisfied": true,
+									"action": {
+										"module": "luci.controller.AdGuardHome",
+										"type": "call",
+										"function": "do_dellog"
+									}
+								},
+								"base": {
+									"satisfied": true,
+									"action": {
+										"module": "luci.dispatcher",
+										"type": "call",
+										"post": {
+											"cbi.submit": true
+										},
+										"function": "invoke_cbi_action",
+										"parameters": [
+											"AdGuardHome/base",
+											{
+											}
+										]
+									},
+									"order": 1,
+									"title": "Base Setting",
+									"wildcard": true
+								},
+								"doupdate": {
+									"satisfied": true,
+									"action": {
+										"module": "luci.controller.AdGuardHome",
+										"type": "call",
+										"function": "do_update"
+									}
+								},
+								"log": {
+									"satisfied": true,
+									"action": {
+										"module": "luci.dispatcher",
+										"type": "call",
+										"post": {
+											"cbi.submit": true
+										},
+										"function": "invoke_form_action",
+										"parameters": [
+											"AdGuardHome/log"
+										]
+									},
+									"order": 2,
+									"title": "Log",
+									"wildcard": true
+								},
+								"status": {
+									"satisfied": true,
+									"action": {
+										"module": "luci.controller.AdGuardHome",
+										"type": "call",
+										"function": "act_status"
+									},
+									"wildcard": true
+								},
+								"getlog": {
+									"satisfied": true,
+									"action": {
+										"module": "luci.controller.AdGuardHome",
+										"type": "call",
+										"function": "get_log"
+									}
+								},
+								"gettemplateconfig": {
+									"satisfied": true,
+									"action": {
+										"module": "luci.controller.AdGuardHome",
+										"type": "call",
+										"function": "get_template_config"
+									}
+								},
+								"check": {
+									"satisfied": true,
+									"action": {
+										"module": "luci.controller.AdGuardHome",
+										"type": "call",
+										"function": "check_update"
+									}
+								},
+								"reloadconfig": {
+									"satisfied": true,
+									"action": {
+										"module": "luci.controller.AdGuardHome",
+										"type": "call",
+										"function": "reload_config"
+									}
+								}
+							},
+							"action": {
+								"path": "admin/services/AdGuardHome/base",
+								"type": "alias"
+							},
+							"depends": {
+								"acl": [
+									"luci-app-adguardhome"
+								]
+							},
+							"order": 10,
+							"title": "AdGuard Home"
+						},
+						"appfilter": {
+							"satisfied": true,
+							"children": {
+								"user": {
+									"satisfied": true,
+									"action": {
+										"module": "luci.dispatcher",
+										"type": "call",
+										"post": {
+											"cbi.submit": true
+										},
+										"function": "invoke_cbi_action",
+										"parameters": [
+											"appfilter/user",
+											{
+												"hideapplybtn": true,
+												"hidesavebtn": true,
+												"hideresetbtn": true
+											}
+										]
+									},
+									"order": 24,
+									"title": "User Configuration",
+									"wildcard": true
+								},
+								"feature": {
+									"satisfied": true,
+									"action": {
+										"module": "luci.dispatcher",
+										"type": "call",
+										"post": {
+											"cbi.submit": true
+										},
+										"function": "invoke_cbi_action",
+										"parameters": [
+											"appfilter/feature",
+											{
+												"hideapplybtn": true,
+												"hidesavebtn": true,
+												"hideresetbtn": true
+											}
+										]
+									},
+									"order": 26,
+									"title": "App Feature",
+									"wildcard": true
+								},
+								"user_list": {
+									"satisfied": true,
+									"action": {
+										"targets": [
+											{
+												"module": "luci.dispatcher",
+												"type": "call",
+												"post": {
+													"cbi.submit": true
+												},
+												"function": "invoke_cbi_action",
+												"parameters": [
+													"appfilter/user_list",
+													{
+														"hideapplybtn": true,
+														"hidesavebtn": true,
+														"hideresetbtn": true
+													}
+												]
+											},
+											{
+												"module": "luci.dispatcher",
+												"type": "call",
+												"post": {
+													"cbi.submit": true
+												},
+												"function": "invoke_cbi_action",
+												"parameters": [
+													"appfilter/dev_status",
+													{
+														"hideapplybtn": true,
+														"hidesavebtn": true,
+														"hideresetbtn": true
+													}
+												]
+											}
+										],
+										"type": "arcombine"
+									},
+									"order": 20,
+									"title": "User List",
+									"wildcard": true
+								},
+								"time": {
+									"satisfied": true,
+									"action": {
+										"module": "luci.dispatcher",
+										"type": "call",
+										"post": {
+											"cbi.submit": true
+										},
+										"function": "invoke_cbi_action",
+										"parameters": [
+											"appfilter/time",
+											{
+												"hideapplybtn": true,
+												"hidesavebtn": true,
+												"hideresetbtn": true
+											}
+										]
+									},
+									"order": 25,
+									"title": "Time Configuration",
+									"wildcard": true
+								},
+								"app_filter": {
+									"satisfied": true,
+									"action": {
+										"module": "luci.dispatcher",
+										"type": "call",
+										"post": {
+											"cbi.submit": true
+										},
+										"function": "invoke_cbi_action",
+										"parameters": [
+											"appfilter/app_filter",
+											{
+												"hideapplybtn": true,
+												"hidesavebtn": true,
+												"hideresetbtn": true
+											}
+										]
+									},
+									"order": 21,
+									"title": "App Filter",
+									"wildcard": true
+								},
+								"advance": {
+									"satisfied": true,
+									"action": {
+										"module": "luci.dispatcher",
+										"type": "call",
+										"post": {
+											"cbi.submit": true
+										},
+										"function": "invoke_cbi_action",
+										"parameters": [
+											"appfilter/advance",
+											{
+												"hideapplybtn": true,
+												"hidesavebtn": true,
+												"hideresetbtn": true
+											}
+										]
+									},
+									"order": 27,
+									"title": "Advanced Settings",
+									"wildcard": true
+								}
+							},
+							"action": {
+								"path": "admin/services/appfilter/app_filter",
+								"type": "alias"
+							},
+							"order": 10,
+							"title": "App Filter"
+						},
+						"cupsd": {
+							"satisfied": true,
+							"action": {
+								"path": "admin/services/cupsd/page1",
+								"type": "alias"
+							},
+							"order": 60,
+							"title": "CUPS 打印服务器",
+							"children": {
+								"page2": {
+									"satisfied": true,
+									"action": {
+										"module": "luci.dispatcher",
+										"type": "call",
+										"post": {
+											"cbi.submit": true
+										},
+										"function": "invoke_cbi_action",
+										"parameters": [
+											"cupsd/page2",
+											{
+											}
+										]
+									},
+									"order": 20,
+									"title": "高级",
+									"wildcard": true
+								},
+								"page1": {
+									"satisfied": true,
+									"action": {
+										"module": "luci.dispatcher",
+										"type": "call",
+										"post": {
+											"cbi.submit": true
+										},
+										"function": "invoke_cbi_action",
+										"parameters": [
+											"cupsd/page1",
+											{
+											}
+										]
+									},
+									"order": 10,
+									"title": "设置",
+									"wildcard": true
+								}
+							}
+						},
+						"lucky_info": {
+							"satisfied": true,
+							"action": {
+								"module": "luci.controller.lucky",
+								"type": "call",
+								"function": "lucky_info"
+							}
+						},
+						"lucky_status": {
+							"satisfied": true,
+							"action": {
+								"module": "luci.controller.lucky",
+								"type": "call",
+								"function": "act_status"
+							}
+						},
+						"lucky_set_config": {
+							"satisfied": true,
+							"action": {
+								"module": "luci.controller.lucky",
+								"type": "call",
+								"function": "lucky_set_config"
+							}
+						},
+						"lucky_service": {
+							"satisfied": true,
+							"action": {
+								"module": "luci.controller.lucky",
+								"type": "call",
+								"function": "lucky_service"
+							}
+						},
+						"openclash": {
+							"satisfied": true,
+							"children": {
+								"check_core": {
+									"satisfied": true,
+									"action": {
+										"module": "luci.controller.openclash",
+										"type": "call",
+										"function": "action_check_core"
+									}
+								},
+								"switch_oc_setting": {
+									"satisfied": true,
+									"action": {
+										"module": "luci.controller.openclash",
+										"type": "call",
+										"function": "action_switch_oc_setting"
+									}
+								},
+								"status": {
+									"satisfied": true,
+									"action": {
+										"module": "luci.controller.openclash",
+										"type": "call",
+										"function": "action_status"
+									},
+									"wildcard": true
+								},
+								"sub_info_get": {
+									"satisfied": true,
+									"action": {
+										"module": "luci.controller.openclash",
+										"type": "call",
+										"function": "sub_info_get"
+									}
+								},
+								"custom-dns-edit": {
+									"satisfied": true,
+									"action": {
+										"module": "luci.dispatcher",
+										"type": "call",
+										"post": {
+											"cbi.submit": true
+										},
+										"function": "invoke_cbi_action",
+										"parameters": [
+											"openclash/custom-dns-edit",
+											{
+											}
+										]
+									},
+									"wildcard": true
+								},
+								"backup_only_proxy": {
+									"satisfied": true,
+									"action": {
+										"module": "luci.controller.openclash",
+										"type": "call",
+										"function": "action_backup_only_proxy"
+									}
+								},
+								"settings": {
+									"satisfied": true,
+									"action": {
+										"module": "luci.dispatcher",
+										"type": "call",
+										"post": {
+											"cbi.submit": true
+										},
+										"function": "invoke_cbi_action",
+										"parameters": [
+											"openclash/settings",
+											{
+											}
+										]
+									},
+									"order": 30,
+									"title": "Plugin Settings",
+									"wildcard": true
+								},
+								"core_download": {
+									"satisfied": true,
+									"action": {
+										"module": "luci.controller.openclash",
+										"type": "call",
+										"function": "core_download"
+									}
+								},
+								"game-rules-manage": {
+									"satisfied": true,
+									"action": {
+										"module": "luci.dispatcher",
+										"type": "call",
+										"post": {
+											"cbi.submit": true
+										},
+										"function": "invoke_form_action",
+										"parameters": [
+											"openclash/game-rules-manage"
+										]
+									},
+									"wildcard": true
+								},
+								"oc_settings": {
+									"satisfied": true,
+									"action": {
+										"module": "luci.controller.openclash",
+										"type": "call",
+										"function": "action_oc_settings"
+									}
+								},
+								"one_key_update": {
+									"satisfied": true,
+									"action": {
+										"module": "luci.controller.openclash",
+										"type": "call",
+										"function": "action_one_key_update"
+									}
+								},
+								"rename_file": {
+									"satisfied": true,
+									"action": {
+										"module": "luci.controller.openclash",
+										"type": "call",
+										"function": "rename_file"
+									}
+								},
+								"config_file_save": {
+									"satisfied": true,
+									"action": {
+										"module": "luci.controller.openclash",
+										"type": "call",
+										"function": "action_config_file_save"
+									}
+								},
+								"switch_run_mode": {
+									"satisfied": true,
+									"action": {
+										"module": "luci.controller.openclash",
+										"type": "call",
+										"function": "action_switch_run_mode"
+									}
+								},
+								"proxy_info": {
+									"satisfied": true,
+									"action": {
+										"module": "luci.controller.openclash",
+										"type": "call",
+										"function": "action_proxy_info"
+									}
+								},
+								"manual_stream_unlock_test": {
+									"satisfied": true,
+									"action": {
+										"module": "luci.controller.openclash",
+										"type": "call",
+										"function": "manual_stream_unlock_test"
+									}
+								},
+								"get_last_version": {
+									"satisfied": true,
+									"action": {
+										"module": "luci.controller.openclash",
+										"type": "call",
+										"function": "action_get_last_version"
+									}
+								},
+								"website_check": {
+									"satisfied": true,
+									"action": {
+										"module": "luci.controller.openclash",
+										"type": "call",
+										"function": "action_website_check"
+									}
+								},
+								"dler_logout": {
+									"satisfied": true,
+									"action": {
+										"module": "luci.controller.openclash",
+										"type": "call",
+										"function": "action_dler_logout"
+									}
+								},
+								"remove_all_core": {
+									"satisfied": true,
+									"action": {
+										"module": "luci.controller.openclash",
+										"type": "call",
+										"function": "action_remove_all_core"
+									}
+								},
+								"other-file-edit": {
+									"satisfied": true,
+									"action": {
+										"module": "luci.dispatcher",
+										"type": "call",
+										"post": {
+											"cbi.submit": true
+										},
+										"function": "invoke_cbi_action",
+										"parameters": [
+											"openclash/other-file-edit",
+											{
+											}
+										]
+									},
+									"wildcard": true
+								},
+								"backup_only_config": {
+									"satisfied": true,
+									"action": {
+										"module": "luci.controller.openclash",
+										"type": "call",
+										"function": "action_backup_only_config"
+									}
+								},
+								"backup_only_core": {
+									"satisfied": true,
+									"action": {
+										"module": "luci.controller.openclash",
+										"type": "call",
+										"function": "action_backup_only_core"
+									}
+								},
+								"lastversion": {
+									"satisfied": true,
+									"action": {
+										"module": "luci.controller.openclash",
+										"type": "call",
+										"function": "action_lastversion"
+									}
+								},
+								"dler_login_info_save": {
+									"satisfied": true,
+									"action": {
+										"module": "luci.controller.openclash",
+										"type": "call",
+										"function": "action_dler_login_info_save"
+									}
+								},
+								"op_mode": {
+									"satisfied": true,
+									"action": {
+										"module": "luci.controller.openclash",
+										"type": "call",
+										"function": "action_op_mode"
+									}
+								},
+								"startlog": {
+									"satisfied": true,
+									"action": {
+										"module": "luci.controller.openclash",
+										"type": "call",
+										"function": "action_start"
+									},
+									"wildcard": true
+								},
+								"diag_dns": {
+									"satisfied": true,
+									"action": {
+										"module": "luci.controller.openclash",
+										"type": "call",
+										"function": "action_diag_dns"
+									}
+								},
+								"diag_connection": {
+									"satisfied": true,
+									"action": {
+										"module": "luci.controller.openclash",
+										"type": "call",
+										"function": "action_diag_connection"
+									}
+								},
+								"del_log": {
+									"satisfied": true,
+									"action": {
+										"module": "luci.controller.openclash",
+										"type": "call",
+										"function": "action_del_log"
+									}
+								},
+								"opupdate": {
+									"satisfied": true,
+									"action": {
+										"module": "luci.controller.openclash",
+										"type": "call",
+										"function": "action_opupdate"
+									}
+								},
+								"update": {
+									"satisfied": true,
+									"action": {
+										"module": "luci.controller.openclash",
+										"type": "call",
+										"function": "action_update"
+									}
+								},
+								"dashboard_type": {
+									"satisfied": true,
+									"action": {
+										"module": "luci.controller.openclash",
+										"type": "call",
+										"function": "action_dashboard_type"
+									}
+								},
+								"dler_info": {
+									"satisfied": true,
+									"action": {
+										"module": "luci.controller.openclash",
+										"type": "call",
+										"function": "action_dler_info"
+									}
+								},
+								"game-rules-file-manage": {
+									"satisfied": true,
+									"action": {
+										"module": "luci.dispatcher",
+										"type": "call",
+										"post": {
+											"cbi.submit": true
+										},
+										"function": "invoke_form_action",
+										"parameters": [
+											"openclash/game-rules-file-manage"
+										]
+									},
+									"wildcard": true
+								},
+								"client": {
+									"satisfied": true,
+									"action": {
+										"module": "luci.dispatcher",
+										"type": "call",
+										"post": {
+											"cbi.submit": true
+										},
+										"function": "invoke_form_action",
+										"parameters": [
+											"openclash/client"
+										]
+									},
+									"order": 20,
+									"title": "Overviews",
+									"wildcard": true
+								},
+								"close_all_connection": {
+									"satisfied": true,
+									"action": {
+										"module": "luci.controller.openclash",
+										"type": "call",
+										"function": "action_close_all_connection"
+									}
+								},
+								"delete_overwrite_file": {
+									"satisfied": true,
+									"action": {
+										"module": "luci.controller.openclash",
+										"type": "call",
+										"function": "delete_overwrite_file"
+									}
+								},
+								"log_level": {
+									"satisfied": true,
+									"action": {
+										"module": "luci.controller.openclash",
+										"type": "call",
+										"function": "action_log_level"
+									}
+								},
+								"save_corever_branch": {
+									"satisfied": true,
+									"action": {
+										"module": "luci.controller.openclash",
+										"type": "call",
+										"function": "action_save_corever_branch"
+									}
+								},
+								"overwrite_file_list": {
+									"satisfied": true,
+									"action": {
+										"module": "luci.controller.openclash",
+										"type": "call",
+										"function": "action_overwrite_file_list"
+									}
+								},
+								"one_key_update_check": {
+									"satisfied": true,
+									"action": {
+										"module": "luci.controller.openclash",
+										"type": "call",
+										"function": "action_one_key_update_check"
+									}
+								},
+								"toolbar_show": {
+									"satisfied": true,
+									"action": {
+										"module": "luci.controller.openclash",
+										"type": "call",
+										"function": "action_toolbar_show"
+									}
+								},
+								"rule_mode": {
+									"satisfied": true,
+									"action": {
+										"module": "luci.controller.openclash",
+										"type": "call",
+										"function": "action_rule_mode"
+									}
+								},
+								"restore": {
+									"satisfied": true,
+									"action": {
+										"module": "luci.controller.openclash",
+										"type": "call",
+										"function": "action_restore_config"
+									}
+								},
+								"overwrite_subscribe_info": {
+									"satisfied": true,
+									"action": {
+										"module": "luci.controller.openclash",
+										"type": "call",
+										"function": "action_overwrite_subscribe_info"
+									}
+								},
+								"upload_overwrite": {
+									"satisfied": true,
+									"action": {
+										"module": "luci.controller.openclash",
+										"type": "call",
+										"function": "action_upload_overwrite"
+									}
+								},
+								"add_subscription": {
+									"satisfied": true,
+									"action": {
+										"module": "luci.controller.openclash",
+										"type": "call",
+										"function": "action_add_subscription"
+									}
+								},
+								"backup_ex_core": {
+									"satisfied": true,
+									"action": {
+										"module": "luci.controller.openclash",
+										"type": "call",
+										"function": "action_backup_ex_core"
+									}
+								},
+								"upload_config": {
+									"satisfied": true,
+									"action": {
+										"module": "luci.controller.openclash",
+										"type": "call",
+										"function": "action_upload_config"
+									}
+								},
+								"config_file_read": {
+									"satisfied": true,
+									"action": {
+										"module": "luci.controller.openclash",
+										"type": "call",
+										"function": "action_config_file_read"
+									}
+								},
+								"get_run_mode": {
+									"satisfied": true,
+									"action": {
+										"module": "luci.controller.openclash",
+										"type": "call",
+										"function": "action_get_run_mode"
+									}
+								},
+								"all_proxies_stream_test": {
+									"satisfied": true,
+									"action": {
+										"module": "luci.controller.openclash",
+										"type": "call",
+										"function": "all_proxies_stream_test"
+									}
+								},
+								"config_file_list": {
+									"satisfied": true,
+									"action": {
+										"module": "luci.controller.openclash",
+										"type": "call",
+										"function": "action_config_file_list"
+									}
+								},
+								"action": {
+									"satisfied": true,
+									"action": {
+										"module": "luci.controller.openclash",
+										"type": "call",
+										"function": "action_oc_action"
+									}
+								},
+								"generate_pac": {
+									"satisfied": true,
+									"action": {
+										"module": "luci.controller.openclash",
+										"type": "call",
+										"function": "action_generate_pac"
+									}
+								},
+								"myip_check": {
+									"satisfied": true,
+									"action": {
+										"module": "luci.controller.openclash",
+										"type": "call",
+										"function": "action_myip_check"
+									}
+								},
+								"log": {
+									"satisfied": true,
+									"action": {
+										"module": "luci.dispatcher",
+										"type": "call",
+										"post": {
+											"cbi.submit": true
+										},
+										"function": "invoke_cbi_action",
+										"parameters": [
+											"openclash/log",
+											{
+											}
+										]
+									},
+									"order": 90,
+									"title": "Server Logs",
+									"wildcard": true
+								},
+								"config": {
+									"satisfied": true,
+									"action": {
+										"module": "luci.dispatcher",
+										"type": "call",
+										"post": {
+											"cbi.submit": true
+										},
+										"function": "invoke_form_action",
+										"parameters": [
+											"openclash/config"
+										]
+									},
+									"order": 80,
+									"title": "Config Manage",
+									"wildcard": true
+								},
+								"servers": {
+									"satisfied": true,
+									"action": {
+										"module": "luci.dispatcher",
+										"type": "call",
+										"post": {
+											"cbi.submit": true
+										},
+										"function": "invoke_cbi_action",
+										"parameters": [
+											"openclash/servers",
+											{
+											}
+										]
+									},
+									"order": 50,
+									"title": "Onekey Create",
+									"wildcard": true
+								},
+								"gen_debug_logs": {
+									"satisfied": true,
+									"action": {
+										"module": "luci.controller.openclash",
+										"type": "call",
+										"function": "action_gen_debug_logs"
+									}
+								},
+								"proxy-provider-config": {
+									"satisfied": true,
+									"action": {
+										"module": "luci.dispatcher",
+										"type": "call",
+										"post": {
+											"cbi.submit": true
+										},
+										"function": "invoke_cbi_action",
+										"parameters": [
+											"openclash/proxy-provider-config",
+											{
+											}
+										]
+									},
+									"wildcard": true
+								},
+								"backup": {
+									"satisfied": true,
+									"action": {
+										"module": "luci.controller.openclash",
+										"type": "call",
+										"function": "action_backup"
+									}
+								},
+								"flush_smart_cache": {
+									"satisfied": true,
+									"action": {
+										"module": "luci.controller.openclash",
+										"type": "call",
+										"function": "action_flush_smart_cache"
+									}
+								},
+								"groups-config": {
+									"satisfied": true,
+									"action": {
+										"module": "luci.dispatcher",
+										"type": "call",
+										"post": {
+											"cbi.submit": true
+										},
+										"function": "invoke_cbi_action",
+										"parameters": [
+											"openclash/groups-config",
+											{
+											}
+										]
+									},
+									"wildcard": true
+								},
+								"servers-config": {
+									"satisfied": true,
+									"action": {
+										"module": "luci.dispatcher",
+										"type": "call",
+										"post": {
+											"cbi.submit": true
+										},
+										"function": "invoke_cbi_action",
+										"parameters": [
+											"openclash/servers-config",
+											{
+											}
+										]
+									},
+									"wildcard": true
+								},
+								"rule-providers-file-manage": {
+									"satisfied": true,
+									"action": {
+										"module": "luci.dispatcher",
+										"type": "call",
+										"post": {
+											"cbi.submit": true
+										},
+										"function": "invoke_form_action",
+										"parameters": [
+											"openclash/rule-providers-file-manage"
+										]
+									},
+									"wildcard": true
+								},
+								"coreupdate": {
+									"satisfied": true,
+									"action": {
+										"module": "luci.controller.openclash",
+										"type": "call",
+										"function": "action_coreupdate"
+									}
+								},
+								"reload_firewall": {
+									"satisfied": true,
+									"action": {
+										"module": "luci.controller.openclash",
+										"type": "call",
+										"function": "action_reload_firewall"
+									}
+								},
+								"config-subscribe-edit": {
+									"satisfied": true,
+									"action": {
+										"module": "luci.dispatcher",
+										"type": "call",
+										"post": {
+											"cbi.submit": true
+										},
+										"function": "invoke_cbi_action",
+										"parameters": [
+											"openclash/config-subscribe-edit",
+											{
+											}
+										]
+									},
+									"wildcard": true
+								},
+								"config-subscribe": {
+									"satisfied": true,
+									"action": {
+										"module": "luci.dispatcher",
+										"type": "call",
+										"post": {
+											"cbi.submit": true
+										},
+										"function": "invoke_cbi_action",
+										"parameters": [
+											"openclash/config-subscribe",
+											{
+											}
+										]
+									},
+									"order": 70,
+									"title": "Config Subscribe",
+									"wildcard": true
+								},
+								"switch_mode": {
+									"satisfied": true,
+									"action": {
+										"module": "luci.controller.openclash",
+										"type": "call",
+										"function": "action_switch_mode"
+									}
+								},
+								"proxy-provider-file-manage": {
+									"satisfied": true,
+									"action": {
+										"module": "luci.dispatcher",
+										"type": "call",
+										"post": {
+											"cbi.submit": true
+										},
+										"function": "invoke_form_action",
+										"parameters": [
+											"openclash/proxy-provider-file-manage"
+										]
+									},
+									"wildcard": true
+								},
+								"rule-providers-manage": {
+									"satisfied": true,
+									"action": {
+										"module": "luci.dispatcher",
+										"type": "call",
+										"post": {
+											"cbi.submit": true
+										},
+										"function": "invoke_form_action",
+										"parameters": [
+											"openclash/rule-providers-manage"
+										]
+									},
+									"wildcard": true
+								},
+								"rule-providers-settings": {
+									"satisfied": true,
+									"action": {
+										"module": "luci.dispatcher",
+										"type": "call",
+										"post": {
+											"cbi.submit": true
+										},
+										"function": "invoke_cbi_action",
+										"parameters": [
+											"openclash/rule-providers-settings",
+											{
+											}
+										]
+									},
+									"order": 60,
+									"title": "Rule Providers Append",
+									"wildcard": true
+								},
+								"other-rules-edit": {
+									"satisfied": true,
+									"action": {
+										"module": "luci.dispatcher",
+										"type": "call",
+										"post": {
+											"cbi.submit": true
+										},
+										"function": "invoke_cbi_action",
+										"parameters": [
+											"openclash/other-rules-edit",
+											{
+											}
+										]
+									},
+									"wildcard": true
+								},
+								"rule-providers-config": {
+									"satisfied": true,
+									"action": {
+										"module": "luci.dispatcher",
+										"type": "call",
+										"post": {
+											"cbi.submit": true
+										},
+										"function": "invoke_cbi_action",
+										"parameters": [
+											"openclash/rule-providers-config",
+											{
+											}
+										]
+									},
+									"wildcard": true
+								},
+								"config-overwrite": {
+									"satisfied": true,
+									"action": {
+										"module": "luci.dispatcher",
+										"type": "call",
+										"post": {
+											"cbi.submit": true
+										},
+										"function": "invoke_cbi_action",
+										"parameters": [
+											"openclash/config-overwrite",
+											{
+											}
+										]
+									},
+									"order": 40,
+									"title": "Overwrite Settings",
+									"wildcard": true
+								},
+								"backup_only_rule": {
+									"satisfied": true,
+									"action": {
+										"module": "luci.controller.openclash",
+										"type": "call",
+										"function": "action_backup_only_rule"
+									}
+								},
+								"update_config": {
+									"satisfied": true,
+									"action": {
+										"module": "luci.controller.openclash",
+										"type": "call",
+										"function": "action_update_config"
+									}
+								},
+								"dler_login": {
+									"satisfied": true,
+									"action": {
+										"module": "luci.controller.openclash",
+										"type": "call",
+										"function": "action_dler_login"
+									}
+								},
+								"announcement": {
+									"satisfied": true,
+									"action": {
+										"module": "luci.controller.openclash",
+										"type": "call",
+										"function": "action_announcement"
+									}
+								},
+								"dler_checkin": {
+									"satisfied": true,
+									"action": {
+										"module": "luci.controller.openclash",
+										"type": "call",
+										"function": "action_dler_checkin"
+									}
+								},
+								"toolbar_show_sys": {
+									"satisfied": true,
+									"action": {
+										"module": "luci.controller.openclash",
+										"type": "call",
+										"function": "action_toolbar_show_sys"
+									}
+								},
+								"set_subinfo_url": {
+									"satisfied": true,
+									"action": {
+										"module": "luci.controller.openclash",
+										"type": "call",
+										"function": "set_subinfo_url"
+									}
+								},
+								"create_file": {
+									"satisfied": true,
+									"action": {
+										"module": "luci.controller.openclash",
+										"type": "call",
+										"function": "create_file"
+									}
+								},
+								"refresh_log": {
+									"satisfied": true,
+									"action": {
+										"module": "luci.controller.openclash",
+										"type": "call",
+										"function": "action_refresh_log"
+									}
+								},
+								"del_start_log": {
+									"satisfied": true,
+									"action": {
+										"module": "luci.controller.openclash",
+										"type": "call",
+										"function": "action_del_start_log"
+									}
+								},
+								"switch_dashboard": {
+									"satisfied": true,
+									"action": {
+										"module": "luci.controller.openclash",
+										"type": "call",
+										"function": "action_switch_dashboard"
+									}
+								},
+								"switch_rule_mode": {
+									"satisfied": true,
+									"action": {
+										"module": "luci.controller.openclash",
+										"type": "call",
+										"function": "action_switch_rule_mode"
+									}
+								},
+								"update_ma": {
+									"satisfied": true,
+									"action": {
+										"module": "luci.controller.openclash",
+										"type": "call",
+										"function": "action_update_ma"
+									}
+								},
+								"switch_log": {
+									"satisfied": true,
+									"action": {
+										"module": "luci.controller.openclash",
+										"type": "call",
+										"function": "action_switch_log"
+									}
+								},
+								"download_rule": {
+									"satisfied": true,
+									"action": {
+										"module": "luci.controller.openclash",
+										"type": "call",
+										"function": "action_download_rule"
+									}
+								},
+								"flush_dns_cache": {
+									"satisfied": true,
+									"action": {
+										"module": "luci.controller.openclash",
+										"type": "call",
+										"function": "action_flush_dns_cache"
+									}
+								},
+								"switch_config": {
+									"satisfied": true,
+									"action": {
+										"module": "luci.controller.openclash",
+										"type": "call",
+										"function": "action_switch_config"
+									}
+								},
+								"config_name": {
+									"satisfied": true,
+									"action": {
+										"module": "luci.controller.openclash",
+										"type": "call",
+										"function": "action_config_name"
+									}
+								},
+								"update_info": {
+									"satisfied": true,
+									"action": {
+										"module": "luci.controller.openclash",
+										"type": "call",
+										"function": "action_update_info"
+									}
+								}
+							},
+							"action": {
+								"path": "admin/services/openclash/client",
+								"type": "alias"
+							},
+							"depends": {
+								"acl": [
+									"luci-app-openclash"
+								]
+							},
+							"order": 50,
+							"title": "OpenClash"
+						}
+					},
+					"action": {
+						"type": "firstchild",
+						"recurse": true
+					},
+					"order": 30,
+					"title": "Services"
+				},
+				"status": {
+					"satisfied": true,
+					"action": {
+						"type": "firstchild",
+						"preferred": "overview",
+						"recurse": true
+					},
+					"order": 10,
+					"title": "Status",
+					"children": {
+						"overview": {
+							"satisfied": true,
+							"action": {
+								"type": "template",
+								"path": "admin_status/index"
+							},
+							"depends": {
+								"acl": [
+									"luci-mod-status-index"
+								]
+							},
+							"order": 1,
+							"title": "Overview"
+						},
+						"routes": {
+							"satisfied": false,
+							"action": {
+								"type": "view",
+								"path": "status/routes"
+							},
+							"depends": {
+								"acl": [
+									"luci-mod-status-routes"
+								],
+								"fs": [
+									{
+										"/usr/libexec/ip-tiny": "absent",
+										"/usr/libexec/ip-full": "absent"
+									}
+								]
+							},
+							"order": 2,
+							"title": "Routing",
+							"readonly": true
+						},
+						"routesj": {
+							"satisfied": true,
+							"action": {
+								"type": "view",
+								"path": "status/routesj"
+							},
+							"depends": {
+								"acl": [
+									"luci-mod-status-routes-json"
+								],
+								"fs": [
+									{
+										"/usr/libexec/ip-tiny": "executable"
+									},
+									{
+										"/usr/libexec/ip-full": "executable"
+									}
+								]
+							},
+							"order": 2,
+							"title": "Routing",
+							"readonly": true
+						},
+						"iptables": {
+							"satisfied": false,
+							"action": {
+								"type": "view",
+								"path": "status/iptables"
+							},
+							"depends": {
+								"acl": [
+									"luci-mod-status-firewall"
+								],
+								"fs": [
+									{
+										"/usr/sbin/nft": "absent",
+										"/usr/sbin/iptables": "executable"
+									},
+									{
+										"/usr/sbin/nft": "absent",
+										"/usr/sbin/ip6tables": "executable"
+									}
+								]
+							},
+							"order": 3,
+							"title": "Firewall"
+						},
+						"nftables": {
+							"satisfied": true,
+							"action": {
+								"type": "view",
+								"path": "status/nftables"
+							},
+							"depends": {
+								"acl": [
+									"luci-mod-status-firewall"
+								],
+								"fs": {
+									"/usr/sbin/nft": "executable"
+								}
+							},
+							"order": 3,
+							"title": "Firewall",
+							"children": {
+								"iptables": {
+									"satisfied": true,
+									"action": {
+										"type": "view",
+										"path": "status/iptables"
+									}
+								}
+							}
+						},
+						"logs": {
+							"satisfied": true,
+							"action": {
+								"type": "alias",
+								"path": "admin/status/logs/syslog"
+							},
+							"depends": {
+								"acl": [
+									"luci-mod-status-logs"
+								]
+							},
+							"order": 4,
+							"title": "System Log",
+							"children": {
+								"syslog": {
+									"satisfied": true,
+									"action": {
+										"type": "view",
+										"path": "status/syslog"
+									},
+									"order": 1,
+									"title": "System Log"
+								},
+								"dmesg": {
+									"satisfied": true,
+									"action": {
+										"type": "view",
+										"path": "status/dmesg"
+									},
+									"order": 2,
+									"title": "Kernel Log"
+								}
+							},
+							"readonly": true
+						},
+						"processes": {
+							"satisfied": true,
+							"action": {
+								"type": "view",
+								"path": "status/processes"
+							},
+							"depends": {
+								"acl": [
+									"luci-mod-status-processes"
+								]
+							},
+							"order": 6,
+							"title": "Processes"
+						},
+						"channel_analysis": {
+							"satisfied": true,
+							"action": {
+								"type": "view",
+								"path": "status/channel_analysis"
+							},
+							"depends": {
+								"acl": [
+									"luci-mod-status-channel_analysis"
+								],
+								"uci": {
+									"wireless": {
+										"@wifi-device": true
+									}
+								}
+							},
+							"order": 7,
+							"title": "Channel Analysis",
+							"readonly": true
+						},
+						"realtime": {
+							"satisfied": true,
+							"action": {
+								"type": "alias",
+								"path": "admin/status/realtime/load"
+							},
+							"depends": {
+								"acl": [
+									"luci-mod-status-realtime"
+								]
+							},
+							"order": 7,
+							"title": "Realtime Graphs",
+							"children": {
+								"load": {
+									"satisfied": true,
+									"action": {
+										"type": "view",
+										"path": "status/load"
+									},
+									"order": 1,
+									"title": "Load"
+								},
+								"bandwidth": {
+									"satisfied": true,
+									"action": {
+										"type": "view",
+										"path": "status/bandwidth"
+									},
+									"order": 2,
+									"title": "Bandwidth"
+								},
+								"wireless": {
+									"satisfied": true,
+									"action": {
+										"type": "view",
+										"path": "status/wireless"
+									},
+									"depends": {
+										"uci": {
+											"wireless": {
+												"@wifi-device": true
+											}
+										}
+									},
+									"order": 3,
+									"title": "Wireless"
+								},
+								"connections": {
+									"satisfied": true,
+									"action": {
+										"type": "view",
+										"path": "status/connections"
+									},
+									"order": 4,
+									"title": "Connections"
+								}
+							},
+							"readonly": true
+						},
+						"wireguard": {
+							"satisfied": true,
+							"action": {
+								"type": "view",
+								"path": "wireguard/status"
+							},
+							"depends": {
+								"acl": [
+									"luci-proto-wireguard"
+								],
+								"uci": {
+									"network": true
+								}
+							},
+							"order": 92,
+							"title": "WireGuard"
+						}
+					}
+				},
+				"nas": {
+					"satisfied": true,
+					"action": {
+						"type": "firstchild",
+						"recurse": true
+					},
+					"order": 40,
+					"title": "NAS"
+				},
+				"vpn": {
+					"satisfied": true,
+					"action": {
+						"type": "firstchild",
+						"recurse": true
+					},
+					"order": 50,
+					"title": "VPN",
+					"children": {
+						"easytier": {
+							"satisfied": true,
+							"children": {
+								"get_log": {
+									"satisfied": true,
+									"action": {
+										"module": "luci.controller.easytier",
+										"type": "call",
+										"function": "get_log"
+									},
+									"wildcard": true
+								},
+								"easytier_log": {
+									"satisfied": true,
+									"action": {
+										"module": "luci.dispatcher",
+										"type": "call",
+										"post": {
+											"cbi.submit": true
+										},
+										"function": "invoke_form_action",
+										"parameters": [
+											"easytier_log"
+										]
+									},
+									"order": 48,
+									"title": "core log",
+									"wildcard": true
+								},
+								"get_wlog": {
+									"satisfied": true,
+									"action": {
+										"module": "luci.controller.easytier",
+										"type": "call",
+										"function": "get_wlog"
+									},
+									"wildcard": true
+								},
+								"easytier": {
+									"satisfied": true,
+									"action": {
+										"module": "luci.dispatcher",
+										"type": "call",
+										"post": {
+											"cbi.submit": true
+										},
+										"function": "invoke_cbi_action",
+										"parameters": [
+											"easytier",
+											{
+											}
+										]
+									},
+									"order": 47,
+									"title": "EasyTier",
+									"wildcard": true
+								},
+								"clear_log": {
+									"satisfied": true,
+									"action": {
+										"module": "luci.controller.easytier",
+										"type": "call",
+										"function": "clear_log"
+									},
+									"wildcard": true
+								},
+								"clear_wlog": {
+									"satisfied": true,
+									"action": {
+										"module": "luci.controller.easytier",
+										"type": "call",
+										"function": "clear_wlog"
+									},
+									"wildcard": true
+								},
+								"status": {
+									"satisfied": true,
+									"action": {
+										"module": "luci.controller.easytier",
+										"type": "call",
+										"function": "act_status"
+									},
+									"wildcard": true
+								},
+								"easytierweb_log": {
+									"satisfied": true,
+									"action": {
+										"module": "luci.dispatcher",
+										"type": "call",
+										"post": {
+											"cbi.submit": true
+										},
+										"function": "invoke_form_action",
+										"parameters": [
+											"easytierweb_log"
+										]
+									},
+									"order": 49,
+									"title": "web log",
+									"wildcard": true
+								}
+							},
+							"action": {
+								"path": "admin/vpn/easytier/easytier",
+								"type": "alias"
+							},
+							"order": 46,
+							"title": "EasyTier"
+						}
+					}
+				},
+				"translations": {
+					"satisfied": true,
+					"wildcard": true,
+					"action": {
+						"type": "function",
+						"module": "luci.controller.admin.index",
+						"function": "action_translations"
+					},
+					"auth": {
+					}
+				},
+				"ubus": {
+					"satisfied": true,
+					"wildcard": true,
+					"action": {
+						"type": "function",
+						"module": "luci.controller.admin.index",
+						"function": "action_ubus"
+					},
+					"auth": {
+					}
+				},
+				"logout": {
+					"satisfied": true,
+					"action": {
+						"type": "function",
+						"module": "luci.controller.admin.index",
+						"function": "action_logout"
+					},
+					"depends": {
+						"acl": [
+							"luci-base"
+						]
+					},
+					"order": 999,
+					"title": "Log out",
+					"firstchild_ineligible": true
+				},
+				"uci": {
+					"satisfied": true,
+					"action": {
+						"type": "firstchild"
+					},
+					"children": {
+						"revert": {
+							"satisfied": true,
+							"action": {
+								"type": "function",
+								"module": "luci.controller.admin.uci",
+								"function": "action_revert",
+								"post": true
+							}
+						},
+						"apply_rollback": {
+							"satisfied": true,
+							"action": {
+								"type": "function",
+								"module": "luci.controller.admin.uci",
+								"function": "action_apply_rollback",
+								"post": true
+							},
+							"auth": {
+								"methods": [
+									"cookie:sysauth_https",
+									"cookie:sysauth_http"
+								]
+							},
+							"cors": true
+						},
+						"apply_unchecked": {
+							"satisfied": true,
+							"action": {
+								"type": "function",
+								"module": "luci.controller.admin.uci",
+								"function": "action_apply_unchecked",
+								"post": true
+							},
+							"auth": {
+								"methods": [
+									"cookie:sysauth_https",
+									"cookie:sysauth_http"
+								]
+							},
+							"cors": true
+						},
+						"confirm": {
+							"satisfied": true,
+							"action": {
+								"type": "function",
+								"module": "luci.controller.admin.uci",
+								"function": "action_confirm"
+							},
+							"auth": {
+							},
+							"cors": true
+						}
+					}
+				},
+				"menu": {
+					"satisfied": true,
+					"action": {
+						"type": "function",
+						"module": "luci.controller.admin.index",
+						"function": "action_menu"
+					},
+					"auth": {
+					}
+				}
+			},
+			"action": {
+				"type": "firstchild",
+				"recurse": true
+			},
+			"auth": {
+				"methods": [
+					"cookie:sysauth_https",
+					"cookie:sysauth_http"
+				],
+				"login": true
+			},
+			"order": 10,
+			"title": "Administration"
+		}
+	}
+}

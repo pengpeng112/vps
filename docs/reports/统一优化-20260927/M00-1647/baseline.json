@@ -1,0 +1,151 @@
+{
+  "pc": {
+    "device": "pc",
+    "time": "2026-09-27T16:49:12+08:00\n",
+    "route": "\n      9 192.168.132.1          10              10\n\n\n\n",
+    "adapter": "\nName            InterfaceDescription               LinkSpeed\n----            --------------------               ---------\nvEthernet (WSL) Hyper-V Virtual Ethernet Adapter   10 Gbps  \n��̫��             Realtek PCIe GbE Family Controller 1 Gbps   \n\n\n\n",
+    "dns": "\nInterfaceAlias ServerAddresses\n-------------- ---------------\n��̫��            {192.168.132.1}\nWLAN           {192.168.132.1}\n\n\n\n",
+    "ip": "\nInterfaceAlias  IPAddress       PrefixLength\n--------------  ---------       ------------\nvEthernet (WSL) 172.29.64.1               20\n��̫��             192.168.132.105           24\n\n\n\n",
+    "tasks": "\n",
+    "tunnel_proc": "\n\nProcessId   : 15136\nCommandLine : \"D:\\Program Files\\Git\\usr\\bin\\ssh.exe\" -f -N -p 28722 -i C:/Users/Administrator/.ssh/id_ed25519_digitaloc\n              ean -o IdentitiesOnly=yes -o BatchMode=yes -o ExitOnForwardFailure=yes -o ServerAliveInterval=30 -L 127.0\n              .0.1:18444:10.10.0.1:8443 root@159.223.36.119\n\n\n\n\n"
+  },
+  "athena": {
+    "device": "athena",
+    "basic": "2026-09-27T16:49:12+0800\nCST-8\n 16:49:12 up 3 days, 21:33,  load average: 0.21, 0.09, 0.05\n0.22 0.10 0.06 2/201 20001\n",
+    "network": "1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000\n    inet 127.0.0.1/8 scope host lo\n7: wan: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc mq state UP group default qlen 1000\n    inet 10.1.2.105/24 brd 10.1.2.255 scope global wan\n    inet 10.1.2.18/24 scope global secondary wan\n12: br-lan: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP group default qlen 1000\n    inet 192.168.2.1/24 brd 192.168.2.255 scope global br-lan\n25: wg0: <POINTOPOINT,NOARP,UP,LOWER_UP> mtu 1420 qdisc noqueue state UNKNOWN group default qlen 1000\n    inet 10.10.0.10/32 brd 255.255.255.255 scope global wg0\ndefault via 10.1.2.254 dev wan proto static src 10.1.2.105 \n10.1.2.0/24 dev wan proto kernel scope link src 10.1.2.105 \n10.10.0.0/24 dev wg0 proto static scope link \n159.223.36.119 via 10.1.2.254 dev wan proto static \n192.168.2.0/24 dev br-lan proto kernel scope link src 192.168.2.1 \nsearch lan\nnameserver 127.0.0.1\nnameserver ::1\n{\n\t\"up\": true,\n\t\"pending\": false,\n\t\"available\": true,\n\t\"autostart\": true,\n\t\"dynamic\": false,\n\t\"uptime\": 336791,\n\t\"l3_device\": \"wan\",\n\t\"proto\": \"dhcp\",\n\t\"device\": \"wan\",\n\t\"metric\": 0,\n\t\"dns_metric\": 0,\n\t\"delegation\": true,\n\t\"ipv4-address\": [\n\t\t{\n\t\t\t\"address\": \"10.1.2.105\",\n\t\t\t\"mask\": 24\n\t\t}\n\t],\n\t\"ipv6-address\": [\n\t\t\n\t],\n\t\"ipv6-prefix\": [\n\t\t\n\t],\n\t\"ipv6-prefix-assignment\": [\n\t\t\n\t],\n\t\"route\": [\n\t\t{\n\t\t\t\"target\": \"0.0.0.0\",\n\t\t\t\"mask\": 0,\n\t\t\t\"nexthop\": \"10.1.2.254\",\n\t\t\t\"source\": \"10.1.2.105/32\"\n\t\t}\n\t],\n\t\"dns-server\": [\n\t\t\"211.137.191.26\",\n\t\t\"202.102.128.68\"\n\t],\n",
+    "resources": "MemTotal:         898212 kB\nMemAvailable:     481992 kB\n1155\n65535\nInter-|   Receive                                                |  Transmit\nlo: 1449353 1449353\nmiireg: 0 0\nlan1: 678565 759268\nlan2: 0 0\nlan3: 43032521 65755468\nlan4: 5345 3254\nwan: 68868568 43702400\ndummy0: 0 0\ngre0: 0 0\ngretap0: 0 0\nerspan0: 0 0\nbr-lan: 39189174 62458768\nwg0: 0 51720\nphy0-ap0: 0 60386\nphy1-ap0: 0 60386\nphy2-ap0: 0 60366\n",
+    "services": "mihomo=enabled,running\nroutermgmt=enabled,running\nwan-watch=enabled,running\nmgmt-tunnel=enabled,running\ndropbear=enabled,running\nuhttpd=ash: /etc/init.d/uhttpd: not found\ncron=enabled,running\n",
+    "ports": "tcp        0      0 0.0.0.0:22              0.0.0.0:*               LISTEN      2087/dropbear\ntcp        0      0 0.0.0.0:80              0.0.0.0:*               LISTEN      3730/uci.conf -g da\ntcp        0      0 0.0.0.0:631             0.0.0.0:*               LISTEN      3439/cupsd\ntcp        0      0 10.1.2.105:53           0.0.0.0:*               LISTEN      8858/dnsmasq\ntcp        0      0 127.0.0.1:9090          0.0.0.0:*               LISTEN      14949/mihomo\ntcp        0      0 192.168.2.1:53          0.0.0.0:*               LISTEN      8858/dnsmasq\ntcp        0      0 10.1.2.18:53            0.0.0.0:*               LISTEN      8858/dnsmasq\ntcp        0      0 192.168.2.1:7681        0.0.0.0:*               LISTEN      5484/ttyd\ntcp        0      0 127.0.0.1:53            0.0.0.0:*               LISTEN      8858/dnsmasq\ntcp        0      0 10.10.0.10:53           0.0.0.0:*               LISTEN      8858/dnsmasq\ntcp        0      0 127.0.0.1:18443         0.0.0.0:*               LISTEN      32284/ssh\ntcp        0      0 0.0.0.0:443             0.0.0.0:*               LISTEN      3730/uci.conf -g da\ntcp        0      0 :::1053                 :::*                    LISTEN      14949/mihomo\ntcp        0      0 :::22                   :::*                    LISTEN      2087/dropbear\ntcp        0      0 :::80                   :::*                    LISTEN      3730/uci.conf -g da\ntcp        0      0 :::631                  :::*                    LISTEN      3439/cupsd\ntcp        0      0 ::1:53                  :::*                    LISTEN      8858/dnsmasq\ntcp        0      0 fe80::ded8:7bff:fe5c:faff:53 :::*                    LISTEN      8858/dnsmasq\ntcp        0      0 :::7890                 :::*                    LISTEN      14949/mihomo\ntcp        0      0 :::7892                 :::*                    LISTEN      14949/mihomo\ntcp        0      0 fe80::ded8:7cff:fe5c:fb00:53 :::*                    LISTEN      8858/dnsmasq\ntcp        0      0 :::443                  :::*                    LISTEN      3730/uci.conf -g da\ntcp        0      0 fd33:8425:e078::1:53    :::*                    LISTEN      8858/dnsmasq\n",
+    "mgmt_dir": "drwx------    5 root     root          3488 Sep 25 19:22 .\ndrwxr-xr-x    1 root     root          3488 Sep 23 18:09 ..\n-rwxr-xr-x    1 root     root          2573 Sep 20 09:48 access-fw.sh\n-rw-r--r--    1 root     root         16576 Sep 25 11:46 agent-bak-20260925114659.tar.gz\n-rw-r--r--    1 root     root         17013 Sep 25 11:51 agent-bak-20260925115100.tar.gz\n-rw-------    1 root     root           243 Sep 20 10:48 agent.conf\ndrwxr-xr-x    2 root     root          3488 Sep 25 11:51 handlers\n-rw-------    1 root     root            83 Sep 20 10:48 id_dropbear_mgmt\n-rw-------    1 root     root            93 Sep 20 10:48 id_dropbear_mgmt.pub\ndrwxr-xr-x    2 root     root          3488 Sep 27 16:47 logs\n-rwxr-xr-x    1 root     root          2083 Sep 27 07:54 netprobe.sh\n-rwx------    1 root     root         16646 Sep 25 11:51 routermgmt-agent.sh\n-rw-r--r--    1 root     root           113 Sep 17 09:05 sign_pub.pem\ndrwx------    5 root     root          3488 Sep 27 14:27 state\n-rw-------    1 root     root           255 Sep 25 12:02 tunnel.conf\n-rwxr-xr-x    1 root     root           651 Sep 23 19:50 wifi_restore.sh\ndrwxr-xr-x    2 root     root          3488 Sep 27 16:47 .\ndrwx------    5 root     root          3488 Sep 25 19:22 ..\n-rw-r--r--    1 root     root        170338 Sep 27 16:46 netprobe.log\n-rw-------    1 root     root         35579 Sep 27 16:49 syslog\n-rw-------    1 root     root       1048667 Sep 27 16:47 syslog.old\n-rw-r--r--    1 root     root           126 Sep 27 16:48 wan-watch.last\n-rw-r--r--    1 root     root        310451 Sep 27 16:48 wan-watch.log\n-rw-r--r--    1 root     root        400050 Sep 26 17:21 wan-watch.log.1\n-rw-r--r--    1 root     root        400233 Sep 25 11:07 wan-watch.log.2\n",
+    "agent_ver": " 1740 root      1624 S    /sbin/logread -f -F /etc/routermgmt/logs/syslog -p /var/run/logread.1.pid -S 1024\n14949 root     1412m S    /usr/bin/mihomo -d /etc/openclash -f /etc/mihomo/run.yaml\n20311 root      1348 S    ash -c cat /etc/routermgmt/version 2>/dev/null; md5sum /usr/bin/routermgmt 2>/dev/null || md5sum /etc/rou\n20314 root      2076 S    {routermgmt-agen} /bin/sh /usr/bin/routermgmt-agent\n28781 root      2076 S    {routermgmt-agen} /bin/sh /usr/bin/routermgmt-agent\n32284 root      1316 S    /usr/bin/ssh -i /etc/routermgmt/id_dropbear_mgmt -p 28722 -N -K 30 -T -L 127.0.0.1:18443:10.10.0.1:8443 r\n32285 root      1312 S    /usr/bin/ssh -i /etc/routermgmt/id_dropbear_mgmt -p 28722 -N -K 30 -T -R 127.0.0.1:18222:127.0.0.1:22 roo\n",
+    "mgmt_tunnel": "#!/bin/sh /etc/rc.common\n# mgmt-tunnel — SSH TCP 管理通道（公司网/拦 UDP 51820 场景）\n# 2026-09-24 阶段1重构：\n#   - 配置外置到 /etc/routermgmt/tunnel.conf（严格白名单 key=value，逐行解析，禁止 source）\n#   - 管理 -L 与排障 -R 拆成两个 procd instance：-R 绑定失败不再伪装成全部成功\n#   - /root/.ssh/known_hosts 含本 VPS 条目时自动去掉 -y（host key 变更即拒连，fail-closed）\n#     注：dbclient 不认 $HOME 环境变量，known_hosts 固定读 root 家目录；\n#         条目为纯主机名格式（dropbear 自写），用 setup-mgmt-tunnel.sh pin-hostkey 生成\n#   - tunnel.conf 缺失/无效时降级为仅 -L 的旧默认，保证心跳不因缺配置中断\n# 注意：Dropbear dbclient 无 ExitOnForwardFailure（两台生产机实测 /usr/bin/ssh\n# 均为 dbclient 链接），-R 绑定失败进程不退出；半通状态由 VPS 侧\n# mgmt-rssh-probe banner 探测发现并经白名单任务 repair_mgmt_tunnel 修复。\nUSE_PROCD=1\nSTART=98\nSTOP=12\n\nCONF=/etc/routermgmt/tunnel.conf\nKEY=/etc/routermgmt/id_dropbear_mgmt\nKH=/root/.ssh/known_hosts\n\n# 降级默认（无 tunnel.conf 时仅保心跳通道）\nDEF_VPS=159.223.36.119\nDEF_PORT=28722\nDEF_LOCAL=18443\nDEF_HUB=10.10.0.1:8443\n\nTC_VPS_HOST=\"\"\nTC_VPS_PORT=\"\"\nTC_MGMT_LOCAL_PORT=\"\"\nTC_MGMT_TARGET=\"\"\n32284 root      1316 S    /usr/bin/ssh -i /etc/routermgmt/id_dropbear_mgmt -p 28722 -N -K 30 -T -L 127.0.0.1:18443:10.10.0.1:8443 r\n32285 root      1312 S    /usr/bin/ssh -i /etc/routermgmt/id_dropbear_mgmt -p 28722 -N -K 30 -T -R 127.0.0.1:18222:127.0.0.1:22 roo\n",
+    "cron": "3 3 12 12 * /usr/bin/nginx-util 'check_ssl'\n15 3 * * * sync && echo 3 > /proc/sys/vm/drop_caches\n*/5 * * * * /etc/routermgmt/netprobe.sh #routermgmt-netprobe\n",
+    "mihomo_ver": "Mihomo Meta alpha-ge183c58 linux arm64 with go1.26.5 Mon Aug 10 14:32:53 UTC 2026\nUse tags: with_gvisor\n/usr/bin/mihomo -d /etc/openclash -f /etc/mihomo/run.yaml \n-rw-r--r--    1 root     root          5896 Sep 27 14:23 /etc/mihomo/run.yaml\n",
+    "mihomo_cfg_hash": "d957c18c873e21dd49ceecbf4b3e1bfac0045d5627ee359100ad6bc71dd2fabb /etc/mihomo/run.yaml\n",
+    "groups_now": {
+      "AUTO": {
+        "type": "Fallback",
+        "now": "NODE-PICK"
+      },
+      "CN-MEDIA": {
+        "type": "Selector",
+        "now": "DIRECT"
+      },
+      "DOWNLOAD": {
+        "type": "Selector",
+        "now": "DIRECT"
+      },
+      "GLOBAL": {
+        "type": "Selector",
+        "now": "DIRECT"
+      },
+      "NODE-PICK": {
+        "type": "URLTest",
+        "now": "VPS-SG-01"
+      },
+      "PROXY": {
+        "type": "Selector",
+        "now": "AUTO"
+      }
+    },
+    "rules_meta": {
+      "count": 54,
+      "gstatic_hits": [],
+      "google_cn_pos": [
+        40
+      ]
+    },
+    "dns_now": "{\"AD\":false,\"Answer\":[{\"TTL\":3,\"data\":\"114.250.69.34\",\"name\":\"www.gstatic.com.\",\"type\":1}],\"CD\":false,\"Question\":[{\"Name\":\"www.gstatic.com.\",\"Qtype\":1,\"Qclass\":1}],\"RA\":true,\"RD\":true,\"Status\":0,\"TC\":false}\n\n{\"AD\":false,\"Answer\":[{\"TTL\":1,\"data\":\"www.a.shifen.com.\",\"name\":\"www.baidu.com.\",\"type\":5},{\"TTL\":1,\"data\":\"110.242.70.57\",\"name\":\"www.a.shifen.com.\",\"type\":1},{\"TTL\":1,\"data\":\"110.242.69.21\",\"name\":\"www.a.shifen.com.\",\"type\":1}],\"CD\":false,\"Question\":[{\"Name\":\"www.baidu.com.\",\"Qtype\":1,\"Qclass\":1}],\"RA\":true,\"RD\":true,\"Status\":0,\"TC\":false}\n",
+    "backup_state": "",
+    "firewall_head": "80:\t\tct status dnat accept comment \"!fw4: Accept port redirections\"\n184:table inet mihomo {\n188:\t\tiifname \"br-lan\" udp dport 53 ip daddr != 192.168.2.0/24 counter packets 106 bytes 6245 redirect to :1053\n189:\t\tiifname \"br-lan\" tcp dport 53 ip daddr != 192.168.2.0/24 counter packets 0 bytes 0 redirect to :1053\n190:\t\tiifname \"br-lan\" udp dport 443 ip daddr != { 10.0.0.0/8, 100.64.0.0/10, 127.0.0.0/8, 169.254.0.0/16, 172.16.0.0/12, 192.168.0.0/16, 224.0.0.0/4, 255.255.255.255 } counter packets 0 bytes 0 drop\n191:\t\tiifname \"br-lan\" tcp dport 1-65535 ip daddr != { 10.0.0.0/8, 100.64.0.0/10, 127.0.0.0/8, 169.254.0.0/16, 172.16.0.0/12, 192.168.0.0/16, 224.0.0.0/4, 255.255.255.255 } counter packets 16869 bytes 1012140 redirect to :7892\n"
+  },
+  "snr1": {
+    "device": "snr1",
+    "basic": "2026-09-27T16:49:12+0800\nCST-8\n 16:49:12 up 1 day,  2:49,  load average: 0.06, 0.09, 0.08\n0.07 0.09 0.09 1/112 20750\n",
+    "network": "1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN qlen 1000\n    inet 127.0.0.1/8 scope host lo\n4: wan@eth0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP qlen 1000\n    inet 192.168.2.158/24 brd 192.168.2.255 scope global wan\n13: br-lan: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP qlen 1000\n    inet 192.168.132.1/24 brd 192.168.132.255 scope global br-lan\ndefault via 192.168.2.1 dev wan  src 192.168.2.158 \n192.168.2.0/24 dev wan scope link  src 192.168.2.158 \n192.168.2.1 dev wan scope link  src 192.168.2.158 \n192.168.132.0/24 dev br-lan scope link  src 192.168.132.1 \n# Interface wan\nnameserver 192.168.2.1\nsearch lan\n{\n\t\"up\": true,\n\t\"pending\": false,\n\t\"available\": true,\n\t\"autostart\": true,\n\t\"dynamic\": false,\n\t\"uptime\": 96562,\n\t\"l3_device\": \"wan\",\n\t\"proto\": \"dhcp\",\n\t\"device\": \"wan\",\n\t\"metric\": 0,\n\t\"dns_metric\": 0,\n\t\"delegation\": true,\n\t\"ipv4-address\": [\n\t\t{\n\t\t\t\"address\": \"192.168.2.158\",\n\t\t\t\"mask\": 24\n\t\t}\n\t],\n\t\"ipv6-address\": [\n\t\t\n\t],\n\t\"ipv6-prefix\": [\n\t\t\n\t],\n\t\"ipv6-prefix-assignment\": [\n\t\t\n\t],\n\t\"route\": [\n\t\t{\n\t\t\t\"target\": \"192.168.2.1\",\n\t\t\t\"mask\": 32,\n\t\t\t\"nexthop\": \"0.0.0.0\",\n\t\t\t\"source\": \"192.168.2.158/32\"\n\t\t},\n\t\t{\n\t\t\t\"target\": \"0.0.0.0\",\n\t\t\t\"mask\": 0,\n\t\t\t\"nexthop\": \"192.168.2.1\",\n\t\t\t\"source\": \"192.168.2.158/32\"\n",
+    "resources": "MemTotal:        1014720 kB\nMemAvailable:     839828 kB\n1034\n16384\nInter-|   Receive                                                |  Transmit\nra3: 0 0\neth1: 0 0\nlan1: 0 0\ngre0: 0 0\nrax0: 0 0\nlan2: 0 0\nrax1: 0 0\nrax2: 0 0\nbr-lan: 11564584 28282572\nra2: 0 0\nlo: 650110 650110\nra4: 0 0\neth0: 43925560 44414587\nlan4: 12830406 28282573\nra5: 0 0\nra1: 0 0\nlan3: 0 0\nrax3: 0 0\nerspan0: 0 0\ngretap0: 0 0\napcli0: 0 0\nra0: 0 0\nrax4: 0 0\napclix0: 0 0\nwan: 31095154 13992850\nrax5: 0 0\n",
+    "services": "mihomo=enabled,running\nroutermgmt=enabled,running\nwan-watch=enabled,running\nmgmt-tunnel=enabled,running\ndropbear=enabled,running\nuhttpd=enabled,running\ncron=enabled,running\n",
+    "ports": "tcp        0      0 127.0.0.1:18443         0.0.0.0:*               LISTEN      13948/ssh\ntcp        0      0 192.168.132.1:80        0.0.0.0:*               LISTEN      5943/uhttpd\ntcp        0      0 127.0.0.1:53            0.0.0.0:*               LISTEN      20668/dnsmasq\ntcp        0      0 192.168.2.158:53        0.0.0.0:*               LISTEN      20668/dnsmasq\ntcp        0      0 192.168.132.1:53        0.0.0.0:*               LISTEN      20668/dnsmasq\ntcp        0      0 192.168.132.1:22        0.0.0.0:*               LISTEN      3892/dropbear\ntcp        0      0 192.168.132.1:443       0.0.0.0:*               LISTEN      5943/uhttpd\ntcp        0      0 127.0.0.1:9090          0.0.0.0:*               LISTEN      5134/mihomo\ntcp        0      0 :::7890                 :::*                    LISTEN      5134/mihomo\ntcp        0      0 :::7892                 :::*                    LISTEN      5134/mihomo\ntcp        0      0 ::1:53                  :::*                    LISTEN      20668/dnsmasq\ntcp        0      0 fe80::4894:25ff:fed2:76ef:53 :::*                    LISTEN      20668/dnsmasq\ntcp        0      0 fe80::4894:25ff:fed2:76ef:53 :::*                    LISTEN      20668/dnsmasq\ntcp        0      0 fe80::4894:25ff:fed2:76ef:53 :::*                    LISTEN      20668/dnsmasq\ntcp        0      0 :::23                   :::*                    LISTEN      4673/telnetd\ntcp        0      0 :::1053                 :::*                    LISTEN      5134/mihomo\n",
+    "mgmt_dir": "drwxr-xr-x    5 root     root          3488 Sep 25 19:22 .\ndrwxr-xr-x    1 root     root          3488 Sep 27 13:59 ..\n-rwxr-xr-x    1 root     root          1783 Sep 23 17:35 access-fw.sh\n-rw-r--r--    1 root     root         16562 Sep 25 11:52 agent-bak-20260925115203.tar.gz\n-rw-r--r--    1 root     root         16060 Sep 25 11:59 agent-bak-20260925115901.tar.gz\n-rw-------    1 root     root           243 Sep 23 19:02 agent.conf\ndrwxr-xr-x    2 root     root          3488 Sep 25 11:59 handlers\n-rw-------    1 root     root           805 Sep 23 17:35 id_dropbear_mgmt\ndrwxr-xr-x    2 root     root          3488 Sep 26 21:54 logs\n-rwxr-xr-x    1 root     root          2083 Sep 27 07:55 netprobe.sh\n-rwx------    1 root     root         16646 Sep 25 11:59 routermgmt-agent.sh\n-rw-r--r--    1 root     root           113 Sep 23 17:35 sign_pub.pem\ndrwx------    6 root     root          3488 Sep 27 14:37 state\n-rw-------    1 root     root           347 Sep 24 15:09 tunnel.conf\n-rwxr-xr-x    1 root     root           651 Sep 23 19:50 wifi_restore.sh\ndrwxr-xr-x    2 root     root          3488 Sep 26 21:54 .\ndrwxr-xr-x    5 root     root          3488 Sep 25 19:22 ..\n-rw-r--r--    1 root     root        130875 Sep 27 16:46 netprobe.log\n-rw-r--r--    1 root     root           114 Sep 27 16:48 wan-watch.last\n-rw-r--r--    1 root     root        296548 Sep 27 16:48 wan-watch.log\n-rw-r--r--    1 root     root        400004 Sep 26 21:53 wan-watch.log.1\n",
+    "agent_ver": " 5134 root     1366m S    /usr/bin/mihomo -d /etc/mihomo -f /etc/mihomo/config.yaml\n 5445 root      2292 S    /bin/sh /usr/bin/routermgmt-agent\n13948 root      1128 S    /usr/bin/ssh -i /etc/routermgmt/id_dropbear_mgmt -p 28722 -N -K 30 -T -y -L 127.0.0.1:18443:10.10.0.1:844\n13949 root      1128 S    /usr/bin/ssh -i /etc/routermgmt/id_dropbear_mgmt -p 28722 -N -K 30 -T -y -R 127.0.0.1:13222:192.168.132.1\n21116 root      1240 S    ash -c cat /etc/routermgmt/version 2>/dev/null; md5sum /usr/bin/routermgmt 2>/dev/null || md5sum /etc/rou\n",
+    "mgmt_tunnel": "#!/bin/sh /etc/rc.common\n# mgmt-tunnel — SSH TCP 管理通道（公司网/拦 UDP 51820 场景）\n# 2026-09-24 阶段1重构：\n#   - 配置外置到 /etc/routermgmt/tunnel.conf（严格白名单 key=value，逐行解析，禁止 source）\n#   - 管理 -L 与排障 -R 拆成两个 procd instance：-R 绑定失败不再伪装成全部成功\n#   - /root/.ssh/known_hosts 含本 VPS 条目时自动去掉 -y（host key 变更即拒连，fail-closed）\n#     注：dbclient 不认 $HOME 环境变量，known_hosts 固定读 root 家目录；\n#         条目为纯主机名格式（dropbear 自写），用 setup-mgmt-tunnel.sh pin-hostkey 生成\n#   - tunnel.conf 缺失/无效时降级为仅 -L 的旧默认，保证心跳不因缺配置中断\n# 注意：Dropbear dbclient 无 ExitOnForwardFailure（两台生产机实测 /usr/bin/ssh\n# 均为 dbclient 链接），-R 绑定失败进程不退出；半通状态由 VPS 侧\n# mgmt-rssh-probe banner 探测发现并经白名单任务 repair_mgmt_tunnel 修复。\n# shellcheck disable=SC2034  # rc.common framework vars\nUSE_PROCD=1\nSTART=98\nSTOP=12\n\nCONF=/etc/routermgmt/tunnel.conf\nKEY=/etc/routermgmt/id_dropbear_mgmt\nKH=/root/.ssh/known_hosts\n\n# 降级默认（无 tunnel.conf 时仅保心跳通道）\nDEF_VPS=159.223.36.119\nDEF_PORT=28722\nDEF_LOCAL=18443\nDEF_HUB=10.10.0.1:8443\n\nTC_VPS_HOST=\"\"\nTC_VPS_PORT=\"\"\nTC_MGMT_LOCAL_PORT=\"\"\n13948 root      1128 S    /usr/bin/ssh -i /etc/routermgmt/id_dropbear_mgmt -p 28722 -N -K 30 -T -y -L 127.0.0.1:18443:10.10.0.1:844\n13949 root      1128 S    /usr/bin/ssh -i /etc/routermgmt/id_dropbear_mgmt -p 28722 -N -K 30 -T -y -R 127.0.0.1:13222:192.168.132.1\n",
+    "cron": "*/15 * * * * factory checkMem\n*/5 * * * * /etc/routermgmt/netprobe.sh #routermgmt-netprobe\n",
+    "mihomo_ver": "Mihomo Meta v1.19.31 linux arm64 with go1.26.8 Mon Sep 14 13:20:46 UTC 2026\nUse tags: with_gvisor\n/usr/bin/mihomo -d /etc/mihomo -f /etc/mihomo/config.yaml \n-rw-r--r--    1 root     root          5896 Sep 27 14:37 /etc/mihomo/config.yaml\n",
+    "mihomo_cfg_hash": "d957c18c873e21dd49ceecbf4b3e1bfac0045d5627ee359100ad6bc71dd2fabb /etc/mihomo/config.yaml\n",
+    "groups_now": {
+      "AUTO": {
+        "type": "Fallback",
+        "now": "NODE-PICK"
+      },
+      "CN-MEDIA": {
+        "type": "Selector",
+        "now": "DIRECT"
+      },
+      "DOWNLOAD": {
+        "type": "Selector",
+        "now": "DIRECT"
+      },
+      "GLOBAL": {
+        "type": "Selector",
+        "now": "DIRECT"
+      },
+      "NODE-PICK": {
+        "type": "URLTest",
+        "now": "VPS-SG-01"
+      },
+      "PROXY": {
+        "type": "Selector",
+        "now": "AUTO"
+      }
+    },
+    "rules_meta": {
+      "count": 54,
+      "gstatic_hits": [],
+      "google_cn_pos": [
+        40
+      ]
+    },
+    "dns_now": "{\"AD\":false,\"Answer\":[{\"TTL\":214,\"data\":\"142.251.12.94\",\"name\":\"www.gstatic.com.\",\"type\":1}],\"CD\":false,\"Question\":[{\"Name\":\"www.gstatic.com.\",\"Qtype\":1,\"Qclass\":1}],\"RA\":true,\"RD\":true,\"Status\":0,\"TC\":false}\n\n{\"AD\":false,\"Answer\":[{\"TTL\":1,\"data\":\"www.a.shifen.com.\",\"name\":\"www.baidu.com.\",\"type\":5},{\"TTL\":1,\"data\":\"110.242.70.57\",\"name\":\"www.a.shifen.com.\",\"type\":1},{\"TTL\":1,\"data\":\"110.242.69.21\",\"name\":\"www.a.shifen.com.\",\"type\":1}],\"CD\":false,\"Question\":[{\"Name\":\"www.baidu.com.\",\"Qtype\":1,\"Qclass\":1}],\"RA\":true,\"RD\":true,\"Status\":0,\"TC\":false}\n",
+    "backup_state": "",
+    "firewall_head": "67:[0:0] -A MIHOMO -d 0.0.0.0/8 -j RETURN\n68:[32480:2588612] -A MIHOMO -d 10.0.0.0/8 -j RETURN\n69:[0:0] -A MIHOMO -d 127.0.0.0/8 -j RETURN\n70:[0:0] -A MIHOMO -d 100.64.0.0/10 -j RETURN\n71:[0:0] -A MIHOMO -d 169.254.0.0/16 -j RETURN\n72:[0:0] -A MIHOMO -d 172.16.0.0/12 -j RETURN\n73:[43226:2881941] -A MIHOMO -d 192.168.0.0/16 -j RETURN\n74:[47773:13869473] -A MIHOMO -d 224.0.0.0/4 -j RETURN\n75:[15:788] -A MIHOMO -d 159.223.36.119/32 -j RETURN\n76:[93183:4845532] -A MIHOMO -p tcp -j REDIRECT --to-ports 7892\n78:[43149:2875689] -A MIHOMO_DNS -d 192.168.132.0/24 -j RETURN\n79:[5518:909691] -A MIHOMO_DNS -p udp -m udp --dport 53 -j REDIRECT --to-ports 1053\n80:[0:0] -A MIHOMO_DNS -p tcp -m tcp --dport 53 -j REDIRECT --to-ports 1053\n112::FORWARD DROP [0:0]\n135::zone_lan_dest_DROP - [0:0]\n153:[2144:2673272] -A FORWARD -i br-lan -p udp -m udp --dport 443 -m comment --comment mihomo-quic-drop -j DROP\n168:[1865:96980] -A syn_flood -p tcp -m tcp --tcp-flags FIN,SYN,RST,ACK SYN -m limit --limit 25/sec --limit-burst 50 -m comment --comment \"!fw3\" -j RETURN\n169:[0:0] -A syn_flood -m comment --comment \"!fw3\" -j DROP\n181:[0:0] -A zone_lan_dest_DROP -o br-lan -m comment --comment \"!fw3\" -j DROP\n193:[2:152] -A zone_wan_dest_ACCEPT -o wan -m conntrack --ctstate INVALID -m comment --comment \"!fw3: Prevent NAT leakage\" -j DROP\n197:[0:0] -A zone_wan_forward -d 239.255.255.250/32 -p udp -m comment --comment \"!fw3: ubus:igmpproxy[instance1] rule 1\" -j zone_lan_dest_DROP\n"
+  },
+  "do": {
+    "device": "do",
+    "basic": "2026-09-27T16:49:16+0800\n 16:49:16 up 9 days,  7:31,  6 users,  load average: 0.08, 0.10, 0.09\n               Local time: Sun 2026-09-27 16:49:16 CST\n           Universal time: Sun 2026-09-27 08:49:16 UTC\n                 RTC time: Sun 2026-09-27 08:49:16\n                Time zone: Asia/Shanghai (CST, +0800)\nSystem clock synchronized: yes\n",
+    "listen": "LISTEN 0      128          0.0.0.0:28722      0.0.0.0:*    users:((\"sshd\",pid=857,fd=3))            \nLISTEN 0      4096      127.0.0.54:53         0.0.0.0:*    users:((\"systemd-resolve\",pid=453,fd=17))\nLISTEN 0      4096       127.0.0.1:46527      0.0.0.0:*    users:((\"containerd\",pid=871,fd=15))     \nLISTEN 0      128        127.0.0.1:13222      0.0.0.0:*    users:((\"sshd\",pid=614985,fd=5))         \nLISTEN 0      4096       10.10.0.1:8443       0.0.0.0:*    users:((\"docker-proxy\",pid=3071387,fd=7))\nLISTEN 0      4096   127.0.0.53%lo:53         0.0.0.0:*    users:((\"systemd-resolve\",pid=453,fd=15))\nLISTEN 0      128        127.0.0.1:18222      0.0.0.0:*    users:((\"sshd\",pid=3560049,fd=5))        \n",
+    "rev_ssh": "root      665775  0.6  1.0  15004 10416 ?        Ss   16:49   0:00 sshd: root@notty\n",
+    "resources": "               total        used        free      shared  buff/cache   available\nMem:             961         532          94          14         496         428\nSwap:           2047         263        1784\n/dev/vda1        24G   14G  9.4G  60% /\n0.08 0.10 0.09 1/224 665925\n",
+    "services": "routermgmt-api-1 running Up 2 hours (healthy)\nroutermgmt-db-1 running Up 9 days (healthy)\nroutermgmt-web-1 running Up 3 days\nactive\nactive\nactive\nStatus: active\n\nTo                         Action      From\n--                         ------      ----\n443/tcp                    ALLOW       Anywhere                  \n22/tcp                     DENY        Anywhere                  \n51820/udp                  ALLOW       Anywhere                   # wireguard hub\n28722/tcp                  ALLOW       Anywhere                   # ssh fleet+tunnels\n443/tcp (v6)               ALLOW       Anywhere (v6)             \n22/tcp (v6)                DENY        Anywhere (v6)             \n",
+    "jump": "uid=1000(jump) gid=1000(jump) groups=1000(jump)\nrestrict,port-forwarding AAAAC3NzaC1lZDI1NTE5AAAAIF9Q2DABv+uz9dVretFg7b9letf3gm6VOFqMGrtVfnc9\nrestrict,port-forwarding,permitopen=\"127.0.0.1:18422\",permitopen=\"127.0.0.1:18322\",permitopen=\"127.0.0.1:18222\",permitopen=\"127.0.0.1:13222\" AAAAC3NzaC1lZDI1NTE5AAAAIGYiohAmN+izS/DXYkar3BTkR+RXqz6lcAU+WgNpyye4\n",
+    "backup": "-rw------- 1 root root 9743818 Sep 27 03:30 /opt/mgmt/backups/mgmt-backup-20260927-0330.tar.gz\n-rw------- 1 root root 9625561 Sep 26 03:30 /opt/mgmt/backups/mgmt-backup-20260926-0330.tar.gz\n-rw------- 1 root root 9564978 Sep 25 19:23 /opt/mgmt/backups/mgmt-backup-20260925-1923.tar.gz\n-rw------- 1 root root 9408761 Sep 25 03:30 /opt/mgmt/backups/mgmt-backup-20260925-0330.tar.gz\n2026-09-25 19:23:59 ok  mgmt-backup-20260925-1923.tar.gz 9.2M\n2026-09-26 03:30:06 ok  mgmt-backup-20260926-0330.tar.gz 9.2M\n2026-09-27 03:30:05 ok  mgmt-backup-20260927-0330.tar.gz 9.3M\n30 3 * * * /opt/mgmt/backup.sh\n*/5 * * * * /opt/mgmt/netprobe-vps.sh\n",
+    "kernel_net": "net.ipv4.tcp_congestion_control = bbr\nnet.core.default_qdisc = fq\nUdp: InDatagrams NoPorts InErrors OutDatagrams RcvbufErrors SndbufErrors InCsumErrors IgnoredMulti MemErrors\n"
+  },
+  "tx": {
+    "device": "tx",
+    "basic": "2026-09-27T16:49:18+0800\n 16:49:18 up 2 days,  9:33,  1 user,  load average: 0.58, 0.25, 0.13\n               Local time: Sun 2026-09-27 16:49:18 CST\n           Universal time: Sun 2026-09-27 08:49:18 UTC\n                 RTC time: Sun 2026-09-27 08:49:18\n                Time zone: Asia/Shanghai (CST, +0800)\nSystem clock synchronized: yes\n",
+    "listen": "LISTEN 0      4096   127.0.0.53%lo:53        0.0.0.0:*          \nLISTEN 0      4096      127.0.0.54:53        0.0.0.0:*          \nLISTEN 0      4096         0.0.0.0:22        0.0.0.0:*          \n",
+    "rev_ssh": "",
+    "resources": "               total        used        free      shared  buff/cache   available\nMem:            1962         516         339           2        1272        1445\nSwap:           2047           0        2047\n/dev/vda3        49G  5.8G   41G  13% /\n0.58 0.25 0.13 1/208 801794\n",
+    "services": "active\nactive\n",
+    "jump": "",
+    "backup": "",
+    "kernel_net": "net.ipv4.tcp_congestion_control = cubic\nnet.core.default_qdisc = fq\nUdp: InDatagrams NoPorts InErrors OutDatagrams RcvbufErrors SndbufErrors InCsumErrors IgnoredMulti MemErrors\n"
+  },
+  "pc_http": {
+    "https://www.gstatic.com/generate_204": [
+      "code=000 ip= tcp=0.000000 tls=0.000000 total=4.003799 curl_exit=28",
+      "code=000 ip= tcp=0.000000 tls=0.000000 total=4.013913 curl_exit=28",
+      "code=000 ip= tcp=0.000000 tls=0.000000 total=4.006664 curl_exit=28"
+    ],
+    "https://www.google.com/generate_204": [
+      "code=204 ip=198.18.0.33 tcp=0.022750 tls=0.710747 total=0.873571 curl_exit=0",
+      "code=204 ip=198.18.0.33 tcp=0.025583 tls=0.467725 total=0.571475 curl_exit=0",
+      "code=204 ip=198.18.0.33 tcp=0.027680 tls=1.741726 total=1.898999 curl_exit=0"
+    ],
+    "https://www.baidu.com/": [
+      "code=000 ip= tcp=0.000000 tls=0.000000 total=4.011420 curl_exit=28",
+      "code=200 ip=198.18.0.8 tcp=0.024050 tls=0.130496 total=0.160766 curl_exit=0",
+      "code=000 ip= tcp=0.000000 tls=0.000000 total=4.012531 curl_exit=28"
+    ]
+  }
+}

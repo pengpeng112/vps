@@ -1,0 +1,12 @@
+# mgmt-tunnel 配置模板 — 复制到 /etc/routermgmt/tunnel.conf (600) 后按设备修改
+# 严格 key=value 白名单：未知键被忽略；值带空格/特殊字符会被判无效并跳过该键
+# 管理通道（-L，心跳走这里，缺省即降级默认）
+VPS_HOST=159.223.36.119
+VPS_SSH_PORT=28722
+MGMT_LOCAL_PORT=18443
+MGMT_TARGET=10.10.0.1:8443
+# 排障通道（-R，VPS 回环端口 -> 路由器 SSH）——按设备填写，两台生产机示例：
+#   雅典娜:  RSSH_REMOTE_PORT=18222  RSSH_TARGET=127.0.0.1:22
+#   SN-R1 :  RSSH_REMOTE_PORT=13222  RSSH_TARGET=192.168.132.1:22   # 其 dropbear 不监听 127.0.0.1，禁止改成 127.0.0.1
+RSSH_REMOTE_PORT=18222
+RSSH_TARGET=127.0.0.1:22

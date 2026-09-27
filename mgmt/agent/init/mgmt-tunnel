@@ -1,0 +1,97 @@
+#!/bin/sh /etc/rc.common
+# mgmt-tunnel — SSH TCP 管理通道（公司网/拦 UDP 51820 场景）
+# 2026-09-24 阶段1重构：
+#   - 配置外置到 /etc/routermgmt/tunnel.conf（严格白名单 key=value，逐行解析，禁止 source）
+#   - 管理 -L 与排障 -R 拆成两个 procd instance：-R 绑定失败不再伪装成全部成功
+#   - /root/.ssh/known_hosts 含本 VPS 条目时自动去掉 -y（host key 变更即拒连，fail-closed）
+#     注：dbclient 不认 $HOME 环境变量，known_hosts 固定读 root 家目录；
+#         条目为纯主机名格式（dropbear 自写），用 setup-mgmt-tunnel.sh pin-hostkey 生成
+#   - tunnel.conf 缺失/无效时降级为仅 -L 的旧默认，保证心跳不因缺配置中断
+# 注意：Dropbear dbclient 无 ExitOnForwardFailure（两台生产机实测 /usr/bin/ssh
+# 均为 dbclient 链接），-R 绑定失败进程不退出；半通状态由 VPS 侧
+# mgmt-rssh-probe banner 探测发现并经白名单任务 repair_mgmt_tunnel 修复。
+# shellcheck disable=SC2034  # rc.common framework vars
+USE_PROCD=1
+START=98
+STOP=12
+
+CONF=/etc/routermgmt/tunnel.conf
+KEY=/etc/routermgmt/id_dropbear_mgmt
+KH=/root/.ssh/known_hosts
+
+# 降级默认（无 tunnel.conf 时仅保心跳通道）
+DEF_VPS=159.223.36.119
+DEF_PORT=28722
+DEF_LOCAL=18443
+DEF_HUB=10.10.0.1:8443
+
+TC_VPS_HOST=""
+TC_VPS_PORT=""
+TC_MGMT_LOCAL_PORT=""
+TC_MGMT_TARGET=""
+TC_RSSH_REMOTE_PORT=""
+TC_RSSH_TARGET=""
+
+_valid_host() { case "$1" in ''|*[!A-Za-z0-9.\-]*) return 1 ;; esac; return 0; }
+_valid_port() {
+    case "$1" in ''|*[!0-9]*) return 1 ;; esac
+    [ "$1" -ge 1 ] && [ "$1" -le 65535 ]
+}
+_valid_target() { # host:port
+    case "$1" in *:*) ;; *) return 1 ;; esac
+    _h=${1%:*}; _p=${1##*:}
+    _valid_host "$_h" && _valid_port "$_p"
+}
+
+# 只认白名单键；值先做字符集校验再赋值；未知键直接忽略；绝不 source
+load_tunnel_conf() {
+    [ -f "$CONF" ] || return 1
+    while IFS='=' read -r _k _v; do
+        case "$_k" in
+            ''|\#*) continue ;;
+            VPS_HOST)         _valid_host "$_v"   && TC_VPS_HOST="$_v" ;;
+            VPS_SSH_PORT)     _valid_port "$_v"   && TC_VPS_PORT="$_v" ;;
+            MGMT_LOCAL_PORT)  _valid_port "$_v"   && TC_MGMT_LOCAL_PORT="$_v" ;;
+            MGMT_TARGET)      _valid_target "$_v" && TC_MGMT_TARGET="$_v" ;;
+            RSSH_REMOTE_PORT) _valid_port "$_v"   && TC_RSSH_REMOTE_PORT="$_v" ;;
+            RSSH_TARGET)      _valid_target "$_v" && TC_RSSH_TARGET="$_v" ;;
+        esac
+    done < "$CONF"
+    [ -n "$TC_VPS_HOST" ] && [ -n "$TC_VPS_PORT" ] && \
+    [ -n "$TC_MGMT_LOCAL_PORT" ] && [ -n "$TC_MGMT_TARGET" ]
+}
+
+# $1=实例名 $2=vps $3=port $4=forward-spec(-L/-R 参数串)
+_open_instance() {
+    _inst="$1"; _vps="$2"; _port="$3"; _fwd="$4"
+    _y="-y"
+    if [ -f "$KH" ] && grep -q "^$_vps " "$KH" 2>/dev/null; then
+        _y=""
+    else
+        logger -t mgmt-tunnel "WARN: $KH 无 ${_vps} 条目，使用 -y 接受未知主机钥（应尽快 pin-hostkey）"
+    fi
+    procd_open_instance "$_inst"
+    procd_set_param command /usr/bin/ssh -i "$KEY" -p "$_port" -N -K 30 -T $_y $_fwd "root@$_vps"
+    # threshold 3600s: 启动后 1 小时内退出视为快速崩溃，procd 指数退避拉起，防重试风暴
+    procd_set_param respawn 3600 5 0
+    procd_set_param stdout 1
+    procd_set_param stderr 1
+    procd_close_instance
+}
+
+start_service() {
+    if ! load_tunnel_conf; then
+        logger -t mgmt-tunnel "WARN: $CONF 缺失或核心字段无效，降级为仅管理通道(-L)默认配置"
+        _open_instance mgmt "$DEF_VPS" "$DEF_PORT" \
+            "-L 127.0.0.1:$DEF_LOCAL:$DEF_HUB"
+        return
+    fi
+    _open_instance mgmt "$TC_VPS_HOST" "$TC_VPS_PORT" \
+        "-L 127.0.0.1:$TC_MGMT_LOCAL_PORT:$TC_MGMT_TARGET"
+    if [ -n "$TC_RSSH_REMOTE_PORT" ] && [ -n "$TC_RSSH_TARGET" ]; then
+        _open_instance rssh "$TC_VPS_HOST" "$TC_VPS_PORT" \
+            "-R 127.0.0.1:$TC_RSSH_REMOTE_PORT:$TC_RSSH_TARGET"
+    else
+        logger -t mgmt-tunnel "ERROR: RSSH_REMOTE_PORT/RSSH_TARGET 缺失或无效，排障通道未启动（心跳通道不受影响）"
+    fi
+}

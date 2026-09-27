@@ -1,0 +1,497 @@
+openapi: 3.0.3
+info:
+  title: 路由器集群后端管理系统 API
+  version: "1.0.0-session1"
+  description: |
+    管理台（JWT 12h）+ 设备 Agent（HMAC-SHA256）+ 订阅三类接口。
+    错误统一 `{code, message, request_id}`；列表统一 `{items, total, page, page_size}`（page/page_size 默认 20、最大 100）。
+    状态码：401 未认证 / 403 越权 / 404 不存在 / 409 状态冲突 / 422 参数错误 / 429 限流。
+servers:
+  - url: https://10.10.0.1:8443
+    description: WG 内网（生产）
+  - url: http://127.0.0.1:8080
+    description: 本机开发（web 同源反代）
+
+components:
+  securitySchemes:
+    bearerJwt: { type: http, scheme: bearer, bearerFormat: JWT }
+    deviceHmac:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: "HMAC-SHA256 <64hex>；配合 X-Device-Id / X-Timestamp / X-Nonce"
+  schemas:
+    Error:
+      type: object
+      properties: { code: {type: string}, message: {type: string}, request_id: {type: string} }
+    Paged:
+      type: object
+      properties:
+        items: { type: array, items: {} }
+        total: { type: integer }
+        page: { type: integer }
+        page_size: { type: integer }
+    Device:
+      type: object
+      properties:
+        id: { type: string, example: rtr-a1b2c3 }
+        name: { type: string }
+        group_id: { type: integer, nullable: true }
+        wg_ip: { type: string, example: 10.10.0.10 }
+        lifecycle_status: { type: string, enum: [pending, approved, revoked] }
+        online: { type: boolean }
+        current_node_id: { type: integer, nullable: true }
+        current_exit_ip: { type: string }
+        desired_config_version: { type: integer }
+        current_config_version: { type: integer }
+        last_heartbeat_at: { type: string, format: date-time, nullable: true }
+    Node:
+      type: object
+      properties:
+        id: { type: integer }
+        name: { type: string }
+        host: { type: string }   # Session 1 仅 IPv4 字面量
+        port: { type: integer }
+        proto: { type: string, example: vless-reality }
+        params:
+          type: object
+          description: uuid/pbk 掩码为前后 4 位，sid 前后 2 位；明文只在创建请求中出现
+          properties:
+            uuid: { type: string, example: "1111...5555" }
+            pbk: { type: string, example: "cWCe...xiW0" }
+            sid: { type: string, example: "aa...dd" }
+            sni: { type: string }
+            flow: { type: string }
+            fp: { type: string }
+        enabled: { type: boolean }
+        health_status: { type: string, enum: [unknown, up, down] }
+        last_latency_ms: { type: integer, nullable: true }
+    Task:
+      type: object
+      properties:
+        id: { type: string }
+        device_id: { type: string }
+        type: { type: string, enum: [reboot, reload_proxy, switch_node, ping_test, set_proxy_state, agent_update, apply_policy, set_ratelimit, set_reboot_schedule, set_license, collect_diag] }
+        status: { type: string, enum: [pending, running, ok, failed, rolled_back, expired, unknown, cancelled] }
+        params: { type: object }
+        result: { type: object }
+        config_version: { type: integer, nullable: true }
+        created_by: { type: string }
+        created_at: { type: string, format: date-time }
+        deadline: { type: string, format: date-time }
+
+paths:
+  /api/v1/health:
+    get:
+      summary: 健康检查（无鉴权）
+      responses: { "200": { description: ok } }
+  /api/v1/meta:
+    get:
+      summary: 签名公钥与传输模式（无鉴权；不能作为首次信任根）
+      responses:
+        "200":
+          description: meta
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  sign_public_key: { type: string, description: ed25519 PEM }
+                  transport_mode: { type: string, enum: [wireguard, mock] }
+
+  /api/v1/auth/login:
+    post:
+      summary: 密码登录（发受限 ticket，不发完整 JWT；同 IP 5 分钟 10 次）
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [username, password]
+              properties: { username: {type: string}, password: {type: string} }
+      responses:
+        "200":
+          description: 未绑 TOTP 返回 need_setup；已绑返回 need_totp
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  need_setup: { type: boolean }
+                  need_totp: { type: boolean }
+                  ticket: { type: string, description: 5 分钟一次性 }
+        "401": { description: 用户名或密码错误 }
+        "429": { description: 限流 }
+  /api/v1/auth/totp:
+    post:
+      summary: ticket + TOTP 验证码 → 完整 JWT（验证码限流且不可重复使用）
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [ticket, code]
+              properties: { ticket: {type: string}, code: {type: string} }
+      responses:
+        "200": { description: "{token, username, role}" }
+        "401": { description: ticket 无效/验证码错误或已使用 }
+  /api/v1/auth/totp/setup:
+    post:
+      summary: setup ticket → otpauth URI（secret 加密存储）
+      requestBody:
+        content:
+          application/json:
+            schema: { type: object, required: [ticket], properties: { ticket: {type: string} } }
+      responses: { "200": { description: "{otpauth_url, secret}" } }
+  /api/v1/auth/totp/confirm:
+    post:
+      summary: setup ticket + 验证码 → 完成首次绑定并签发完整 JWT
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [ticket, code]
+              properties: { ticket: {type: string}, code: {type: string} }
+      responses: { "200": { description: "{token,...}" } }
+  /api/v1/auth/me:
+    get:
+      security: [{ bearerJwt: [] }]
+      summary: 当前管理员
+      responses: { "200": { description: "{username, role, totp_bound}" } }
+  /api/v1/auth/password:
+    post:
+      security: [{ bearerJwt: [] }]
+      summary: 修改密码（需旧密码+TOTP；成功后旧会话全部失效）
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [old_password, new_password, totp_code]
+              properties: { old_password: {type: string}, new_password: {type: string, minLength: 10}, totp_code: {type: string} }
+      responses: { "200": { description: ok } }
+
+  /api/v1/devices:
+    get:
+      security: [{ bearerJwt: [] }]
+      summary: 设备列表（不返回 enc/凭据字段）
+      parameters:
+        - { in: query, name: status, schema: { enum: [online, offline] } }
+        - { in: query, name: group_id, schema: { type: integer } }
+      responses: { "200": { description: 分页设备列表 } }
+    post:
+      security: [{ bearerJwt: [] }]
+      summary: 创建设备（enroll_code 明文仅此一次）
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [name]
+              properties: { name: {type: string}, location_note: {type: string}, group_id: {type: integer, nullable: true} }
+      responses:
+        "200":
+          description: "{id, enroll_code(32B hex, 30min), wg_ip}"
+  /api/v1/devices/enroll:
+    post:
+      summary: 设备凭一次性 enroll_code 领凭据（无 HMAC/JWT；成功后注册码作废；并发仅一个成功）
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [enroll_code]
+              properties: { enroll_code: {type: string}, hw_model: {type: string}, firmware_ver: {type: string} }
+      responses:
+        "200":
+          description: "凭据仅此一次：{device_id, hmac_key, sub_token, sub_url, sign_public_key, transport_mode, wg{...}}"
+        "401": { description: 注册码无效/已用/过期 }
+  /api/v1/devices/{id}:
+    get:
+      security: [{ bearerJwt: [] }]
+      summary: 设备详情（含绑定节点、最新指标）
+      parameters: [{ in: path, name: id, required: true, schema: { type: string } }]
+      responses: { "200": { description: 详情 } }
+    patch:
+      security: [{ bearerJwt: [] }]
+      summary: 编辑名称/地点/分组
+      parameters: [{ in: path, name: id, required: true, schema: { type: string } }]
+      responses: { "200": { description: ok } }
+  /api/v1/devices/{id}/revoke:
+    post:
+      security: [{ bearerJwt: [] }]
+      summary: 吊销（HMAC/token/enroll 立即失效；pending 任务取消；WG Peer 删除待 Session 2）
+      parameters: [{ in: path, name: id, required: true, schema: { type: string } }]
+      responses: { "200": { description: ok } }
+  /api/v1/devices/{id}/rotate:
+    post:
+      security: [{ bearerJwt: [] }]
+      summary: 离线轮换（新引导包仅此一次返回；设备将暂时失联，§19.6）
+      parameters: [{ in: path, name: id, required: true, schema: { type: string } }]
+      responses: { "200": { description: 新凭据包 } }
+  /api/v1/devices/{id}/enroll-reset:
+    post:
+      security: [{ bearerJwt: [] }]
+      summary: 重置 pending 设备注册码（enroll 响应丢失恢复用，§19.1；扩展接口）
+      parameters: [{ in: path, name: id, required: true, schema: { type: string } }]
+      responses: { "200": { description: 新 enroll_code } }
+  /api/v1/devices/{id}/ops:
+    post:
+      security: [{ bearerJwt: [] }]
+      summary: 运维任务入队（需 Idempotency-Key 头；同 key 同内容幂等，异内容 409）
+      parameters:
+        - { in: path, name: id, required: true, schema: { type: string } }
+        - { in: header, name: Idempotency-Key, required: true, schema: { type: string } }
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [type]
+              properties:
+                type: { type: string, enum: [reboot, reload_proxy, switch_node, ping_test, set_proxy_state, agent_update, apply_policy, set_ratelimit, set_reboot_schedule, set_license, collect_diag] }
+                params:
+                  type: object
+                  description: "switch_node: {node_id}; ping_test: {host}"
+      responses: { "200": { description: "{task_id, version?}" } }
+  /api/v1/devices/{id}/metrics:
+    get:
+      security: [{ bearerJwt: [] }]
+      summary: 指标序列（字节数为字符串，避免 JS 精度失真）
+      parameters:
+        - { in: path, name: id, required: true, schema: { type: string } }
+        - { in: query, name: range, schema: { enum: [1h, 24h, 7d], default: 1h } }
+      responses: { "200": { description: items } }
+  /api/v1/devices/{id}/config:
+    get:
+      security: [{ bearerJwt: [] }]
+      summary: 当前期望配置（掩码 YAML；原始配置仅设备可下）
+      parameters: [{ in: path, name: id, required: true, schema: { type: string } }]
+      responses: { "200": { description: "{version, yaml(masked)}" } }
+  /api/v1/devices/{id}/configs/preview:
+    post:
+      security: [{ bearerJwt: [] }]
+      summary: 生成掩码预览与 diff（不发布不进版本）
+      parameters: [{ in: path, name: id, required: true, schema: { type: string } }]
+      responses:
+        "200": { description: "{revision, next_version, sha256, masked_yaml, diff}" }
+        "409": { description: 无可用绑定节点 }
+  /api/v1/devices/{id}/configs/apply:
+    post:
+      security: [{ bearerJwt: [] }]
+      summary: 发布不可变版本+签名并原子入队（revision 过期返回 409）
+      parameters: [{ in: path, name: id, required: true, schema: { type: string } }]
+      requestBody:
+        content:
+          application/json:
+            schema: { type: object, required: [revision], properties: { revision: {type: string} } }
+      responses:
+        "200": { description: "{task_id, version}" }
+        "409": { description: 绑定/节点参数已变化，需重新 preview }
+
+  /api/v1/groups:
+    get:
+      security: [{ bearerJwt: [] }]
+      summary: 分组列表
+      responses: { "200": { description: 分页 } }
+    post:
+      security: [{ bearerJwt: [] }]
+      summary: 创建分组
+      requestBody:
+        content:
+          application/json:
+            schema: { type: object, required: [name], properties: { name: {type: string}, description: {type: string} } }
+      responses: { "200": { description: ok } }
+
+  /api/v1/nodes:
+    get:
+      security: [{ bearerJwt: [] }]
+      summary: 节点列表（参数掩码）
+      responses: { "200": { description: 分页 } }
+    post:
+      security: [{ bearerJwt: [] }]
+      summary: 创建节点（host 仅 IPv4 字面量；参数 AES-GCM 加密落库）
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [name, host, port, params]
+              properties:
+                name: { type: string, description: "字母数字-_，2~32" }
+                host: { type: string, description: IPv4 字面量（Session 1） }
+                port: { type: integer }
+                proto: { type: string, default: vless-reality }
+                params:
+                  type: object
+                  required: [uuid, pbk]
+                  properties:
+                    uuid: { type: string, format: uuid }
+                    pbk: { type: string, description: 43 字符 base64url }
+                    sid: { type: string, description: 偶数长度 hex ≤16 }
+                    sni: { type: string }
+                    flow: { type: string, default: xtls-rprx-vision }
+                    fp: { type: string, default: chrome }
+      responses: { "200": { description: 掩码节点 } , "422": { description: 参数不合法 } }
+  /api/v1/nodes/{id}:
+    patch:
+      security: [{ bearerJwt: [] }]
+      summary: 修改（省略=保留；掩码值写回 422）
+      parameters: [{ in: path, name: id, required: true, schema: { type: integer } }]
+      responses: { "200": { description: 掩码节点 } }
+    delete:
+      security: [{ bearerJwt: [] }]
+      summary: 删除（被绑定/使用中返回 409）
+      parameters: [{ in: path, name: id, required: true, schema: { type: integer } }]
+      responses: { "200": { description: ok }, "409": { description: 被引用 } }
+  /api/v1/nodes/{id}/probe:
+    post:
+      security: [{ bearerJwt: [] }]
+      summary: TCP 探测（3s；TCP 可达≠Reality 鉴权可用）
+      parameters: [{ in: path, name: id, required: true, schema: { type: integer } }]
+      responses: { "200": { description: "{health_status, latency_ms}" } }
+
+  /api/v1/assignments/batch:
+    post:
+      security: [{ bearerJwt: [] }]
+      summary: 批量绑定（默认只更新期望绑定；apply=true 才发布并逐台生成任务）
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [device_ids, node_id]
+              properties:
+                device_ids: { type: array, items: { type: string } }
+                node_id: { type: integer }
+                is_primary: { type: boolean, default: false }
+                apply: { type: boolean, default: false }
+      responses: { "200": { description: 逐台结果 items[{device_id, ok, error?, task_id?}] } }
+
+  /api/v1/tasks:
+    get:
+      security: [{ bearerJwt: [] }]
+      summary: 任务队列（管理端）
+      parameters:
+        - { in: query, name: device_id, schema: { type: string } }
+        - { in: query, name: status, schema: { type: string } }
+      responses: { "200": { description: 分页任务 } }
+  /api/v1/alerts:
+    get:
+      security: [{ bearerJwt: [] }]
+      summary: 告警列表（state=active|acked 过滤）
+      responses: { "200": { description: 分页 } }
+  /api/v1/alerts/{id}:
+    patch:
+      security: [{ bearerJwt: [] }]
+      summary: 确认告警
+      parameters: [{ in: path, name: id, required: true, schema: { type: integer } }]
+      responses: { "200": { description: ok } }
+  /api/v1/audit:
+    get:
+      security: [{ bearerJwt: [] }]
+      summary: 审计日志（append-only；运行态账号无 UPDATE/DELETE 权限）
+      responses: { "200": { description: 分页 } }
+  /api/v1/dashboard:
+    get:
+      security: [{ bearerJwt: [] }]
+      summary: 仪表盘（在线/离线、本月代理流量、节点分布、最近告警）
+      responses: { "200": { description: 汇总 } }
+
+  # ---- 设备 Agent（HMAC；禁止 query 参数）----
+  /api/v1/agent/heartbeat:
+    post:
+      security: [{ deviceHmac: [] }]
+      summary: 心跳（sample_id 去重；boot_id/counter_epoch 定基线；时间窗 ±120s；nonce 防重放）
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [device_id, metrics]
+              properties:
+                device_id: { type: string }
+                ts: { type: integer }
+                task_id: { type: string, description: 运行中任务续租（可选） }
+                lease_id: { type: string }
+                metrics:
+                  type: object
+                  required: [sample_id]
+                  properties:
+                    cpu: { type: number }
+                    mem_used_mb: { type: integer }
+                    mem_total_mb: { type: integer }
+                    temp_c: { type: number }
+                    disk_free_mb: { type: integer }
+                    uptime_s: { type: integer }
+                    wan_ip: { type: string }
+                    exit_ip: { type: string }
+                    exit_node: { type: string }
+                    exit_latency_ms: { type: integer }
+                    clash_alive: { type: boolean }
+                    wg_alive: { type: boolean }
+                    wan_rx_bytes: { type: integer, format: int64 }
+                    wan_tx_bytes: { type: integer, format: int64 }
+                    proxy_rx_bytes: { type: integer, format: int64, nullable: true }
+                    proxy_tx_bytes: { type: integer, format: int64, nullable: true }
+                    sample_id: { type: string }
+                    boot_id: { type: string }
+                    proxy_counter_epoch: { type: string }
+                    proxy_measurement_status: { type: string, enum: [available, partial, unavailable] }
+                    config_version: { type: integer }
+      responses:
+        "200": { description: "{ok, server_ts}" }
+        "401": { description: 签名/nonce/时间窗/身份不符 }
+        "403": { description: body device_id 与认证身份不一致 }
+  /api/v1/agent/tasks:
+    get:
+      security: [{ deviceHmac: [] }]
+      summary: 原子领取本设备任务（数据库事务 + FOR UPDATE SKIP LOCKED；一台设备同时最多一个运行任务）
+      responses:
+        "200":
+          description: |
+            `{tasks:[{task_id, type, params{node_id,node_name,expect_exit_ip}, lease_id,
+            deadline, config_version, config_url, signature, config_sha256}]}`（至多 1 个）
+  /api/v1/agent/tasks/{id}/result:
+    post:
+      security: [{ deviceHmac: [] }]
+      summary: 回传结果（相同结果幂等 200；冲突 409；lease 校验）
+      parameters: [{ in: path, name: id, required: true, schema: { type: string } }]
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [lease_id, status]
+              properties:
+                lease_id: { type: string }
+                status: { type: string, enum: [ok, failed, rolled_back] }
+                detail:
+                  type: object
+                  description: "可含 exit_ip / error / rollback_failed:true"
+      responses: { "200": { description: ok }, "409": { description: 冲突结果或 lease 不匹配 } }
+  /api/v1/agent/configs/{version}:
+    get:
+      security: [{ deviceHmac: [] }]
+      summary: 下载本设备指定不可变版本（签名针对返回 YAML 原始字节）
+      parameters: [{ in: path, name: version, required: true, schema: { type: integer } }]
+      responses:
+        "200":
+          description: text/yaml
+          headers:
+            X-Config-Version: { schema: { type: string } }
+            X-Signature: { schema: { type: string, description: 128 小写 hex } }
+            Cache-Control: { schema: { type: string, example: no-store } }
+        "404": { description: 不存在或不属于本设备 }
+
+  /sub/{id}:
+    get:
+      summary: 订阅（sha256(token) 常量时间比对；仅返回已发布最新不可变版本；GET 不生成版本）
+      parameters:
+        - { in: path, name: id, required: true, schema: { type: string } }
+        - { in: query, name: token, required: true, schema: { type: string } }
+      responses:
+        "200": { description: text/yaml（黄金模板渲染） }
+        "401": { description: token 无效 }
+        "409": { description: 尚无已发布配置 }

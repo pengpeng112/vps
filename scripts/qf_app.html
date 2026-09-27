@@ -1,0 +1,2356 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Quick 文件管理</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="sbwml <admin@cooluc.com>">
+    <link rel="shortcut icon" href="/cgi-bin/luci/quickfile-static/favicon.svg" />
+    <script src="/cgi-bin/luci/quickfile-static/tailwindcss.js"></script>
+    <script src="/cgi-bin/luci/quickfile-static/vs/loader.js"></script>
+    <link href="/cgi-bin/luci/quickfile-static/font-awesome.min.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#165DFF',
+                        secondary: '#6B7280',
+                        success: '#00B42A',
+                        warning: '#FF7D00',
+                        danger: '#F53F3F',
+                        dark: '#1D2129',
+                        light: '#F2F3F5',
+                        'border-color': '#E5E6EB'
+                    },
+                    fontFamily: {
+                        inter: ['Inter', 'sans-serif'],
+                    },
+                    boxShadow: {
+                        'card': '0 2px 8px 0 rgba(0, 0, 0, 0.08)',
+                        'modal': '0 4px 16px 0 rgba(0, 0, 0, 0.12)',
+                    }
+                },
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .content-auto {
+                content-visibility: auto;
+            }
+            .table-shadow {
+                box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            }
+            .file-row-hover {
+                @apply transition-all duration-200;
+            }
+            .file-row-hover:hover {
+                @apply bg-light;
+            }
+            .btn-hover {
+                @apply transition-all duration-200;
+            }
+            .btn-hover:hover {
+                @apply transform scale-105;
+            }
+            .fade-in {
+                animation: fadeIn 0.3s ease-in-out;
+            }
+            .slide-in {
+                animation: slideIn 0.3s ease-in-out;
+            }
+            .progress-animate {
+                transition: width 0.3s ease-in-out;
+            }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideIn {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .file-drop-hover {
+            box-shadow: 0 0 0 4px #165DFF33, 0 2px 16px 0 rgba(22,93,255,0.15);
+            border: 2px dashed #165DFF;
+            transition: box-shadow 0.2s, border 0.2s;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-50 font-inter text-dark">
+    <div class="container mx-auto px-3 py-6" id="main-container">
+        <div class="flex justify-between items-center mb-6">
+            <div class="flex items-center space-x-2">
+                <i class="fa fa-folder-open text-primary text-2xl"></i>
+                <a id="quickfile-title" class="text-xl font-semibold cursor-pointer transition-colors"
+                    style="text-decoration:none;">
+                    Quick 文件管理
+                </a>
+            </div>
+            <script>
+                document.addEventListener('DOMContentLoaded', function () {
+                    var host = window.location.hostname;
+                    var protocol = window.location.protocol;
+                    var url = protocol + '//' + host + '/cgi-bin/luci/quickfile?host=' + protocol + '//' + host;
+                    var title = document.getElementById('quickfile-title');
+                    if (title) {
+                        title.href = url;
+                        title.target = "_blank";
+                    }
+                });
+            </script>
+            <div class="flex items-center space-x-4">
+                <button class="btn-hover flex items-center space-x-1 text-sm text-secondary" onclick="refreshList()">
+                    <i class="fa fa-refresh"></i>
+                    <span>刷新</span>
+                </button>
+            </div>
+        </div>
+
+        <nav class="bg-white rounded-lg shadow-sm mb-4 p-3" id="breadcrumb-nav">
+            <ol class="flex items-center text-sm" id="breadcrumb"></ol>
+            <input type="text" id="breadcrumb-input"
+                class="mt-2 px-2 py-1 border border-primary rounded text-sm w-full hidden" style="outline:none;" />
+        </nav>
+
+        <div class="bg-white rounded-lg shadow-sm mb-4 p-3 flex flex-wrap items-center justify-between">
+            <div class="flex flex-wrap items-center gap-2 mb-2 sm:mb-0">
+                <button class="btn-hover flex items-center space-x-1 px-3 py-1.5 bg-primary text-white rounded text-sm"
+                    id="upload-btn">
+                    <i class="fa fa-upload"></i>
+                    <span>上传文件</span>
+                </button>
+                <div class="relative" id="new-dropdown-container">
+                    <button onclick="toggleNewDropdown()" type="button"
+                        class="btn-hover flex items-center space-x-1 px-3 py-1.5 bg-gray-100 text-dark rounded text-sm"
+                        id="new-btn">
+                        <i class="fa fa-plus"></i>
+                        <span>新建</span>
+                        <i class="fa fa-caret-down ml-1"></i>
+                    </button>
+                    <div id="new-dropdown-menu"
+                        class="hidden absolute left-0 mt-1 w-36 bg-white rounded shadow-lg z-10">
+                        <button onclick="showMkdirInput();hideNewDropdown()"
+                            class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                            <i class="fa fa-folder-o mr-2"></i>新建文件夹
+                        </button>
+                        <button onclick="showCreateFileInput();hideNewDropdown()"
+                            class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                            <i class="fa fa-file-o mr-2"></i>新建文件
+                        </button>
+                    </div>
+                </div>
+                <div class="relative" id="archive-dropdown-container">
+                    <button
+                        class="btn-hover flex items-center space-x-1 px-3 py-1.5 bg-gray-100 text-dark rounded text-sm disabled:opacity-50"
+                        id="archive-btn" onclick="toggleArchiveDropdown()" disabled>
+                        <i class="fa fa-file-archive-o"></i>
+                        <span>压缩</span>
+                        <i class="fa fa-caret-down ml-1"></i>
+                    </button>
+                    <div class="hidden absolute left-0 mt-1 w-36 bg-white rounded shadow-lg z-10"
+                        id="archive-dropdown-menu">
+                        <button class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                            onclick="openCompressModal('zip')">
+                            <i class="fa fa-file-zip-o mr-2"></i>压缩为 zip
+                        </button>
+                        <button class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                            onclick="openCompressModal('tar.gz')">
+                            <i class="fa fa-file-archive-o mr-2"></i>压缩为 tar.gz
+                        </button>
+                        <button class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                            onclick="openCompressModal('tar.xz')">
+                            <i class="fa fa-file-archive-o mr-2"></i>压缩为 tar.xz
+                        </button>
+                    </div>
+                </div>
+                <button class="btn-hover flex items-center space-x-1 px-3 py-1.5 bg-gray-100 text-dark rounded text-sm"
+                    id="copy-btn" onclick="copyFiles()">
+                    <i class="fa fa-copy"></i>
+                    <span>复制</span>
+                </button>
+                <button class="btn-hover flex items-center space-x-1 px-3 py-1.5 bg-gray-100 text-dark rounded text-sm"
+                    id="move-btn" onclick="moveFiles()">
+                    <i class="fa fa-scissors"></i>
+                    <span>剪切</span>
+                </button>
+                <button class="btn-hover flex items-center space-x-1 px-3 py-1.5 bg-gray-100 text-dark rounded text-sm"
+                    id="paste-btn" onclick="pasteFiles()">
+                    <i class="fa fa-clipboard"></i>
+                    <span>粘贴</span>
+                </button>
+                <button class="btn-hover flex items-center space-x-1 px-3 py-1.5 bg-gray-100 text-dark rounded text-sm"
+                    onclick="showDownloadUrlModal()">
+                    <i class="fa fa-cloud-download"></i>
+                    <span>下载文件</span>
+                </button>
+                <button
+                    class="btn-hover flex items-center space-x-1 px-3 py-1.5 bg-gray-100 text-danger rounded text-sm"
+                    id="batch-delete-btn" onclick="batchDeleteFiles()">
+                    <i class="fa fa-trash text-danger"></i>
+                    <span>批量删除</span>
+                </button>
+            </div>
+            <div class="relative">
+                <input type="text" placeholder="搜索文件..."
+                    class="pl-4 pr-8 py-1.5 rounded border border-gray-200 focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary text-sm w-full sm:w-48"
+                    id="search-input">
+                <button class="absolute right-8 top-1.5 text-gray-400 hover:text-primary" id="search-btn" tabindex="-1">
+                    <i class="fa fa-search"></i>
+                </button>
+                <button type="button"
+                    class="absolute right-2 top-1.5 text-gray-400 hover:text-danger focus:outline-none"
+                    id="clear-search-btn" style="display:none;" tabindex="-1">
+                    <i class="fa fa-times-circle"></i>
+                </button>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-lg shadow-sm overflow-hidden" id="file-area">
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th scope="col"
+                            class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                            style="width: 24%;">
+                            <div class="flex items-center">
+                                <input type="checkbox" id="header-checkbox" onclick="headerCheckboxClick()"
+                                    class="rounded text-primary focus:ring-primary mr-3">
+                                <span>名称</span>
+                            </div>
+                        </th>
+                        <th scope="col"
+                            class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            大小</th>
+                        <th scope="col"
+                            class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            修改时间</th>
+                        <th scope="col"
+                            class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            权限</th>
+                        <th scope="col"
+                            class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            属主</th>
+                        <th scope="col"
+                            class="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            操作</th>
+                    </tr>
+                </thead>
+            </table>
+            <div class="file-area" style="max-height: 500px; overflow-y: auto;">
+                <table class="min-w-full divide-y divide-gray-200">
+                    <tbody class="bg-white divide-y divide-gray-200" id="file-table-body"></tbody>
+                </table>
+            </div>
+
+            <script>
+                document.addEventListener('DOMContentLoaded', function () {
+                    const fileAreaDivs = document.querySelectorAll('.file-area');
+
+                    fileAreaDivs.forEach(fileAreaDiv => {
+                        if (window.self !== window.top) {
+                            fileAreaDiv.style.maxHeight = '500px';
+                        } else {
+                            fileAreaDiv.style.maxHeight = '700px';
+                        }
+                        if (!fileAreaDiv.style.overflowY) {
+                            fileAreaDiv.style.overflowY = 'auto';
+                        }
+                    });
+                });
+            </script>
+        </div>
+        <div id="context-menu"
+            class="fixed bg-white border border-gray-200 rounded-lg shadow-lg z-50 py-2 min-w-[150px] hidden"
+            style="min-width: 150px; font-size: 15px;">
+            <button class="block w-full text-left px-4 py-2 hover:bg-light" id="ctx-mkdir">新建文件夹</button>
+            <button class="block w-full text-left px-4 py-2 hover:bg-light" id="ctx-createfile">新建文件</button>
+            <div class="border-t my-1"></div>
+            <button class="block w-full text-left px-4 py-2 hover:bg-light" id="ctx-compress">压缩 (zip)</button>
+            <button class="block w-full text-left px-4 py-2 hover:bg-light" id="ctx-decompress">解压</button>
+            <div class="border-t my-1"></div>
+            <button class="block w-full text-left px-4 py-2 hover:bg-light" id="ctx-rename">重命名</button>
+            <button class="block w-full text-left px-4 py-2 hover:bg-light" id="ctx-copy">复制</button>
+            <button class="block w-full text-left px-4 py-2 hover:bg-light" id="ctx-move">剪切</button>
+            <button class="block w-full text-left px-4 py-2 hover:bg-light" id="ctx-paste">粘贴</button>
+            <div class="border-t my-1"></div>
+            <button class="block w-full text-left px-4 py-2 hover:bg-light" id="ctx-download">下载</button>
+            <button class="block w-full text-left px-4 py-2 text-danger hover:bg-light" id="ctx-delete">删除</button>
+        </div>
+    </div>
+
+    <div class="fixed inset-0 bg-black bg-opacity-80 z-50 flex items-center justify-center hidden fade-in"
+        id="player-modal">
+        <div class="relative bg-transparent min-w-[340px] px-8 py-6 rounded-xl shadow-xl">
+            <button onclick="closePlayer()" class="absolute top-2 right-2 text-white text-2xl z-10">
+                <i class="fa fa-times"></i>
+            </button>
+            <div id="player-container" class="flex justify-center items-center"></div>
+            <div class="text-center mt-2 text-white" id="player-file-name"></div>
+        </div>
+    </div>
+
+    <div class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center hidden fade-in"
+        id="editor-modal">
+        <div class="bg-white rounded-lg shadow-modal w-full max-w-7xl max-h-[90vh] flex flex-col fade-in">
+            <div class="p-3 flex justify-between items-center">
+                <h3 class="font-semibold" id="editor-filename"></h3>
+                <button onclick="closeEditorModal()" class="text-gray-500 hover:text-gray-700">
+                    <i class="fa fa-times"></i>
+                </button>
+            </div>
+            <div class="flex-grow p-2 overflow-hidden">
+                <div id="editor-monaco" class="w-full h-[80vh] min-h-[500px] border border-gray-200 rounded"></div>
+            </div>
+            <div class="p-3 flex justify-end space-x-3">
+                <button class="px-3 py-2 bg-gray-100 text-dark rounded hover:bg-gray-200 transition-colors"
+                    onclick="closeEditorModal()">取消</button>
+                <button class="px-3 py-2 bg-primary text-white rounded hover:bg-primary/90 transition-colors"
+                    onclick="saveEditFile()">保存</button>
+            </div>
+            <div class="p-2 text-danger text-sm hidden" id="editor-msg"></div>
+        </div>
+    </div>
+
+    <div class="fixed inset-0 bg-black bg-opacity-80 z-50 flex items-center justify-center hidden fade-in"
+        id="image-preview-modal">
+        <div class="relative bg-transparent">
+            <button onclick="closeImagePreview()" class="absolute top-2 right-2 text-white text-2xl z-10">
+                <i class="fa fa-times"></i>
+            </button>
+            <img id="preview-image" src="" alt="图片预览" class="max-w-[90vw] max-h-[80vh] rounded-xl shadow-xl" />
+            <div class="flex items-center justify-center mt-2 text-white">
+                <button id="preview-prev-btn" onclick="previewPrevImage()"
+                    class="w-10 h-10 flex items-center justify-center bg-black/40 hover:bg-black/60 rounded-full text-white text-2xl mr-4"
+                    style="user-select:none;">
+                    <i class="fa fa-chevron-left" style="margin:0;line-height:1;"></i>
+                </button>
+                <div id="image-preview-name" class="min-w-0 truncate px-2"></div>
+                <button id="preview-next-btn" onclick="previewNextImage()"
+                    class="w-10 h-10 flex items-center justify-center bg-black/40 hover:bg-black/60 rounded-full text-white text-2xl ml-4"
+                    style="user-select:none;">
+                    <i class="fa fa-chevron-right" style="margin:0;line-height:1;"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center hidden fade-in"
+        id="chmod-modal">
+        <div class="bg-white rounded-lg shadow-modal w-full max-w-md fade-in">
+            <div class="p-4 border-b flex justify-between items-center">
+                <h3 class="font-semibold" id="chmod-filename"></h3>
+                <button onclick="closeChmodModal()" class="text-gray-500 hover:text-gray-700">
+                    <i class="fa fa-times"></i>
+                </button>
+            </div>
+            <div class="p-4">
+                <form onsubmit="doChmodChown();return false;">
+                    <div class="mb-3">
+                        <label class="block text-sm font-medium text-gray-700 mb-1">权限：</label>
+                        <input type="text"
+                            class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary"
+                            id="chmod-input" value="0644" placeholder="如 0644">
+                    </div>
+                    <div class="mb-3">
+                        <label class="block text-sm font-medium text-gray-700 mb-1">用户：</label>
+                        <input type="text"
+                            class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary"
+                            id="owner-input" placeholder="用户名">
+                    </div>
+                    <div class="mb-3">
+                        <label class="block text-sm font-medium text-gray-700 mb-1">用户组：</label>
+                        <input type="text"
+                            class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary"
+                            id="group-input" placeholder="用户组（可选）">
+                    </div>
+                    <div id="chmod-msg" class="text-danger text-sm mb-3 hidden"></div>
+                    <div class="flex justify-end space-x-3">
+                        <button type="button"
+                            class="px-4 py-2 bg-gray-100 text-dark rounded hover:bg-gray-200 transition-colors"
+                            onclick="closeChmodModal()">取消</button>
+                        <button type="submit"
+                            class="px-4 py-2 bg-primary text-white rounded hover:bg-primary/90 transition-colors">确定</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center hidden fade-in"
+        id="custom-confirm-modal">
+        <div class="bg-white rounded-lg shadow-modal w-full max-w-md p-6 fade-in">
+            <div class="text-center mb-6">
+                <div
+                    class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-danger/10 text-danger mb-4">
+                    <i class="fa fa-exclamation-triangle text-xl"></i>
+                </div>
+                <h3 class="text-lg font-semibold" id="custom-confirm-title">确认操作</h3>
+                <p class="text-gray-600 mt-2" id="custom-confirm-message"></p>
+            </div>
+            <div class="flex justify-center space-x-4">
+                <button class="px-6 py-2.5 bg-gray-100 text-dark rounded hover:bg-gray-200 transition-colors"
+                    id="custom-confirm-cancel">取消</button>
+                <button class="px-6 py-2.5 bg-danger text-white rounded hover:bg-danger/90 transition-colors"
+                    id="custom-confirm-ok">确定</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center hidden fade-in"
+        id="custom-alert-modal">
+        <div class="bg-white rounded-lg shadow-modal w-full max-w-md p-6 fade-in">
+            <div class="text-center mb-6">
+                <div
+                    class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-warning/10 text-warning mb-4">
+                    <i class="fa fa-info-circle text-xl"></i>
+                </div>
+                <h3 class="text-lg font-semibold" id="custom-alert-title">提示</h3>
+                <p class="text-gray-600 mt-2" id="custom-alert-message"></p>
+            </div>
+            <div class="flex justify-center space-x-4">
+                <button class="px-6 py-2.5 bg-primary text-white rounded hover:bg-primary/90 transition-colors"
+                    id="custom-alert-ok">确定</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="fixed bottom-4 right-4 z-40 max-w-md w-full hidden fade-in" id="upload-progress-container">
+        <div id="upload-progress-list"></div>
+    </div>
+
+    <div class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center hidden fade-in"
+        id="download-url-modal">
+        <div class="bg-white rounded-lg shadow-modal w-full max-w-md p-6 fade-in">
+            <div class="mb-4">
+                <label class="block text-sm font-medium text-gray-700 mb-1">下载地址 (URL)：</label>
+                <input type="text" id="download-url-input"
+                    class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary">
+            </div>
+            <div class="mb-4">
+                <label class="block text-sm font-medium text-gray-700 mb-1">保存文件名：</label>
+                <input type="text" id="download-filename-input"
+                    class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary">
+            </div>
+            <div id="download-progress-bar" class="w-full bg-gray-200 rounded h-3 mb-4" style="display:none;">
+                <div id="download-progress-inner" class="bg-primary h-3 rounded progress-animate" style="width:0%">
+                </div>
+            </div>
+            <div id="download-progress-text" class="mb-2 text-sm"></div>
+            <div class="flex justify-end space-x-3">
+                <button class="px-3 py-2 bg-gray-100 text-dark rounded hover:bg-gray-200 transition-colors"
+                    onclick="closeDownloadUrlModal()">取消</button>
+                <button class="px-3 py-2 bg-primary text-white rounded hover:bg-primary/90 transition-colors"
+                    onclick="startDownloadUrl()">开始下载</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center hidden fade-in"
+        id="compress-modal">
+        <div class="bg-white rounded-lg shadow-modal w-full max-w-md p-6 fade-in">
+            <div class="mb-4">
+                <label class="block text-sm font-medium text-gray-700 mb-1">压缩文件名称：</label>
+                <input id="compress-name-input"
+                    class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary"
+                    type="text" />
+            </div>
+            <div class="flex justify-end space-x-3">
+                <button onclick="closeCompressModal()"
+                    class="px-3 py-2 bg-gray-100 text-dark rounded hover:bg-gray-200 transition-colors">取消</button>
+                <button onclick="startCompress()"
+                    class="px-3 py-2 bg-primary text-white rounded hover:bg-primary/90 transition-colors">开始压缩</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center hidden fade-in"
+        id="compress-progress-modal">
+        <div class="bg-white rounded-lg shadow-modal w-full max-w-md p-6 fade-in">
+            <div class="text-center mb-4">
+                <div
+                    class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-primary/10 text-primary mb-4">
+                    <i class="fa fa-cog fa-spin text-xl"></i>
+                </div>
+                <h3 class="text-lg font-semibold" id="progress-title">处理中...</h3>
+                <p class="text-gray-600 mt-2" id="progress-message">请稍候...</p>
+            </div>
+            <div class="flex justify-center">
+                <button class="px-6 py-2.5 bg-primary text-white rounded hover:bg-primary/90 transition-colors hidden"
+                    id="progress-ok" onclick="closeProgressModal()">完成</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let curDir = ".";
+        let mkdirInputRow = null;
+        let createFileInputRow = null;
+        let renameInputRow = null;
+        let renameFileInputRow = null;
+        let editingFileName = null;
+        let monacoInstance = null;
+        let chmodTargetName = null;
+        let searchKeyword = "";
+        let clipboardAction = null;
+        let clipboardFiles = [];
+        let clipboardDir = null;
+
+        const formatSize = s => (s < 1024 ? s + ' B' : s < 1024 * 1024 ? (s / 1024).toFixed(2) + ' KB' : (s / 1024 / 1024).toFixed(2) + ' MB');
+
+        if (window.self !== window.top) {
+            document.getElementById('main-container').classList.add('max-w-full');
+        } else {
+            document.getElementById('main-container').classList.add('max-w-7xl');
+        }
+
+        function isImageFile(name) {
+            const ext = name.split('.').pop().toLowerCase();
+            return ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp', 'svg', 'ico', 'tif', 'tiff', 'avif'].includes(ext);
+        }
+        function isVideoFile(name) {
+            const ext = name.split('.').pop().toLowerCase();
+            return ['mp4', 'webm', 'ogv', 'mov', 'mkv', 'avi', 'flv', 'wmv', 'm4v', '3gp', 'ts'].includes(ext);
+        }
+        function isAudioFile(name) {
+            const ext = name.split('.').pop().toLowerCase();
+            return ['mp3', 'wav', 'ogg', 'flac', 'aac', 'm4a', 'ape', 'amr'].includes(ext);
+        }
+        function isIpkFile(name) {
+            return name.toLowerCase().endsWith('.ipk');
+        }
+        function isApkFile(name) {
+            return name.toLowerCase().endsWith('.apk');
+        }
+
+        async function showInstallPackageModal(fileName, type) {
+            const title = "安装软件包";
+            const message = `确定要安装 <span class="text-primary font-semibold">${fileName}</span> 吗？<br>这是一个 <b>${type.toUpperCase()}</b> 包，将通过 <code>${type === 'ipk' ? 'opkg' : 'apk'}</code> 命令安装。`;
+
+            const modal = document.getElementById('custom-confirm-modal');
+            const okBtn = document.getElementById('custom-confirm-ok');
+            const cancelBtn = document.getElementById('custom-confirm-cancel');
+            document.getElementById('custom-confirm-title').textContent = title;
+            document.getElementById('custom-confirm-message').innerHTML = message;
+            okBtn.innerText = "确定";
+            cancelBtn.innerText = "取消";
+            okBtn.disabled = false;
+            cancelBtn.disabled = false;
+            modal.classList.remove('hidden');
+
+            let okClicked = false;
+            let userChoice = await new Promise(resolve => {
+                function okHandler() {
+                    if (okClicked) return;
+                    okClicked = true;
+                    okBtn.disabled = true;
+                    cancelBtn.disabled = true;
+                    okBtn.innerText = "安装中...";
+                    resolve(true);
+                }
+                function cancelHandler() {
+                    if (okClicked) return;
+                    okClicked = true;
+                    resolve(false);
+                }
+                okBtn.addEventListener('click', okHandler, { once: true });
+                cancelBtn.addEventListener('click', cancelHandler, { once: true });
+            });
+
+            if (!userChoice) {
+                modal.classList.add('hidden');
+                okBtn.disabled = false;
+                cancelBtn.disabled = false;
+                okBtn.innerText = "确定";
+                return;
+            }
+
+            async function doInstall() {
+                okBtn.disabled = true;
+                cancelBtn.disabled = true;
+                okBtn.innerText = "安装中...";
+
+                let url = type === "ipk" ? "/cgi-bin/luci/quickfile/api/install_ipk" : "/cgi-bin/luci/quickfile/api/install_apk";
+                const data = new URLSearchParams();
+                data.append("dir", curDir);
+                data.append("name", fileName);
+
+                let res = await fetch(url, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                    body: data.toString(),
+                });
+                let result = await res.json();
+
+                if (result.success) {
+                    modal.classList.add('hidden');
+                    okBtn.disabled = false;
+                    cancelBtn.disabled = false;
+                    okBtn.innerText = "确定";
+                    let msg = `<div class="text-success font-semibold mb-2">安装成功</div>`;
+                    msg += `<pre style="white-space:pre-wrap;max-height:320px;overflow:auto;background:#f7f7f7;border-radius:8px;padding:8px;margin:0;text-align:left;">${(result.log || "").replace(/</g, "&lt;")}</pre>`;
+                    await customAlertModal(msg, "安装日志");
+                    refreshList();
+                    return;
+                } else {
+                    let msg = `<div class="text-danger font-semibold mb-2">安装失败</div>`;
+                    msg += `<pre style="white-space:pre-wrap;max-height:320px;overflow:auto;background:#f7f7f7;border-radius:8px;padding:8px;margin:0;text-align:left;">${(result.log || "").replace(/</g, "&lt;")}</pre>`;
+                    msg += `<div class="mt-3">是否更新软件源后重试？</div>`;
+                    document.getElementById('custom-confirm-message').innerHTML = msg;
+                    okBtn.innerText = "更新软件源重试";
+                    cancelBtn.innerText = "退出";
+                    okBtn.disabled = false;
+                    cancelBtn.disabled = false;
+
+                    while (true) {
+                        let retryChoice = await new Promise(resolve => {
+                            function okHandler() {
+                                okBtn.disabled = true;
+                                cancelBtn.disabled = true;
+                                okBtn.innerText = "更新中...";
+                                resolve(true);
+                            }
+                            function cancelHandler() {
+                                resolve(false);
+                            }
+                            okBtn.onclick = okHandler;
+                            cancelBtn.onclick = cancelHandler;
+                        });
+
+                        if (!retryChoice) {
+                            modal.classList.add('hidden');
+                            okBtn.innerText = "确定";
+                            cancelBtn.innerText = "取消";
+                            okBtn.disabled = false;
+                            cancelBtn.disabled = false;
+                            return;
+                        }
+
+                        let updateUrl = type === "ipk" ? "/cgi-bin/luci/quickfile/api/opkg_update" : "/cgi-bin/luci/quickfile/api/apk_update";
+                        let updateRes = await fetch(updateUrl, { method: "POST" });
+                        let updateData = await updateRes.json();
+                        let updateMsg = "";
+                        if (updateData.success) {
+                            updateMsg = `<div class="text-success font-semibold mb-2">软件源更新成功</div>`;
+                        } else {
+                            updateMsg = `<div class="text-danger font-semibold mb-2">软件源更新失败</div>`;
+                        }
+                        updateMsg += `<pre style="white-space:pre-wrap;max-height:320px;overflow:auto;background:#f7f7f7;border-radius:8px;padding:8px;margin:0;text-align:left;">${(updateData.log || "").replace(/</g, "&lt;")}</pre>`;
+                        document.getElementById('custom-confirm-message').innerHTML = updateMsg;
+                        okBtn.innerText = updateData.success ? "重新安装" : "重试更新";
+                        cancelBtn.innerText = "退出";
+                        okBtn.disabled = false;
+                        cancelBtn.disabled = false;
+
+                        if (updateData.success) {
+                            let again = await new Promise(resolve => {
+                                function okHandler() {
+                                    okBtn.disabled = true;
+                                    cancelBtn.disabled = true;
+                                    okBtn.innerText = "安装中...";
+                                    resolve(true);
+                                }
+                                function cancelHandler() {
+                                    resolve(false);
+                                }
+                                okBtn.onclick = okHandler;
+                                cancelBtn.onclick = cancelHandler;
+                            });
+                            if (again) {
+                                return await doInstall();
+                            } else {
+                                modal.classList.add('hidden');
+                                okBtn.innerText = "确定";
+                                cancelBtn.innerText = "取消";
+                                okBtn.disabled = false;
+                                cancelBtn.disabled = false;
+                                return;
+                            }
+                        }
+                    }
+                }
+            }
+
+            await doInstall();
+        }
+
+        function customAlertModal(message, title) {
+            return new Promise(resolve => {
+                const modal = document.getElementById('custom-alert-modal');
+                const msg = document.getElementById('custom-alert-message');
+                const t = document.getElementById('custom-alert-title');
+                msg.innerHTML = message;
+                t.textContent = title || '提示';
+                modal.classList.remove('hidden');
+
+                function close() {
+                    modal.classList.add('hidden');
+                    ok.removeEventListener('click', okFn);
+                    modal.removeEventListener('click', outsideClick);
+                    document.removeEventListener('keydown', keyHandler);
+                    resolve();
+                }
+
+                const ok = document.getElementById('custom-alert-ok');
+                function okFn() { close(); }
+
+                ok.addEventListener('click', okFn);
+
+                function outsideClick(e) {
+                    if (e.target === modal) close();
+                }
+                modal.addEventListener('click', outsideClick);
+
+                function keyHandler(e) {
+                    if (e.key === 'Escape' || e.key === 'Enter') close();
+                }
+                document.addEventListener('keydown', keyHandler);
+            });
+        }
+
+        function customChoiceModal(message, title, okText, cancelText) {
+            return new Promise(resolve => {
+                const modal = document.getElementById('custom-confirm-modal');
+                document.getElementById('custom-confirm-title').textContent = title || '请选择';
+                document.getElementById('custom-confirm-message').innerHTML = message;
+                const ok = document.getElementById('custom-confirm-ok');
+                const cancel = document.getElementById('custom-confirm-cancel');
+                ok.innerText = okText || "确定";
+                cancel.innerText = cancelText || "取消";
+                modal.classList.remove('hidden');
+
+                function close(ret) {
+                    modal.classList.add('hidden');
+                    ok.removeEventListener('click', okFn);
+                    cancel.removeEventListener('click', cancelFn);
+                    modal.removeEventListener('click', outsideClick);
+                    document.removeEventListener('keydown', keyHandler);
+                    ok.innerText = "确定";
+                    cancel.innerText = "取消";
+                    resolve(ret);
+                }
+
+                function okFn() { close(true); }
+                function cancelFn() { close(false); }
+
+                ok.addEventListener('click', okFn, { once: true });
+                cancel.addEventListener('click', cancelFn, { once: true });
+
+                function outsideClick(e) {
+                    if (e.target === modal) close(false);
+                }
+                modal.addEventListener('click', outsideClick);
+
+                function keyHandler(e) {
+                    if (e.key === 'Escape') close(false);
+                    if (e.key === 'Enter') close(true);
+                }
+                document.addEventListener('keydown', keyHandler);
+            });
+        }
+
+        function isTextFile(name, size) {
+            const lower = name.toLowerCase();
+            const ext = lower.split('.').pop();
+            if (lower === "makefile") return true;
+            if (['txt', 'js', 'ts', 'go', 'py', 'json', 'md', 'html', 'css', 'sh', 'bash', 'c', 'java', 'cs', 'php', 'rb', 'rs', 'swift', 'kt', 'kts', 'scala', 'pl', 'pm', 'lua', 'dart', 'yaml', 'yml', 'toml', 'ini', 'conf', 'log', 'bashrc', 'rc', 'cfg'].includes(ext)) return true;
+            if (['cpp', 'cc', 'cxx', 'hpp', 'hxx', 'h'].includes(ext)) return true;
+            if (size && size < 1024 * 1024) {
+                return true;
+            }
+            return false;
+        }
+
+        function showImagePreview(name) {
+            const modal = document.getElementById('image-preview-modal');
+            const img = document.getElementById('preview-image');
+            const fileName = document.getElementById('image-preview-name');
+            img.src = `/cgi-bin/luci/quickfile/api/download?dir=${encodeURIComponent(curDir)}&name=${encodeURIComponent(name)}`;
+            fileName.textContent = name;
+            modal.classList.remove('hidden');
+        }
+        function closeImagePreview() {
+            document.getElementById('image-preview-modal').classList.add('hidden');
+            document.getElementById('preview-image').src = '';
+        }
+
+        function showPlayer(name) {
+            const modal = document.getElementById('player-modal');
+            const container = document.getElementById('player-container');
+            const fileName = document.getElementById('player-file-name');
+            container.innerHTML = '';
+            let url = `/cgi-bin/luci/quickfile/api/download?dir=${encodeURIComponent(curDir)}&name=${encodeURIComponent(name)}`;
+            if (isVideoFile(name)) {
+                container.innerHTML = `<video controls autoplay style="max-width:90vw;max-height:80vh;border-radius:0.5rem;box-shadow:0 4px 16px 0 rgba(0,0,0,0.12);background:#000;">
+                    <source src="${url}">
+                    您的浏览器不支持 video 标签
+                </video>`;
+            } else if (isAudioFile(name)) {
+                container.innerHTML = `<audio controls autoplay style="width:500px;max-width:90vw;min-width:300px;">
+                    <source src="${url}">
+                    您的浏览器不支持 audio 标签
+                </audio>`;
+            }
+            fileName.textContent = name;
+            modal.classList.remove('hidden');
+        }
+        function closePlayer() {
+            document.getElementById('player-modal').classList.add('hidden');
+            document.getElementById('player-container').innerHTML = '';
+        }
+
+        let isEditingBreadcrumb = false;
+
+        function updateBreadcrumb() {
+            const bc = document.getElementById('breadcrumb');
+            const nav = document.getElementById('breadcrumb-nav');
+            const input = document.getElementById('breadcrumb-input');
+            bc.innerHTML = '';
+            input.classList.add('hidden');
+            bc.style.display = '';
+
+            const parts = curDir === "." ? [] : curDir.split(/[\\/]/);
+            let path = ".";
+
+            const rootLi = document.createElement('li');
+            rootLi.className = "text-gray-500 hover:text-primary cursor-pointer";
+            rootLi.innerHTML = '<i class="fa fa-home mr-1"></i>根目录';
+            rootLi.onclick = e => { e.stopPropagation(); curDir = "."; refreshList(); };
+            bc.appendChild(rootLi);
+
+            bc.appendChild(document.createTextNode('\u00A0/\u00A0'));
+
+            parts.forEach((p, i) => {
+                path += (path === "." ? "" : "/") + p;
+                const span = document.createElement('span');
+                span.className = i === parts.length - 1 ? "text-dark font-medium" : "text-gray-500 hover:text-primary cursor-pointer";
+                span.innerHTML = i === parts.length - 1 ? p : `<span>${p}</span>`;
+                span.onclick = e => {
+                    e.stopPropagation();
+                    curDir = parts.slice(0, i + 1).join("/") || ".";
+                    refreshList();
+                };
+                bc.appendChild(span);
+                if (i < parts.length - 1) {
+                    bc.appendChild(document.createTextNode('\u00A0/\u00A0'));
+                }
+            });
+
+            nav.onclick = function (e) {
+                if (e.target.tagName === 'SPAN' && e.target.onclick) return;
+                if (e.target.closest('li')) return;
+                if (isEditingBreadcrumb) return;
+                isEditingBreadcrumb = true;
+                input.value = curDir === "." ? "/" : curDir;
+                input.classList.remove('hidden');
+                bc.style.display = 'none';
+                input.focus();
+                input.select();
+            };
+
+            input.onkeydown = function (e) {
+                if (e.key === 'Enter') {
+                    let val = input.value.trim();
+                    if (!val || val === "/") curDir = ".";
+                    else curDir = val.replace(/^\/+|\/+$/g, '').replace(/\\/g, '/');
+                    isEditingBreadcrumb = false;
+                    refreshList();
+                }
+                if (e.key === 'Escape') {
+                    isEditingBreadcrumb = false;
+                    input.classList.add('hidden');
+                    bc.style.display = '';
+                }
+            };
+            input.onblur = function () {
+                isEditingBreadcrumb = false;
+                input.classList.add('hidden');
+                bc.style.display = '';
+            };
+        }
+
+        window.currentFileList = [];
+
+        function refreshList(insertMkdir, insertCreateFile) {
+            updateBreadcrumb();
+            let url = `/cgi-bin/luci/quickfile/api/list?dir=${encodeURIComponent(curDir)}`;
+            if (searchKeyword) {
+                url += `&search=${encodeURIComponent(searchKeyword)}`;
+            }
+            fetch(url)
+                .then(r => r.json())
+                .then(list => {
+                    window.currentFileList = list || [];
+                    list = list || [];
+                    const tableBody = document.getElementById('file-table-body');
+                    tableBody.innerHTML = '';
+
+                    list.filter(f => f.isdir).forEach(f => {
+                        const tr = document.createElement('tr');
+                        tr.className = 'file-row-hover';
+                        tr.setAttribute('data-name', f.name);
+                        tr.setAttribute('data-isdir', '1');
+
+                        if (renameInputRow === f.name) {
+                            tr.innerHTML = `
+                            <td colspan="6" class="px-4 py-3">
+                                <div class="flex items-center">
+                                    <input type="checkbox" style="visibility:hidden;">
+                                    <input type="text" class="ml-2 px-3 py-1 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary w-full max-w-xs" id="rename-dir-input" value="${f.name}" onkeydown="renameDirInputKeydown(event, '${f.name}')">
+                                    <button class="ml-2 px-3 py-1 bg-primary text-white rounded text-sm btn-hover" onclick="renameDirSave(document.getElementById('rename-dir-input'), '${f.name}')">保存</button>
+                                    <button class="ml-2 px-3 py-1 bg-gray-100 text-dark rounded text-sm btn-hover" onclick="renameDirCancel()">取消</button>
+                                </div>
+                            </td>
+                        `;
+                            setTimeout(() => { document.getElementById('rename-dir-input').focus(); }, 50);
+                        } else {
+                            tr.innerHTML = `
+                            <td class="px-4 py-3 whitespace-nowrap">
+                                <div class="flex items-center">
+                                    <input type="checkbox" class="batch-delete-checkbox mr-3" data-name="${f.name}" onclick="updateHeaderCheckbox()">
+                                    <i class="fa fa-folder text-warning mr-2"></i>
+                                    <a href="#" class="text-primary hover:text-primary/80">${f.name}</a>
+                                    ${f.issymlink && f.linktarget ? `<span class="ml-2 text-gray-400 text-sm">→ ${f.linktarget}</span>` : ""}
+                                </div>
+                            </td>
+                            <td class="px-4 py-3 whitespace-nowrap text-gray-500">—</td>
+                            <td class="px-4 py-3 whitespace-nowrap text-gray-500">${new Date(f.modtime * 1000).toLocaleString()}</td>
+                            <td class="px-4 py-3 whitespace-nowrap text-gray-500">${f.mode || 'drwxr-xr-x'}</td>
+                            <td class="px-4 py-3 whitespace-nowrap text-gray-500">${f.owner || '-'}/${f.group || '-'}</td>
+                            <td class="px-4 py-3 whitespace-nowrap text-right text-sm font-medium">
+                                <button class="text-primary hover:text-primary/80 mr-3 btn-hover" onclick="showRenameInput('${f.name}')">
+                                    <i class="fa fa-pencil"></i>
+                                </button>
+                                <button class="text-secondary hover:text-secondary/80 mr-3 btn-hover" onclick="showChmodModal('${f.name}')">
+                                    <i class="fa fa-lock"></i>
+                                </button>
+                                <button class="text-danger hover:text-danger/80 btn-hover" onclick="rmdirPrompt('${f.name}')">
+                                    <i class="fa fa-trash"></i>
+                                </button>
+                            </td>
+                        `;
+                            tr.querySelector('a').onclick = () => {
+                                curDir = curDir === '.' ? f.name : (curDir + '/' + f.name);
+                                refreshList();
+                            };
+                        }
+
+                        tr.addEventListener('click', function (e) {
+                            if (e.button !== 0) return;
+                            if (e.target.closest('input[type="checkbox"]') || e.target.closest('a')) return;
+                            const cb = tr.querySelector('.batch-delete-checkbox');
+                            if (e.ctrlKey || e.metaKey) {
+                                if (cb) cb.checked = !cb.checked;
+                            } else {
+                                document.querySelectorAll('.batch-delete-checkbox').forEach(cb => cb.checked = false);
+                                const cb = tr.querySelector('.batch-delete-checkbox');
+                            }
+                            updateHeaderCheckbox();
+                        });
+
+                        tableBody.appendChild(tr);
+                    });
+
+                    list.filter(f => !f.isdir).forEach(f => {
+                        const tr = document.createElement('tr');
+                        tr.className = 'file-row-hover';
+                        tr.setAttribute('data-name', f.name);
+                        tr.setAttribute('data-isdir', '0');
+
+                        if (renameFileInputRow === f.name) {
+                            tr.innerHTML = `
+                                <td colspan="6" class="px-4 py-3">
+                                    <div class="flex items-center">
+                                        <input type="checkbox" class="batch-delete-checkbox" data-name="${f.name}" onclick="updateHeaderCheckbox()">
+                                        <input type="text" class="ml-2 px-3 py-1 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary w-full max-w-xs" id="rename-file-input" value="${f.name}" onkeydown="renameFileInputKeydown(event, '${f.name}')">
+                                        <button class="ml-2 px-3 py-1 bg-primary text-white rounded text-sm btn-hover" onclick="renameFileSave(document.getElementById('rename-file-input'), '${f.name}')">保存</button>
+                                        <button class="ml-2 px-3 py-1 bg-gray-100 text-dark rounded text-sm btn-hover" onclick="renameFileCancel()">取消</button>
+                                    </div>
+                                </td>
+                            `;
+                            setTimeout(() => { document.getElementById('rename-file-input').focus(); }, 50);
+                        } else {
+                            let fileNameHtml = '';
+                            if (isIpkFile(f.name)) {
+                                fileNameHtml = `<span class="cursor-pointer text-blue-600 hover:underline" onclick="showInstallPackageModal('${f.name}', 'ipk')">${f.name}</span>`;
+                            } else if (isApkFile(f.name)) {
+                                fileNameHtml = `<span class="cursor-pointer text-green-600 hover:underline" onclick="showInstallPackageModal('${f.name}', 'apk')">${f.name}</span>`;
+                            } else if (isImageFile(f.name)) {
+                                fileNameHtml = `<span class="cursor-pointer text-primary hover:underline" onclick="showImagePreview('${f.name}')">${f.name}</span>`;
+                            } else if (isVideoFile(f.name) || isAudioFile(f.name)) {
+                                fileNameHtml = `<span class="cursor-pointer text-primary hover:underline" onclick="showPlayer('${f.name}')">${f.name}</span>`;
+                            } else if (isTextFile(f.name, f.size)) {
+                                fileNameHtml = `<span class="cursor-pointer text-primary hover:underline" onclick="editFile('${f.name}')">${f.name}</span>`;
+                            } else {
+                                fileNameHtml = `<a href="/cgi-bin/luci/quickfile/api/download?dir=${encodeURIComponent(curDir)}&name=${encodeURIComponent(f.name)}" class="text-primary hover:underline" target="_blank">${f.name}</a>`;
+                            }
+                            tr.innerHTML = `
+                                <td class="px-4 py-3 whitespace-nowrap">
+                                    <div class="flex items-center">
+                                        <input type="checkbox" class="batch-delete-checkbox mr-3" data-name="${f.name}" onclick="updateHeaderCheckbox()">
+                                        <i class="${getFileIconClass(f.name)} mr-2"></i>
+                                        ${fileNameHtml}
+                                        ${f.issymlink && f.linktarget ? `<span class="ml-2 text-gray-400 text-sm">→ ${f.linktarget}</span>` : ""}
+                                    </div>
+                                </td>
+                                <td class="px-4 py-3 whitespace-nowrap text-gray-500">${formatSize(f.size)}</td>
+                                <td class="px-4 py-3 whitespace-nowrap text-gray-500">${new Date(f.modtime * 1000).toLocaleString()}</td>
+                                <td class="px-4 py-3 whitespace-nowrap text-gray-500">${f.mode || '-rw-r--r--'}</td>
+                                <td class="px-4 py-3 whitespace-nowrap text-gray-500">${f.owner || '-'}/${f.group || '-'}</td>
+                                <td class="px-4 py-3 whitespace-nowrap text-right text-sm font-medium">
+                                    <a href="/cgi-bin/luci/quickfile/api/download?dir=${encodeURIComponent(curDir)}&name=${encodeURIComponent(f.name)}" target="_blank" class="text-success hover:text-success/80 mr-3 btn-hover">
+                                        <i class="fa fa-download"></i>
+                                    </a>
+                                    <button class="text-warning hover:text-warning/80 mr-3 btn-hover" onclick="editFile('${f.name}')">
+                                        <i class="fa fa-edit"></i>
+                                    </button>
+                                    <button class="text-primary hover:text-primary/80 mr-3 btn-hover" onclick="showRenameFileInput('${f.name}')">
+                                        <i class="fa fa-pencil"></i>
+                                    </button>
+                                    <button class="text-secondary hover:text-secondary/80 mr-3 btn-hover" onclick="showChmodModal('${f.name}')">
+                                        <i class="fa fa-lock"></i>
+                                    </button>
+                                    <button class="text-danger hover:text-danger/80 btn-hover" onclick="deleteFile('${f.name}')">
+                                        <i class="fa fa-trash"></i>
+                                    </button>
+                                </td>
+                            `;
+                        }
+
+                        tr.addEventListener('click', function (e) {
+                            if (e.button !== 0) return;
+                            if (e.target.closest('input[type="checkbox"]') || e.target.closest('a')) return;
+                            const cb = tr.querySelector('.batch-delete-checkbox');
+                            if (e.ctrlKey || e.metaKey) {
+                                if (cb) cb.checked = !cb.checked;
+                            } else {
+                                document.querySelectorAll('.batch-delete-checkbox').forEach(cb => cb.checked = false);
+                                const cb = tr.querySelector('.batch-delete-checkbox');
+                            }
+                            updateHeaderCheckbox();
+                        });
+
+                        tableBody.appendChild(tr);
+                    });
+
+                    if (insertMkdir) {
+                        mkdirInputRow = true;
+                        const tr = document.createElement('tr');
+                        tr.innerHTML = `
+        <td colspan="6" class="px-4 py-3">
+            <div class="flex items-center">
+                <input type="checkbox" style="visibility:hidden;">
+                <input type="text" class="ml-2 px-3 py-1 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary w-full max-w-xs" id="mkdir-input" placeholder="文件夹名称" onkeydown="mkdirInputKeydown(event)">
+                <button class="ml-2 px-3 py-1 bg-primary text-white rounded text-sm btn-hover" onclick="mkdirSave(document.getElementById('mkdir-input'))">创建</button>
+                <button class="ml-2 px-3 py-1 bg-gray-100 text-dark rounded text-sm btn-hover" onclick="mkdirCancel()">取消</button>
+            </div>
+        </td>
+    `;
+                        if (tableBody.firstChild) {
+                            tableBody.insertBefore(tr, tableBody.firstChild);
+                        } else {
+                            tableBody.appendChild(tr);
+                        }
+                        setTimeout(() => { document.getElementById('mkdir-input').focus(); }, 50);
+                    }
+
+                    if (insertCreateFile) {
+                        createFileInputRow = true;
+                        const tr = document.createElement('tr');
+                        tr.innerHTML = `
+        <td colspan="6" class="px-4 py-3">
+            <div class="flex items-center">
+                <input type="checkbox" style="visibility:hidden;">
+                <input type="text" class="ml-2 px-3 py-1 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary w-full max-w-xs" id="create-file-input" placeholder="文件名称" onkeydown="createFileInputKeydown(event)">
+                <button class="ml-2 px-3 py-1 bg-primary text-white rounded text-sm btn-hover" onclick="createFileSave(document.getElementById('create-file-input'))">创建</button>
+                <button class="ml-2 px-3 py-1 bg-gray-100 text-dark rounded text-sm btn-hover" onclick="createFileCancel()">取消</button>
+            </div>
+        </td>
+    `;
+                        if (tableBody.firstChild) {
+                            tableBody.insertBefore(tr, tableBody.firstChild);
+                        } else {
+                            tableBody.appendChild(tr);
+                        }
+                        setTimeout(() => { document.getElementById('create-file-input').focus(); }, 50);
+                    }
+
+                    updateHeaderCheckbox();
+                });
+        }
+
+        let imageFileList = [];
+        let imagePreviewIndex = 0;
+
+        function getAllImageFilesFromList() {
+            return window.currentFileList
+                .filter(f => !f.isdir && isImageFile(f.name))
+                .map(f => f.name);
+        }
+
+        function showImagePreview(name) {
+            imageFileList = getAllImageFilesFromList();
+            imagePreviewIndex = imageFileList.indexOf(name);
+            if (imagePreviewIndex < 0) imagePreviewIndex = 0;
+            updateImagePreview();
+        }
+
+        function updateImagePreview() {
+            if (!imageFileList.length) return;
+            const name = imageFileList[imagePreviewIndex];
+            const modal = document.getElementById('image-preview-modal');
+            const img = document.getElementById('preview-image');
+            const fileName = document.getElementById('image-preview-name');
+            img.src = `/cgi-bin/luci/quickfile/api/download?dir=${encodeURIComponent(curDir)}&name=${encodeURIComponent(name)}`;
+            fileName.textContent = name;
+            modal.classList.remove('hidden');
+            document.getElementById('preview-prev-btn').disabled = (imagePreviewIndex === 0);
+            document.getElementById('preview-next-btn').disabled = (imagePreviewIndex === imageFileList.length - 1);
+        }
+
+        function previewPrevImage() {
+            if (imagePreviewIndex > 0) {
+                imagePreviewIndex--;
+                updateImagePreview();
+            }
+        }
+
+        function previewNextImage() {
+            if (imagePreviewIndex < imageFileList.length - 1) {
+                imagePreviewIndex++;
+                updateImagePreview();
+            }
+        }
+
+        function closeImagePreview() {
+            document.getElementById('image-preview-modal').classList.add('hidden');
+            document.getElementById('preview-image').src = '';
+            imageFileList = [];
+            imagePreviewIndex = 0;
+        }
+
+        document.addEventListener('keydown', function (e) {
+            const modal = document.getElementById('image-preview-modal');
+            if (!modal || modal.classList.contains('hidden')) return;
+            if (e.key === 'ArrowLeft') previewPrevImage();
+            if (e.key === 'ArrowRight') previewNextImage();
+            if (e.key === 'Escape') closeImagePreview();
+        });
+
+        function customAlert(message, title) {
+            return new Promise(resolve => {
+                const modal = document.getElementById('custom-alert-modal');
+                const msg = document.getElementById('custom-alert-message');
+                const t = document.getElementById('custom-alert-title');
+                msg.textContent = message;
+                t.textContent = title || '提示';
+                modal.classList.remove('hidden');
+
+                function close() {
+                    modal.classList.add('hidden');
+                    ok.removeEventListener('click', okFn);
+                    modal.removeEventListener('click', outsideClick);
+                    document.removeEventListener('keydown', keyHandler);
+                    resolve();
+                }
+
+                const ok = document.getElementById('custom-alert-ok');
+                function okFn() { close(); }
+
+                ok.addEventListener('click', okFn);
+
+                function outsideClick(e) {
+                    if (e.target === modal) close();
+                }
+                modal.addEventListener('click', outsideClick);
+
+                function keyHandler(e) {
+                    if (e.key === 'Escape' || e.key === 'Enter') close();
+                }
+                document.addEventListener('keydown', keyHandler);
+            });
+        }
+
+        function updateHeaderCheckbox() {
+            const checkboxes = document.querySelectorAll('.batch-delete-checkbox:checked');
+            const archiveBtn = document.getElementById('archive-btn');
+            if (archiveBtn) {
+                archiveBtn.disabled = checkboxes.length === 0;
+            }
+            const headerCheckbox = document.getElementById('header-checkbox');
+            const all = document.querySelectorAll('.batch-delete-checkbox');
+            if (headerCheckbox && all.length > 0) {
+                headerCheckbox.checked = checkboxes.length === all.length;
+            }
+        }
+
+        function headerCheckboxClick() {
+            const all = document.querySelectorAll('.batch-delete-checkbox');
+            const headerCheckbox = document.getElementById('header-checkbox');
+            all.forEach(cb => cb.checked = headerCheckbox.checked);
+            updateHeaderCheckbox();
+        }
+
+        function copyFiles() {
+            const checkboxes = document.querySelectorAll('.batch-delete-checkbox:checked');
+            const names = Array.from(checkboxes).map(cb => cb.getAttribute('data-name'));
+            if (names.length === 0) {
+                customAlert("请先选择要复制的文件或文件夹");
+                return;
+            }
+            clipboardAction = "copy";
+            clipboardFiles = names;
+            clipboardDir = curDir;
+        }
+
+        function moveFiles() {
+            const checkboxes = document.querySelectorAll('.batch-delete-checkbox:checked');
+            const names = Array.from(checkboxes).map(cb => cb.getAttribute('data-name'));
+            if (names.length === 0) {
+                customAlert("请先选择要剪切的文件或文件夹");
+                return;
+            }
+            clipboardAction = "move";
+            clipboardFiles = names;
+            clipboardDir = curDir;
+        }
+
+        async function pasteFiles() {
+            if (!clipboardAction || !clipboardFiles || !clipboardFiles.length || !clipboardDir) {
+                await customAlert("请先进行“复制”或“剪切”操作再粘贴");
+                return;
+            }
+            if (clipboardDir === curDir) {
+                await customAlert("目标目录与来源目录相同，请切换到其他目录再粘贴");
+                return;
+            }
+            if (clipboardFiles.some(f => curDir.startsWith(clipboardDir + "/" + f))) {
+                await customAlert("目标文件名存在冲突，请切换到其他文件夹再粘贴");
+                return;
+            }
+            let url = clipboardAction === "copy" ? "/cgi-bin/luci/quickfile/api/copy" : "/cgi-bin/luci/quickfile/api/move";
+            const data = new URLSearchParams();
+            data.append('srcDir', clipboardDir);
+            data.append('dstDir', curDir);
+            clipboardFiles.forEach(n => data.append('names[]', n));
+            fetch(url, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: data.toString(),
+            }).then(async r => {
+                const res = await r.json();
+                if (res.success) {
+                    clipboardAction = null;
+                    clipboardFiles = [];
+                    clipboardDir = null;
+                    refreshList();
+                } else {
+                    let msg = "部分项目操作失败: " + (res.failed || []).join(", ");
+                    customAlert(msg);
+                    refreshList();
+                }
+            });
+        }
+
+        async function batchDeleteFiles() {
+            const checkboxes = document.querySelectorAll('.batch-delete-checkbox:checked');
+            const names = Array.from(checkboxes).map(cb => cb.getAttribute('data-name'));
+            if (names.length === 0) {
+                await customAlert("请先选择要删除的文件或文件夹");
+                return;
+            }
+            if (!await customConfirm(`确定删除所选的 ${names.length} 个文件或目录吗？`)) return;
+            const data = new URLSearchParams();
+            data.append('dir', curDir);
+            names.forEach(n => data.append('names[]', n));
+            fetch('/cgi-bin/luci/quickfile/api/delete_batch', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: data.toString(),
+            }).then(async r => {
+                const res = await r.json();
+                if (res.success) {
+                    refreshList();
+                } else {
+                    alert("部分文件删除失败: " + (res.failed || []).join(", "));
+                    refreshList();
+                }
+            });
+        }
+
+        function showChmodModal(name) {
+            chmodTargetName = name;
+            document.getElementById('chmod-filename').innerText = name;
+            document.getElementById('chmod-input').value = '0644';
+            document.getElementById('owner-input').value = '';
+            document.getElementById('group-input').value = '';
+            document.getElementById('chmod-msg').classList.add('hidden');
+            document.getElementById('chmod-modal').classList.remove('hidden');
+        }
+
+        function closeChmodModal() {
+            document.getElementById('chmod-modal').classList.add('hidden');
+        }
+
+        function doChmodChown() {
+            const mode = document.getElementById('chmod-input').value.trim();
+            const owner = document.getElementById('owner-input').value.trim();
+            const group = document.getElementById('group-input').value.trim();
+            let error = '';
+            if (mode && !/^[0-7]{3,4}$/.test(mode)) error = '权限格式不正确';
+            if (error) {
+                document.getElementById('chmod-msg').innerText = error;
+                document.getElementById('chmod-msg').classList.remove('hidden');
+                return;
+            }
+
+            let p = Promise.resolve();
+            if (mode) {
+                p = fetch('/cgi-bin/luci/quickfile/api/chmod', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body: `name=${encodeURIComponent(chmodTargetName)}&dir=${encodeURIComponent(curDir)}&mode=${encodeURIComponent(mode)}`
+                }).then(r => r.json());
+            }
+
+            p.then(() => {
+                if (owner) {
+                    return fetch('/cgi-bin/luci/quickfile/api/chown', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                        body: `name=${encodeURIComponent(chmodTargetName)}&dir=${encodeURIComponent(curDir)}&owner=${encodeURIComponent(owner)}&group=${encodeURIComponent(group)}`
+                    }).then(r => r.json());
+                }
+            }).then(() => {
+                closeChmodModal();
+                refreshList();
+            }).catch(async err => {
+                let msg = "操作失败";
+                if (err.text) msg = await err.text();
+                document.getElementById('chmod-msg').innerText = msg;
+                document.getElementById('chmod-msg').classList.remove('hidden');
+            });
+        }
+
+        function customConfirm(message) {
+            return new Promise(resolve => {
+                const modal = document.getElementById('custom-confirm-modal');
+                const msg = document.getElementById('custom-confirm-message');
+                msg.textContent = message;
+                modal.classList.remove('hidden');
+
+                function close(ret) {
+                    modal.classList.add('hidden');
+                    ok.removeEventListener('click', okFn);
+                    cancel.removeEventListener('click', cancelFn);
+                    modal.removeEventListener('click', outsideClick);
+                    document.removeEventListener('keydown', keyHandler);
+                    resolve(ret);
+                }
+
+                const ok = document.getElementById('custom-confirm-ok');
+                const cancel = document.getElementById('custom-confirm-cancel');
+
+                function okFn() { close(true); }
+                function cancelFn() { close(false); }
+
+                ok.addEventListener('click', okFn);
+                cancel.addEventListener('click', cancelFn);
+
+                function outsideClick(e) {
+                    if (e.target === modal) close(false);
+                }
+                modal.addEventListener('click', outsideClick);
+
+                function keyHandler(e) {
+                    if (e.key === 'Escape') close(false);
+                    if (e.key === 'Enter') close(true);
+                }
+                document.addEventListener('keydown', keyHandler);
+            });
+        }
+
+        async function deleteFile(name) {
+            if (!await customConfirm('确定要删除 "' + name + '" 吗？')) return;
+            fetch('/cgi-bin/luci/quickfile/api/delete', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: 'name=' + encodeURIComponent(name) + '&dir=' + encodeURIComponent(curDir)
+            }).then(r => r.json()).then(() => refreshList());
+        }
+
+        async function rmdirPrompt(name) {
+            if (!await customConfirm('确定要删除文件夹 "' + name + '" 及其全部内容吗？')) return;
+            fetch('/cgi-bin/luci/quickfile/api/rmdir', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: 'name=' + encodeURIComponent(name) + '&dir=' + encodeURIComponent(curDir)
+            }).then(r => r.json()).then(() => refreshList());
+        }
+
+        function editFile(name) {
+            fetch(`/cgi-bin/luci/quickfile/api/readfile?dir=${encodeURIComponent(curDir)}&name=${encodeURIComponent(name)}`)
+                .then(r => {
+                    if (!r.ok) throw r;
+                    return r.json();
+                })
+                .then(data => {
+                    editingFileName = name;
+                    document.getElementById('editor-filename').innerText = name;
+                    document.getElementById('editor-msg').classList.add('hidden');
+                    document.getElementById('editor-modal').classList.remove('hidden');
+
+                    setTimeout(() => {
+                        if (monacoInstance) {
+                            monacoInstance.dispose();
+                        }
+                        require.config({ paths: { 'vs': '/cgi-bin/luci/quickfile-static/vs' } });
+                        require(['vs/editor/editor.main'], function () {
+                            monaco.editor.defineTheme('vs-dark-new', {
+                                base: 'vs-dark',
+                                inherit: true,
+                                rules: [],
+                                colors: {
+                                    'editor.background': '#0d1117'
+                                }
+                            });
+
+                            monacoInstance = monaco.editor.create(document.getElementById('editor-monaco'), {
+                                value: data.content,
+                                language: guessLanguage(name),
+                                theme: "vs-dark-new",
+                                automaticLayout: true,
+                                fontSize: 15,
+                                minimap: { enabled: false }
+                            });
+                        });
+                    }, 10);
+                })
+                .catch(async err => {
+                    let msg = "读取文件内容失败";
+                    if (err.text) msg = await err.text();
+                    document.getElementById('editor-msg').innerText = msg;
+                    document.getElementById('editor-msg').classList.remove('hidden');
+                    document.getElementById('editor-modal').classList.remove('hidden');
+                });
+        }
+
+        function closeEditorModal() {
+            document.getElementById('editor-modal').classList.add('hidden');
+            if (monacoInstance) {
+                monacoInstance.dispose();
+                monacoInstance = null;
+            }
+            editingFileName = null;
+        }
+
+        function saveEditFile() {
+            if (!monacoInstance) return;
+            const content = monacoInstance.getValue();
+            fetch('/cgi-bin/luci/quickfile/api/writefile', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: `name=${encodeURIComponent(editingFileName)}&dir=${encodeURIComponent(curDir)}&content=${encodeURIComponent(content)}`
+            })
+                .then(r => {
+                    if (!r.ok) throw r;
+                    return r.json();
+                })
+                .then(() => {
+                    closeEditorModal();
+                    refreshList();
+                })
+                .catch(async err => {
+                    let msg = "保存失败";
+                    if (err.text) msg = await err.text();
+                    document.getElementById('editor-msg').innerText = msg;
+                    document.getElementById('editor-msg').classList.remove('hidden');
+                });
+        }
+
+        function guessLanguage(name) {
+            const lower = name.toLowerCase();
+            const ext = lower.split('.').pop();
+            if (lower === "makefile") return "makefile";
+            if (ext === 'js') return 'javascript';
+            if (ext === 'ts') return 'typescript';
+            if (ext === 'go') return 'go';
+            if (ext === 'py') return 'python';
+            if (ext === 'json') return 'json';
+            if (ext === 'md') return 'markdown';
+            if (ext === 'html') return 'html';
+            if (ext === 'css') return 'css';
+            if (ext === 'sh' || ext === 'bash') return 'shell';
+            if (ext === 'c') return 'c';
+            if (['cpp', 'cc', 'cxx', 'hpp', 'hxx', 'h'].includes(ext)) return 'cpp';
+            if (ext === 'java') return 'java';
+            if (ext === 'cs') return 'csharp';
+            if (ext === 'php') return 'php';
+            if (ext === 'rb') return 'ruby';
+            if (ext === 'rs') return 'rust';
+            if (ext === 'swift') return 'swift';
+            if (ext === 'kt' || ext === 'kts') return 'kotlin';
+            if (ext === 'scala') return 'scala';
+            if (ext === 'pl' || ext === 'pm') return 'perl';
+            if (ext === 'lua') return 'lua';
+            if (ext === 'dart') return 'dart';
+            if (ext === 'yaml' || ext === 'yml') return 'yaml';
+            if (ext === 'toml') return 'toml';
+            if (ext === 'ini') return 'ini';
+            return 'plaintext';
+        }
+
+        function showMkdirInput() {
+            if (mkdirInputRow || createFileInputRow) return;
+            refreshList(true, false);
+        }
+
+        function mkdirInputKeydown(e) {
+            if (e.key === 'Enter') {
+                mkdirSave(e.target);
+            }
+        }
+
+        function mkdirSave(input) {
+            const name = input.value.trim();
+            if (!name) return;
+            fetch('/cgi-bin/luci/quickfile/api/mkdir', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: `name=${encodeURIComponent(name)}&dir=${encodeURIComponent(curDir)}`
+            })
+                .then(r => {
+                    if (!r.ok) throw new Error(r.statusText);
+                    return r.json();
+                })
+                .then(() => {
+                    mkdirInputRow = null;
+                    refreshList();
+                })
+                .catch(err => {
+                    alert('创建文件夹失败: ' + err.message);
+                    mkdirInputRow = null;
+                    refreshList();
+                });
+        }
+
+        function mkdirCancel() {
+            mkdirInputRow = null;
+            refreshList();
+        }
+
+        function showCreateFileInput() {
+            if (createFileInputRow || mkdirInputRow) return;
+            refreshList(false, true);
+        }
+
+        function createFileInputKeydown(e) {
+            if (e.key === 'Enter') {
+                createFileSave(e.target);
+            }
+        }
+
+        function createFileSave(input) {
+            const name = input.value.trim();
+            if (!name) return;
+            fetch('/cgi-bin/luci/quickfile/api/createfile', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: `name=${encodeURIComponent(name)}&dir=${encodeURIComponent(curDir)}`
+            })
+                .then(r => {
+                    if (!r.ok) throw new Error(r.statusText);
+                    return r.json();
+                })
+                .then(() => {
+                    createFileInputRow = null;
+                    refreshList();
+                })
+                .catch(err => {
+                    alert('创建文件失败: ' + err.message);
+                    createFileInputRow = null;
+                    refreshList();
+                });
+        }
+
+        function createFileCancel() {
+            createFileInputRow = null;
+            refreshList();
+        }
+
+        function showRenameInput(oldName) {
+            if (renameInputRow || renameFileInputRow) return;
+            renameInputRow = oldName;
+            refreshList();
+        }
+
+        function renameDirInputKeydown(e, oldName) {
+            if (e.key === 'Enter') {
+                renameDirSave(e.target, oldName);
+            }
+        }
+
+        function renameDirSave(input, oldName) {
+            const newName = input.value.trim();
+            if (!newName || newName === oldName) return;
+            fetch('/cgi-bin/luci/quickfile/api/renamedir', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: `from=${encodeURIComponent(oldName)}&to=${encodeURIComponent(newName)}&dir=${encodeURIComponent(curDir)}`
+            })
+                .then(r => {
+                    if (!r.ok) throw new Error(r.statusText);
+                    return r.json();
+                })
+                .then(() => {
+                    renameInputRow = null;
+                    refreshList();
+                })
+                .catch(err => {
+                    alert('重命名文件夹失败: ' + err.message);
+                    renameInputRow = null;
+                    refreshList();
+                });
+        }
+
+        function renameDirCancel() {
+            renameInputRow = null;
+            refreshList();
+        }
+
+        function showRenameFileInput(oldName) {
+            if (renameInputRow || renameFileInputRow) return;
+            renameFileInputRow = oldName;
+            refreshList();
+        }
+
+        function renameFileInputKeydown(e, oldName) {
+            if (e.key === 'Enter') {
+                renameFileSave(e.target, oldName);
+            }
+        }
+
+        function renameFileSave(input, oldName) {
+            const newName = input.value.trim();
+            if (!newName || newName === oldName) return;
+            fetch('/cgi-bin/luci/quickfile/api/rename', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: `from=${encodeURIComponent(oldName)}&to=${encodeURIComponent(newName)}&dir=${encodeURIComponent(curDir)}`
+            })
+                .then(r => {
+                    if (!r.ok) throw new Error(r.statusText);
+                    return r.json();
+                })
+                .then(() => {
+                    renameFileInputRow = null;
+                    refreshList();
+                })
+                .catch(err => {
+                    alert('重命名文件失败: ' + err.message);
+                    renameFileInputRow = null;
+                    refreshList();
+                });
+        }
+
+        function renameFileCancel() {
+            renameFileInputRow = null;
+            refreshList();
+        }
+
+        document.getElementById('upload-btn').addEventListener('click', function () {
+            const fileInput = document.createElement('input');
+            fileInput.type = 'file';
+            fileInput.multiple = true;
+            fileInput.onchange = function () {
+                for (const f of fileInput.files) uploadFile(f);
+            };
+            fileInput.click();
+        });
+
+        function uploadFile(file) {
+            const container = document.getElementById('upload-progress-container');
+            const list = document.getElementById('upload-progress-list');
+            container.classList.remove('hidden');
+
+            const item = document.createElement('div');
+            item.className = "bg-white rounded-lg shadow-modal p-4 mb-3 fade-in flex flex-col";
+            item.innerHTML = `
+                <div class="flex justify-between items-center mb-2">
+                    <h4 class="font-medium">${file.name}</h4>
+                    <span class="text-xs text-gray-500 upload-speed"></span>
+                </div>
+                <div class="w-full bg-gray-200 rounded-full h-2.5 mb-2">
+                    <div class="bg-primary h-2.5 rounded-full progress-animate upload-progress-bar" style="width: 0%"></div>
+                </div>
+                <div class="flex justify-between text-xs text-gray-500">
+                    <span class="upload-percentage">0%</span>
+                    <span class="upload-size">0 MB / ${formatSize(file.size)}</span>
+                </div>
+            `;
+            list.appendChild(item);
+
+            const progressBar = item.querySelector('.upload-progress-bar');
+            const percentage = item.querySelector('.upload-percentage');
+            const size = item.querySelector('.upload-size');
+            const speed = item.querySelector('.upload-speed');
+
+            let uploaded = 0, last = 0, lastTime = Date.now();
+
+            const xhr = new XMLHttpRequest();
+            xhr.open('POST', '/cgi-bin/luci/quickfile/api/upload');
+            xhr.upload.onprogress = e => {
+                if (e.lengthComputable) {
+                    uploaded = e.loaded;
+                    let percent = Math.floor((e.loaded / e.total) * 100);
+                    progressBar.style.width = percent + "%";
+                    percentage.textContent = percent + "%";
+                    size.textContent = formatSize(e.loaded) + ' / ' + formatSize(file.size);
+
+                    let now = Date.now();
+                    if (now - lastTime > 250) {
+                        let speedVal = (e.loaded - last) / ((now - lastTime) / 1000);
+                        speed.textContent = formatSize(speedVal) + '/s';
+                        last = e.loaded;
+                        lastTime = now;
+                    }
+                }
+            }
+            xhr.onload = () => {
+                progressBar.classList.add('bg-success');
+                setTimeout(() => {
+                    item.remove();
+                    if (list.children.length === 0) {
+                        container.classList.add('hidden');
+                        refreshList();
+                    }
+                }, 1200);
+            }
+            xhr.onerror = () => {
+                progressBar.classList.add('bg-danger');
+                setTimeout(() => {
+                    item.remove();
+                    if (list.children.length === 0) {
+                        container.classList.add('hidden');
+                    }
+                }, 1200);
+            }
+            const data = new FormData();
+            data.append('file', file);
+            data.append('dir', curDir);
+            xhr.send(data);
+        }
+
+        const searchInput = document.getElementById('search-input');
+        const searchBtn = document.getElementById('search-btn');
+        const clearBtn = document.getElementById('clear-search-btn');
+
+        function updateClearBtn() {
+            clearBtn.style.display = searchInput.value.trim() ? '' : 'none';
+        }
+        searchInput.addEventListener('input', updateClearBtn);
+        updateClearBtn();
+
+        searchBtn.addEventListener('click', function () {
+            searchKeyword = searchInput.value.trim();
+            refreshList();
+        });
+
+        searchInput.addEventListener('keydown', function (e) {
+            if (e.key === 'Enter') {
+                searchKeyword = this.value.trim();
+                refreshList();
+            }
+        });
+
+        clearBtn.addEventListener('click', function () {
+            searchInput.value = '';
+            updateClearBtn();
+            searchKeyword = '';
+            refreshList();
+            searchInput.focus();
+        });
+
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape') {
+                closeImagePreview();
+                closePlayer();
+            }
+        });
+
+        document.getElementById('image-preview-modal').addEventListener('click', function (e) {
+            if (e.target === this) {
+                closeImagePreview();
+            }
+        });
+
+        function getFileIconClass(name) {
+            const ext = name.split('.').pop().toLowerCase();
+            if (['ipk', 'apk'].includes(ext)) {
+                return 'fa fa-cube text-blue-400';
+            }
+            if (['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp', 'svg', 'ico', 'tif', 'tiff', 'avif'].includes(ext)) {
+                return 'fa fa-file-image-o text-blue-400';
+            }
+            if (['mp4', 'webm', 'ogv', 'mov', 'mkv', 'avi', 'flv', 'wmv', 'm4v', '3gp', 'ts'].includes(ext)) {
+                return 'fa fa-file-video-o text-purple-400';
+            }
+            if (['mp3', 'wav', 'ogg', 'flac', 'aac', 'm4a', 'ape', 'amr'].includes(ext)) {
+                return 'fa fa-file-audio-o text-green-400';
+            }
+            if (['zip', 'rar', '7z', 'tar', 'gz', 'bz2', 'xz', 'tgz', 'tbz2', 'zstd'].includes(ext)) {
+                return 'fa fa-file-archive-o text-yellow-500';
+            }
+            if (['pdf'].includes(ext)) {
+                return 'fa fa-file-pdf-o text-red-500';
+            }
+            if (['doc', 'docx', 'odt', 'rtf'].includes(ext)) {
+                return 'fa fa-file-word-o text-blue-600';
+            }
+            if (['xls', 'xlsx', 'ods', 'csv'].includes(ext)) {
+                return 'fa fa-file-excel-o text-green-700';
+            }
+            if (['ppt', 'pptx', 'odp'].includes(ext)) {
+                return 'fa fa-file-powerpoint-o text-orange-500';
+            }
+            if (['txt', 'md', 'log', 'ini', 'conf', 'json', 'yaml', 'yml'].includes(ext)) {
+                return 'fa fa-file-text-o text-gray-400';
+            }
+            if (['js', 'ts', 'go', 'py', 'c', 'cpp', 'cc', 'cxx', 'hpp', 'hxx', 'h', 'java', 'cs', 'html', 'htm', 'php', 'rb', 'rs', 'swift', 'kt', 'kts', 'scala', 'pl', 'pm', 'lua', 'dart', 'toml', 'sh'].includes(ext)) {
+                return 'fa fa-file-code-o text-indigo-400';
+            }
+            return 'fa fa-file-o text-gray-400';
+        }
+
+        let filenameAutoFilled = true;
+
+        function showDownloadUrlModal() {
+            document.getElementById('download-url-modal').classList.remove('hidden');
+            document.getElementById('download-url-input').value = "";
+            document.getElementById('download-filename-input').value = "";
+            document.getElementById('download-progress-bar').style.display = "none";
+            document.getElementById('download-progress-inner').style.width = "0%";
+            document.getElementById('download-progress-text').textContent = "";
+            filenameAutoFilled = true;
+            setTimeout(() => {
+                document.addEventListener('mousedown', downloadModalClickOutside);
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const urlInput = document.getElementById('download-url-input');
+            const filenameInput = document.getElementById('download-filename-input');
+            let filenameAutoFilled = true;
+
+            if (urlInput && filenameInput) {
+                urlInput.addEventListener('input', function () {
+                    if (filenameAutoFilled) {
+                        const urlVal = urlInput.value.trim();
+                        try {
+                            let fakeUrl = urlVal;
+                            if (!/^https?:\/\//i.test(fakeUrl)) fakeUrl = "http://" + fakeUrl;
+                            const pathname = (new URL(fakeUrl)).pathname;
+                            const parts = pathname.split('/');
+                            let fname = parts.pop() || parts.pop() || '';
+                            fname = decodeURIComponent(fname);
+                            filenameInput.value = fname || "";
+                        } catch (e) {
+                            filenameInput.value = "";
+                        }
+                    }
+                });
+                filenameInput.addEventListener('input', function () {
+                    filenameAutoFilled = false;
+                });
+            }
+        });
+
+        function closeDownloadUrlModal() {
+            document.getElementById('download-url-modal').classList.add('hidden');
+            document.removeEventListener('mousedown', downloadModalClickOutside);
+        }
+
+        function downloadModalClickOutside(e) {
+            const modal = document.getElementById('download-url-modal');
+            if (modal && e.target === modal) {
+                closeDownloadUrlModal();
+            }
+        }
+
+        let downloadUrlInterval = null;
+
+        function startDownloadUrl() {
+            const url = document.getElementById('download-url-input').value.trim();
+            const filename = document.getElementById('download-filename-input').value.trim();
+            if (!url || !filename) {
+                closeDownloadUrlModal();
+                customAlertModal('请填写下载地址和保存文件名！', '提示');
+                return;
+            }
+
+            const progressBar = document.getElementById('download-progress-bar');
+            const progressInner = document.getElementById('download-progress-inner');
+            const progressText = document.getElementById('download-progress-text');
+            if (progressBar && progressInner && progressText) {
+                progressBar.style.display = "";
+                progressInner.style.width = "0%";
+                progressText.textContent = "准备下载...";
+            } else {
+                customAlertModal('页面结构错误：找不到进度条元素！', '错误');
+                return;
+            }
+
+            const formData = new URLSearchParams();
+            formData.append('url', url);
+            formData.append('filename', filename);
+            formData.append('dir', curDir);
+
+            fetch('/cgi-bin/luci/quickfile/api/download_url', {
+                method: "POST",
+                headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                body: formData.toString()
+            }).then(res => res.json())
+                .then(data => {
+                    if (data.success) {
+                        progressText.textContent = "下载开始...";
+                        pollDownloadProgress(filename);
+                    } else {
+                        customAlertModal('下载任务创建失败！', '错误');
+                        progressBar.style.display = "none";
+                    }
+                });
+        }
+
+        function pollDownloadProgress(filename) {
+            if (downloadUrlInterval) clearInterval(downloadUrlInterval);
+            downloadUrlInterval = setInterval(() => {
+                fetch(`/cgi-bin/luci/quickfile/api/download_progress?filename=${encodeURIComponent(filename)}`)
+                    .then(res => {
+                        if (res.ok) return res.json();
+                        throw new Error('not found');
+                    })
+                    .then(progress => {
+                        let percent = progress.total > 0 ? ((progress.current / progress.total) * 100).toFixed(1) : 0;
+                        document.getElementById('download-progress-inner').style.width = percent + "%";
+                        document.getElementById('download-progress-text').textContent =
+                            `已下载 ${formatSize(progress.current)} / ${progress.total > 0 ? formatSize(progress.total) : "?"} (${percent}%)`;
+                        if (progress.done) {
+                            clearInterval(downloadUrlInterval);
+                            if (!progress.error) {
+                                document.getElementById('download-progress-text').textContent = "下载完成";
+                                setTimeout(() => {
+                                    closeDownloadUrlModal();
+                                    refreshList();
+                                }, 1000);
+                            } else {
+                                document.getElementById('download-progress-text').textContent = "下载失败: " + progress.error;
+                            }
+                        }
+                    })
+                    .catch(() => {
+                        clearInterval(downloadUrlInterval);
+                        document.getElementById('download-progress-text').textContent = "下载任务不存在";
+                    });
+            }, 800);
+        }
+
+        function toggleNewDropdown() {
+            const menu = document.getElementById('new-dropdown-menu');
+            menu.classList.toggle('hidden');
+            if (!menu.classList.contains('hidden')) {
+                document.addEventListener('mousedown', newDropdownClickOutside);
+            }
+        }
+        function hideNewDropdown() {
+            document.getElementById('new-dropdown-menu').classList.add('hidden');
+            document.removeEventListener('mousedown', newDropdownClickOutside);
+        }
+        function newDropdownClickOutside(e) {
+            const container = document.getElementById('new-dropdown-container');
+            if (container && !container.contains(e.target)) {
+                hideNewDropdown();
+            }
+        }
+
+        function setCtxBtnState(id, disabled) {
+            const btn = document.getElementById(id);
+            if (!btn) return;
+            btn.classList.toggle('opacity-50', disabled);
+            btn.classList.toggle('pointer-events-none', disabled);
+        }
+
+        function isArchiveFile(name) {
+            return (
+                name.endsWith('.zip') ||
+                name.endsWith('.tar.gz') ||
+                name.endsWith('.tar.xz') ||
+                name.endsWith('.tgz')
+            );
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const ctxMenu = document.getElementById('context-menu');
+            const fileArea = document.getElementById('file-area');
+            const fileTableBody = document.getElementById('file-table-body');
+            let ctxTargetType = 'area';
+
+            function hideCtxMenu() {
+                ctxMenu.classList.add('hidden');
+            }
+
+            fileTableBody.addEventListener('contextmenu', function (e) {
+                let tr = e.target.closest('tr');
+                if (tr && tr.hasAttribute('data-name')) {
+                    document.querySelectorAll('.batch-delete-checkbox').forEach(cb => cb.checked = false);
+                    let cb = tr.querySelector('.batch-delete-checkbox');
+                    if (cb) cb.checked = true;
+                }
+                e.preventDefault();
+                const checked = document.querySelectorAll('.batch-delete-checkbox:checked');
+                ctxTargetType = checked.length > 0 ? 'file' : 'area';
+
+                let disableDownload = checked.length === 0;
+                if (!disableDownload) {
+                    disableDownload = Array.from(checked).every(cb => {
+                        const tr = cb.closest('tr');
+                        return tr && tr.getAttribute('data-isdir') === '1';
+                    });
+                }
+
+                setCtxBtnState('ctx-rename', checked.length !== 1);
+                setCtxBtnState('ctx-copy', ctxTargetType === 'area');
+                setCtxBtnState('ctx-move', ctxTargetType === 'area');
+                setCtxBtnState('ctx-delete', ctxTargetType === 'area');
+                setCtxBtnState('ctx-paste', !(clipboardFiles && clipboardFiles.length && clipboardDir));
+                setCtxBtnState('ctx-download', disableDownload);
+
+                const ctxDecompress = document.getElementById('ctx-decompress');
+                if (ctxDecompress) {
+                    if (
+                        checked.length === 1 &&
+                        isArchiveFile(checked[0].getAttribute('data-name')) &&
+                        checked[0].closest('tr').getAttribute('data-isdir') !== '1'
+                    ) {
+                        ctxDecompress.classList.remove('opacity-50', 'pointer-events-none');
+                        ctxDecompress.disabled = false;
+                    } else {
+                        ctxDecompress.classList.add('opacity-50', 'pointer-events-none');
+                        ctxDecompress.disabled = true;
+                    }
+                }
+
+                // 智能定位右键菜单
+                // 先让菜单可见但不可见于用户，用于测量高度宽度
+                ctxMenu.style.visibility = 'hidden';
+                ctxMenu.classList.remove('hidden');
+                // 获取菜单尺寸
+                const menuHeight = ctxMenu.offsetHeight;
+                const menuWidth = ctxMenu.offsetWidth;
+                const winHeight = window.innerHeight;
+                const winWidth = window.innerWidth;
+
+                let left = e.clientX;
+                let top = e.clientY;
+
+                // 水平方向溢出修正
+                if (left + menuWidth > winWidth) {
+                    left = winWidth - menuWidth - 2;
+                    if (left < 0) left = 0;
+                }
+                // 垂直方向溢出修正
+                if (top + menuHeight > winHeight) {
+                    top = top - menuHeight;
+                    if (top < 0) top = 0;
+                }
+
+                ctxMenu.style.left = left + 'px';
+                ctxMenu.style.top = top + 'px';
+
+                // 现在让菜单可见
+                ctxMenu.style.visibility = 'visible';
+                ctxMenu.classList.remove('hidden');
+            });
+
+            fileArea.addEventListener('contextmenu', function (e) {
+                if (e.target.closest('tbody tr')) return;
+                e.preventDefault();
+                document.querySelectorAll('.batch-delete-checkbox').forEach(cb => cb.checked = false);
+                ctxTargetType = 'area';
+                setCtxBtnState('ctx-rename', true);
+                setCtxBtnState('ctx-copy', true);
+                setCtxBtnState('ctx-move', true);
+                setCtxBtnState('ctx-delete', true);
+                setCtxBtnState('ctx-paste', !(clipboardFiles && clipboardFiles.length && clipboardDir));
+                setCtxBtnState('ctx-download', true);
+                ctxMenu.style.left = e.clientX + 'px';
+                ctxMenu.style.top = e.clientY + 'px';
+                ctxMenu.classList.remove('hidden');
+            });
+
+            document.addEventListener('click', function (e) {
+                if (!ctxMenu.contains(e.target)) {
+                    hideCtxMenu();
+                }
+            });
+            document.addEventListener('scroll', hideCtxMenu, true);
+            window.addEventListener('resize', hideCtxMenu);
+
+            const ctxMkdir = document.getElementById('ctx-mkdir');
+            if (ctxMkdir) ctxMkdir.onclick = function () {
+                hideCtxMenu();
+                showMkdirInput();
+            };
+            const ctxCreatefile = document.getElementById('ctx-createfile');
+            if (ctxCreatefile) ctxCreatefile.onclick = function () {
+                hideCtxMenu();
+                showCreateFileInput();
+            };
+            const ctxRename = document.getElementById('ctx-rename');
+            if (ctxRename) ctxRename.onclick = function () {
+                hideCtxMenu();
+                const checked = document.querySelectorAll('.batch-delete-checkbox:checked');
+                if (checked.length !== 1) {
+                    customAlert("请只选择一个文件或文件夹进行重命名");
+                    return;
+                }
+                const name = checked[0].getAttribute('data-name');
+                const tr = checked[0].closest('tr');
+                if (tr) {
+                    const isFolder = tr.querySelector('.fa-folder');
+                    if (isFolder) {
+                        showRenameInput(name);
+                    } else {
+                        showRenameFileInput(name);
+                    }
+                }
+            };
+            const ctxCopy = document.getElementById('ctx-copy');
+            if (ctxCopy) ctxCopy.onclick = function () {
+                hideCtxMenu();
+                if (ctxTargetType === 'file') copyFiles();
+            };
+            const ctxMove = document.getElementById('ctx-move');
+            if (ctxMove) ctxMove.onclick = function () {
+                hideCtxMenu();
+                if (ctxTargetType === 'file') moveFiles();
+            };
+            const ctxPaste = document.getElementById('ctx-paste');
+            if (ctxPaste) ctxPaste.onclick = function () {
+                hideCtxMenu();
+                if (clipboardFiles && clipboardFiles.length && clipboardDir) pasteFiles();
+            };
+            const ctxDownload = document.getElementById('ctx-download');
+            if (ctxDownload) ctxDownload.onclick = function () {
+                hideCtxMenu();
+                const checked = document.querySelectorAll('.batch-delete-checkbox:checked');
+                checked.forEach(cb => {
+                    const tr = cb.closest('tr');
+                    if (tr && tr.getAttribute('data-isdir') !== '1') {
+                        const name = cb.getAttribute('data-name');
+                        window.open(`/cgi-bin/luci/quickfile/api/download?dir=${encodeURIComponent(curDir)}&name=${encodeURIComponent(name)}`, '_blank');
+                    }
+                });
+            };
+            const ctxDelete = document.getElementById('ctx-delete');
+            if (ctxDelete) ctxDelete.onclick = function () {
+                hideCtxMenu();
+                if (ctxTargetType === 'file') batchDeleteFiles();
+            };
+
+            document.addEventListener('keydown', function (e) {
+                if (e.key === 'Escape') hideCtxMenu();
+            });
+        });
+
+        (function () {
+            let dragCounter = 0;
+            const fileArea = document.querySelector('.bg-white.rounded-lg.shadow-sm.overflow-hidden');
+            document.addEventListener('dragenter', function (e) {
+                dragCounter++;
+                if (fileArea) fileArea.classList.add('file-drop-hover');
+            });
+            document.addEventListener('dragleave', function (e) {
+                dragCounter--;
+                if (dragCounter <= 0 && fileArea) fileArea.classList.remove('file-drop-hover');
+            });
+            document.addEventListener('dragover', function (e) {
+                e.preventDefault();
+                e.dataTransfer.dropEffect = 'copy';
+            });
+            document.addEventListener('drop', function (e) {
+                e.preventDefault();
+                dragCounter = 0;
+                if (fileArea) fileArea.classList.remove('file-drop-hover');
+                if (e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+                    for (const f of e.dataTransfer.files) uploadFile(f);
+                }
+            });
+        })();
+
+        function toggleArchiveDropdown() {
+            const menu = document.getElementById('archive-dropdown-menu');
+            menu.classList.toggle('hidden');
+            document.addEventListener('click', (e) => {
+                if (!e.target.closest('#archive-dropdown-container')) {
+                    menu.classList.add('hidden');
+                }
+            }, { once: true });
+        }
+
+        let currentCompressFormat = "zip";
+
+        function hideCtxMenu() {
+            const ctxMenu = document.getElementById('context-menu');
+            if (ctxMenu) ctxMenu.classList.add('hidden');
+        }
+
+        function openCompressModal(format) {
+            currentCompressFormat = format;
+            const modal = document.getElementById('compress-modal');
+            const input = document.getElementById('compress-name-input');
+
+            let extension = format;
+            if (format === 'tar.gz') extension = 'tar.gz';
+            else if (format === 'tar.xz') extension = 'tar.xz';
+            else extension = 'zip';
+
+            input.value = `archive.${extension}`;
+            modal.classList.remove('hidden');
+
+            // 自动隐藏下拉菜单
+            const dropdown = document.getElementById('archive-dropdown-menu');
+            if (dropdown) dropdown.classList.add('hidden');
+        }
+
+        // 点击空白区域时关闭下拉菜单
+        window.addEventListener('click', function (e) {
+            const dropdown = document.getElementById('archive-dropdown-menu');
+            const btn = document.getElementById('archive-btn');
+            if (!btn.contains(e.target) && !dropdown.contains(e.target)) {
+                dropdown.classList.add('hidden');
+            }
+        });
+
+        function closeCompressModal() {
+            document.getElementById('compress-modal').classList.add('hidden');
+        }
+
+        function startCompress() {
+            const name = document.getElementById('compress-name-input').value.trim();
+            if (!name) return alert('请输入文件名');
+            const paths = Array.from(document.querySelectorAll('.batch-delete-checkbox:checked')).map(cb => cb.dataset.name);
+            if (!paths.length) return alert('请选择文件或文件夹');
+
+            closeCompressModal();
+            showProgressModal('压缩中...', '正在压缩文件，请稍候...');
+
+            fetch('/cgi-bin/luci/quickfile/api/compress', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    paths,
+                    format: currentCompressFormat,
+                    target: name,
+                    workdir: curDir
+                })
+            })
+                .then(res => res.json())
+                .then(res => {
+                    if (res.success) {
+                        document.getElementById('progress-message').textContent = '压缩完成';
+                        document.getElementById('progress-ok').classList.remove('hidden');
+                        refreshList();
+                    } else {
+                        document.getElementById('progress-message').textContent = '压缩失败';
+                        document.getElementById('progress-ok').classList.remove('hidden');
+                    }
+                })
+                .catch(() => {
+                    document.getElementById('progress-message').textContent = '网络错误';
+                    document.getElementById('progress-ok').classList.remove('hidden');
+                });
+        }
+
+        function closeProgressModal() {
+            document.getElementById('compress-progress-modal').classList.add('hidden');
+            document.getElementById('progress-ok').classList.add('hidden');
+        }
+
+        function showProgressModal(title, message) {
+            document.getElementById('progress-title').textContent = title;
+            document.getElementById('progress-message').textContent = message;
+            document.getElementById('progress-ok').classList.add('hidden');
+            document.getElementById('compress-progress-modal').classList.remove('hidden');
+        }
+
+        // 右键菜单绑定
+        document.addEventListener('DOMContentLoaded', () => {
+            const ctxCompress = document.getElementById('ctx-compress');
+            const ctxDecompress = document.getElementById('ctx-decompress');
+
+            if (ctxCompress) {
+                ctxCompress.onclick = () => {
+                    hideCtxMenu();
+                    const checked = document.querySelectorAll('.batch-delete-checkbox:checked');
+                    if (checked.length === 0) {
+                        alert("请选择要压缩的文件或文件夹");
+                        return;
+                    }
+                    openCompressModal('zip');
+                };
+            }
+
+            if (ctxDecompress) {
+                ctxDecompress.onclick = () => {
+                    hideCtxMenu();
+                    const checked = document.querySelectorAll('.batch-delete-checkbox:checked');
+                    if (checked.length !== 1) {
+                        alert("请选择一个压缩包进行解压");
+                        return;
+                    }
+                    const name = checked[0].getAttribute('data-name');
+                    decompressFile(name);
+                };
+            }
+        });
+
+        function decompressFile(name) {
+            showProgressModal('解压中...', '正在解压文件，请稍候...');
+
+            fetch('/cgi-bin/luci/quickfile/api/decompress', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    archive: name,
+                    target: curDir
+                })
+            })
+                .then(res => res.json())
+                .then(res => {
+                    if (res.success) {
+                        document.getElementById('progress-message').textContent = '解压完成';
+                        document.getElementById('progress-ok').classList.remove('hidden');
+                        refreshList();
+                    } else {
+                        document.getElementById('progress-message').textContent = '解压失败';
+                        document.getElementById('progress-ok').classList.remove('hidden');
+                    }
+                })
+                .catch(() => {
+                    document.getElementById('progress-message').textContent = '网络错误';
+                    document.getElementById('progress-ok').classList.remove('hidden');
+                });
+        }
+
+        refreshList();
+    </script>
+</body>
+
+</html>

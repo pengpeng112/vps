@@ -1,0 +1,10 @@
+#!/bin/sh
+# WAN 口 ifup/ifdown 立刻记一条（不等 60s 轮询）
+# OpenWrt 会传入 ACTION / INTERFACE / DEVICE
+[ -x /usr/sbin/wan-watch.sh ] || exit 0
+case "$INTERFACE" in
+    wan|wan6) ;;
+    *) exit 0 ;;
+esac
+/usr/sbin/wan-watch.sh event "iface-$ACTION-$INTERFACE" >/dev/null 2>&1 &
+exit 0

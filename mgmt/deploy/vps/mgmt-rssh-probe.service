@@ -1,0 +1,13 @@
+[Unit]
+Description=mgmt reverse-SSH port banner probe (one-shot, driven by timer)
+After=network-online.target docker.service
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/sbin/mgmt-rssh-probe.sh
+# 探测器只读端口 + 调本机 API；不给更多权限
+NoNewPrivileges=yes
+ProtectSystem=strict
+ReadWritePaths=/var/lib/mgmt-rssh-probe /var/log
+PrivateTmp=yes
