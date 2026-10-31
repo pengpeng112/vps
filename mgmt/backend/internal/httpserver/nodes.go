@@ -20,25 +20,56 @@ import (
 )
 
 type nodeParams struct {
-	UUID string `json:"uuid"`
-	PBK  string `json:"pbk"`
-	SNI  string `json:"sni"`
-	SID  string `json:"sid"`
-	Flow string `json:"flow"`
-	FP   string `json:"fp"`
+	UUID     string `json:"uuid"`
+	PBK      string `json:"pbk"`
+	SNI      string `json:"sni"`
+	SID      string `json:"sid"`
+	Flow     string `json:"flow"`
+	FP       string `json:"fp"`
+	Password string `json:"password"` // hysteria2
+	WSPath   string `json:"ws_path"`  // vless-ws
+	WSHost   string `json:"ws_host"`  // vless-ws（空=SNI）
 }
 
-func (p nodeParams) validate() error {
-	if !crypto.ValidUUID(p.UUID) {
-		return fmt.Errorf("uuid 参数不合法（需标准 UUID）")
+// validateForProto 按协议校验必填参数：vless-reality 需要 uuid/pbk/sid；hysteria2 需要 password；vless-ws 需要 uuid/sni/ws_path。
+func (p nodeParams) validateForProto(proto string) error {
+	switch proto {
+	case clash.ProtoHy2:
+		if !clash.ValidHy2Password(p.Password) {
+			return fmt.Errorf("hysteria2 password 不合法（需 16~64 位字母数字/-_）")
+		}
+		return nil
+	case clash.ProtoVLESSWS:
+		if !crypto.ValidUUID(p.UUID) {
+			return fmt.Errorf("uuid 参数不合法（需标准 UUID）")
+		}
+		if !clash.ValidWSHost(p.SNI) {
+			return fmt.Errorf("sni 参数不合法（vless-ws 需要中转域名，如 cf.example.top）")
+		}
+		if !clash.ValidWSPath(p.WSPath) {
+			return fmt.Errorf("ws_path 参数不合法（形如 /k3x9）")
+		}
+		if p.WSHost != "" && !clash.ValidWSHost(p.WSHost) {
+			return fmt.Errorf("ws_host 参数不合法")
+		}
+		if p.Flow != "" {
+			return fmt.Errorf("vless-ws 不支持 flow（vision 与 ws 不兼容），请留空")
+		}
+		return nil
+	case "", clash.ProtoVLESS:
+		if !crypto.ValidUUID(p.UUID) {
+			return fmt.Errorf("uuid 参数不合法（需标准 UUID）")
+		}
+		if !crypto.ValidPBK(p.PBK) {
+			return fmt.Errorf("pbk 参数不合法（Reality public key，43 字符 base64url）")
+		}
+		if !crypto.ValidSID(p.SID) {
+			return fmt.Errorf("sid 参数不合法（偶数长度 hex，≤16 字符）")
+		}
+		return nil
+	default:
+		return fmt.Errorf("proto 仅支持 vless-reality / vless-ws / hysteria2")
 	}
-	if !crypto.ValidPBK(p.PBK) {
-		return fmt.Errorf("pbk 参数不合法（Reality public key，43 字符 base64url）")
-	}
-	if !crypto.ValidSID(p.SID) {
-		return fmt.Errorf("sid 参数不合法（偶数长度 hex，≤16 字符）")
-	}
-	return nil
 }
 
 func (s *Server) nodeToDTO(n *models.Node) gin.H {
@@ -46,10 +77,12 @@ func (s *Server) nodeToDTO(n *models.Node) gin.H {
 	return gin.H{
 		"id": n.ID, "name": n.Name, "host": n.Host, "port": n.Port, "proto": n.Proto,
 		"params": gin.H{
-			"uuid": crypto.MaskNodeParam("uuid", params.UUID),
-			"pbk":  crypto.MaskNodeParam("pbk", params.PBK),
-			"sid":  crypto.MaskNodeParam("sid", params.SID),
-			"sni":  params.SNI, "flow": params.Flow, "fp": params.FP,
+			"uuid":     crypto.MaskNodeParam("uuid", params.UUID),
+			"pbk":      crypto.MaskNodeParam("pbk", params.PBK),
+			"sid":      crypto.MaskNodeParam("sid", params.SID),
+			"sni":      params.SNI, "flow": params.Flow, "fp": params.FP,
+			"password": crypto.MaskNodeParam("password", params.Password),
+			"ws_path":  params.WSPath, "ws_host": params.WSHost,
 		},
 		"priority": n.Priority, "enabled": n.Enabled,
 		"health_status": n.HealthStatus, "last_check_at": n.LastCheckAt, "last_latency_ms": n.LastLatencyMs,
@@ -117,17 +150,17 @@ func (s *Server) handleNodeCreate(c *gin.Context) {
 		return
 	}
 	if req.Proto == "" {
-		req.Proto = "vless-reality"
+		req.Proto = clash.ProtoVLESS
 	}
-	if req.Proto != "vless-reality" {
-		fail422(c, "proto 仅支持 vless-reality")
+	if req.Proto != clash.ProtoVLESS && req.Proto != clash.ProtoVLESSWS && req.Proto != clash.ProtoHy2 {
+		fail422(c, "proto 仅支持 vless-reality / vless-ws / hysteria2")
 		return
 	}
 	if err := validateNodeBase(req.Name, req.Host, req.Port); err != nil {
 		fail422(c, err.Error())
 		return
 	}
-	if err := req.Params.validate(); err != nil {
+	if err := req.Params.validateForProto(req.Proto); err != nil {
 		fail422(c, err.Error())
 		return
 	}
@@ -209,11 +242,12 @@ func (s *Server) handleNodePatch(c *gin.Context) {
 	}
 	if req.Params != nil {
 		cur := s.decryptNodeParams(&n)
-		merged := nodeParams{UUID: cur.UUID, PBK: cur.PBK, SNI: cur.SNI, SID: cur.SID, Flow: cur.Flow, FP: cur.FP}
+		merged := nodeParams{UUID: cur.UUID, PBK: cur.PBK, SNI: cur.SNI, SID: cur.SID, Flow: cur.Flow, FP: cur.FP, Password: cur.Password}
 		// 掩码值写回一律拒绝；空串 = 保留原值
 		for field, v := range map[string]string{
 			"uuid": req.Params.UUID, "pbk": req.Params.PBK, "sid": req.Params.SID,
 			"sni": req.Params.SNI, "flow": req.Params.Flow, "fp": req.Params.FP,
+			"password": req.Params.Password,
 		} {
 			if stringsContains(v, "...") || v == "****" {
 				fail422(c, fmt.Sprintf("参数 %s 是掩码值，禁止写回；如需修改请提供完整新值", field))
@@ -238,7 +272,10 @@ func (s *Server) handleNodePatch(c *gin.Context) {
 		if req.Params.FP != "" {
 			merged.FP = req.Params.FP
 		}
-		if err := merged.validate(); err != nil {
+		if req.Params.Password != "" {
+			merged.Password = req.Params.Password
+		}
+		if err := merged.validateForProto(n.Proto); err != nil {
 			fail422(c, err.Error())
 			return
 		}

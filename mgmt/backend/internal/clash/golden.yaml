@@ -76,6 +76,7 @@ dns:
 proxies:
 #{{NODE_PROXIES}}
 
+#{{PROXY_PROVIDERS}}
 proxy-groups:
   - name: "PROXY"
     type: select
@@ -83,25 +84,34 @@ proxy-groups:
       - AUTO
 #{{GROUP_PROXY_MEMBERS}}
       - DIRECT
-  # AUTO = 容灾（2026-09-25）：正常经 NODE-PICK（节点择优），节点全部失活时回落 DIRECT
-  # （国外流量直连兜底；国内流量本就直连不受影响）。健康检查 URL 必须两条路径都可达：
-  # 经节点（Apple 海外边缘）与直连（Apple 在华可达）。
+  # AIRPORT = 机场订阅兜底（2026-10-31 第4层）：url-test 自动择优；仅 AIRPORT_SUB_URL
+  # 配置时渲染。empty-fallback REJECT 防空组直连（Codex 评审）。
+#{{AIRPORT_GROUP}}
+  # AUTO and nested NODE-PICK use the same overseas HTTPS health target.
+  # Domestic Apple reachability cannot prove overseas service availability.
   - name: "AUTO"
     type: fallback
-    url: http://captive.apple.com/hotspot-detect.html
-    interval: 300
+    url: https://www.gstatic.com/generate_204
+    interval: 120
+    timeout: 4000
+    expected-status: 204
+    lazy: false
     proxies:
-      - NODE-PICK
-      - DIRECT
+#{{AUTO_MEMBERS}}
   # NODE-PICK = 节点主备（2026-09-27 M03：url-test 改为有序 fallback）：
-  # fallback 按成员顺序取第一个健康节点——主用腾讯（晚高峰丢包 <1%）、备用 DO
-  # （历史晚高峰 ICMP 丢包 20—24%，但 HTTP 仍偶通，url-test 按延迟会一直选它）。
-  # 成员顺序由绑定关系渲染（primary 在前）；简单 fallback 无外部质量控制器的
-  # 防抖/评分能力，边界与限制见 docs/plans 网络计划 §6.1。
+  # fallback 按成员顺序取第一个健康节点。成员顺序由绑定渲染（primary 在前），
+  # 不在模板里硬编码——现网实况（2026-10-02）：R2/R3/R4 交互主用东京
+  # BWG-VLESS，视频与大文件走 US-MEDIA（LAX）。旧注释「主用腾讯、备用 DO」已过时。
+  # 简单 fallback 无外部质量控制器的防抖/评分能力，边界与限制见 docs/plans
+  # 网络计划 §6.1。
+  # 2026-10-26 lazy:false + interval 120（BWG 被墙事故复盘）：mihomo fallback 组默认
+  # lazy=true——组无流量即暂停探测，节点存活状态停在旧标记，被墙后 17 小时不切换
+  # （R4 实证）。lazy:false 强制常测，节点失效 ≤2 分钟内自动落到下一健康成员。
   - name: "NODE-PICK"
     type: fallback
     url: https://www.gstatic.com/generate_204
-    interval: 300
+    interval: 120
+    lazy: false
     proxies:
 #{{GROUP_AUTO_MEMBERS}}
   - name: "CN-MEDIA"
@@ -113,9 +123,22 @@ proxy-groups:
     proxies:
       - DIRECT
       - PROXY
+  # Explicit members: available LAX nodes first, then NODE-PICK.
+  # include-all excludes groups and previously produced COMPATIBLE without LAX.
+  - name: "US-MEDIA"
+    type: fallback
+    url: https://www.gstatic.com/generate_204
+    interval: 300
+    lazy: false
+    timeout: 4000
+    expected-status: 204
+    proxies:
+#{{MEDIA_MEMBERS}}
 
 rules:
 #{{NODE_DIRECT_RULES}}
+  # 2026-10-29 政企业务系统强制直连（昌乐实测：阿里云高防域名 GeoIP 误判海外→走代理→站点拒访）
+  - DOMAIN-SUFFIX,istarshine.com,DIRECT
   - GEOIP,private,DIRECT,no-resolve
   - IP-CIDR,192.168.0.0/16,DIRECT,no-resolve
   - IP-CIDR,10.0.0.0/8,DIRECT,no-resolve
@@ -162,6 +185,7 @@ rules:
   # 可能给出境外不可达答案（09-27 实测 SN-R1 得 142.251.12.94 直连超时），
   # 强制走 PROXY 且必须先于 GEOSITE,google-cn 命中（统一优化 M02）
   - DOMAIN-SUFFIX,gstatic.com,PROXY
+  - DOMAIN-SUFFIX,dl.google.com,PROXY
   - GEOSITE,google-cn,DIRECT
   - GEOSITE,category-games@cn,DIRECT
   - GEOSITE,cn,DIRECT
@@ -178,6 +202,36 @@ rules:
   - DOMAIN-SUFFIX,update.microsoft.com,DOWNLOAD
   - DOMAIN-SUFFIX,dl.delivery.mp.microsoft.com,DOWNLOAD
   - DOMAIN-SUFFIX,swcdn.apple.com,DOWNLOAD
+
+  # 海外视频/流媒体/大文件 → 美西分流（2026-10-02 阶段1）：
+  # GEOSITE 类别仅用设备 dat 中已确证存在的 youtube/netflix，其余手工域名（零启动风险）。
+  # 顺序在国内直连段之后，不影响国内判定。
+  - GEOSITE,youtube,US-MEDIA
+  - GEOSITE,netflix,US-MEDIA
+  - DOMAIN-SUFFIX,youtube.com,US-MEDIA
+  - DOMAIN-SUFFIX,youtu.be,US-MEDIA
+  - DOMAIN-SUFFIX,ytimg.com,US-MEDIA
+  - DOMAIN-SUFFIX,googlevideo.com,US-MEDIA
+  - DOMAIN-SUFFIX,ggpht.com,US-MEDIA
+  - DOMAIN-SUFFIX,netflix.com,US-MEDIA
+  - DOMAIN-SUFFIX,nflximg.net,US-MEDIA
+  - DOMAIN-SUFFIX,nflxvideo.net,US-MEDIA
+  - DOMAIN-SUFFIX,nflxext.com,US-MEDIA
+  - DOMAIN-SUFFIX,nflxso.net,US-MEDIA
+  - DOMAIN-SUFFIX,disneyplus.com,US-MEDIA
+  - DOMAIN-SUFFIX,bamgrid.com,US-MEDIA
+  - DOMAIN-SUFFIX,dssott.com,US-MEDIA
+  - DOMAIN-SUFFIX,primevideo.com,US-MEDIA
+  - DOMAIN-SUFFIX,amazonvideo.com,US-MEDIA
+  - DOMAIN-SUFFIX,tiktok.com,US-MEDIA
+  - DOMAIN-SUFFIX,tiktokcdn.com,US-MEDIA
+  - DOMAIN-SUFFIX,tiktokv.com,US-MEDIA
+  - DOMAIN-SUFFIX,byteoversea.com,US-MEDIA
+  - DOMAIN-SUFFIX,spotify.com,US-MEDIA
+  - DOMAIN-SUFFIX,scdn.co,US-MEDIA
+  - DOMAIN-SUFFIX,spotifycdn.com,US-MEDIA
+  - DOMAIN-SUFFIX,githubusercontent.com,US-MEDIA
+  - DOMAIN-SUFFIX,githubassets.com,US-MEDIA
 
   - AND,((NETWORK,UDP),(DST-PORT,443)),REJECT
   - MATCH,PROXY

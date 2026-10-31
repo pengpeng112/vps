@@ -27,8 +27,8 @@ import (
 // primary 在前；必须有且仅有一个 primary（§19.3）。
 func (s *Server) resolveRenderNodes(tx *gorm.DB, dev *models.Device) ([]clash.NodeRender, *models.Node, error) {
 	type row struct {
-		ID int64 `gorm:"column:id"`
-		IsPrimary bool `gorm:"column:is_primary"`
+		ID        int64 `gorm:"column:id"`
+		IsPrimary bool  `gorm:"column:is_primary"`
 	}
 	var ids []row
 	if err := tx.Raw(`SELECT n.id, a.is_primary FROM node_assignments a
@@ -58,8 +58,9 @@ func (s *Server) resolveRenderNodes(tx *gorm.DB, dev *models.Device) ([]clash.No
 		}
 		p := s.decryptNodeParams(&n)
 		out = append(out, clash.NodeRender{
-			ID: n.ID, Name: n.Name, Host: n.Host, Port: n.Port,
+			ID: n.ID, Name: n.Name, Proto: n.Proto, Host: n.Host, Port: n.Port,
 			UUID: p.UUID, PBK: p.PBK, SNI: p.SNI, SID: p.SID, Flow: p.Flow, FP: p.FP,
+			Password: p.Password, WSPath: p.WSPath, WSHost: p.WSHost,
 		})
 		if r.IsPrimary {
 			cp := n
@@ -91,7 +92,8 @@ func (s *Server) bindingRevision(tx *gorm.DB, dev *models.Device) (string, error
 	}
 	var sb strings.Builder
 	for _, n := range nodes {
-		sb.WriteString(fmt.Sprintf("%d|%s|%d|%s|%s|%s|%s|%s|%s;", n.ID, n.Name, n.Port, n.Host, n.UUID, n.PBK, n.SNI, n.SID, n.Flow))
+		// 指纹含协议与各自凭据：任何参数变化都触发 apply 重算比对（§19.3）
+		sb.WriteString(fmt.Sprintf("%d|%s|%s|%d|%s|%s|%s|%s|%s|%s|%s|%s|%s;", n.ID, n.Name, n.Proto, n.Port, n.Host, n.UUID, n.PBK, n.SNI, n.SID, n.Flow, n.Password, n.WSPath, n.WSHost))
 	}
 	sb.WriteString(strings.Join(s.mgmtDirectIPs(), ","))
 	return crypto.SHA256Hex([]byte(sb.String())), nil
@@ -103,6 +105,7 @@ func (s *Server) renderFor(tx *gorm.DB, dev *models.Device) ([]byte, []clash.Nod
 		return nil, nil, err
 	}
 	yamlBytes, err := clash.Render(clash.RenderInput{
+		AirportSubURL: s.Cfg.AirportSubURL, AirportGeneration: s.Cfg.AirportGeneration,
 		DeviceID: dev.ID, Nodes: nodes, MgmtDirectIPs: s.mgmtDirectIPs(),
 	})
 	if err != nil {
@@ -153,12 +156,12 @@ func (s *Server) handleConfigPreview(c *gin.Context) {
 	}
 	nextVersion := dev.DesiredConfigVersion + 1
 	c.JSON(http.StatusOK, gin.H{
-		"revision":       revision,
-		"next_version":   nextVersion,
-		"sha256":         crypto.SHA256Hex(yamlBytes),
-		"masked_yaml":    maskedNew,
+		"revision":        revision,
+		"next_version":    nextVersion,
+		"sha256":          crypto.SHA256Hex(yamlBytes),
+		"masked_yaml":     maskedNew,
 		"current_version": oldVersion,
-		"diff":           lineDiff(oldMasked, maskedNew),
+		"diff":            lineDiff(oldMasked, maskedNew),
 	})
 }
 
@@ -626,6 +629,14 @@ func (s *Server) handleDeviceOps(c *gin.Context) {
 			}
 			taskID = t.ID
 			return nil
+		case "repair_mgmt_tunnel":
+			// VPS 侧探针同款任务开放给管理台手动下发（2026-09-30：远程修复 -R 半开连接）
+			t, err := s.createTask(tx, id, "repair_mgmt_tunnel", map[string]any{}, nil, a.Username, idemKey, 120*time.Second)
+			if err != nil {
+				return err
+			}
+			taskID = t.ID
+			return nil
 		case "collect_diag":
 			t, err := s.createTask(tx, id, "collect_diag", map[string]any{}, nil, a.Username, idemKey, 120*time.Second)
 			if err != nil {
@@ -680,7 +691,7 @@ func (s *Server) handleDeviceOps(c *gin.Context) {
 			taskID = t.ID
 			return nil
 		default:
-			return fmt.Errorf("不支持的任务类型 %s（白名单：reboot/reload_proxy/switch_node/ping_test/set_proxy_state/set_wifi/agent_update/apply_policy/set_ratelimit/set_reboot_schedule/set_license/collect_diag/set_proxy_mode/set_access_mode）", req.Type)
+			return fmt.Errorf("不支持的任务类型 %s（白名单：reboot/reload_proxy/switch_node/ping_test/set_proxy_state/set_wifi/agent_update/repair_mgmt_tunnel/apply_policy/set_ratelimit/set_reboot_schedule/set_license/collect_diag/set_proxy_mode/set_access_mode）", req.Type)
 		}
 	})
 	if err != nil {
@@ -720,7 +731,7 @@ func (s *Server) handleTaskList(c *gin.Context) {
 		items = append(items, gin.H{
 			"id": t.ID, "device_id": t.DeviceID, "type": t.Type,
 			"params": jsonRaw(t.ParamsJSON), "status": t.Status,
-			"result": jsonRaw(t.ResultJSON),
+			"result":         jsonRaw(t.ResultJSON),
 			"config_version": t.ConfigVersion, "created_by": t.CreatedBy,
 			"created_at": t.CreatedAt, "claimed_at": t.ClaimedAt, "executed_at": t.ExecutedAt, "deadline": t.Deadline,
 		})

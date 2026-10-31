@@ -25,6 +25,38 @@ func renderOK(t *testing.T, in RenderInput) []byte {
 	return out
 }
 
+func TestMediaFallbackMembers(t *testing.T) {
+	for _, hasLAX := range []bool{false, true} {
+		nodes := fakeNodes()
+		if hasLAX {
+			nodes[1].Name = "LAX-VLESS-US-01"
+		}
+		var doc map[string]any
+		if err := yaml.Unmarshal(renderOK(t, RenderInput{DeviceID: "rtr-media", Nodes: nodes}), &doc); err != nil {
+			t.Fatal(err)
+		}
+		found := false
+		for _, item := range doc["proxy-groups"].([]any) {
+			g := item.(map[string]any)
+			if g["name"] != "US-MEDIA" {
+				continue
+			}
+			found = true
+			members := toStrings(g["proxies"].([]any))
+			want := "NODE-PICK"
+			if hasLAX {
+				want = "LAX-VLESS-US-01,NODE-PICK"
+			}
+			if strings.Join(members, ",") != want || g["include-all"] != nil {
+				t.Fatalf("invalid media fallback (LAX=%v): %v", hasLAX, g)
+			}
+		}
+		if !found {
+			t.Fatal("US-MEDIA missing")
+		}
+	}
+}
+
 // TestGoldenRules 断言任务书 §3.2 全部硬性检查。
 func TestGoldenRules(t *testing.T) {
 	in := RenderInput{DeviceID: "rtr-test01", Nodes: fakeNodes(), MgmtDirectIPs: []string{"192.0.2.1"}}
@@ -116,18 +148,21 @@ func TestGoldenRules(t *testing.T) {
 	if !listHas(proxyGroup["proxies"], "AUTO") || !listHas(proxyGroup["proxies"], "DIRECT") {
 		t.Errorf("PROXY 组必须保留 AUTO 与 DIRECT: %v", proxyGroup["proxies"])
 	}
-	// AUTO 必须 fallback 且成员恰为 [NODE-PICK, DIRECT]：节点全挂时自动回落直连
+	// AUTO 必须 fallback：无机场时 [NODE-PICK, DIRECT]；有机场时 [NODE-PICK, AIRPORT, DIRECT]
 	if autoGroup["type"] != "fallback" {
 		t.Errorf("AUTO 组类型必须是 fallback，实际 %v", autoGroup["type"])
 	}
 	aProxies := toStrings(autoGroup["proxies"].([]any))
 	if len(aProxies) != 2 || aProxies[0] != "NODE-PICK" || aProxies[1] != "DIRECT" {
-		t.Errorf("AUTO 组必须且只能是 [NODE-PICK, DIRECT]，实际 %v", aProxies)
+		t.Errorf("无机场渲染时 AUTO 必须且只能是 [NODE-PICK, DIRECT]，实际 %v", aProxies)
 	}
 	// NODE-PICK 必须 fallback（2026-09-27 M03：腾讯主用/DO 备用的有序主备，
 	// 按成员顺序取第一个健康节点，成员顺序=绑定优先级 primary 在前）
 	if nodePick["type"] != "fallback" {
 		t.Errorf("NODE-PICK 组类型必须是 fallback，实际 %v", nodePick["type"])
+	}
+	if autoGroup["url"] != nodePick["url"] || autoGroup["expected-status"] != 204 {
+		t.Errorf("nested AUTO/NODE-PICK health targets must agree: AUTO=%v NODE-PICK=%v", autoGroup["url"], nodePick["url"])
 	}
 	if !listHas(nodePick["proxies"], "TEST-SGP1") || !listHas(nodePick["proxies"], "TEST-TKY2") {
 		t.Errorf("NODE-PICK 组缺少节点成员: %v", nodePick["proxies"])
@@ -149,6 +184,13 @@ func TestGoldenRules(t *testing.T) {
 		t.Error("缺少 DOMAIN-SUFFIX,gstatic.com,PROXY 规则")
 	} else if gcn < 0 || gs > gcn {
 		t.Errorf("gstatic PROXY 规则必须在 GEOSITE,google-cn 之前（gs=%d gcn=%d）", gs, gcn)
+	}
+	// 10b. dl.google.com 同理（2026-09-30：google-cn 判 DIRECT 使大文件下载在劣质线路必死）
+	dlg := indexOf(ruleStrs, "DOMAIN-SUFFIX,dl.google.com,PROXY")
+	if dlg < 0 {
+		t.Error("缺少 DOMAIN-SUFFIX,dl.google.com,PROXY 规则")
+	} else if dlg > gcn {
+		t.Errorf("dl.google PROXY 规则必须在 GEOSITE,google-cn 之前（dlg=%d gcn=%d）", dlg, gcn)
 	}
 }
 
@@ -230,6 +272,69 @@ func TestMaskYAML(t *testing.T) {
 	}
 }
 
+// TestRenderHy2 hysteria2 节点：出站段类型/端口/密码正确，组成员与直连规则同步，
+// 密码弱/缺失拒绝；MaskYAML 掩码 password；vless 存量字段缺失时拒绝（不静默降级）。
+func TestRenderHy2(t *testing.T) {
+	pw := "Hy2Test-Password-2026-AbCdEf123456"
+	in := RenderInput{DeviceID: "rtr-hy2", Nodes: []NodeRender{{
+		Name: "TX-HY2-01", Proto: ProtoHy2, Host: "203.0.113.99", Port: 443, Password: pw,
+	}}}
+	raw := renderOK(t, in)
+	s := string(raw)
+	if !strings.Contains(s, "type: hysteria2") {
+		t.Error("缺少 hysteria2 出站类型")
+	}
+	if !strings.Contains(s, "server: 203.0.113.99") || !strings.Contains(s, "port: 443") {
+		t.Error("host/port 未渲染")
+	}
+	if !strings.Contains(s, "password: "+pw) {
+		t.Error("密码未渲染")
+	}
+	if !strings.Contains(s, "skip-cert-verify: true") {
+		t.Error("自签证书需 skip-cert-verify")
+	}
+	if !strings.Contains(s, "- TX-HY2-01") {
+		t.Error("组成员未包含 hy2 节点")
+	}
+	if !strings.Contains(s, "IP-CIDR,203.0.113.99/32,DIRECT,no-resolve") {
+		t.Error("节点直连规则缺失")
+	}
+	// 掩码
+	masked := MaskYAML(raw)
+	if strings.Contains(masked, pw) {
+		t.Error("MaskYAML 泄露 hy2 密码")
+	}
+	if !strings.Contains(masked, "password: "+MaskNodeParamForTest(pw)) {
+		t.Error("password 掩码格式不符")
+	}
+	// 弱密码/缺失拒绝
+	for _, bad := range []string{"", "short", "含中文密码password测试数据含中文密码", "has space in it 1234567890"} {
+		if _, err := Render(RenderInput{DeviceID: "rtr-x", Nodes: []NodeRender{{
+			Name: "TX-HY2-01", Proto: ProtoHy2, Host: "203.0.113.99", Port: 443, Password: bad,
+		}}}); err == nil {
+			t.Errorf("弱密码 %q 应拒绝", bad[:min(len(bad), 8)])
+		}
+	}
+	// 未知协议拒绝
+	if _, err := Render(RenderInput{DeviceID: "rtr-x", Nodes: []NodeRender{{
+		Name: "X1", Proto: "trojan", Host: "203.0.113.99", Port: 443,
+	}}}); err == nil {
+		t.Error("未知协议应拒绝")
+	}
+	// hysteria2 节点误带 vless 校验路径：proto=hy2 时 uuid/pbk/sid 不应被要求（上方已验证渲染成功）
+}
+
+func MaskNodeParamForTest(pw string) string {
+	return pw[:2] + "..." + pw[len(pw)-2:]
+}
+
+func min(a, b int) int {
+	if a < b {
+		return a
+	}
+	return b
+}
+
 func listHas(v any, s string) bool {
 	l, ok := v.([]any)
 	if !ok {
@@ -258,4 +363,99 @@ func indexOf(list []string, s string) int {
 		}
 	}
 	return -1
+}
+
+// TestRenderVLESSWS vless-ws（CF CDN 中转）节点渲染：结构、默认指纹、Host 回退、flow 拒绝。
+func TestRenderVLESSWS(t *testing.T) {
+	nodes := append(fakeNodes(), NodeRender{
+		Name: "CF-CDN-GIA-01", Proto: ProtoVLESSWS, Host: "104.18.32.7", Port: 2053,
+		UUID: "99999999-8888-7777-6666-555555555555", SNI: "cf.example.top", WSPath: "/k3x9",
+	})
+	var doc map[string]any
+	if err := yaml.Unmarshal(renderOK(t, RenderInput{DeviceID: "rtr-ws", Nodes: nodes}), &doc); err != nil {
+		t.Fatal(err)
+	}
+	var cf map[string]any
+	for _, item := range doc["proxies"].([]any) {
+		p := item.(map[string]any)
+		if p["name"] == "CF-CDN-GIA-01" {
+			cf = p
+		}
+	}
+	if cf == nil {
+		t.Fatal("CF 节点未渲染")
+	}
+	if cf["network"] != "ws" || cf["tls"] != true || cf["servername"] != "cf.example.top" {
+		t.Fatalf("CF 节点基础字段错误: %v", cf)
+	}
+	if cf["client-fingerprint"] != "chrome" {
+		t.Fatalf("CF 节点默认指纹缺失: %v", cf["client-fingerprint"])
+	}
+	ws := cf["ws-opts"].(map[string]any)
+	if ws["path"] != "/k3x9" || ws["headers"].(map[string]any)["Host"] != "cf.example.top" {
+		t.Fatalf("ws-opts 错误: %v", ws)
+	}
+	// flow 必须被拒绝（vision 与 ws 不兼容）；注意须改切片元素而非结构体副本
+	nodes[len(nodes)-1].Flow = "xtls-rprx-vision"
+	if _, err := Render(RenderInput{DeviceID: "rtr-ws2", Nodes: nodes}); err == nil {
+		t.Fatal("vless-ws 带 flow 应被拒绝")
+	}
+	// 非法 path 拒绝
+	nodes[len(nodes)-1].Flow = ""
+	nodes[len(nodes)-1].WSPath = "no-slash"
+	if _, err := Render(RenderInput{DeviceID: "rtr-ws3", Nodes: nodes}); err == nil {
+		t.Fatal("非法 ws_path 应被拒绝")
+	}
+}
+
+// TestRenderAirport 机场订阅兜底渲染：provider/组/链位/空组REJECT/无机场时零残留。
+func TestRenderAirport(t *testing.T) {
+	sub := "https://sub.example.cc/api/v1/client/subscribe?token=tok123"
+	// 1) 有机场
+	var doc map[string]any
+	y := renderOK(t, RenderInput{DeviceID: "rtr-ap", Nodes: fakeNodes(),
+		AirportSubURL: sub, AirportGeneration: "g01"})
+	if err := yaml.Unmarshal(y, &doc); err != nil {
+		t.Fatal(err)
+	}
+	prov := doc["proxy-providers"].(map[string]any)["airport-sub"].(map[string]any)
+	if prov["url"] != sub || prov["proxy"] != "NODE-PICK" {
+		t.Fatalf("provider 字段错误: %v", prov)
+	}
+	if prov["path"] != "./proxy_providers/airport-g01.yaml" {
+		t.Fatalf("缓存代次路径错误: %v", prov["path"])
+	}
+	grps := map[string]map[string]any{}
+	for _, item := range doc["proxy-groups"].([]any) {
+		g := item.(map[string]any)
+		grps[g["name"].(string)] = g
+	}
+	ap := grps["AIRPORT"]
+	if ap == nil || ap["type"] != "url-test" || ap["empty-fallback"] != "REJECT" {
+		t.Fatalf("AIRPORT 组缺失或配置错误: %v", ap)
+	}
+	if ap["use"].([]any)[0] != "airport-sub" {
+		t.Fatalf("AIRPORT 未引用 provider: %v", ap["use"])
+	}
+	autoM := toStrings(grps["AUTO"]["proxies"].([]any))
+	if len(autoM) != 3 || autoM[0] != "NODE-PICK" || autoM[1] != "AIRPORT" || autoM[2] != "DIRECT" {
+		t.Fatalf("有机场时 AUTO 成员错误: %v", autoM)
+	}
+	um := toStrings(grps["US-MEDIA"]["proxies"].([]any))
+	if um[len(um)-1] != "AIRPORT" {
+		t.Fatalf("US-MEDIA 未追加 AIRPORT: %v", um)
+	}
+	// 2) 无机场：零机场元素残留
+	var doc2 map[string]any
+	if err := yaml.Unmarshal(renderOK(t, RenderInput{DeviceID: "rtr-noap", Nodes: fakeNodes()}), &doc2); err != nil {
+		t.Fatal(err)
+	}
+	if doc2["proxy-providers"] != nil {
+		t.Fatal("无机场时不应有 proxy-providers")
+	}
+	for _, item := range doc2["proxy-groups"].([]any) {
+		if item.(map[string]any)["name"] == "AIRPORT" {
+			t.Fatal("无机场时不应有 AIRPORT 组")
+		}
+	}
 }

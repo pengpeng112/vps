@@ -18,22 +18,25 @@ import (
 )
 
 type Config struct {
-	Env           string // dev | prod
-	Listen        string
-	DatabaseURL   string // 运行态账号（audit_log 仅 INSERT/SELECT）
-	MigrateDBURL  string // 迁移账号
-	DataDir       string
-	JWTSecret     string
-	MasterKeyHex  string
-	BootstrapAdmin string
+	Env               string // dev | prod
+	Listen            string
+	DatabaseURL       string // 运行态账号（audit_log 仅 INSERT/SELECT）
+	MigrateDBURL      string // 迁移账号
+	DataDir           string
+	JWTSecret         string
+	MasterKeyHex      string
+	BootstrapAdmin    string
 	BootstrapPassword string
 
-	MgmtPublicURL   string // 例如 https://10.10.0.1:8443
-	WGHubPublicKey  string // 未配置 => transport_mode=mock
-	WGHubEndpoint   string
+	MgmtPublicURL  string // 例如 https://10.10.0.1:8443
+	WGHubPublicKey string // 未配置 => transport_mode=mock
+	WGHubEndpoint  string
 
 	AlertWebhookURL string
-	TrafficAlertGB  float64 // 每设备每月节点流量阈值（十进制 GB），默认 80
+	// 机场订阅兜底（2026-10-31）：AIRPORT_SUB_URL 注入渲染；token 不入 git
+	AirportSubURL     string
+	AirportGeneration string
+	TrafficAlertGB    float64 // 每设备每月节点流量阈值（十进制 GB），默认 80
 
 	AgentBundleDir string // agent 升级包目录（deploy 侧构建，容器内只读挂载），默认 /srv/bundles
 
@@ -48,23 +51,25 @@ type Config struct {
 
 func Load() (*Config, error) {
 	c := &Config{
-		Env:              env("APP_ENV", "dev"),
-		Listen:           env("LISTEN", "127.0.0.1:8443"),
-		DatabaseURL:      os.Getenv("DATABASE_URL"),
-		MigrateDBURL:     os.Getenv("MIGRATE_DATABASE_URL"),
-		DataDir:          env("DATA_DIR", "./data"),
-		BootstrapAdmin:   os.Getenv("BOOTSTRAP_ADMIN"),
+		Env:               env("APP_ENV", "dev"),
+		Listen:            env("LISTEN", "127.0.0.1:8443"),
+		DatabaseURL:       os.Getenv("DATABASE_URL"),
+		MigrateDBURL:      os.Getenv("MIGRATE_DATABASE_URL"),
+		DataDir:           env("DATA_DIR", "./data"),
+		BootstrapAdmin:    os.Getenv("BOOTSTRAP_ADMIN"),
 		BootstrapPassword: os.Getenv("BOOTSTRAP_PASSWORD"),
-		MgmtPublicURL:    env("MGMT_PUBLIC_URL", "https://10.10.0.1:8443"),
-		WGHubPublicKey:   os.Getenv("WG_HUB_PUBLIC_KEY"),
-		WGHubEndpoint:    os.Getenv("WG_HUB_ENDPOINT"),
-		AlertWebhookURL:  os.Getenv("ALERT_WEBHOOK_URL"),
-		TrafficAlertGB:   80,
-		AgentBundleDir:   env("AGENT_BUNDLE_DIR", "/srv/bundles"),
-		InternalToken:    os.Getenv("INTERNAL_TOKEN"),
-		HeartbeatTimeout: 90 * time.Second,
-		OfflineScanEvery: 10 * time.Second,
-		MetricsKeepDays:  90,
+		MgmtPublicURL:     env("MGMT_PUBLIC_URL", "https://10.10.0.1:8443"),
+		WGHubPublicKey:    os.Getenv("WG_HUB_PUBLIC_KEY"),
+		WGHubEndpoint:     os.Getenv("WG_HUB_ENDPOINT"),
+		AlertWebhookURL:   os.Getenv("ALERT_WEBHOOK_URL"),
+		AirportSubURL:     os.Getenv("AIRPORT_SUB_URL"),
+		AirportGeneration: os.Getenv("AIRPORT_GENERATION"),
+		TrafficAlertGB:    80,
+		AgentBundleDir:    env("AGENT_BUNDLE_DIR", "/srv/bundles"),
+		InternalToken:     os.Getenv("INTERNAL_TOKEN"),
+		HeartbeatTimeout:  90 * time.Second,
+		OfflineScanEvery:  10 * time.Second,
+		MetricsKeepDays:   90,
 	}
 	if v := os.Getenv("TRAFFIC_ALERT_GB"); v != "" {
 		f, err := strconv.ParseFloat(v, 64)
@@ -96,7 +101,7 @@ func (c *Config) loadSecrets() error {
 	path := filepath.Join(c.DataDir, "secrets.json")
 	needWrite := false
 	var stored struct {
-		JWTSecret   string `json:"jwt_secret"`
+		JWTSecret    string `json:"jwt_secret"`
 		MasterKeyHex string `json:"master_key_hex"`
 	}
 	if raw, err := os.ReadFile(path); err == nil {
