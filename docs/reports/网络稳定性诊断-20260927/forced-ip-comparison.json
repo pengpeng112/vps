@@ -1,0 +1,14 @@
+{
+  "athena": {
+    "114.250.68.34": "code=204 tls=0.127461 total=0.201027 ip=114.250.68.34 exit=0\n",
+    "142.251.12.94": "code=000 tls=0.000000 total=4.001322 ip= exit=28\ncurl: (28) Connection timed out after 4001 milliseconds\n",
+    "gstatic_dns_again": "{\"AD\":false,\"Answer\":[{\"TTL\":15,\"data\":\"114.250.68.34\",\"name\":\"www.gstatic.com.\",\"type\":1},{\"TTL\":15,\"data\":\"114.250.68.34\",\"name\":\"www.gstatic.com.\",\"type\":1}],\"CD\":false,\"Question\":[{\"Name\":\"www.gstatic.com.\",\"Qtype\":1,\"Qclass\":1}],\"RA\":true,\"RD\":true,\"Status\":0,\"TC\":false}\n",
+    "icmp": "PING 159.223.36.119 (159.223.36.119): 56 data bytes\n\n--- 159.223.36.119 ping statistics ---\n10 packets transmitted, 10 packets received, 0% packet loss\nround-trip min/avg/max = 110.238/146.069/157.695 ms\nPING 43.134.46.44 (43.134.46.44): 56 data bytes\n\n--- 43.134.46.44 ping statistics ---\n10 packets transmitted, 10 packets received, 0% packet loss\nround-trip min/avg/max = 212.860/212.969/213.386 ms\nPING 223.5.5.5 (223.5.5.5): 56 data bytes\n\n--- 223.5.5.5 ping statistics ---\n10 packets transmitted, 10 packets received, 0% packet loss\nround-trip min/avg/max = 6.445/6.599/6.816 ms\n"
+  },
+  "snr1": {
+    "114.250.68.34": "code=204 tls=0.303845 total=0.377582 ip=114.250.68.34 exit=0\n",
+    "142.251.12.94": "code=000 tls=0.000000 total=4.000229 ip=142.251.12.94 exit=28\ncurl: (28) SSL connection timeout\n",
+    "gstatic_dns_again": "{\"AD\":false,\"Answer\":[{\"TTL\":226,\"data\":\"142.251.12.94\",\"name\":\"www.gstatic.com.\",\"type\":1}],\"CD\":false,\"Question\":[{\"Name\":\"www.gstatic.com.\",\"Qtype\":1,\"Qclass\":1}],\"RA\":true,\"RD\":true,\"Status\":0,\"TC\":false}\n",
+    "icmp": "PING 159.223.36.119 (159.223.36.119): 56 data bytes\n\n--- 159.223.36.119 ping statistics ---\n10 packets transmitted, 10 packets received, 0% packet loss\nround-trip min/avg/max = 110.154/146.933/158.378 ms\nPING 43.134.46.44 (43.134.46.44): 56 data bytes\n\n--- 43.134.46.44 ping statistics ---\n10 packets transmitted, 10 packets received, 0% packet loss\nround-trip min/avg/max = 213.350/213.535/213.805 ms\nPING 223.5.5.5 (223.5.5.5): 56 data bytes\n\n--- 223.5.5.5 ping statistics ---\n10 packets transmitted, 10 packets received, 0% packet loss\nround-trip min/avg/max = 6.777/7.448/10.393 ms\n"
+  }
+}

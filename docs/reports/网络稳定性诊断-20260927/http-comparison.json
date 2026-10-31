@@ -1,0 +1,665 @@
+{
+  "athena": [
+    {
+      "host": "www.gstatic.com",
+      "n": 1,
+      "result": "code=204 dns=0.000084 connect=0.000495 tls=0.106130 first=0.169581 total=0.169632 remote=127.0.0.1 exit=0\n"
+    },
+    {
+      "host": "www.gstatic.com",
+      "n": 2,
+      "result": "code=204 dns=0.000088 connect=0.000614 tls=0.108135 first=0.171376 total=0.171426 remote=127.0.0.1 exit=0\n"
+    },
+    {
+      "host": "www.gstatic.com",
+      "n": 3,
+      "result": "code=204 dns=0.000088 connect=0.000942 tls=0.111079 first=0.172663 total=0.172715 remote=127.0.0.1 exit=0\n"
+    },
+    {
+      "host": "www.google.com",
+      "n": 1,
+      "result": "code=204 dns=0.000095 connect=0.000629 tls=0.355385 first=0.477663 total=0.477725 remote=127.0.0.1 exit=0\n"
+    },
+    {
+      "host": "www.google.com",
+      "n": 2,
+      "result": "code=204 dns=0.000090 connect=0.000552 tls=0.344251 first=0.450396 total=0.450456 remote=127.0.0.1 exit=0\n"
+    },
+    {
+      "host": "www.google.com",
+      "n": 3,
+      "result": "code=204 dns=0.000089 connect=0.000544 tls=1.788129 first=1.927562 total=1.927630 remote=127.0.0.1 exit=0\n"
+    },
+    {
+      "host": "www.baidu.com",
+      "n": 1,
+      "result": "code=200 dns=0.000080 connect=0.000509 tls=0.095945 first=0.119491 total=0.119658 remote=127.0.0.1 exit=0\n"
+    },
+    {
+      "host": "www.baidu.com",
+      "n": 2,
+      "result": "code=200 dns=0.000080 connect=0.000503 tls=0.098015 first=0.121935 total=0.122109 remote=127.0.0.1 exit=0\n"
+    },
+    {
+      "host": "www.baidu.com",
+      "n": 3,
+      "result": "code=200 dns=0.000079 connect=0.000502 tls=0.089746 first=0.113156 total=0.113319 remote=127.0.0.1 exit=0\n"
+    }
+  ],
+  "snr1": [
+    {
+      "host": "www.gstatic.com",
+      "n": 1,
+      "result": "code=000 dns=0.000105 connect=0.000423 tls=0.000000 first=0.000000 total=4.000422 remote=127.0.0.1 exit=28\ncurl: (28) SSL connection timeout\n"
+    },
+    {
+      "host": "www.gstatic.com",
+      "n": 2,
+      "result": "code=000 dns=0.000113 connect=0.000409 tls=0.000000 first=0.000000 total=4.000096 remote=127.0.0.1 exit=28\ncurl: (28) SSL connection timeout\n"
+    },
+    {
+      "host": "www.gstatic.com",
+      "n": 3,
+      "result": "code=000 dns=0.000106 connect=0.000730 tls=0.000000 first=0.000000 total=3.999991 remote=127.0.0.1 exit=28\ncurl: (28) SSL connection timeout\n"
+    },
+    {
+      "host": "www.google.com",
+      "n": 1,
+      "result": "code=204 dns=0.000128 connect=0.000425 tls=0.530500 first=0.651229 total=0.651346 remote=127.0.0.1 exit=0\n"
+    },
+    {
+      "host": "www.google.com",
+      "n": 2,
+      "result": "code=204 dns=0.000102 connect=0.000413 tls=0.795300 first=0.947704 total=0.947782 remote=127.0.0.1 exit=0\n"
+    },
+    {
+      "host": "www.google.com",
+      "n": 3,
+      "result": "code=204 dns=0.000103 connect=0.000415 tls=0.396540 first=0.521562 total=0.521628 remote=127.0.0.1 exit=0\n"
+    },
+    {
+      "host": "www.baidu.com",
+      "n": 1,
+      "result": "code=000 dns=0.000116 connect=0.000894 tls=0.000000 first=0.000000 total=4.001292 remote=127.0.0.1 exit=28\ncurl: (28) SSL connection timeout\n"
+    },
+    {
+      "host": "www.baidu.com",
+      "n": 2,
+      "result": "code=000 dns=0.000102 connect=0.000410 tls=0.000000 first=0.000000 total=4.001572 remote=127.0.0.1 exit=28\ncurl: (28) SSL connection timeout\n"
+    },
+    {
+      "host": "www.baidu.com",
+      "n": 3,
+      "result": "code=200 dns=0.000104 connect=0.000410 tls=0.166452 first=0.190420 total=0.190766 remote=127.0.0.1 exit=0\n"
+    }
+  ],
+  "observed_connections": [
+    {
+      "device": "athena",
+      "meta": {
+        "network": "tcp",
+        "type": "HTTPS",
+        "sourceIP": "127.0.0.1",
+        "destinationIP": "",
+        "destinationPort": "443",
+        "host": "www.gstatic.com",
+        "dnsMode": "normal"
+      },
+      "chains": [
+        "DIRECT"
+      ],
+      "rule": "GeoSite",
+      "rulePayload": "google-cn"
+    },
+    {
+      "device": "snr1",
+      "meta": {
+        "network": "tcp",
+        "type": "HTTPS",
+        "sourceIP": "127.0.0.1",
+        "destinationIP": "",
+        "destinationPort": "443",
+        "host": "www.gstatic.com",
+        "dnsMode": "normal"
+      },
+      "chains": [
+        "DIRECT"
+      ],
+      "rule": "GeoSite",
+      "rulePayload": "google-cn"
+    },
+    {
+      "device": "snr1",
+      "meta": {
+        "network": "tcp",
+        "type": "HTTPS",
+        "sourceIP": "127.0.0.1",
+        "destinationIP": "",
+        "destinationPort": "443",
+        "host": "www.gstatic.com",
+        "dnsMode": "normal"
+      },
+      "chains": [
+        "DIRECT"
+      ],
+      "rule": "GeoSite",
+      "rulePayload": "google-cn"
+    },
+    {
+      "device": "athena",
+      "meta": {
+        "network": "tcp",
+        "type": "HTTPS",
+        "sourceIP": "127.0.0.1",
+        "destinationIP": "",
+        "destinationPort": "443",
+        "host": "www.google.com",
+        "dnsMode": "normal"
+      },
+      "chains": [
+        "VPS-SG-01",
+        "NODE-PICK",
+        "AUTO",
+        "PROXY"
+      ],
+      "rule": "Match",
+      "rulePayload": ""
+    },
+    {
+      "device": "snr1",
+      "meta": {
+        "network": "tcp",
+        "type": "HTTPS",
+        "sourceIP": "127.0.0.1",
+        "destinationIP": "",
+        "destinationPort": "443",
+        "host": "www.gstatic.com",
+        "dnsMode": "normal"
+      },
+      "chains": [
+        "DIRECT"
+      ],
+      "rule": "GeoSite",
+      "rulePayload": "google-cn"
+    },
+    {
+      "device": "snr1",
+      "meta": {
+        "network": "tcp",
+        "type": "HTTPS",
+        "sourceIP": "127.0.0.1",
+        "destinationIP": "",
+        "destinationPort": "443",
+        "host": "www.gstatic.com",
+        "dnsMode": "normal"
+      },
+      "chains": [
+        "DIRECT"
+      ],
+      "rule": "GeoSite",
+      "rulePayload": "google-cn"
+    },
+    {
+      "device": "snr1",
+      "meta": {
+        "network": "tcp",
+        "type": "HTTPS",
+        "sourceIP": "127.0.0.1",
+        "destinationIP": "",
+        "destinationPort": "443",
+        "host": "www.gstatic.com",
+        "dnsMode": "normal"
+      },
+      "chains": [
+        "DIRECT"
+      ],
+      "rule": "GeoSite",
+      "rulePayload": "google-cn"
+    },
+    {
+      "device": "snr1",
+      "meta": {
+        "network": "tcp",
+        "type": "HTTPS",
+        "sourceIP": "127.0.0.1",
+        "destinationIP": "",
+        "destinationPort": "443",
+        "host": "www.gstatic.com",
+        "dnsMode": "normal"
+      },
+      "chains": [
+        "DIRECT"
+      ],
+      "rule": "GeoSite",
+      "rulePayload": "google-cn"
+    },
+    {
+      "device": "snr1",
+      "meta": {
+        "network": "tcp",
+        "type": "HTTPS",
+        "sourceIP": "127.0.0.1",
+        "destinationIP": "",
+        "destinationPort": "443",
+        "host": "www.gstatic.com",
+        "dnsMode": "normal"
+      },
+      "chains": [
+        "DIRECT"
+      ],
+      "rule": "GeoSite",
+      "rulePayload": "google-cn"
+    },
+    {
+      "device": "snr1",
+      "meta": {
+        "network": "tcp",
+        "type": "HTTPS",
+        "sourceIP": "127.0.0.1",
+        "destinationIP": "",
+        "destinationPort": "443",
+        "host": "www.gstatic.com",
+        "dnsMode": "normal"
+      },
+      "chains": [
+        "DIRECT"
+      ],
+      "rule": "GeoSite",
+      "rulePayload": "google-cn"
+    },
+    {
+      "device": "snr1",
+      "meta": {
+        "network": "tcp",
+        "type": "HTTPS",
+        "sourceIP": "127.0.0.1",
+        "destinationIP": "",
+        "destinationPort": "443",
+        "host": "www.gstatic.com",
+        "dnsMode": "normal"
+      },
+      "chains": [
+        "DIRECT"
+      ],
+      "rule": "GeoSite",
+      "rulePayload": "google-cn"
+    },
+    {
+      "device": "snr1",
+      "meta": {
+        "network": "tcp",
+        "type": "HTTPS",
+        "sourceIP": "127.0.0.1",
+        "destinationIP": "",
+        "destinationPort": "443",
+        "host": "www.gstatic.com",
+        "dnsMode": "normal"
+      },
+      "chains": [
+        "DIRECT"
+      ],
+      "rule": "GeoSite",
+      "rulePayload": "google-cn"
+    },
+    {
+      "device": "snr1",
+      "meta": {
+        "network": "tcp",
+        "type": "HTTPS",
+        "sourceIP": "127.0.0.1",
+        "destinationIP": "",
+        "destinationPort": "443",
+        "host": "www.gstatic.com",
+        "dnsMode": "normal"
+      },
+      "chains": [
+        "DIRECT"
+      ],
+      "rule": "GeoSite",
+      "rulePayload": "google-cn"
+    },
+    {
+      "device": "snr1",
+      "meta": {
+        "network": "tcp",
+        "type": "HTTPS",
+        "sourceIP": "127.0.0.1",
+        "destinationIP": "",
+        "destinationPort": "443",
+        "host": "www.gstatic.com",
+        "dnsMode": "normal"
+      },
+      "chains": [
+        "DIRECT"
+      ],
+      "rule": "GeoSite",
+      "rulePayload": "google-cn"
+    },
+    {
+      "device": "snr1",
+      "meta": {
+        "network": "tcp",
+        "type": "HTTPS",
+        "sourceIP": "127.0.0.1",
+        "destinationIP": "",
+        "destinationPort": "443",
+        "host": "www.gstatic.com",
+        "dnsMode": "normal"
+      },
+      "chains": [
+        "DIRECT"
+      ],
+      "rule": "GeoSite",
+      "rulePayload": "google-cn"
+    },
+    {
+      "device": "snr1",
+      "meta": {
+        "network": "tcp",
+        "type": "HTTPS",
+        "sourceIP": "127.0.0.1",
+        "destinationIP": "",
+        "destinationPort": "443",
+        "host": "www.google.com",
+        "dnsMode": "normal"
+      },
+      "chains": [
+        "VPS-SG-01",
+        "NODE-PICK",
+        "AUTO",
+        "PROXY"
+      ],
+      "rule": "Match",
+      "rulePayload": ""
+    },
+    {
+      "device": "snr1",
+      "meta": {
+        "network": "tcp",
+        "type": "HTTPS",
+        "sourceIP": "127.0.0.1",
+        "destinationIP": "",
+        "destinationPort": "443",
+        "host": "www.gstatic.com",
+        "dnsMode": "normal"
+      },
+      "chains": [
+        "DIRECT"
+      ],
+      "rule": "GeoSite",
+      "rulePayload": "google-cn"
+    },
+    {
+      "device": "snr1",
+      "meta": {
+        "network": "tcp",
+        "type": "HTTPS",
+        "sourceIP": "127.0.0.1",
+        "destinationIP": "",
+        "destinationPort": "443",
+        "host": "www.gstatic.com",
+        "dnsMode": "normal"
+      },
+      "chains": [
+        "DIRECT"
+      ],
+      "rule": "GeoSite",
+      "rulePayload": "google-cn"
+    },
+    {
+      "device": "snr1",
+      "meta": {
+        "network": "tcp",
+        "type": "HTTPS",
+        "sourceIP": "127.0.0.1",
+        "destinationIP": "",
+        "destinationPort": "443",
+        "host": "www.baidu.com",
+        "dnsMode": "normal"
+      },
+      "chains": [
+        "DIRECT"
+      ],
+      "rule": "GeoSite",
+      "rulePayload": "baidu"
+    },
+    {
+      "device": "snr1",
+      "meta": {
+        "network": "tcp",
+        "type": "HTTPS",
+        "sourceIP": "127.0.0.1",
+        "destinationIP": "",
+        "destinationPort": "443",
+        "host": "www.gstatic.com",
+        "dnsMode": "normal"
+      },
+      "chains": [
+        "DIRECT"
+      ],
+      "rule": "GeoSite",
+      "rulePayload": "google-cn"
+    },
+    {
+      "device": "snr1",
+      "meta": {
+        "network": "tcp",
+        "type": "HTTPS",
+        "sourceIP": "127.0.0.1",
+        "destinationIP": "",
+        "destinationPort": "443",
+        "host": "www.gstatic.com",
+        "dnsMode": "normal"
+      },
+      "chains": [
+        "DIRECT"
+      ],
+      "rule": "GeoSite",
+      "rulePayload": "google-cn"
+    },
+    {
+      "device": "snr1",
+      "meta": {
+        "network": "tcp",
+        "type": "HTTPS",
+        "sourceIP": "127.0.0.1",
+        "destinationIP": "",
+        "destinationPort": "443",
+        "host": "www.baidu.com",
+        "dnsMode": "normal"
+      },
+      "chains": [
+        "DIRECT"
+      ],
+      "rule": "GeoSite",
+      "rulePayload": "baidu"
+    },
+    {
+      "device": "snr1",
+      "meta": {
+        "network": "tcp",
+        "type": "HTTPS",
+        "sourceIP": "127.0.0.1",
+        "destinationIP": "",
+        "destinationPort": "443",
+        "host": "www.gstatic.com",
+        "dnsMode": "normal"
+      },
+      "chains": [
+        "DIRECT"
+      ],
+      "rule": "GeoSite",
+      "rulePayload": "google-cn"
+    },
+    {
+      "device": "snr1",
+      "meta": {
+        "network": "tcp",
+        "type": "HTTPS",
+        "sourceIP": "127.0.0.1",
+        "destinationIP": "",
+        "destinationPort": "443",
+        "host": "www.baidu.com",
+        "dnsMode": "normal"
+      },
+      "chains": [
+        "DIRECT"
+      ],
+      "rule": "GeoSite",
+      "rulePayload": "baidu"
+    },
+    {
+      "device": "snr1",
+      "meta": {
+        "network": "tcp",
+        "type": "HTTPS",
+        "sourceIP": "127.0.0.1",
+        "destinationIP": "",
+        "destinationPort": "443",
+        "host": "www.baidu.com",
+        "dnsMode": "normal"
+      },
+      "chains": [
+        "DIRECT"
+      ],
+      "rule": "GeoSite",
+      "rulePayload": "baidu"
+    },
+    {
+      "device": "snr1",
+      "meta": {
+        "network": "tcp",
+        "type": "HTTPS",
+        "sourceIP": "127.0.0.1",
+        "destinationIP": "",
+        "destinationPort": "443",
+        "host": "www.gstatic.com",
+        "dnsMode": "normal"
+      },
+      "chains": [
+        "DIRECT"
+      ],
+      "rule": "GeoSite",
+      "rulePayload": "google-cn"
+    },
+    {
+      "device": "snr1",
+      "meta": {
+        "network": "tcp",
+        "type": "HTTPS",
+        "sourceIP": "127.0.0.1",
+        "destinationIP": "",
+        "destinationPort": "443",
+        "host": "www.baidu.com",
+        "dnsMode": "normal"
+      },
+      "chains": [
+        "DIRECT"
+      ],
+      "rule": "GeoSite",
+      "rulePayload": "baidu"
+    },
+    {
+      "device": "snr1",
+      "meta": {
+        "network": "tcp",
+        "type": "HTTPS",
+        "sourceIP": "127.0.0.1",
+        "destinationIP": "",
+        "destinationPort": "443",
+        "host": "www.gstatic.com",
+        "dnsMode": "normal"
+      },
+      "chains": [
+        "DIRECT"
+      ],
+      "rule": "GeoSite",
+      "rulePayload": "google-cn"
+    },
+    {
+      "device": "snr1",
+      "meta": {
+        "network": "tcp",
+        "type": "HTTPS",
+        "sourceIP": "127.0.0.1",
+        "destinationIP": "",
+        "destinationPort": "443",
+        "host": "www.baidu.com",
+        "dnsMode": "normal"
+      },
+      "chains": [
+        "DIRECT"
+      ],
+      "rule": "GeoSite",
+      "rulePayload": "baidu"
+    },
+    {
+      "device": "snr1",
+      "meta": {
+        "network": "tcp",
+        "type": "HTTPS",
+        "sourceIP": "127.0.0.1",
+        "destinationIP": "",
+        "destinationPort": "443",
+        "host": "www.gstatic.com",
+        "dnsMode": "normal"
+      },
+      "chains": [
+        "DIRECT"
+      ],
+      "rule": "GeoSite",
+      "rulePayload": "google-cn"
+    },
+    {
+      "device": "snr1",
+      "meta": {
+        "network": "tcp",
+        "type": "HTTPS",
+        "sourceIP": "127.0.0.1",
+        "destinationIP": "",
+        "destinationPort": "443",
+        "host": "www.gstatic.com",
+        "dnsMode": "normal"
+      },
+      "chains": [
+        "DIRECT"
+      ],
+      "rule": "GeoSite",
+      "rulePayload": "google-cn"
+    },
+    {
+      "device": "snr1",
+      "meta": {
+        "network": "tcp",
+        "type": "HTTPS",
+        "sourceIP": "127.0.0.1",
+        "destinationIP": "",
+        "destinationPort": "443",
+        "host": "www.gstatic.com",
+        "dnsMode": "normal"
+      },
+      "chains": [
+        "DIRECT"
+      ],
+      "rule": "GeoSite",
+      "rulePayload": "google-cn"
+    },
+    {
+      "device": "snr1",
+      "meta": {
+        "network": "tcp",
+        "type": "HTTPS",
+        "sourceIP": "127.0.0.1",
+        "destinationIP": "",
+        "destinationPort": "443",
+        "host": "www.gstatic.com",
+        "dnsMode": "normal"
+      },
+      "chains": [
+        "DIRECT"
+      ],
+      "rule": "GeoSite",
+      "rulePayload": "google-cn"
+    }
+  ]
+}

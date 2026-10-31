@@ -1,0 +1,60 @@
+{
+  "110.242.70.57": [
+    {
+      "ts": "2026-09-28T10:52:54.578468+08:00",
+      "exit": 28,
+      "http_code": 0,
+      "remote_ip": "",
+      "time_connect": 0.0,
+      "time_appconnect": 0.0,
+      "time_total": 4.00684
+    },
+    {
+      "ts": "2026-09-28T10:52:58.614880+08:00",
+      "exit": 28,
+      "http_code": 0,
+      "remote_ip": "",
+      "time_connect": 0.0,
+      "time_appconnect": 0.0,
+      "time_total": 4.009592
+    },
+    {
+      "ts": "2026-09-28T10:53:02.657686+08:00",
+      "exit": 28,
+      "http_code": 0,
+      "remote_ip": "",
+      "time_connect": 0.0,
+      "time_appconnect": 0.0,
+      "time_total": 4.015948
+    }
+  ],
+  "110.242.69.21": [
+    {
+      "ts": "2026-09-28T10:52:50.695967+08:00",
+      "exit": 0,
+      "http_code": 200,
+      "remote_ip": "110.242.69.21",
+      "time_connect": 0.001781,
+      "time_appconnect": 0.089974,
+      "time_total": 0.116903
+    },
+    {
+      "ts": "2026-09-28T10:52:50.841292+08:00",
+      "exit": 0,
+      "http_code": 200,
+      "remote_ip": "110.242.69.21",
+      "time_connect": 0.001433,
+      "time_appconnect": 0.090231,
+      "time_total": 0.117126
+    },
+    {
+      "ts": "2026-09-28T10:52:50.975984+08:00",
+      "exit": 0,
+      "http_code": 200,
+      "remote_ip": "110.242.69.21",
+      "time_connect": 0.001476,
+      "time_appconnect": 0.082661,
+      "time_total": 0.107408
+    }
+  ]
+}

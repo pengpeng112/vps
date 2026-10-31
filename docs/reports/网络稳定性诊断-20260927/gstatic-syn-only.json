@@ -1,0 +1,5 @@
+{
+  "capture": "08:08:05.620087 IP 192.168.2.158.37812 > 142.251.12.94.443: Flags [S], seq 2993451104, win 64240, options [mss 1460,sackOK,TS[|tcp]>\n08:08:05.620704 IP 142.251.12.94.443 > 192.168.2.158.37812: Flags [S.], seq 1949584468, ack 2993451105, win 65160, options [mss 1460,sackOK,TS[|tcp]>\n\ntcpdump: verbose output suppressed, use -v or -vv for full protocol decode\nlistening on wan, link-type EN10MB (Ethernet), capture size 64 bytes\n2 packets captured\n10 packets received by filter\n0 packets dropped by kernel\n",
+  "request": "code=000 total=5.001402curl: (28) SSL connection timeout\n",
+  "note": "Earlier timeout applet unavailable; bounded shell timer used, only SYN headers, no payload."
+}

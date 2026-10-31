@@ -1,0 +1,86 @@
+[
+  {
+    "ts": "2026-09-28T01:21:35.419209821Z",
+    "target": "other_redacted",
+    "rule": "GeoSite/google-cn",
+    "source": "PC"
+  },
+  {
+    "ts": "2026-09-28T02:02:54.859199860Z",
+    "target": "other_redacted",
+    "rule": "GeoIP/cn",
+    "source": "PC"
+  },
+  {
+    "ts": "2026-09-28T02:02:59.870140710Z",
+    "target": "other_redacted",
+    "rule": "GeoSite/cn",
+    "source": "PC"
+  },
+  {
+    "ts": "2026-09-28T02:03:04.880472354Z",
+    "target": "other_redacted",
+    "rule": "GeoIP/cn",
+    "source": "PC"
+  },
+  {
+    "ts": "2026-09-28T02:33:29.417795885Z",
+    "target": "other_redacted",
+    "rule": "GeoSite/google-cn",
+    "source": "PC"
+  },
+  {
+    "ts": "2026-09-28T02:47:10.228183410Z",
+    "target": "other_redacted",
+    "rule": "GeoSite/google-cn",
+    "source": "PC"
+  },
+  {
+    "ts": "2026-09-28T02:50:48.630478495Z",
+    "target": "other_redacted",
+    "rule": "GeoSite/private",
+    "source": "PC"
+  },
+  {
+    "ts": "2026-09-28T02:50:48.711271670Z",
+    "target": "other_redacted",
+    "rule": "GeoSite/private",
+    "source": "PC"
+  },
+  {
+    "ts": "2026-09-28T02:50:53.650065702Z",
+    "target": "other_redacted",
+    "rule": "GeoSite/private",
+    "source": "PC"
+  },
+  {
+    "ts": "2026-09-28T02:50:53.725688084Z",
+    "target": "other_redacted",
+    "rule": "GeoSite/private",
+    "source": "PC"
+  },
+  {
+    "ts": "2026-09-28T02:50:54.916608821Z",
+    "target": "other_redacted",
+    "rule": "GeoSite/private",
+    "source": "PC"
+  },
+  {
+    "ts": "2026-09-28T02:50:55.083483548Z",
+    "target": "other_redacted",
+    "rule": "GeoSite/private",
+    "source": "PC"
+  },
+  {
+    "ts": "2026-09-28T02:50:59.920480069Z",
+    "target": "other_redacted",
+    "rule": "GeoSite/private",
+    "source": "PC"
+  },
+  {
+    "ts": "2026-09-28T02:51:00.085951659Z",
+    "target": "other_redacted",
+    "rule": "GeoSite/private",
+    "source": "PC"
+  }
+]

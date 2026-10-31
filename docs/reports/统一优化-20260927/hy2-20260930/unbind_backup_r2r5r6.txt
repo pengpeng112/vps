@@ -1,0 +1,9 @@
+rtr-673568|3|true|0
+rtr-673568|2|false|0
+rtr-673568|1|false|0
+rtr-a9bcba|3|true|0
+rtr-a9bcba|1|false|0
+rtr-a9bcba|2|false|0
+rtr-c46a25|3|true|0
+rtr-c46a25|1|false|0
+rtr-c46a25|2|false|0

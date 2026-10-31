@@ -1,0 +1,47 @@
+[
+  {
+    "ts": "2026-09-28T10:51:05.280491+08:00",
+    "exit": 0,
+    "http_code": 301,
+    "remote_ip": "198.18.0.4",
+    "time_connect": 0.012607,
+    "time_appconnect": 0.97014,
+    "time_total": 1.383847
+  },
+  {
+    "ts": "2026-09-28T10:51:06.712797+08:00",
+    "exit": 0,
+    "http_code": 301,
+    "remote_ip": "198.18.0.4",
+    "time_connect": 0.012267,
+    "time_appconnect": 0.984557,
+    "time_total": 1.404376
+  },
+  {
+    "ts": "2026-09-28T10:51:08.025484+08:00",
+    "exit": 0,
+    "http_code": 301,
+    "remote_ip": "198.18.0.4",
+    "time_connect": 0.024924,
+    "time_appconnect": 0.905354,
+    "time_total": 1.287168
+  },
+  {
+    "ts": "2026-09-28T10:51:09.368601+08:00",
+    "exit": 0,
+    "http_code": 301,
+    "remote_ip": "198.18.0.4",
+    "time_connect": 0.012613,
+    "time_appconnect": 0.913271,
+    "time_total": 1.317179
+  },
+  {
+    "ts": "2026-09-28T10:51:10.731593+08:00",
+    "exit": 0,
+    "http_code": 301,
+    "remote_ip": "198.18.0.4",
+    "time_connect": 0.012246,
+    "time_appconnect": 0.917973,
+    "time_total": 1.336668
+  }
+]

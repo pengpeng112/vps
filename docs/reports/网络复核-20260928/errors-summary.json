@@ -1,0 +1,1585 @@
+{
+  "athena": {
+    "lines": 69,
+    "counts": [
+      {
+        "reason": "i/o timeout",
+        "target_group": "google.com",
+        "n": 60
+      },
+      {
+        "reason": "i/o timeout",
+        "target_group": "other_redacted",
+        "n": 9
+      }
+    ],
+    "events": [
+      {
+        "ts": "2026-09-28T00:52:44.451650062Z",
+        "reason": "i/o timeout",
+        "target_group": "google.com",
+        "route": "PROXY"
+      },
+      {
+        "ts": "2026-09-28T00:52:49.460541598Z",
+        "reason": "i/o timeout",
+        "target_group": "google.com",
+        "route": "PROXY"
+      },
+      {
+        "ts": "2026-09-28T00:52:54.473362344Z",
+        "reason": "i/o timeout",
+        "target_group": "google.com",
+        "route": "PROXY"
+      },
+      {
+        "ts": "2026-09-28T00:52:59.480197979Z",
+        "reason": "i/o timeout",
+        "target_group": "google.com",
+        "route": "PROXY"
+      },
+      {
+        "ts": "2026-09-28T00:53:04.483418822Z",
+        "reason": "i/o timeout",
+        "target_group": "google.com",
+        "route": "PROXY"
+      },
+      {
+        "ts": "2026-09-28T00:53:04.695876214Z",
+        "reason": "i/o timeout",
+        "target_group": "google.com",
+        "route": "PROXY"
+      },
+      {
+        "ts": "2026-09-28T00:53:09.495900184Z",
+        "reason": "i/o timeout",
+        "target_group": "google.com",
+        "route": "PROXY"
+      },
+      {
+        "ts": "2026-09-28T00:53:09.700982452Z",
+        "reason": "i/o timeout",
+        "target_group": "google.com",
+        "route": "PROXY"
+      },
+      {
+        "ts": "2026-09-28T00:53:14.498749811Z",
+        "reason": "i/o timeout",
+        "target_group": "google.com",
+        "route": "PROXY"
+      },
+      {
+        "ts": "2026-09-28T00:53:19.505278812Z",
+        "reason": "i/o timeout",
+        "target_group": "google.com",
+        "route": "PROXY"
+      },
+      {
+        "ts": "2026-09-28T00:53:24.508968987Z",
+        "reason": "i/o timeout",
+        "target_group": "google.com",
+        "route": "PROXY"
+      },
+      {
+        "ts": "2026-09-28T00:53:29.516854750Z",
+        "reason": "i/o timeout",
+        "target_group": "google.com",
+        "route": "PROXY"
+      },
+      {
+        "ts": "2026-09-28T00:53:34.520269961Z",
+        "reason": "i/o timeout",
+        "target_group": "google.com",
+        "route": "PROXY"
+      },
+      {
+        "ts": "2026-09-28T00:53:34.701598919Z",
+        "reason": "i/o timeout",
+        "target_group": "google.com",
+        "route": "PROXY"
+      },
+      {
+        "ts": "2026-09-28T00:53:39.526900998Z",
+        "reason": "i/o timeout",
+        "target_group": "google.com",
+        "route": "PROXY"
+      },
+      {
+        "ts": "2026-09-28T00:53:39.707757868Z",
+        "reason": "i/o timeout",
+        "target_group": "google.com",
+        "route": "PROXY"
+      },
+      {
+        "ts": "2026-09-28T00:53:44.530081703Z",
+        "reason": "i/o timeout",
+        "target_group": "google.com",
+        "route": "PROXY"
+      },
+      {
+        "ts": "2026-09-28T00:53:49.539030722Z",
+        "reason": "i/o timeout",
+        "target_group": "google.com",
+        "route": "PROXY"
+      },
+      {
+        "ts": "2026-09-28T00:53:54.548452078Z",
+        "reason": "i/o timeout",
+        "target_group": "google.com",
+        "route": "PROXY"
+      },
+      {
+        "ts": "2026-09-28T00:53:59.554158349Z",
+        "reason": "i/o timeout",
+        "target_group": "google.com",
+        "route": "PROXY"
+      },
+      {
+        "ts": "2026-09-28T00:54:04.557678094Z",
+        "reason": "i/o timeout",
+        "target_group": "google.com",
+        "route": "PROXY"
+      },
+      {
+        "ts": "2026-09-28T00:54:04.697835547Z",
+        "reason": "i/o timeout",
+        "target_group": "google.com",
+        "route": "PROXY"
+      },
+      {
+        "ts": "2026-09-28T00:54:09.563902284Z",
+        "reason": "i/o timeout",
+        "target_group": "google.com",
+        "route": "PROXY"
+      },
+      {
+        "ts": "2026-09-28T00:54:09.701319081Z",
+        "reason": "i/o timeout",
+        "target_group": "google.com",
+        "route": "PROXY"
+      },
+      {
+        "ts": "2026-09-28T00:54:14.568927043Z",
+        "reason": "i/o timeout",
+        "target_group": "google.com",
+        "route": "PROXY"
+      },
+      {
+        "ts": "2026-09-28T00:54:19.581782514Z",
+        "reason": "i/o timeout",
+        "target_group": "google.com",
+        "route": "PROXY"
+      },
+      {
+        "ts": "2026-09-28T00:54:24.585072750Z",
+        "reason": "i/o timeout",
+        "target_group": "google.com",
+        "route": "PROXY"
+      },
+      {
+        "ts": "2026-09-28T00:54:29.591061098Z",
+        "reason": "i/o timeout",
+        "target_group": "google.com",
+        "route": "PROXY"
+      },
+      {
+        "ts": "2026-09-28T00:54:34.595542845Z",
+        "reason": "i/o timeout",
+        "target_group": "google.com",
+        "route": "PROXY"
+      },
+      {
+        "ts": "2026-09-28T00:54:34.694162997Z",
+        "reason": "i/o timeout",
+        "target_group": "google.com",
+        "route": "PROXY"
+      },
+      {
+        "ts": "2026-09-28T00:54:39.604832228Z",
+        "reason": "i/o timeout",
+        "target_group": "google.com",
+        "route": "PROXY"
+      },
+      {
+        "ts": "2026-09-28T00:54:39.697843483Z",
+        "reason": "i/o timeout",
+        "target_group": "google.com",
+        "route": "PROXY"
+      },
+      {
+        "ts": "2026-09-28T00:54:44.608455337Z",
+        "reason": "i/o timeout",
+        "target_group": "google.com",
+        "route": "PROXY"
+      },
+      {
+        "ts": "2026-09-28T00:54:44.704037455Z",
+        "reason": "i/o timeout",
+        "target_group": "google.com",
+        "route": "PROXY"
+      },
+      {
+        "ts": "2026-09-28T00:54:49.625175717Z",
+        "reason": "i/o timeout",
+        "target_group": "google.com",
+        "route": "PROXY"
+      },
+      {
+        "ts": "2026-09-28T00:54:49.707275058Z",
+        "reason": "i/o timeout",
+        "target_group": "google.com",
+        "route": "PROXY"
+      },
+      {
+        "ts": "2026-09-28T00:54:54.630417467Z",
+        "reason": "i/o timeout",
+        "target_group": "google.com",
+        "route": "PROXY"
+      },
+      {
+        "ts": "2026-09-28T00:54:54.718971255Z",
+        "reason": "i/o timeout",
+        "target_group": "google.com",
+        "route": "PROXY"
+      },
+      {
+        "ts": "2026-09-28T00:54:59.637358109Z",
+        "reason": "i/o timeout",
+        "target_group": "google.com",
+        "route": "PROXY"
+      },
+      {
+        "ts": "2026-09-28T00:54:59.721603682Z",
+        "reason": "i/o timeout",
+        "target_group": "google.com",
+        "route": "PROXY"
+      },
+      {
+        "ts": "2026-09-28T00:55:04.648358629Z",
+        "reason": "i/o timeout",
+        "target_group": "google.com",
+        "route": "PROXY"
+      },
+      {
+        "ts": "2026-09-28T00:55:04.764756105Z",
+        "reason": "i/o timeout",
+        "target_group": "google.com",
+        "route": "PROXY"
+      },
+      {
+        "ts": "2026-09-28T00:55:09.655532104Z",
+        "reason": "i/o timeout",
+        "target_group": "google.com",
+        "route": "PROXY"
+      },
+      {
+        "ts": "2026-09-28T00:55:09.784236677Z",
+        "reason": "i/o timeout",
+        "target_group": "google.com",
+        "route": "PROXY"
+      },
+      {
+        "ts": "2026-09-28T00:55:14.667328338Z",
+        "reason": "i/o timeout",
+        "target_group": "google.com",
+        "route": "PROXY"
+      },
+      {
+        "ts": "2026-09-28T00:55:14.800256042Z",
+        "reason": "i/o timeout",
+        "target_group": "google.com",
+        "route": "PROXY"
+      },
+      {
+        "ts": "2026-09-28T00:55:19.674017221Z",
+        "reason": "i/o timeout",
+        "target_group": "google.com",
+        "route": "PROXY"
+      },
+      {
+        "ts": "2026-09-28T00:55:19.803776390Z",
+        "reason": "i/o timeout",
+        "target_group": "google.com",
+        "route": "PROXY"
+      },
+      {
+        "ts": "2026-09-28T00:55:24.679670758Z",
+        "reason": "i/o timeout",
+        "target_group": "google.com",
+        "route": "PROXY"
+      },
+      {
+        "ts": "2026-09-28T00:55:29.691335903Z",
+        "reason": "i/o timeout",
+        "target_group": "google.com",
+        "route": "PROXY"
+      },
+      {
+        "ts": "2026-09-28T00:55:34.694888330Z",
+        "reason": "i/o timeout",
+        "target_group": "google.com",
+        "route": "PROXY"
+      },
+      {
+        "ts": "2026-09-28T00:55:34.715043307Z",
+        "reason": "i/o timeout",
+        "target_group": "google.com",
+        "route": "PROXY"
+      },
+      {
+        "ts": "2026-09-28T00:55:39.701444039Z",
+        "reason": "i/o timeout",
+        "target_group": "google.com",
+        "route": "PROXY"
+      },
+      {
+        "ts": "2026-09-28T00:55:39.721794977Z",
+        "reason": "i/o timeout",
+        "target_group": "google.com",
+        "route": "PROXY"
+      },
+      {
+        "ts": "2026-09-28T00:55:44.704803170Z",
+        "reason": "i/o timeout",
+        "target_group": "google.com",
+        "route": "PROXY"
+      },
+      {
+        "ts": "2026-09-28T00:55:44.728317559Z",
+        "reason": "i/o timeout",
+        "target_group": "google.com",
+        "route": "PROXY"
+      },
+      {
+        "ts": "2026-09-28T00:55:49.714175491Z",
+        "reason": "i/o timeout",
+        "target_group": "google.com",
+        "route": "PROXY"
+      },
+      {
+        "ts": "2026-09-28T00:55:49.732202569Z",
+        "reason": "i/o timeout",
+        "target_group": "google.com",
+        "route": "PROXY"
+      },
+      {
+        "ts": "2026-09-28T00:55:54.717655453Z",
+        "reason": "i/o timeout",
+        "target_group": "google.com",
+        "route": "PROXY"
+      },
+      {
+        "ts": "2026-09-28T00:55:59.729406924Z",
+        "reason": "i/o timeout",
+        "target_group": "google.com",
+        "route": "PROXY"
+      },
+      {
+        "ts": "2026-09-28T01:02:39.601359897Z",
+        "reason": "i/o timeout",
+        "target_group": "other_redacted",
+        "route": "DIRECT"
+      },
+      {
+        "ts": "2026-09-28T01:02:44.645518570Z",
+        "reason": "i/o timeout",
+        "target_group": "other_redacted",
+        "route": "DIRECT"
+      },
+      {
+        "ts": "2026-09-28T01:02:49.663116096Z",
+        "reason": "i/o timeout",
+        "target_group": "other_redacted",
+        "route": "DIRECT"
+      },
+      {
+        "ts": "2026-09-28T01:21:35.419209821Z",
+        "reason": "i/o timeout",
+        "target_group": "other_redacted",
+        "route": "DIRECT"
+      },
+      {
+        "ts": "2026-09-28T02:02:54.859199860Z",
+        "reason": "i/o timeout",
+        "target_group": "other_redacted",
+        "route": "DIRECT"
+      },
+      {
+        "ts": "2026-09-28T02:02:59.870140710Z",
+        "reason": "i/o timeout",
+        "target_group": "other_redacted",
+        "route": "DIRECT"
+      },
+      {
+        "ts": "2026-09-28T02:03:04.880472354Z",
+        "reason": "i/o timeout",
+        "target_group": "other_redacted",
+        "route": "DIRECT"
+      },
+      {
+        "ts": "2026-09-28T02:33:29.417795885Z",
+        "reason": "i/o timeout",
+        "target_group": "other_redacted",
+        "route": "DIRECT"
+      },
+      {
+        "ts": "2026-09-28T02:47:10.228183410Z",
+        "reason": "i/o timeout",
+        "target_group": "other_redacted",
+        "route": "DIRECT"
+      }
+    ]
+  },
+  "do": {
+    "lines": 298,
+    "counts": [
+      {
+        "reason": "TLS handshake",
+        "target_group": "other_redacted",
+        "n": 298
+      }
+    ],
+    "events": [
+      {
+        "ts": "2026-09-28 10:09:11",
+        "reason": "TLS handshake",
+        "target_group": "other_redacted",
+        "route": "unknown"
+      },
+      {
+        "ts": "2026-09-28 10:09:11",
+        "reason": "TLS handshake",
+        "target_group": "other_redacted",
+        "route": "unknown"
+      },
+      {
+        "ts": "2026-09-28 10:09:11",
+        "reason": "TLS handshake",
+        "target_group": "other_redacted",
+        "route": "unknown"
+      },
+      {
+        "ts": "2026-09-28 10:09:11",
+        "reason": "TLS handshake",
+        "target_group": "other_redacted",
+        "route": "unknown"
+      },
+      {
+        "ts": "2026-09-28 10:09:11",
+        "reason": "TLS handshake",
+        "target_group": "other_redacted",
+        "route": "unknown"
+      },
+      {
+        "ts": "2026-09-28 10:09:11",
+        "reason": "TLS handshake",
+        "target_group": "other_redacted",
+        "route": "unknown"
+      },
+      {
+        "ts": "2026-09-28 10:09:11",
+        "reason": "TLS handshake",
+        "target_group": "other_redacted",
+        "route": "unknown"
+      },
+      {
+        "ts": "2026-09-28 10:09:11",
+        "reason": "TLS handshake",
+        "target_group": "other_redacted",
+        "route": "unknown"
+      },
+      {
+        "ts": "2026-09-28 10:09:11",
+        "reason": "TLS handshake",
+        "target_group": "other_redacted",
+        "route": "unknown"
+      },
+      {
+        "ts": "2026-09-28 10:09:11",
+        "reason": "TLS handshake",
+        "target_group": "other_redacted",
+        "route": "unknown"
+      },
+      {
+        "ts": "2026-09-28 10:09:11",
+        "reason": "TLS handshake",
+        "target_group": "other_redacted",
+        "route": "unknown"
+      },
+      {
+        "ts": "2026-09-28 10:09:11",
+        "reason": "TLS handshake",
+        "target_group": "other_redacted",
+        "route": "unknown"
+      },
+      {
+        "ts": "2026-09-28 10:09:11",
+        "reason": "TLS handshake",
+        "target_group": "other_redacted",
+        "route": "unknown"
+      },
+      {
+        "ts": "2026-09-28 10:09:11",
+        "reason": "TLS handshake",
+        "target_group": "other_redacted",
+        "route": "unknown"
+      },
+      {
+        "ts": "2026-09-28 10:09:11",
+        "reason": "TLS handshake",
+        "target_group": "other_redacted",
+        "route": "unknown"
+      },
+      {
+        "ts": "2026-09-28 10:09:11",
+        "reason": "TLS handshake",
+        "target_group": "other_redacted",
+        "route": "unknown"
+      },
+      {
+        "ts": "2026-09-28 10:09:11",
+        "reason": "TLS handshake",
+        "target_group": "other_redacted",
+        "route": "unknown"
+      },
+      {
+        "ts": "2026-09-28 10:09:11",
+        "reason": "TLS handshake",
+        "target_group": "other_redacted",
+        "route": "unknown"
+      },
+      {
+        "ts": "2026-09-28 10:09:11",
+        "reason": "TLS handshake",
+        "target_group": "other_redacted",
+        "route": "unknown"
+      },
+      {
+        "ts": "2026-09-28 10:09:11",
+        "reason": "TLS handshake",
+        "target_group": "other_redacted",
+        "route": "unknown"
+      },
+      {
+        "ts": "2026-09-28 10:09:11",
+        "reason": "TLS handshake",
+        "target_group": "other_redacted",
+        "route": "unknown"
+      },
+      {
+        "ts": "2026-09-28 10:09:12",
+        "reason": "TLS handshake",
+        "target_group": "other_redacted",
+        "route": "unknown"
+      },
+      {
+        "ts": "2026-09-28 10:09:12",
+        "reason": "TLS handshake",
+        "target_group": "other_redacted",
+        "route": "unknown"
+      },
+      {
+        "ts": "2026-09-28 10:09:12",
+        "reason": "TLS handshake",
+        "target_group": "other_redacted",
+        "route": "unknown"
+      },
+      {
+        "ts": "2026-09-28 10:09:12",
+        "reason": "TLS handshake",
+        "target_group": "other_redacted",
+        "route": "unknown"
+      },
+      {
+        "ts": "2026-09-28 10:09:12",
+        "reason": "TLS handshake",
+        "target_group": "other_redacted",
+        "route": "unknown"
+      },
+      {
+        "ts": "2026-09-28 10:09:12",
+        "reason": "TLS handshake",
+        "target_group": "other_redacted",
+        "route": "unknown"
+      },
+      {
+        "ts": "2026-09-28 10:09:12",
+        "reason": "TLS handshake",
+        "target_group": "other_redacted",
+        "route": "unknown"
+      },
+      {
+        "ts": "2026-09-28 10:09:12",
+        "reason": "TLS handshake",
+        "target_group": "other_redacted",
+        "route": "unknown"
+      },
+      {
+        "ts": "2026-09-28 10:09:12",
+        "reason": "TLS handshake",
+        "target_group": "other_redacted",
+        "route": "unknown"
+      },
+      {
+        "ts": "2026-09-28 10:09:12",
+        "reason": "TLS handshake",
+        "target_group": "other_redacted",
+        "route": "unknown"
+      },
+      {
+        "ts": "2026-09-28 10:09:12",
+        "reason": "TLS handshake",
+        "target_group": "other_redacted",
+        "route": "unknown"
+      },
+      {
+        "ts": "2026-09-28 10:09:12",
+        "reason": "TLS handshake",
+        "target_group": "other_redacted",
+        "route": "unknown"
+      },
+      {
+        "ts": "2026-09-28 10:09:12",
+        "reason": "TLS handshake",
+        "target_group": "other_redacted",
+        "route": "unknown"
+      },
+      {
+        "ts": "2026-09-28 10:09:12",
+        "reason": "TLS handshake",
+        "target_group": "other_redacted",
+        "route": "unknown"
+      },
+      {
+        "ts": "2026-09-28 10:09:12",
+        "reason": "TLS handshake",
+        "target_group": "other_redacted",
+        "route": "unknown"
+      },
+      {
+        "ts": "2026-09-28 10:09:12",
+        "reason": "TLS handshake",
+        "target_group": "other_redacted",
+        "route": "unknown"
+      },
+      {
+        "ts": "2026-09-28 10:09:12",
+        "reason": "TLS handshake",
+        "target_group": "other_redacted",
+        "route": "unknown"
+      },
+      {
+        "ts": "2026-09-28 10:09:12",
+        "reason": "TLS handshake",
+        "target_group": "other_redacted",
+        "route": "unknown"
+      },
+      {
+        "ts": "2026-09-28 10:09:12",
+        "reason": "TLS handshake",
+        "target_group": "other_redacted",
+        "route": "unknown"
+      },
+      {
+        "ts": "2026-09-28 10:09:12",
+        "reason": "TLS handshake",
+        "target_group": "other_redacted",
+        "route": "unknown"
+      },
+      {
+        "ts": "2026-09-28 10:09:12",
+        "reason": "TLS handshake",
+        "target_group": "other_redacted",
+        "route": "unknown"
+      },
+      {
+        "ts": "2026-09-28 10:09:12",
+        "reason": "TLS handshake",
+        "target_group": "other_redacted",
+        "route": "unknown"
+      },
+      {
+        "ts": "2026-09-28 10:09:12",
+        "reason": "TLS handshake",
+        "target_group": "other_redacted",
+        "route": "unknown"
+      },
+      {
+        "ts": "2026-09-28 10:09:12",
+        "reason": "TLS handshake",
+        "target_group": "other_redacted",
+        "route": "unknown"
+      },
+      {
+        "ts": "2026-09-28 10:09:12",
+        "reason": "TLS handshake",
+        "target_group": "other_redacted",
+        "route": "unknown"
+      },
+      {
+        "ts": "2026-09-28 10:09:12",
+        "reason": "TLS handshake",
+        "target_group": "other_redacted",
+        "route": "unknown"
+      },
+      {
+        "ts": "2026-09-28 10:09:12",
+        "reason": "TLS handshake",
+        "target_group": "other_redacted",
+        "route": "unknown"
+      },
+      {
+        "ts": "2026-09-28 10:09:12",
+        "reason": "TLS handshake",
+        "target_group": "other_redacted",
+        "route": "unknown"
+      },
+      {
+        "ts": "2026-09-28 10:09:12",
+        "reason": "TLS handshake",
+        "target_group": "other_redacted",
+        "route": "unknown"
+      },
+      {
+        "ts": "2026-09-28 10:09:12",
+        "reason": "TLS handshake",
+        "target_group": "other_redacted",
+        "route": "unknown"
+      },
+      {
+        "ts": "2026-09-28 10:09:12",
+        "reason": "TLS handshake",
+        "target_group": "other_redacted",
+        "route": "unknown"
+      },
+      {
+        "ts": "2026-09-28 10:09:12",
+        "reason": "TLS handshake",
+        "target_group": "other_redacted",
+        "route": "unknown"
+      },
+      {
+        "ts": "2026-09-28 10:09:12",
+        "reason": "TLS handshake",
+        "target_group": "other_redacted",
+        "route": "unknown"
+      },
+      {
+        "ts": "2026-09-28 10:09:12",
+        "reason": "TLS handshake",
+        "target_group": "other_redacted",
+        "route": "unknown"
+      },
+      {
+        "ts": "2026-09-28 10:09:12",
+        "reason": "TLS handshake",
+        "target_group": "other_redacted",
+        "route": "unknown"
+      },
+      {
+        "ts": "2026-09-28 10:09:12",
+        "reason": "TLS handshake",
+        "target_group": "other_redacted",
+        "route": "unknown"
+      },
+      {
+        "ts": "2026-09-28 10:09:12",
+        "reason": "TLS handshake",
+        "target_group": "other_redacted",
+        "route": "unknown"
+      },
+      {
+        "ts": "2026-09-28 10:09:12",
+        "reason": "TLS handshake",
+        "target_group": "other_redacted",
+        "route": "unknown"
+      },
+      {
+        "ts": "2026-09-28 10:09:12",
+        "reason": "TLS handshake",
+        "target_group": "other_redacted",
+        "route": "unknown"
+      },
+      {
+        "ts": "2026-09-28 10:09:12",
+        "reason": "TLS handshake",
+        "target_group": "other_redacted",
+        "route": "unknown"
+      },
+      {
+        "ts": "2026-09-28 10:09:12",
+        "reason": "TLS handshake",
+        "target_group": "other_redacted",
+        "route": "unknown"
+      },
+      {
+        "ts": "2026-09-28 10:09:12",
+        "reason": "TLS handshake",
+        "target_group": "other_redacted",
+        "route": "unknown"
+      },
+      {
+        "ts": "2026-09-28 10:09:12",
+        "reason": "TLS handshake",
+        "target_group": "other_redacted",
+        "route": "unknown"
+      },
+      {
+        "ts": "2026-09-28 10:09:12",
+        "reason": "TLS handshake",
+        "target_group": "other_redacted",
+        "route": "unknown"
+      },
+      {
+        "ts": "2026-09-28 10:09:12",
+        "reason": "TLS handshake",
+        "target_group": "other_redacted",
+        "route": "unknown"
+      },
+      {
+        "ts": "2026-09-28 10:09:12",
+        "reason": "TLS handshake",
+        "target_group": "other_redacted",
+        "route": "unknown"
+      },
+      {
+        "ts": "2026-09-28 10:09:12",
+        "reason": "TLS handshake",
+        "target_group": "other_redacted",
+        "route": "unknown"
+      },
+      {
+        "ts": "2026-09-28 10:09:12",
+        "reason": "TLS handshake",
+        "target_group": "other_redacted",
+        "route": "unknown"
+      },
+      {
+        "ts": "2026-09-28 10:09:12",
+        "reason": "TLS handshake",
+        "target_group": "other_redacted",
+        "route": "unknown"
+      },
+      {
+        "ts": "2026-09-28 10:09:12",
+        "reason": "TLS handshake",
+        "target_group": "other_redacted",
+        "route": "unknown"
+      },
+      {
+        "ts": "2026-09-28 10:09:57",
+        "reason": "TLS handshake",
+        "target_group": "other_redacted",
+        "route": "unknown"
+      },
+      {
+        "ts": "2026-09-28 10:11:01",
+        "reason": "TLS handshake",
+        "target_group": "other_redacted",
+        "route": "unknown"
+      },
+      {
+        "ts": "2026-09-28 10:11:28",
+        "reason": "TLS handshake",
+        "target_group": "other_redacted",
+        "route": "unknown"
+      },
+      {
+        "ts": "2026-09-28 10:12:04",
+        "reason": "TLS handshake",
+        "target_group": "other_redacted",
+        "route": "unknown"
+      },
+      {
+        "ts": "2026-09-28 10:13:08",
+        "reason": "TLS handshake",
+        "target_group": "other_redacted",
+        "route": "unknown"
+      },
+      {
+        "ts": "2026-09-28 10:14:13",
+        "reason": "TLS handshake",
+        "target_group": "other_redacted",
+        "route": "unknown"
+      },
+      {
+        "ts": "2026-09-28 10:15:16",
+        "reason": "TLS handshake",
+        "target_group": "other_redacted",
+        "route": "unknown"
+      },
+      {
+        "ts": "2026-09-28 10:16:22",
+        "reason": "TLS handshake",
+        "target_group": "other_redacted",
+        "route": "unknown"
+      },
+      {
+        "ts": "2026-09-28 10:17:25",
+        "reason": "TLS handshake",
+        "target_group": "other_redacted",
+        "route": "unknown"
+      },
+      {
+        "ts": "2026-09-28 10:18:15",
+        "reason": "TLS handshake",
+        "target_group": "other_redacted",
+        "route": "unknown"
+      },
+      {
+        "ts": "2026-09-28 10:18:29",
+        "reason": "TLS handshake",
+        "target_group": "other_redacted",
+        "route": "unknown"
+      },
+      {
+        "ts": "2026-09-28 10:19:34",
+        "reason": "TLS handshake",
+        "target_group": "other_redacted",
+        "route": "unknown"
+      },
+      {
+        "ts": "2026-09-28 10:20:38",
+        "reason": "TLS handshake",
+        "target_group": "other_redacted",
+        "route": "unknown"
+      },
+      {
+        "ts": "2026-09-28 10:21:42",
+        "reason": "TLS handshake",
+        "target_group": "other_redacted",
+        "route": "unknown"
+      },
+      {
+        "ts": "2026-09-28 10:22:47",
+        "reason": "TLS handshake",
+        "target_group": "other_redacted",
+        "route": "unknown"
+      },
+      {
+        "ts": "2026-09-28 10:23:52",
+        "reason": "TLS handshake",
+        "target_group": "other_redacted",
+        "route": "unknown"
+      },
+      {
+        "ts": "2026-09-28 10:24:19",
+        "reason": "TLS handshake",
+        "target_group": "other_redacted",
+        "route": "unknown"
+      },
+      {
+        "ts": "2026-09-28 10:24:56",
+        "reason": "TLS handshake",
+        "target_group": "other_redacted",
+        "route": "unknown"
+      },
+      {
+        "ts": "2026-09-28 10:26:01",
+        "reason": "TLS handshake",
+        "target_group": "other_redacted",
+        "route": "unknown"
+      },
+      {
+        "ts": "2026-09-28 10:27:05",
+        "reason": "TLS handshake",
+        "target_group": "other_redacted",
+        "route": "unknown"
+      },
+      {
+        "ts": "2026-09-28 10:28:09",
+        "reason": "TLS handshake",
+        "target_group": "other_redacted",
+        "route": "unknown"
+      },
+      {
+        "ts": "2026-09-28 10:29:13",
+        "reason": "TLS handshake",
+        "target_group": "other_redacted",
+        "route": "unknown"
+      },
+      {
+        "ts": "2026-09-28 10:29:33",
+        "reason": "TLS handshake",
+        "target_group": "other_redacted",
+        "route": "unknown"
+      },
+      {
+        "ts": "2026-09-28 10:30:17",
+        "reason": "TLS handshake",
+        "target_group": "other_redacted",
+        "route": "unknown"
+      },
+      {
+        "ts": "2026-09-28 10:31:22",
+        "reason": "TLS handshake",
+        "target_group": "other_redacted",
+        "route": "unknown"
+      },
+      {
+        "ts": "2026-09-28 10:32:25",
+        "reason": "TLS handshake",
+        "target_group": "other_redacted",
+        "route": "unknown"
+      },
+      {
+        "ts": "2026-09-28 10:33:29",
+        "reason": "TLS handshake",
+        "target_group": "other_redacted",
+        "route": "unknown"
+      },
+      {
+        "ts": "2026-09-28 10:34:32",
+        "reason": "TLS handshake",
+        "target_group": "other_redacted",
+        "route": "unknown"
+      },
+      {
+        "ts": "2026-09-28 10:35:36",
+        "reason": "TLS handshake",
+        "target_group": "other_redacted",
+        "route": "unknown"
+      },
+      {
+        "ts": "2026-09-28 10:36:40",
+        "reason": "TLS handshake",
+        "target_group": "other_redacted",
+        "route": "unknown"
+      },
+      {
+        "ts": "2026-09-28 10:37:44",
+        "reason": "TLS handshake",
+        "target_group": "other_redacted",
+        "route": "unknown"
+      },
+      {
+        "ts": "2026-09-28 10:38:49",
+        "reason": "TLS handshake",
+        "target_group": "other_redacted",
+        "route": "unknown"
+      },
+      {
+        "ts": "2026-09-28 10:39:53",
+        "reason": "TLS handshake",
+        "target_group": "other_redacted",
+        "route": "unknown"
+      },
+      {
+        "ts": "2026-09-28 10:40:59",
+        "reason": "TLS handshake",
+        "target_group": "other_redacted",
+        "route": "unknown"
+      },
+      {
+        "ts": "2026-09-28 10:42:02",
+        "reason": "TLS handshake",
+        "target_group": "other_redacted",
+        "route": "unknown"
+      },
+      {
+        "ts": "2026-09-28 10:42:02",
+        "reason": "TLS handshake",
+        "target_group": "other_redacted",
+        "route": "unknown"
+      },
+      {
+        "ts": "2026-09-28 10:42:03",
+        "reason": "TLS handshake",
+        "target_group": "other_redacted",
+        "route": "unknown"
+      },
+      {
+        "ts": "2026-09-28 10:43:07",
+        "reason": "TLS handshake",
+        "target_group": "other_redacted",
+        "route": "unknown"
+      },
+      {
+        "ts": "2026-09-28 10:44:11",
+        "reason": "TLS handshake",
+        "target_group": "other_redacted",
+        "route": "unknown"
+      },
+      {
+        "ts": "2026-09-28 10:44:40",
+        "reason": "TLS handshake",
+        "target_group": "other_redacted",
+        "route": "unknown"
+      },
+      {
+        "ts": "2026-09-28 10:45:15",
+        "reason": "TLS handshake",
+        "target_group": "other_redacted",
+        "route": "unknown"
+      },
+      {
+        "ts": "2026-09-28 10:46:18",
+        "reason": "TLS handshake",
+        "target_group": "other_redacted",
+        "route": "unknown"
+      },
+      {
+        "ts": "2026-09-28 10:46:39",
+        "reason": "TLS handshake",
+        "target_group": "other_redacted",
+        "route": "unknown"
+      },
+      {
+        "ts": "2026-09-28 10:47:00",
+        "reason": "TLS handshake",
+        "target_group": "other_redacted",
+        "route": "unknown"
+      },
+      {
+        "ts": "2026-09-28 10:47:23",
+        "reason": "TLS handshake",
+        "target_group": "other_redacted",
+        "route": "unknown"
+      },
+      {
+        "ts": "2026-09-28 10:48:26",
+        "reason": "TLS handshake",
+        "target_group": "other_redacted",
+        "route": "unknown"
+      },
+      {
+        "ts": "2026-09-28 10:48:59",
+        "reason": "TLS handshake",
+        "target_group": "other_redacted",
+        "route": "unknown"
+      },
+      {
+        "ts": "2026-09-28 10:49:00",
+        "reason": "TLS handshake",
+        "target_group": "other_redacted",
+        "route": "unknown"
+      },
+      {
+        "ts": "2026-09-28 10:49:30",
+        "reason": "TLS handshake",
+        "target_group": "other_redacted",
+        "route": "unknown"
+      }
+    ]
+  },
+  "tx": {
+    "lines": 68,
+    "counts": [
+      {
+        "reason": "TLS handshake",
+        "target_group": "other_redacted",
+        "n": 68
+      }
+    ],
+    "events": [
+      {
+        "ts": "2026-09-28 09:02:25",
+        "reason": "TLS handshake",
+        "target_group": "other_redacted",
+        "route": "unknown"
+      },
+      {
+        "ts": "2026-09-28 09:02:44",
+        "reason": "TLS handshake",
+        "target_group": "other_redacted",
+        "route": "unknown"
+      },
+      {
+        "ts": "2026-09-28 09:09:26",
+        "reason": "TLS handshake",
+        "target_group": "other_redacted",
+        "route": "unknown"
+      },
+      {
+        "ts": "2026-09-28 09:09:27",
+        "reason": "TLS handshake",
+        "target_group": "other_redacted",
+        "route": "unknown"
+      },
+      {
+        "ts": "2026-09-28 09:09:29",
+        "reason": "TLS handshake",
+        "target_group": "other_redacted",
+        "route": "unknown"
+      },
+      {
+        "ts": "2026-09-28 09:09:40",
+        "reason": "TLS handshake",
+        "target_group": "other_redacted",
+        "route": "unknown"
+      },
+      {
+        "ts": "2026-09-28 09:09:40",
+        "reason": "TLS handshake",
+        "target_group": "other_redacted",
+        "route": "unknown"
+      },
+      {
+        "ts": "2026-09-28 09:09:40",
+        "reason": "TLS handshake",
+        "target_group": "other_redacted",
+        "route": "unknown"
+      },
+      {
+        "ts": "2026-09-28 09:09:40",
+        "reason": "TLS handshake",
+        "target_group": "other_redacted",
+        "route": "unknown"
+      },
+      {
+        "ts": "2026-09-28 09:09:40",
+        "reason": "TLS handshake",
+        "target_group": "other_redacted",
+        "route": "unknown"
+      },
+      {
+        "ts": "2026-09-28 09:09:40",
+        "reason": "TLS handshake",
+        "target_group": "other_redacted",
+        "route": "unknown"
+      },
+      {
+        "ts": "2026-09-28 09:09:40",
+        "reason": "TLS handshake",
+        "target_group": "other_redacted",
+        "route": "unknown"
+      },
+      {
+        "ts": "2026-09-28 09:09:41",
+        "reason": "TLS handshake",
+        "target_group": "other_redacted",
+        "route": "unknown"
+      },
+      {
+        "ts": "2026-09-28 09:09:41",
+        "reason": "TLS handshake",
+        "target_group": "other_redacted",
+        "route": "unknown"
+      },
+      {
+        "ts": "2026-09-28 09:09:41",
+        "reason": "TLS handshake",
+        "target_group": "other_redacted",
+        "route": "unknown"
+      },
+      {
+        "ts": "2026-09-28 09:09:41",
+        "reason": "TLS handshake",
+        "target_group": "other_redacted",
+        "route": "unknown"
+      },
+      {
+        "ts": "2026-09-28 09:09:41",
+        "reason": "TLS handshake",
+        "target_group": "other_redacted",
+        "route": "unknown"
+      },
+      {
+        "ts": "2026-09-28 09:09:41",
+        "reason": "TLS handshake",
+        "target_group": "other_redacted",
+        "route": "unknown"
+      },
+      {
+        "ts": "2026-09-28 09:09:41",
+        "reason": "TLS handshake",
+        "target_group": "other_redacted",
+        "route": "unknown"
+      },
+      {
+        "ts": "2026-09-28 09:09:42",
+        "reason": "TLS handshake",
+        "target_group": "other_redacted",
+        "route": "unknown"
+      },
+      {
+        "ts": "2026-09-28 09:09:42",
+        "reason": "TLS handshake",
+        "target_group": "other_redacted",
+        "route": "unknown"
+      },
+      {
+        "ts": "2026-09-28 09:09:42",
+        "reason": "TLS handshake",
+        "target_group": "other_redacted",
+        "route": "unknown"
+      },
+      {
+        "ts": "2026-09-28 09:09:43",
+        "reason": "TLS handshake",
+        "target_group": "other_redacted",
+        "route": "unknown"
+      },
+      {
+        "ts": "2026-09-28 09:09:43",
+        "reason": "TLS handshake",
+        "target_group": "other_redacted",
+        "route": "unknown"
+      },
+      {
+        "ts": "2026-09-28 09:09:43",
+        "reason": "TLS handshake",
+        "target_group": "other_redacted",
+        "route": "unknown"
+      },
+      {
+        "ts": "2026-09-28 09:09:43",
+        "reason": "TLS handshake",
+        "target_group": "other_redacted",
+        "route": "unknown"
+      },
+      {
+        "ts": "2026-09-28 09:10:02",
+        "reason": "TLS handshake",
+        "target_group": "other_redacted",
+        "route": "unknown"
+      },
+      {
+        "ts": "2026-09-28 09:10:02",
+        "reason": "TLS handshake",
+        "target_group": "other_redacted",
+        "route": "unknown"
+      },
+      {
+        "ts": "2026-09-28 09:10:02",
+        "reason": "TLS handshake",
+        "target_group": "other_redacted",
+        "route": "unknown"
+      },
+      {
+        "ts": "2026-09-28 09:10:02",
+        "reason": "TLS handshake",
+        "target_group": "other_redacted",
+        "route": "unknown"
+      },
+      {
+        "ts": "2026-09-28 09:10:02",
+        "reason": "TLS handshake",
+        "target_group": "other_redacted",
+        "route": "unknown"
+      },
+      {
+        "ts": "2026-09-28 09:10:02",
+        "reason": "TLS handshake",
+        "target_group": "other_redacted",
+        "route": "unknown"
+      },
+      {
+        "ts": "2026-09-28 09:10:03",
+        "reason": "TLS handshake",
+        "target_group": "other_redacted",
+        "route": "unknown"
+      },
+      {
+        "ts": "2026-09-28 09:10:03",
+        "reason": "TLS handshake",
+        "target_group": "other_redacted",
+        "route": "unknown"
+      },
+      {
+        "ts": "2026-09-28 09:13:41",
+        "reason": "TLS handshake",
+        "target_group": "other_redacted",
+        "route": "unknown"
+      },
+      {
+        "ts": "2026-09-28 09:33:09",
+        "reason": "TLS handshake",
+        "target_group": "other_redacted",
+        "route": "unknown"
+      },
+      {
+        "ts": "2026-09-28 09:33:40",
+        "reason": "TLS handshake",
+        "target_group": "other_redacted",
+        "route": "unknown"
+      },
+      {
+        "ts": "2026-09-28 09:33:41",
+        "reason": "TLS handshake",
+        "target_group": "other_redacted",
+        "route": "unknown"
+      },
+      {
+        "ts": "2026-09-28 09:34:01",
+        "reason": "TLS handshake",
+        "target_group": "other_redacted",
+        "route": "unknown"
+      },
+      {
+        "ts": "2026-09-28 09:35:26",
+        "reason": "TLS handshake",
+        "target_group": "other_redacted",
+        "route": "unknown"
+      },
+      {
+        "ts": "2026-09-28 09:56:54",
+        "reason": "TLS handshake",
+        "target_group": "other_redacted",
+        "route": "unknown"
+      },
+      {
+        "ts": "2026-09-28 09:56:56",
+        "reason": "TLS handshake",
+        "target_group": "other_redacted",
+        "route": "unknown"
+      },
+      {
+        "ts": "2026-09-28 09:56:57",
+        "reason": "TLS handshake",
+        "target_group": "other_redacted",
+        "route": "unknown"
+      },
+      {
+        "ts": "2026-09-28 09:56:58",
+        "reason": "TLS handshake",
+        "target_group": "other_redacted",
+        "route": "unknown"
+      },
+      {
+        "ts": "2026-09-28 09:57:13",
+        "reason": "TLS handshake",
+        "target_group": "other_redacted",
+        "route": "unknown"
+      },
+      {
+        "ts": "2026-09-28 09:57:13",
+        "reason": "TLS handshake",
+        "target_group": "other_redacted",
+        "route": "unknown"
+      },
+      {
+        "ts": "2026-09-28 09:57:14",
+        "reason": "TLS handshake",
+        "target_group": "other_redacted",
+        "route": "unknown"
+      },
+      {
+        "ts": "2026-09-28 09:57:15",
+        "reason": "TLS handshake",
+        "target_group": "other_redacted",
+        "route": "unknown"
+      },
+      {
+        "ts": "2026-09-28 09:57:16",
+        "reason": "TLS handshake",
+        "target_group": "other_redacted",
+        "route": "unknown"
+      },
+      {
+        "ts": "2026-09-28 09:57:16",
+        "reason": "TLS handshake",
+        "target_group": "other_redacted",
+        "route": "unknown"
+      },
+      {
+        "ts": "2026-09-28 10:08:34",
+        "reason": "TLS handshake",
+        "target_group": "other_redacted",
+        "route": "unknown"
+      },
+      {
+        "ts": "2026-09-28 10:08:35",
+        "reason": "TLS handshake",
+        "target_group": "other_redacted",
+        "route": "unknown"
+      },
+      {
+        "ts": "2026-09-28 10:08:37",
+        "reason": "TLS handshake",
+        "target_group": "other_redacted",
+        "route": "unknown"
+      },
+      {
+        "ts": "2026-09-28 10:08:37",
+        "reason": "TLS handshake",
+        "target_group": "other_redacted",
+        "route": "unknown"
+      },
+      {
+        "ts": "2026-09-28 10:08:53",
+        "reason": "TLS handshake",
+        "target_group": "other_redacted",
+        "route": "unknown"
+      },
+      {
+        "ts": "2026-09-28 10:08:53",
+        "reason": "TLS handshake",
+        "target_group": "other_redacted",
+        "route": "unknown"
+      },
+      {
+        "ts": "2026-09-28 10:08:54",
+        "reason": "TLS handshake",
+        "target_group": "other_redacted",
+        "route": "unknown"
+      },
+      {
+        "ts": "2026-09-28 10:08:55",
+        "reason": "TLS handshake",
+        "target_group": "other_redacted",
+        "route": "unknown"
+      },
+      {
+        "ts": "2026-09-28 10:08:55",
+        "reason": "TLS handshake",
+        "target_group": "other_redacted",
+        "route": "unknown"
+      },
+      {
+        "ts": "2026-09-28 10:08:56",
+        "reason": "TLS handshake",
+        "target_group": "other_redacted",
+        "route": "unknown"
+      },
+      {
+        "ts": "2026-09-28 10:10:40",
+        "reason": "TLS handshake",
+        "target_group": "other_redacted",
+        "route": "unknown"
+      },
+      {
+        "ts": "2026-09-28 10:13:37",
+        "reason": "TLS handshake",
+        "target_group": "other_redacted",
+        "route": "unknown"
+      },
+      {
+        "ts": "2026-09-28 10:27:26",
+        "reason": "TLS handshake",
+        "target_group": "other_redacted",
+        "route": "unknown"
+      },
+      {
+        "ts": "2026-09-28 10:27:27",
+        "reason": "TLS handshake",
+        "target_group": "other_redacted",
+        "route": "unknown"
+      },
+      {
+        "ts": "2026-09-28 10:37:27",
+        "reason": "TLS handshake",
+        "target_group": "other_redacted",
+        "route": "unknown"
+      },
+      {
+        "ts": "2026-09-28 10:37:35",
+        "reason": "TLS handshake",
+        "target_group": "other_redacted",
+        "route": "unknown"
+      },
+      {
+        "ts": "2026-09-28 10:43:57",
+        "reason": "TLS handshake",
+        "target_group": "other_redacted",
+        "route": "unknown"
+      },
+      {
+        "ts": "2026-09-28 10:43:57",
+        "reason": "TLS handshake",
+        "target_group": "other_redacted",
+        "route": "unknown"
+      }
+    ]
+  }
+}

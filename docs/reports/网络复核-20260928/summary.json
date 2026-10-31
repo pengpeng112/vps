@@ -1,0 +1,384 @@
+{
+  "since_v3": {
+    "http_gstatic": {
+      "n": 204,
+      "timeouts": 0,
+      "failures": [],
+      "max": 3.553478,
+      "p95_nearest_rank": 1.330973,
+      "selections": {
+        "VPS-TX-SG-02": 203,
+        "VPS-SG-01": 1
+      }
+    },
+    "http_proxy": {
+      "n": 204,
+      "timeouts": 0,
+      "failures": [],
+      "max": 3.448681,
+      "p95_nearest_rank": 1.363202,
+      "selections": {
+        "VPS-TX-SG-02": 203,
+        "VPS-SG-01": 1
+      }
+    },
+    "icmp_cn": {
+      "n": 204,
+      "sent": 4080,
+      "recv": 4079,
+      "loss_pct": 0.02
+    },
+    "icmp_tx": {
+      "n": 204,
+      "sent": 4080,
+      "recv": 4068,
+      "loss_pct": 0.29
+    },
+    "icmp_vps": {
+      "n": 204,
+      "sent": 4080,
+      "recv": 3591,
+      "loss_pct": 11.99
+    }
+  },
+  "evening": {
+    "http_gstatic": {
+      "n": 36,
+      "timeouts": 0,
+      "failures": [],
+      "max": 3.553478,
+      "p95_nearest_rank": 1.533919,
+      "selections": {
+        "VPS-TX-SG-02": 36
+      }
+    },
+    "http_proxy": {
+      "n": 36,
+      "timeouts": 0,
+      "failures": [],
+      "max": 3.448681,
+      "p95_nearest_rank": 2.515269,
+      "selections": {
+        "VPS-TX-SG-02": 36
+      }
+    },
+    "icmp_cn": {
+      "n": 36,
+      "sent": 720,
+      "recv": 720,
+      "loss_pct": 0.0
+    },
+    "icmp_tx": {
+      "n": 36,
+      "sent": 720,
+      "recv": 712,
+      "loss_pct": 1.11
+    },
+    "icmp_vps": {
+      "n": 36,
+      "sent": 720,
+      "recv": 555,
+      "loss_pct": 22.92
+    }
+  },
+  "after_rewire": {
+    "http_gstatic": {
+      "n": 24,
+      "timeouts": 0,
+      "failures": [],
+      "max": 0.988186,
+      "p95_nearest_rank": 0.986023,
+      "selections": {
+        "VPS-TX-SG-02": 23,
+        "VPS-SG-01": 1
+      }
+    },
+    "http_proxy": {
+      "n": 24,
+      "timeouts": 0,
+      "failures": [],
+      "max": 1.774909,
+      "p95_nearest_rank": 0.994257,
+      "selections": {
+        "VPS-TX-SG-02": 23,
+        "VPS-SG-01": 1
+      }
+    },
+    "icmp_cn": {
+      "n": 24,
+      "sent": 480,
+      "recv": 480,
+      "loss_pct": 0.0
+    },
+    "icmp_tx": {
+      "n": 24,
+      "sent": 480,
+      "recv": 480,
+      "loss_pct": 0.0
+    },
+    "icmp_vps": {
+      "n": 24,
+      "sent": 480,
+      "recv": 406,
+      "loss_pct": 15.42
+    }
+  },
+  "last_hour": {
+    "http_gstatic": {
+      "n": 13,
+      "timeouts": 0,
+      "failures": [],
+      "max": 0.986023,
+      "p95_nearest_rank": 0.986023,
+      "selections": {
+        "VPS-TX-SG-02": 13
+      }
+    },
+    "http_proxy": {
+      "n": 13,
+      "timeouts": 0,
+      "failures": [],
+      "max": 1.774909,
+      "p95_nearest_rank": 1.774909,
+      "selections": {
+        "VPS-TX-SG-02": 13
+      }
+    },
+    "icmp_cn": {
+      "n": 13,
+      "sent": 260,
+      "recv": 260,
+      "loss_pct": 0.0
+    },
+    "icmp_tx": {
+      "n": 13,
+      "sent": 260,
+      "recv": 260,
+      "loss_pct": 0.0
+    },
+    "icmp_vps": {
+      "n": 13,
+      "sent": 260,
+      "recv": 212,
+      "loss_pct": 18.46
+    }
+  },
+  "web": {
+    "since_17": {
+      "baidu": {
+        "rows": 17,
+        "requests": 51,
+        "no_http_000": 22,
+        "codes": {
+          "200": 29,
+          "000": 22
+        }
+      },
+      "bbc_news": {
+        "rows": 17,
+        "requests": 51,
+        "no_http_000": 0,
+        "codes": {
+          "200": 51
+        }
+      },
+      "facebook": {
+        "rows": 17,
+        "requests": 51,
+        "no_http_000": 0,
+        "codes": {
+          "200": 51
+        }
+      },
+      "github": {
+        "rows": 17,
+        "requests": 51,
+        "no_http_000": 1,
+        "codes": {
+          "200": 50,
+          "000": 1
+        }
+      },
+      "google_search": {
+        "rows": 17,
+        "requests": 51,
+        "no_http_000": 0,
+        "codes": {
+          "204": 51
+        }
+      },
+      "gstatic": {
+        "rows": 17,
+        "requests": 51,
+        "no_http_000": 0,
+        "codes": {
+          "204": 51
+        }
+      },
+      "instagram": {
+        "rows": 17,
+        "requests": 51,
+        "no_http_000": 0,
+        "codes": {
+          "200": 51
+        }
+      },
+      "reddit": {
+        "rows": 17,
+        "requests": 51,
+        "no_http_000": 0,
+        "codes": {
+          "200": 51
+        }
+      },
+      "reuters": {
+        "rows": 17,
+        "requests": 51,
+        "no_http_000": 0,
+        "codes": {
+          "200": 51
+        }
+      },
+      "twitch": {
+        "rows": 17,
+        "requests": 51,
+        "no_http_000": 0,
+        "codes": {
+          "200": 51
+        }
+      },
+      "twitter_x": {
+        "rows": 17,
+        "requests": 51,
+        "no_http_000": 0,
+        "codes": {
+          "200": 51
+        }
+      },
+      "wikipedia": {
+        "rows": 17,
+        "requests": 51,
+        "no_http_000": 1,
+        "codes": {
+          "403": 50,
+          "000": 1
+        }
+      },
+      "youtube": {
+        "rows": 17,
+        "requests": 51,
+        "no_http_000": 1,
+        "codes": {
+          "204": 50,
+          "000": 1
+        }
+      }
+    },
+    "after_rewire": {
+      "baidu": {
+        "rows": 2,
+        "requests": 6,
+        "no_http_000": 0,
+        "codes": {
+          "200": 6
+        }
+      },
+      "bbc_news": {
+        "rows": 2,
+        "requests": 6,
+        "no_http_000": 0,
+        "codes": {
+          "200": 6
+        }
+      },
+      "facebook": {
+        "rows": 2,
+        "requests": 6,
+        "no_http_000": 0,
+        "codes": {
+          "200": 6
+        }
+      },
+      "github": {
+        "rows": 2,
+        "requests": 6,
+        "no_http_000": 0,
+        "codes": {
+          "200": 6
+        }
+      },
+      "google_search": {
+        "rows": 2,
+        "requests": 6,
+        "no_http_000": 0,
+        "codes": {
+          "204": 6
+        }
+      },
+      "gstatic": {
+        "rows": 2,
+        "requests": 6,
+        "no_http_000": 0,
+        "codes": {
+          "204": 6
+        }
+      },
+      "instagram": {
+        "rows": 2,
+        "requests": 6,
+        "no_http_000": 0,
+        "codes": {
+          "200": 6
+        }
+      },
+      "reddit": {
+        "rows": 2,
+        "requests": 6,
+        "no_http_000": 0,
+        "codes": {
+          "200": 6
+        }
+      },
+      "reuters": {
+        "rows": 2,
+        "requests": 6,
+        "no_http_000": 0,
+        "codes": {
+          "200": 6
+        }
+      },
+      "twitch": {
+        "rows": 2,
+        "requests": 6,
+        "no_http_000": 0,
+        "codes": {
+          "200": 6
+        }
+      },
+      "twitter_x": {
+        "rows": 2,
+        "requests": 6,
+        "no_http_000": 0,
+        "codes": {
+          "200": 6
+        }
+      },
+      "wikipedia": {
+        "rows": 2,
+        "requests": 6,
+        "no_http_000": 0,
+        "codes": {
+          "403": 6
+        }
+      },
+      "youtube": {
+        "rows": 2,
+        "requests": 6,
+        "no_http_000": 0,
+        "codes": {
+          "204": 6
+        }
+      }
+    }
+  }
+}

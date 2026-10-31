@@ -1,0 +1,53 @@
+{
+  "www.gstatic.com": [
+    {
+      "exit": 28,
+      "metrics": "code=000 total=4.005738 remote=",
+      "error": "curl: (28) Connection timed out after 4005 milliseconds\n"
+    },
+    {
+      "exit": 28,
+      "metrics": "code=000 total=4.012114 remote=",
+      "error": "curl: (28) Connection timed out after 4012 milliseconds\n"
+    },
+    {
+      "exit": 28,
+      "metrics": "code=000 total=4.006653 remote=",
+      "error": "curl: (28) Connection timed out after 4006 milliseconds\n"
+    }
+  ],
+  "www.google.com": [
+    {
+      "exit": 0,
+      "metrics": "code=204 total=0.817661 remote=198.18.0.33",
+      "error": ""
+    },
+    {
+      "exit": 0,
+      "metrics": "code=204 total=0.600741 remote=198.18.0.33",
+      "error": ""
+    },
+    {
+      "exit": 0,
+      "metrics": "code=204 total=1.491688 remote=198.18.0.33",
+      "error": ""
+    }
+  ],
+  "www.baidu.com": [
+    {
+      "exit": 28,
+      "metrics": "code=000 total=4.005573 remote=",
+      "error": "curl: (28) Connection timed out after 4005 milliseconds\n"
+    },
+    {
+      "exit": 28,
+      "metrics": "code=000 total=4.010826 remote=",
+      "error": "curl: (28) Connection timed out after 4010 milliseconds\n"
+    },
+    {
+      "exit": 0,
+      "metrics": "code=200 total=0.129495 remote=198.18.0.8",
+      "error": ""
+    }
+  ]
+}

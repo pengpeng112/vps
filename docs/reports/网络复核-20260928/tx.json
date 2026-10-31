@@ -1,0 +1,9 @@
+{
+  "start": "2026-09-28T10:48:35.423687+08:00",
+  "basic": "2026-09-28T10:48:36+08:00\n 10:48:36 up 3 days,  3:33,  1 user,  load average: 0.08, 0.12, 0.09\n0.08 0.12 0.09 1/208 1048997\nMemTotal:        2009588 kB\nMemAvailable:    1460588 kB\n/dev/vda3        49G  5.9G   41G  13% /\n",
+  "tcp": "Tcp: RtoAlgorithm RtoMin RtoMax MaxConn ActiveOpens PassiveOpens AttemptFails EstabResets CurrEstab InSegs OutSegs RetransSegs InErrs OutRsts InCsumErrors\nTcp: 1 200 120000 -1 293013 82175 889 5734 34 4999937 6446588 45527 1184 261552 0\nUdp: InDatagrams NoPorts InErrors OutDatagrams RcvbufErrors SndbufErrors InCsumErrors IgnoredMulti MemErrors\n",
+  "services": "active\nActiveEnterTimestamp=Fri 2026-09-25 07:22:16 CST\nNRestarts=0\nTotal: 250\nTCP:   49 (estab 34, closed 10, orphaned 0, timewait 10)\n\nTransport Total     IP        IPv6\nRAW\t  1         0         1        \nUDP\t  6         5         1        \nTCP\t  39        22        17       \nINET\t  46        27        19       \nFRAG\t  0         0         0        \n\nState  Recv-Q Send-Q Local Address:Port Peer Address:Port\nLISTEN 0      4096   127.0.0.53%lo:53        0.0.0.0:*   \nLISTEN 0      4096      127.0.0.54:53        0.0.0.0:*   \nLISTEN 0      4096         0.0.0.0:22        0.0.0.0:*   \nLISTEN 0      4096               *:443             *:*   \nLISTEN 0      4096            [::]:22           [::]:*   \n",
+  "errors": "timeout_lines= error_lines=68\n",
+  "http": "code=204 tcp=0.003903 tls=0.016265 total=0.018236\ncurl_exit=0\ncode=204 tcp=0.003590 tls=0.016460 total=0.018813\ncurl_exit=0\ncode=200 tcp=0.003875 tls=0.057710 total=0.111369\ncurl_exit=0\n",
+  "end": "2026-09-28T10:48:39.614815+08:00"
+}
