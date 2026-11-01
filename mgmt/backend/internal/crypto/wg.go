@@ -87,7 +87,7 @@ func MaskMid(s string, keepHead, keepTail int) string {
 	return s[:keepHead] + "..." + s[len(s)-keepTail:]
 }
 
-// MaskNodeParam 按 §9 掩码规则：uuid/pbk 前后 4 位，sid 前后 2 位。
+// MaskNodeParam 按 §9 掩码规则：uuid/pbk 前后 4 位，sid/password 前后 2 位。
 // 同时接受字段名（uuid/pbk/sid）与 YAML 键名（public-key/short-id）。
 func MaskNodeParam(name, value string) string {
 	switch strings.ToLower(name) {
@@ -95,6 +95,8 @@ func MaskNodeParam(name, value string) string {
 		return MaskMid(value, 2, 2)
 	case "uuid", "pbk", "public-key":
 		return MaskMid(value, 4, 4)
+	case "password", "hysteria2-password":
+		return MaskMid(value, 2, 2)
 	default:
 		return value
 	}

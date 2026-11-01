@@ -1,4 +1,9 @@
 #!/bin/sh
+# ⚠️ DEPRECATED（2026-10-10）：v3 舰队（R2-R6/雅典娜）勿再运行本脚本！
+#   会以单端点 DO 默认值（VPS=159.223.36.119）重新生成 tunnel.conf，覆盖 v3 四端点配置，
+#   且其 conf 键名（VPS_SSH_PORT 等）与 v3 init 读取的键名（VPS_PORT 等）不兼容，
+#   运行后隧道降级为单端点、管理冗余全失。现役升级/新设备接入一律走
+#   docs/operations/设备接入与隧道升级标准流程-v3-20261002.md（v3 init + md5 闸门）。
 # 公司网/拦截 UDP 51820 的现场：用 SSH TCP 把管理心跳绕过去（家宽发货设备走 WG，不跑这个）。
 # 2026-09-24 阶段1重构：生成 /etc/routermgmt/tunnel.conf（init 按白名单解析，
 # 管理 -L 与排障 -R 拆双实例）；pin-hostkey 先核对指纹再用 dbclient 自写格式固化。

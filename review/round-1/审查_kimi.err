@@ -1,0 +1,136 @@
+• User wants a read-only review of F:/vps/review/round-1/方案.md against the requirement, cross-checking flash-snr.py, flash-batch.py, docs/operations/. Let me read these files. This is a substantial review task — I could delegate, but I need to form my own independent conclusion. Let me read the files myself in parallel.
+
+• Now read the two scripts and the SOP. flash-snr.py is likely large. Let me check sizes and read them. This is a big review task — I could delegate to subagents, but the user asks for "我的独立结论". I should read key files myself. Let me read flash-snr.py and flash-batch.py and the automated SOP. These may be long; delegate some reading? Better: read them directly but check size first.  651 scripts/flash-snr.py
+  188 scripts/flash-batch.py
+  256 docs/operations/新SN-R1刷机录入SOP-自动化-20260928.md
+   48 docs/operations/新SN-R1刷机录入SOP-20260928.md
+ 1143 total
+Now I need to form an independent review of the 方案 against the user requirement and the actual script/SOP state. Let me also check a few things: does mgmt_api_test.ensure_tunnel exist and is DMIT default? The 方案 claims "已修". I can quickly grep mgmt_api_test.py for BASE default. Also check whether flash-snr.py's 发布步骤 binds nodes 5,3,2,4 — 方案 §五 says "切 LAX/回东京出口双验" — script does _switch_verify(5,...) LAX and (4,...) 回东京， fine.
+
+  Now let me identify issues:
+
+  **Coverage of user requirement:**
+  1. "对刷机流程碰到的问题和难点进行梳理" — 方案 §二 does this. ✅
+  2. "对刷机脚本进行标准化的" — §三. ✅
+  3. "接下来我会再刷四台设备，如何固定快速刷机完成且不要有遗漏" — §四、五. Mostly covered, but some gaps (see below).
+  4. "根据各个ai给出的意见对刷机脚本进行修订完善" — §六 says三方审查→修订. The 方案 §3.2 proposes R1-R4 revisions. ✅ structure-wise.
+
+  **Problems I found (independent):**
+
+  1. **方案 §四.1 与 §2.2 拓扑描述 vs SOP 的物理前提**：SOP v2 §一方式A说"设备 WAN 口插 R7 或雅典娜的 LAN 口"，方案 §四.1 说"WAN 口插 R7 的 LAN 口（或雅典娜 LAN），通电。零其他操作"。但 flash-batch 扫描网段是 192.168.132 与 192.168.2 —— R7/雅典娜 LAN 分配的 DHCP 网段是否落在这两个网段？SOP 方式A说"由上级 DHCP 自动分配（192.168.132.x / 192.168.2.x）"，一致。但注意：方式 A 需要上级路由的 LAN 网段恰好是这两个之一。如果四台设备 WAN 都插同一台 R7，DHCP 各给 192.168.132.x 的不同 IP，扫描可发现。OK，但方案未说明 PC 自身必须有到管理台（DMIT 8444）的通道 —— 刷机脚本步骤 4 需要 M.BASE 可达。SOP 手工版前置条件 3 提到"PC 无线保底外网"。方案 §四 声称"零其他操作"，但 cron 无人值守模式依赖 PC 开机且管理台通道（管理台通道-DMIT.bat 8444）已建立。方案完全没提这个前置，§3.2 也没检查。实际 mgmt_api_test.ensure_tunnel 可能自建隧道。需要查 mgmt_api_test.py。
+
+  2. **断点续跑 R1 的实现风险**：方案 §3.2-R1 说"脚本各步骤写标志文件，重跑自动跳过"。但脚本步骤 0 telnet 登录：一旦步骤 1 改密完成，telnet 已在步骤 2 被禁用（sed done 注释 telnet + killall telnetd），重跑会死在 `Tel()` connect。SOP §五明确"禁止盲目重跑全量（telnet 已关、口令已改，全量必挂）"。R1 的思路（步骤级断点跳过）与 SOP 的手工检查点续跑方法论冲突吗？其实 R1 是把它脚本化，方向对，但风险大：断点状态判定不可靠（SOP 检查点法依赖人工判读；脚本自动跳过若误判——例如标志文件写了但步骤实际半途——会产出"半成品且终验 FAIL"，好在有 11 关兜底）。另外标志文件写在哪？设备 /tmp 是 tmpfs，重启即丢——若中断原因是断电/重启，标志全丢，自动跳过反而失效，还是得走手工法。方案未提这个矛盾。另外 telnet 被禁用后重跑，脚本应从步骤 1 之后开始并用 SSH——方案没说明入口如何绕过 telnet 阶段。这是可行性问题。
+
+  3. **方案 §2.1-#1 声称"已修：目标改 DMIT+写前身份预检"** —— 需核实 mgmt_api_test.py 的默认 BASE。让我 grep。
+
+  4. **端口池问题**：flash-batch next_ports 起点 13230；方案 §四.2 说端口 13230-13233 预分配。但 flash-snr.py 的 alloc_rssh 起点是 13223（max(mx+1, 13223)）。batch 预分配后把 --rssh 传给 flash-snr，而 flash-snr 中 `RSSH = int(args.rssh) if str(args.rssh).isdigit() else alloc_rssh(...)`，batch 传具体端口所以不走 alloc。OK。但注意：雅典娜是 13228（rtr-5e1a8d）。next_ports 从 DMIT authorized_keys 取最大 132xx +1，若最大是 13228，则 base=max(13229, 13230)=13230。方案说编号 R8-R11、端口 13230-13233。当前平台最大 SN-R 是 R7（13229?）。SOP 提到 R1=13222, R5=13225, R6=13226，雅典娜 13228。R7 应是 13229。那么 13230-13233 合理。✅ 一致性 OK。但若 R7 的端口不是 13229 而是别的呢——无法确认，不展开。
+
+  5. **方案 §2.2 时长估计**："单台全流程 4-5 分钟...并行后≈6-8 分钟"，§四.3 说"≈8-10 分钟（含巡检间隔）"。内部不一致（6-8 vs 8-10），小事。另外步骤 7 推 57MB mihomo，四台并行各从 PC 经 SSH 推到设备——PC 上行带宽到四台 LAN 设备没问题（本地）。wait_final 轮询 10s 改 6s 的 R2 收益微小。R2 "mihomo 推送与 agent 栈部署顺序对调（先推大文件再装小件，减少失败重推成本）" —— 理由牵强：若 mihomo 推送失败先推大文件反而先花 57MB 的成本。顺序对调的实际收益可疑；而且步骤 4-6 必须先于发布（步骤 8），mihomo 在步骤 7 已经在 agent（步骤5）之后。对调成"先推大文件"意味着在 telnet 改密之后立刻推 mihomo？也行，但"减少失败重推成本"逻辑反了：先推大文件，如果后面小件失败，重跑时（无断点恢复）大文件要重推；现在大文件在后面，前面失败不浪费大推送。R2 的理由值得质疑。
+
+  6. **安全问题：方案本身无凭证泄露** —— 方案没有泄露密码。✅。但 flash-snr.py 第 21 行硬编码 UNIFIED_PW = "[REDACTED]" 明文。这是现状，非方案问题；但方案 §3.2 修订未提"凭证从脚本剥离"——AGENTS.md 要求"报告、工具输出、提交中不显示密码"。方案作为审查文档确实没写密码，好。但"标准化"没覆盖凭证管理（硬编码统一口令在脚本里，git 仓库内）。这是个值得提的安全观察。
+
+  7. **方案 §五验收与脚本终验的一致性**：脚本 11 关中 "PCDN 六面净" —— 方案 §五说"PCDN 六面净（进程/端口/S 自启/钩子/弹药/分区无执行文件）"，但脚本终验只有第 9 关 "PCDN 残留=0"（ps 进程数）。端口/S 自启/钩子/弹药/分区无执行文件 **不在脚本终验里**！SOP 增补（二）也说验收口径包括 netstat 无 51002/9821/9800/60022、rc.d 无 S 链接。所以方案 §五 的验收标准超出脚本实际能力——四台刷完脚本 PASS 不等于六面净。方案没有把这个差距列为待修项（R1-R4 里没有）。这是覆盖缺口：方案自己的验收标准无法在"零人工"流程下达成。这是一个重要发现。
+
+  8. **方案 §四.2 "台账自动登记"** —— flash-snr.py 确实 append 凭证总览（步骤 9 末）。✅。但 R4 "批量汇总落盘"当前只打屏——flash-batch 确实只 print。R4 合理。
+
+  9. **WiFi 默认关 vs "不要有遗漏"**：脚本步骤 9 改 dat 文件 SSID/密码。注意 SOP 红线："WiFi 域名/密码若用户自设勿擅自改回标准名"——那是已上线设备，新刷不涉及。OK。
+
+  10. **方案 §2.1-#7 声称 REJECT-SELFHEAL "R1-R4+R7 落地并经真实重载验证"** —— SOP 增补（四）说"⚠️ R2-R6 同病，修复待授权逐台做"。矛盾！方案声称 R1-R4 已落地，SOP（2026-10-13/14 增补）说 R2-R6 待授权。方案此说与 SOP 冲突，可能夸大现状。除非 10-14 之后做过。方案日期 2026-10-14。SOP 增补（五）也是 10-14，没提 R2-R6 已修 QUIC。所以方案 #7 的"R1-R4+R7 落地"与 SOP 矛盾 —— 需要标注为存疑/与权威文档冲突。
+
+  11. **方案遗漏的现网依赖/红线**：AGENTS.md 提到"无人值守站点慎配 0 点重启（R4 曾断 33.5h）"（SOP 运维红线）。脚本步骤 8 对所有新设备一律写 reboot_cron 0 0 * * *。四台新设备的部署场景（是否无人值守站点）未知——方案 §四 没提醒用户确认部署场景。SOP 异构设备红线也说"家庭/医院依赖设备不加每日 0 点重启"。SN-R 系是默认加，但若这四台要去无人值守点，方案未提。中等风险提醒。
+
+  12. **方案 §六流程与用户需求第 4 条**：用户说"最后根据各个ai给出的意见对刷机脚本进行修订完善"。方案 §六正是三方审查→修订。覆盖。但方案 §3.2 说"其余以三方审查意见为准"——合理。
+
+  13. **cron 无人值守的细节**：方案 §2.2 说"cron 每 10 分钟巡检+进程锁"。flash-batch --auto 无设备静默退出。但有个真问题：四台设备如果分批插电（不是同时），--auto 每 10 分钟扫一次，发现 1 台就刷 1 台（found[:max]），没问题。但如果设备刷完后仍插着，telnet 已禁用+口令已改，fingerprint 会判"非出厂口令"跳过——幂等防重刷。✅。但注意：fingerprint 里型号准入在 telnet 登录成功后才跑；如果一台现役 SN-R 设备不知为何 telnet 开着且口令还是 abc@1234？不可能，改密了。OK。
+
+  14. **flash-batch 的 lock 清理 bug**：main() 里 finally 块：`if not found or args.detect: os.remove(LOCK)`。若 found 非空且非 detect，锁保持，刷完后 try: os.remove(LOCK)。但若 next_ports/next_nums sys.exit(6)，锁残留——90 分钟兜底，可接受，方案没提但 SOP 也没提。小问题：方案 §四.4 说"进程锁防重叠"✅。
+
+  15. **方案 §四.1 "零其他操作" vs PC 侧前提**：见第 1 点。另外管理台通道：flash-snr.py 步骤 4 调 M.ensure_tunnel()。让我检查 mgmt_api_test.py 确认它是否能自建隧道、BASE 默认。
+
+  16. **方案 §3.2-R2 发布轮询 10s→6s**：wait_final timeout=240，发布任务串行。改 6s 收益 ~秒级，而方案自称"总目标单台≤4 分钟"——但 §2.2 说现状 4-5 分钟，其中 57MB 推送+发布等待占大头；轮询间隔改动几乎无贡献，目标缺乏依据。小加戏/无依据承诺。
+
+  17. **四台并行的资源冲突**：四线程并行 flash-snr.py，每台步骤 4 都调 M.ensure_tunnel()——如果 ensure_tunnel 会检查/建立本地隧道，四个进程并发调用是否互踩（端口 8444 已被占用判断）？这是潜在并发坑，方案未提。需看 mgmt_api_test.py。还有 alloc_rssh：batch 已预分配端口传给子进程，但子进程步骤 6 公钥分发都向 DMIT authorized_keys append——并发 append 用 `grep -q || >>` 非原子，四个子进程同时 append 不同 snR{N} 行，理论上 >> 追加是 O_APPEND，不太会丢，但 grep-then-append 竞态只影响重复不丢行。低风险。TB 分发 tb_sh 也在 DMIT 上并发执行，写 /tmp/snr-ak-tb-{N} 带后缀，已修。OK。
+
+  还有 push() 用同一个 M.token()？token 是每进程自己取的，OK。
+
+  真正需要核实的：mgmt_api_test.py 的 ensure_tunnel 与 BASE。让我 grep。
+
+  Also check: 方案 §2.1-#5 说"公钥分发 $K 字面量/临时文件互踩 ✅ 已修：双引号+带 N 后缀" —— 脚本里 tb_sh 中 `K=/root/.ssh/id_ed25519_txbackup; O="-i $K ..."` 在 Python 字符串里用双引号，OK。
+
+  18. **方案 §五 "MAC 固定"**：脚本 uci 固定但"重启生效，刷机现场不做即时网络重启"——终验 11 关里**没有**验证 MAC 固定生效（uci 读回？步骤 5 里有 echo MAC_PINNED 但没作为关卡）。四台刷完后若不重启，MAC 固定未实际生效；方案 §五把"MAC 固定"列为验收项但脚本只写 uci 未重启验证。方案 §四 流程里没有"重启验证"步骤！SOP 增补（四）方法论强调"静态清理后必须做真实重启验证"（R7 四次重启迭代出 QUIC 竞态和挂载九命猫两个只在重启后暴露的根因）。方案 §四"通电→自动刷完→台账登记"没有安排重启验证，而 SOP 自己的方法论要求重启验证。这是方案与 SOP 方法论的重大偏离——"不要有遗漏"恰恰可能漏掉重启后才暴露的问题（WiFi 开机策略、MAC 生效、PCDN 复活、QUIC 竞态）。方案 §五验收全是刷机现场态，无重启后态。重要发现。
+
+  19. **编号 R8-R11**：AGENTS.md 说 R5/R6 已接入但现场离线。当前最大序号是 R7（2026-10-13 刷）。所以 R8-R11 合理，与 next_nums 动态计算一致。✅ 但方案写死了"编号 R8-R11"，而 next_nums 是动态的——若期间有别的录入会变。小事。
+
+  20. **方案 §3.1 "SOP v2（文档权威）：新SN-R1刷机录入SOP-自动化-20260928.md 末章"** ✅ 与 SOP "统一 SN 刷机流程 v2" 一致。
+
+  21. **遗漏：设备到货状态差异**。四台新设备是否同固件版本？R7 是"新机无 /etc/routermgmt/logs/syslog"等差异。方案默认四台与 R7 同批次。提醒项。
+
+  22. **方案 §2.1 表格"现状"列**：多条"已修"我抽查：#2 type=int ✅（脚本 140 行）；#4 md5 ✅（push）；#6 PCDN 四层 ✅ 脚本步骤 2 有；但注意 SOP 增补（五）说 rathole/zcon 二进制已删是 R7 实机做的，脚本里只 killall 进程+禁服务+删 init.d 本体，**没有删 /usr/bin/rathole、zcon 二进制，也没删厂商云端点 cgi-exec/upload/download/backup**（增补五说 R7 上已删——是手工还是脚本？脚本步骤 2 没有这些 rm）。SOP 增补（三）"遗留未决"明确说"rathole 二进制未删…文件保留备查"——但增补（五）说 R7 实机"rathole/zcon 二进制已删、厂商云端点已删"。这两个增补之间有演进：R7 实机后来删了，但**脚本没有同步**。所以四台新设备刷完后 rathole 二进制和厂商云 cgi 端点仍在——方案 §五验收"PCDN 六面净"没把二进制/云端点纳入，方案 §3.2 也没把"R7 手工追加的删除项回灌脚本"列为修订项。这是一个真遗漏：R7 终态比脚本新，方案未覆盖"把 R7 实机终态回灌脚本"。
+
+  Let me verify: 脚本步骤 2 的 rm 列表：`/usr/bin/install_mbox.sh install_pdnterminal.sh mbox_init.sh mboxinit.sh`、`/etc/init.d/netbox_daemon.service zcon-edge-service zcon-ng mbox`、`/mnt/mmcblk0p6/...`、`/etc/m-box /usr/m-box`。确实没有 rathole/zcon 二进制删除、没有 /www/cgi-bin 清理。SOP 增补（五）说 R7 实机这些"已删"——所以是 R7 上手工做的，脚本未回灌。✅ 发现成立。
+
+  23. **checkMem**：增补五说 R7 "checkMem 已清"，脚本也没有。同类。
+
+  现在检查 mgmt_api_test.py 来验证 #3（#1 声称已修）和 #17 并发问题。
+
+• Key finding: `mgmt_api_test.py` line 13-17 — comment says "2026-10-02 管理面迁 DMIT：默认仍指 DO 18444". BASE default is `https://127.0.0.1:18444`. The 方案 §2.1-#1 claims "✅ 已修：目标改 DMIT+写前身份预检". But the default BASE is still 18444. The ensure_tunnel at line 42-58: builds tunnel "本地 18444 -> VPS 10.10.0.1:8443" — wait, to root@179.255.137.64 (DMIT)? Line 54: `-L 127.0.0.1:18444:127.0.0.1:8443 root@179.255.137.64`. So ensure_tunnel now builds a tunnel to DMIT on local 18444. But line 13 comment says "默认仍指 DO 18444（雅典娜/R4 历史通道）" — meaning if the user already has an old tunnel on 18444 pointing to DO, ensure_tunnel's health check would succeed against DO (health endpoint responds on both), and it would NOT rebuild the tunnel. Let me read ensure_tunnel fully to see.
+
+  Also flash-snr.py's write-gate checks /devices/rtr-5e1a8d — DMIT-only device — that does protect. But the 方案's claim "目标改 DMIT" is only partially true: the ensure_tunnel fallback now points to DMIT (need to verify line 45-58), but a pre-existing stale tunnel on 18444 to DO would pass health check and be reused — then the identity pre-check in flash-snr would catch it (rtr-5e1a8d returns 404 on DO). So the gate works but flow would abort rather than auto-correct. SOP 增补三 #4 said "改为失败重试一次（脚本内嵌 MGMT_API_BASE=8444 纠正）" — but flash-snr.py I read has NO retry and no MGMT_API_BASE correction; it just sys.exit(3) on pre-check failure. Let me check: flash-snr.py lines 243-246 — pre-check fails → exit 3, no retry, no 8444 fallback. So SOP 增补（三）#4 claims a fix ("失败重试一次（脚本内嵌 MGMT_API_BASE=8444 纠正）") that is NOT in the script. Discrepancy between SOP and script! Unless it was later removed. The current script has no retry. So the SOP statement is stale/false, and the 方案 §2.1-#1's "已修" is also overstated regarding auto-correction.
+
+  Let me read ensure_tunnel lines 42-62 fully to be precise.Now I have what I need. Key findings on mgmt_api_test:
+
+  - ensure_tunnel: if health on BASE (default 18444) responds, it returns immediately — a stale 18444 tunnel pointing to DO would be reused silently. The V2 fix only changed the fallback target (when building a NEW tunnel) to DMIT. So "目标改 DMIT" is half-true. flash-snr's write-gate (rtr-5e1a8d) catches the stale-DO case and aborts with zero writes — good — but then the run dies at step 4, requiring manual fix (kill stale tunnel). SOP 增补（三）#4 claims "改为失败重试一次（脚本内嵌 MGMT_API_BASE=8444 纠正）" — but flash-snr.py has NO such retry (lines 243-246 exit immediately). So SOP overstates; the 方案 §2.1-#1 inherits the overstatement. Also the stale-tunnel hazard is EXACTLY the R7 case; on the flash PC, the user's own 管理台通道-DMIT.bat uses 8444, while old 雅典娜/R4 channels may hold 18444. Real risk remains for the upcoming 4-device run: if any stale 18444 tunnel exists, batch run aborts at step 4 for every device — "无人值守" breaks. 方案 does not list a pre-flight check (netstat 18444 ownership) in §四. That's a concrete gap for "不要有遗漏".
+
+  - Concurrency: four parallel flash-snr processes each call ensure_tunnel. If tunnel absent, all four Popen ssh -f -L 18444 — first wins, others fail with ExitOnForwardFailure (exit silently in background), then health check succeeds anyway via the winner's tunnel. Mostly benign. token(): TOKEN_FILE shared — four processes may concurrently write .mgmt-token; json.dump non-atomic could produce a truncated file read by another process → token() falls back to re-login (json.load raises → except → re-login). Benign-ish. Not worth heavy flagging, but worth a line.
+
+  Also note: health endpoint responding ≠ correct backend; the write-gate covers writes. But steps that READ (wait_final GET /api/v1/tasks, assignments POST) all go through the same gate-guarded flow after step 4, fine.
+
+  Now another check: 方案 §2.1-#7 "REJECT-SELFHEAL 自压（R1-R4+R7 落地并经真实重载验证）" vs SOP 增补（四） "⚠️ R2-R6 同病…修复待授权逐台做". Conflict. SOP 增补（四） dated 2026-10-13; 方案 dated 2026-10-14. Unless something happened on 10-14 (增补五 mentions "R7 实机重启 18 项验证" but not R2-R6 QUIC fixes), 方案's claim contradicts the authoritative SOP. Flag as 存疑/冲突.
+
+  Also 方案 §3.2 R2 "mihomo 推送与 agent 栈部署顺序对调（先推大文件再装小件，减少失败重推成本）" — the rationale is backwards as I analyzed. Also reordering steps has risk: mihomo step 7 currently depends on /etc/mihomo created in step 5 (mkdir -p /etc/mihomo in step 5's run block) — actually step 7 pushes to /etc/mihomo/GeoSite.dat; the mkdir is in step 5's script. If mihomo push moved before agent stack, must move mkdir too. Minor implementation coupling the 方案 doesn't mention.
+
+  Also R2 轮询 10s→6s: trivial gain; the wait is dominated by actual task time. And "总目标单台≤4 分钟" unsupported.
+
+  方案 §四 gaps:
+  - No pre-flight checklist: PC 侧（18444/8444 隧道归属、台账可读、DMIT 可达、固件文件存在）、设备侧（同批次固件/型号 MT7981 指纹已内置✅）。
+  - No restart-verification step (SOP 增补四方法论 requires real reboot validation; several R7 root causes only manifested after reboot). 方案 §五 acceptance is all pre-reboot state. For "不要有遗漏" this is the biggest hole: WiFi 开机策略、MAC 固定生效、PCDN 复活、QUIC 竞态、cron 厂商重写 — all only verifiable after reboot. 方案 should include "刷完后至少一次重启+终验复跑（或 R7 式 18 项）"。
+  - 验收 §五 "PCDN 六面净（进程/端口/S 自启/钩子/弹药/分区无执行文件）" exceeds script's gate 9 (process count only). Gap between 方案's own acceptance criteria and script capability; 方案 §3.2 doesn't propose adding port/S-link/hook/ammo/partition checks to 终验.
+  - R7 实机增补删除项（rathole/zcon 二进制、厂商云 cgi 端点 cgi-exec/upload/download/backup、checkMem）未回灌脚本 —— 方案 §3.2 未列。SOP 增补（五） documents these as R7 final state; new four devices won't get them. Real omission.
+  - 每日 0 点重启 caution for 无人值守站点 (SOP red line; R4 33.5h 事故). 方案 §四 doesn't ask user to confirm deployment scenario. Medium.
+  - 方案 §四.2 says "编号 R8-R11、端口 13230-13233" hardcoded; script computes dynamically — fine but the 方案 presents them as fixed; if anything changed, actual may differ. Minor.
+
+  Also: 方案 §二 2.1 table's 现状 column generally accurate per my spot checks (#2, #4, #5 verified in code). #1 partially overstated (stale tunnel reuse path remains; abort not auto-correct; SOP-claimed retry absent). #3 verified: flash-batch has 型号准入+精确 MAC. ✅. #8 honest (notes no auto-resume). 
+
+  方案 §3.2-R1 断点自恢复 risks:
+  - /tmp on OpenWrt is tmpfs — flag files lost on reboot/power-cycle, exactly the interruption scenarios; resume would then mis-detect. Must use /etc/routermgmt/state/ or similar persistent path. 方案 says /tmp/flash-N.stepK — flawed as written.
+  - Step 0/1 re-entry: after step 1-2, telnet disabled and password changed; re-run dies at Tel() connect or login. Auto-skip must also switch entry transport to SSH. 方案 doesn't address. SOP §五 checkpoint method is the fallback; R1 should be designed as "skip + SSH entry" not just flag files.
+  - Risk of false-positive flags producing half-configured devices that pass? No — 11-gate final verification catches; acceptable backstop. But batch --auto unattended + auto-resume could mask repeated partial failures. Moderate.
+
+  Also flash-batch: `found = found[:args.max]` — if user plugs 4 devices plus an old factory-state device, max=4 arbitrary selection (sorted by IP). Fine.
+
+  One more: 方案 §四.2 "四线程并行" — flash-batch default --max 4 ✅.
+
+  Coverage assessment of user requirement: 需求4条全部有对应章节，无大遗漏；偏离点 = §五 验收超出脚本能力未给出落地路径（可视为加戏/空头支票），§2.2 时长数据与 §四.3 不一致。私加戏：R2 顺序对调属于非必要改动且理由存疑（不过用户要求"根据各 ai 意见修订"，若某 ai 提过则不算私加，但方案未注明来源）。
+
+  Security observations:
+  - UNIFIED_PW hardcoded plaintext in flash-snr.py:21 (and in SOP doc). AGENTS.md says reports/输出不显示密码；the 方案 itself doesn't leak it ✅. But "标准化"未涵盖凭证管理（硬编码+git 仓库）。Worth one bullet.
+  - tb_sh embeds pubkey lines in ssh command — fine.
+  - flash-snr writes .snr{N}-pw without chmod 600 (line 164) — pkg json gets 0600 but pw file doesn't. Minor inconsistency.
+  - requests verify=False — existing pattern.
+  - 方案 §四 cron 无人值守：auto mode flashes any factory-state MT7981 device that appears on the two subnets with zero human confirmation — 防误刷 relies on MAC sets; if a friend's/factory-fresh different-ownership device is plugged in it gets flashed. That's intended. But combined with stale-tunnel abort: cron would retry every 10 min, each attempt dying at step 4 after password changed... wait — second attempt: telnet disabled? No — step 4 abort happens AFTER step 2 (telnet killed in step 2? telnetd is in the disable list step 2, and killall telnetd at line 204). So a failed run leaves device with changed password + telnet dead; next cron scan: telnet closed → sweep (port 23) won't even find it → device invisible, silently dropped from batch, "无人值守" permanently stuck with a half-flashed device that no longer shows up in scans. That's a REAL operational hole for the 4-device plan: any failure after step 2 makes the device undiscoverable by flash-batch (which discovers via telnet:23 + factory password). 方案 §四.4 "失败台按检查点续跑修复" requires MANUAL ssh — so "零其他操作" claim breaks on any mid-run failure. This is worth flagging prominently: discovery mechanism only sees virgin devices; failed devices vanish from the pipeline. Mitigation: batch should also track in-progress devices (e.g., ledger of found IPs) or 方案 should state failure handling is manual with precise commands.
+
+  Enough findings. Also verify 方案 §2.2 "发布任务串行等待...各台独立任务互不阻塞" — consistent with per-device tasks. OK.
+
+  Check 方案 §五 "平台心跳秒级" — heartbeat interval? agent heartbeat maybe 30s/60s; "秒级" plausible. Skip.
+
+  One more consistency: 方案 §3.1 says flash-snr "11 步" and SOP v2 §二 also 11 步 ✅. 方案 §2.1-#6 says PCDN "唯一不可根除=固件驱动级..." consistent with SOP 增补五 ✅.
+
+  方案 §四.1 "WAN 口插 R7 的 LAN 口（或雅典娜 LAN）" — SOP 方式A says "R7 或雅典娜的 LAN 口" ✅ consistent. But AGENTS.md says R5/R6 现场离线; irrelevant.
+
+  Also note SOP §一前置条件 3 "PC 无线保底外网（管理台隧道走公网）" — 方案 §四 "零其他操作" omits PC-side prerequisites: PC must have internet (for DMIT tunnel), 台账 file present, firmware files present, and no stale 18444 tunnel. Pre-flight checklist missing. Good.
+
+  Now also the 方案 §六 process mentions "三方自由审查本方案与两个脚本现状 → 分歧表/对辩 → 按共识意见修订脚本 → 回归 → 收口报告" — matches user requirement item 4 ✅.
+
+  Structure my answer: ①覆盖度与忠实度结论；②发现的问题逐条（编号、引用方案节号、理由、风险、依据）。Keep it organized, cite script lines and SOP sections. Chinese. Reasonably thorough but not bloated.
+
+To resume this session: kimi -r session_8f55c853-c3fb-404e-a2e6-ed84d55544ab

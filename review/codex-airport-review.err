@@ -1,0 +1,549 @@
+Reading additional input from stdin...
+OpenAI Codex v0.165.0
+--------
+workdir: F:\vps
+model: gpt-6.1-sol
+provider: openai
+approval: never
+sandbox: read-only
+reasoning effort: xhigh
+reasoning summaries: none
+session id: 01a18fed-491d-7771-987a-9288153173b2
+--------
+user
+你是 mihomo 配置评审专家。中文回答，简明扼要，按重要性排序。
+
+背景：已在一台 OpenWrt 路由器（mihomo v1.19.31 arm64，内存 1GB）试点接入机场订阅兜底，实测通过（38节点加载、url-test 自动选中日本线路 56ms、主链 155ms 不受影响、健康检查瞬间 CPU 冲 138% 后回落）。现在要把同样配置铺到其余 5 台同型号设备。请评审以下实际部署的配置，找出铺开前应该修复或改进的问题：
+
+```yaml
+proxy-providers:
+  airport-sub:
+    type: http
+    url: "https://sub.subpremium.cc/api/v1/client/subscribe?token=***"
+    path: ./proxy_providers/airport-g01.yaml
+    interval: 21600
+    proxy: NODE-PICK
+    health-check:
+      enable: true
+      url: https://www.gstatic.com/generate_204
+      interval: 300
+      timeout: 5000
+      lazy: false
+      expected-status: 204
+    exclude-filter: '(剩余流量|套餐到期|官网|公告|重置时间)'
+    override:
+      additional-prefix: "AP | "
+
+  - name: "AIRPORT"
+    type: url-test
+    use:
+      - airport-sub
+    url: https://www.gstatic.com/generate_204
+    interval: 300
+    timeout: 5000
+    expected-status: 204
+    tolerance: 100
+    lazy: false
+# AUTO(fallback) 成员改为: [NODE-PICK, AIRPORT, DIRECT]
+# US-MEDIA(fallback) 成员改为: [NODE-PICK, AIRPORT]
+```
+
+实测已知情况：
+- 订阅含一个名为 '⚠️节点超时就更新订阅！' 的信息节点未被 exclude-filter 排除（我的过滤词没覆盖它）
+- 健康检查周期 CPU 瞬时 138%（5台同型号设备，都是 AX3000 1GB 内存）
+- 全部 6 台设备共用同一订阅（机场限 10 台在线设备的说法未验证，这家未标注）
+- mihomo 配置由平台服务端渲染下发，设备端这份是手工试点（下次平台发布会覆盖，之后会做模板化）
+
+问题：
+1. 铺开前必须修的（阻断性）问题有哪些？
+2. 建议改进项（非阻断）有哪些？exclude-filter 怎么补？CPU 峰值要不要处理（比如 health-check interval 放宽）？
+3. 10 台设备限制风险怎么缓解（错开各设备的 interval？）
+4. 有没有我没想到的坑？
+
+结论给出'可以铺开'或'先修 X 再铺开'。
+2026-10-31T03:07:40.047569Z ERROR codex_models_manager::manager: failed to refresh available models: request timed out
+codex
+我先核对仓库里的当前约束，以及 mihomo 官方文档和 v1.19.31 源码，重点确认配置层级、健康检查是否重复、订阅更新的依赖链。
+web search: 
+exec
+"C:\\Users\\Administrator\\AppData\\Local\\Microsoft\\WindowsApps\\pwsh.exe" -Command "Get-Content -LiteralPath 'docs/current/当前状态.md' -TotalCount 180" in F:\vps
+exec
+"C:\\Users\\Administrator\\AppData\\Local\\Microsoft\\WindowsApps\\pwsh.exe" -Command "Get-Content -LiteralPath 'docs/plans/远程不断线修复执行记录-20261029.md' -TotalCount 150" in F:\vps
+exec
+"C:\\Users\\Administrator\\AppData\\Local\\Microsoft\\WindowsApps\\pwsh.exe" -Command 'Get-Content -LiteralPath README.md -TotalCount 200' in F:\vps
+ succeeded in 623ms:
+# VPS 与路由器项目
+
+唯一工作目录：`F:\vps`。入口核对于 **2026-10-12**。移动记录见 [2026-10-01 清单](docs/archive/20261001-manifest.md) 和 [2026-10-12 清单](docs/archive/20261012-manifest.md)。
+
+## 新会话从这里开始
+
+1. [AGENTS.md](AGENTS.md)：态势速览、工作边界、高危坑。
+2. [当前状态](docs/current/当前状态.md)：已知事实、来源日期、冲突与未验证项（顶部最新）。
+3. [跨 AI 协作入口](docs/AI协作入口.md)：启动提示词、事实优先级和交接格式。
+4. 设备接入/隧道升级看 [v3 标准流程](docs/operations/设备接入与隧道升级标准流程-v3-20261002.md)；进行中任务见 [资料索引 §二](docs/INDEX.md)。
+5. 通过 [资料索引](docs/INDEX.md) 按需阅读，不要一次加载所有历史会话和凭证。
+
+## 目录分工
+
+| 位置 | 用途 |
+|---|---|
+| `docs/current/` | 唯一现状摘要；运行结论附日期和证据 |
+| `docs/plans/` | 活跃/近期任务计划与执行记录（证据链） |
+| `docs/operations/` | 接入标准、运维、刷机、通道手册 |
+| `docs/reference/` | 原始需求、阶段计划、历史会话分析指南 |
+| `docs/reports/` | 验收、变更记录、诊断证据（按日期） |
+| `docs/archive/` | 历史归档；整理清单在 `20261001-manifest.md`、`20261012-manifest.md` |
+| `docs/会话导出/` | 历史对话，不视为已脱敏或当前事实 |
+| `docs/wg-peers/`、`docs/设备引导包-雅典娜.json` | WireGuard 与注册包，含密钥，不要写进索引正文 |
+| `verify/` | 2026-10-10 核查原文；[说明](verify/README.md) |
+| `logs/`、`webprobe/` | 巡检生成物；[日志说明](logs/README.md) |
+| `mgmt/` | 管理系统源码；[开发入口](mgmt/README.md)。不要遍历 `frontend/node_modules` |
+| `scripts/` | 现役运维脚本（[分类表](scripts/README.md)）+ `archive/` 历史脚本 |
+| `firmware/`、`京东云AX6600雅典娜/` | 固件与工具；[固件索引](firmware/README.md) |
+| `backups/` | 备份、凭据与现场证据（gitignore）；[备份索引](backups/README.md) |
+| `VPS远程工具包/` | 本机进 DMIT 的入口：`管理台通道-DMIT.bat`（8444） |
+| `.v2c/`、`.video_agent/` | 工具生成的定位文件，保留原位 |
+
+凭证台账仍在根目录，且有脚本运行时依赖；只在具体任务需要时读取相关段落，不复制到报告或外发附件。R2/R3/R4 管理主台是 DMIT，本机入口为 `VPS远程工具包\管理台通道-DMIT.bat`（8444）；访问与恢复细节见 [当前状态](docs/current/当前状态.md)及 [v3 标准流程](docs/operations/设备接入与隧道升级标准流程-v3-20261002.md)。
+
+当前出口涉及 BWG 东京、DMIT 美西、TX、DO 四节点；DO 仍承载部分历史依赖。设备与管理面完成范围见 [当前状态](docs/current/当前状态.md)，操作前核实现状。
+
+ succeeded in 684ms:
+# 当前状态与证据入口
+
+## 2026-10-31：PCDN 深层清理收尾（R5/R6）+ 全舰队复核（本轮实测）
+
+- **全舰队 PCDN 八项终验全零**（进程/安装器/init.d/软链/checkMem/rc.local钩子/数据盘/厂商cgi/异常端口）。R1-R4 为 10-14 清理的只读复核（保持干净，零改动）；**R5/R6（10-14 时离线未清）本轮补清**：R5 删 2 安装器+1 悬空软链；R6 删 2 安装器+init.d/start_jcgqos+5 自启软链（**拆掉每日 0 点重启会拉起厂商程序的 S99 定时钩**）。全程零服务动作零重启，健康三项（health=200/心跳新鲜/隧道数不变）前后一致，快照双端 md5 一致拉回 `backups/pcdn-clean-R5/R6-20261031/`。名单外 /usr/m-box、/home/.mqtt、/home/.token 按惯例登记不删。
+- GIA 加装 vnstat（月流量配额 820GB 视线）；BWG/DMIT 解封复测=仍封（TCP 全死，BWG UDP 54ms 持续可用）；三 VPS 体检全绿。
+- 遗留待办移交：R7-R11 回线后同款清理；机场第4层/微信告警URL/备用域名 等用户侧三项。
+
+## 2026-10-30 深夜：P0 加固三件套（本轮实测）
+
+- **CF2 第二节点上线**（id=11，162.159.135.42 边缘，同源站同 UUID）铺满 6 台（failover=3 链尾第二 CF）。**双封演练 3 号：30 秒内自动切 CF、流量 273ms 实测通**（对比上次同场景 3.5 分钟不接管；接管时延受联通→CF 波动影响，CF2 使探测命中率翻倍）。
+- **告警管道建成待激活**：平台侧 `ALERT_WEBHOOK_URL`（deploy/.env，含 device_offline/traffic_threshold/exit_ip_changed 等 10 类异步投递+重试）；GIA 侧 gfw-watch v3（被墙哨兵，今天 13:10 曾实测抓到疑似被墙事件）+ alert-push.sh 推送器（URL 在 GIA /etc/alerts/webhook.url）。**两处都等用户提供企业微信机器人 Webhook URL 后一句话激活**。
+- 待办移交：备用域名购买（用户自购，¥2/个×2，注册后接 CF 挂 A 记录即可当切换弹药）。
+
+## 2026-10-30 晚：CF 铺全舰队 + 双封演练 + 方案 A/D 落地（本轮实测）
+
+- **CF 节点已铺满 6 台在线设备**（R1 v18/R2 v23/R3 v22/R4 v22/R5 v12/R6 v14，全部任务 ok+验收：CF 在 NODE-PICK 链尾、US-MEDIA 非空、零 CRLF、流量 146-165ms）。R6 首次发布被回滚——**根因=self-heal v4 的 pidof 误判在应用中途重启 agent**；已定 **self-heal v3.1**（ps+/proc 双检+事务保护+心跳新鲜度，md5 329c6081）全舰队替换+仓库同步，R6 重试成功。
+- **双封演练（GIA+BWG 同封）诚实结论：CF 未自动接管**——NODE-PICK 全员不健康时停留在死首成员（mihomo fallback 行为，与评审预言一致），流量中断至解封。CF 兜底现实定位=**应急手动切换可用**（PROXY 选择器直切 CF），自动接管不可依赖。改进项：加第二 CF 节点（不同边缘 IP）提高探测成功率（待授权）。
+- **方案 A 完成**：BWG 部署 CF 备源站（s-box-ws :2053 同 UUID/path，TLS=404/WS=101 验证，cf2053-guard 限源+回环放行，双源站同款）；切换程序见预案文档（改 A 记录即切，设备零改动）。
+- **方案 D 否决**：GZ→BWG:22 实测不通（GFW 对 BWG 为 IP 级 TCP 封锁）→ 管理中继备份需走 F（新购中转）或 E（广州 API 副本，推荐）。
+- SOP 已归档：[CF节点设备接入标准流程](../operations/CF节点设备接入标准流程-20261030.md)。
+
+## 2026-10-30 下午—晚间：CF 转正、故障修复与评审后五项整改（本轮实测）
+
+- **修复三起叠加故障**：①R4 mihomo 12:49—15:06 崩溃循环（12:49 一次设备端手工写入把 DMIT-HY2 写成顶格缩进，非平台渲染器问题；已修复+实证 desired=accepted=21 无重推风险）；②GIA s-relay 仍指 DMIT 旧 IP（改 69.63.219.156）；③DMIT 12:19 重启后 wg0(10.10.0.1) 丢失致 web 容器起不来（重建 wg0 + wg-placeholder.service 持久化 + 正规 compose up）。心跳 15:21 恢复。R1/R2/R3/R5/R6 巡检全健康。
+- **CF 中转全链路上线**：域名 k3x9m2.top/源站 s-box-ws(GIA:2053，独立进程)/A记录橙云/SSL Full 全通；GIA 2053 已限源 CF IP 段（cf2053-guard.service 持久化，直连封死实测）。
+- **平台改造部署**：template.go/nodes.go/configs.go 加 vless-ws 协议（WS+TLS+指纹+Host 头），激活此前未部署的 US-MEDIA 显式成员模板修复，LF 归一防 CRLF，测试全过后重建 DMIT api 容器（healthy，mac_addr/traffic_alert_hourly_mb 列已迁移）。
+- **CF 节点转正**：平台节点 id=10 CF-CDN-GIA-01（104.18.32.7:2053 优选），R4 v22 发布验证（渲染合规/链尾/心跳正常）；US-MEDIA=[NODE-PICK] 恢复，R4 真实路由 YouTube 154ms。
+- **受控封禁演练通过**：R4 iptables 封 GIA → ≤30-60s 自动切 BWG-HY2（**重大修正：BWG 仅 TCP 443 被封，UDP 34567 实测可用**，演练期真实流量 103-143ms 不断）→ 解除后自动回切 GIA 162ms，无残留。
+- 多方评审（Codex+Grok，Kimi 缺席）推翻若干过度断言（CF=异入口非异出口、管理面依赖 GIA 中继等），产物 review/round-cf-1030/。
+- 遗留：CF 节点仅绑 R4（其他设备待授权批量绑定+发布）；BWG 状态需在架构文档改"TCP 封/UDP 可用"；中长期预案见 [第二源站与管理中继去GIA化预案](../plans/第二源站与管理中继去GIA化预案-20261030.md)。
+
+## 2026-10-30 09:30—09:32 R1 操作追溯（只读）
+
+- R1 经广州 13222 实际登录成功，心跳更新，gstatic 204/YouTube 首页 200；最近约 09:17 启动过，启动原因未核实。本轮无重启或修改。
+- 昨晚本助手改动的 discovery/watchdog/handler 和原 cron 散列一致；代理配置相对修后只变更 GIA IP 及对应直连规则。不能仅由当前正常排除先前中断或后续影响。
+- 平台 R1 remote_ssh_alive=false 的检查时间仍是 10-02，属于过期状态，不可据此断言当前远程不可用。详见 [追溯报告](../reports/R1操作追溯与当前实测-20261030.md)。
+
+## 2026-10-30 09:05—09:07 Hysteria2 方案只读核查
+
+- R4 已可经广州实际登录，身份 rtr-cd473f；广州 relay 与 R4 的 VPS5_HOST 已指向新 GIA `154.36.139.155`，此变更非本轮执行。广州 8443 已实际回环监听。
+- R4 → 新 GIA:443 TCP/TLS 成功、HTTP 400；→ BWG:443 限时连接未建立、HTTP 000。不能由单端口测试证明全 TCP 封锁或 UDP 可用。
+- R4 当前代理 gstatic 204，YouTube 首页 000；US-MEDIA 仍只有 COMPATIBLE，媒体分流问题待修。增加 HY2 不能替代该项修复。
+- 本轮没有安装 HY2、发布配置或改服务器规则。建议 BWG 先做隔离 HY2/UDP 试点，保留唯一可用 GIA 和国内管理路径。细节见 [方案评估](../reports/Hysteria2增量方案评估-20261030.md)。下文是此前时点。
+
+## 2026-10-29 晚：保留远程通道的在线修复（本轮实测）
+
+- **22:34 二次复核**：R1/R3/R5 主备实际登录、gstatic 204/YouTube 首页 200、GIA 出口、修后文件 SHA-256 和看门狗定时采样正常。API 二进制仍为旧模板，重发覆盖风险未解除。R2/R4/R6 心跳仍停在今天约 13:27，R4 实际 v17/目标 v19；不是全舰队已恢复。详见执行记录末尾。
+- **22:46 访问入口**：新增 `VPS远程工具包/管理台通道-广州.bat`，浏览器使用 `https://127.0.0.1:8445`，原 DMIT 8444 保留；新入口 health/UI 均实测 200，账号/TOTP/数据库不变。R2/R4/R6 经广州/GIA 仍未能实际登录。广州是入口，平台后端仍在 DMIT。
+- **23:15 升级关联核查**：R2/R4/R6 都有匹配设备身份的 GIA SSH 会话，仍无对应反向口；R2 会话为 09:53 起旧会话，R4/R6 约三分钟重连。三台最后心跳紧邻 agent_update=2026102905；服务器保留的 2905/2906 包均缺少 agent 多端口选路补丁，2906 只修 init respawn，不能直接作为完整修复包推送。午夜重启不保证恢复。证据与限制见执行记录最新段。
+
+- 广州为 R1/R3/R5 的管理主端点，GIA 保留第二反向 SSH。三台本轮均已核验身份并实际登录；R1 此前握手失败、22:13 已恢复，本轮没有为恢复它而杀会话或重启设备，恢复原因未查明。
+- 三台在线修复 US-MEDIA 空组直连、AUTO/NODE-PICK 探测地址不一致，以及全断时发现脚本跳过看门狗的问题；看门狗增加锁、60 秒采样、600 秒冷却，仅操作 mgmt 系列心跳实例，不操作 rssh/rssh2、WAN 或 sshd。R5 去掉重复看门狗 cron。
+- 广州公网 8443 已用单端口规则收口；现有中继不重启，下一次自然启动改绑回环。新增反向 SSH 横幅观测 timer，只告警，不回收连接。没有启用整套 UFW。
+- 本地模板/部署源和设备 handler 文件已更新；**运行中后端二进制及已加载的 agent handler 未重启激活**。三台现网媒体修复属于本地热修复，配置版本号不变；在后端模板正式发版前，平台重新下发配置可能覆盖该修复，须先核对。
+- 本轮只覆盖三台可实登设备，不能推定 R2/R4/R6 或其他离线设备已修复。没有迁库、轮换设备身份、下发全舰队任务或做断网演练。
+- 证据、备份 SHA-256、验证和待办见 [执行记录](../plans/远程不断线修复执行记录-20261029.md)。下文 10 月早期条目保留历史时点。
+
+## 2026-10-12 目录索引重整（只动本地文件，未连现网）
+
+- 地图改写为 `docs/INDEX.md`。`AGENTS.md` 顶部态势改为 10-12：R5/R6 已接入但现场离线，雅典娜管理面在 DMIT `13228`，R1 已回。
+- 两处移动见 [20261012 清单](../archive/20261012-manifest.md)：雅典娜引导包回到 `docs/设备引导包-雅典娜.json`（让原有 gitignore 生效）；无引用的 `scripts/qf_app.html` 进 `scripts/archive/`。`docs/wg-peers/` 补进根 `.gitignore`，文件未搬。
+- 新增 `verify/README.md`、`logs/README.md`。脚本、手册、备份三份 README 补了 10-10 之后的文件名。没有改路由器、VPS 或管理库。
+
+## 2026-10-12 10:21 SN-R1 回归补齐（脚本三件 + 有线 MAC 固定，未整机重启）
+
+- **对象**：临朐网警 SN-R1（`rtr-d3847d`，DMIT 13222）。今晨约 09:46 计划下线后重新上电。
+- **已写入并 md5 对齐仓库**：`mgmt-port-discovery.sh`=`aea30ce6`（`curl -fsk`）、`onboot-hooks.sh`=`e8b85c92`（开机把 QUIC REJECT 置顶）、`connlog.sh`=`86d97188`。当时 FORWARD 第一条已是 REJECT，DROP 在其后。回退文件在 R1 `/root/*.bak-20261012-101806`。
+- **有线 MAC 已生效**：WAN `76:a7:c8:e0:4f:21`、br-lan `76:a7:c8:e0:4f:31`（uci 与 `/sys/class/net` 一致）。DHCP 由 `192.168.1.88` 换成 `192.168.1.73`。备份 `/root/network.bak-macpin-20261012-101806`。WiFi `WIFI-ZHISHANG` 未动。
+- **ifup wan 后**：旧 13222 会话半开占口，已踢掉该 sshd 子进程；约 20 秒后新会话横幅正常。10:21:27 心跳恢复，出口仍东京 `74.82.203.175`，本地 18443/18444/18445 在听。管理台 `remote_ssh_alive` 仍为旧失败值，因为探针名单里没有 13222。
+
+## 2026-10-10（晚）一次性完善执行轮 T0-T11 全部完成（零路由器重启，详见执行记录）
+
+- **背景**：早间 multi-verify 修复轮已完成大部分现网项；本轮按《一次性完善执行计划-20261010》逐项实测复核+补齐。三处与计划 §0 的偏差（BWG 已加固/R3 18446 已 200/R4 discovery 已补）均与修复轮记录吻合。
+- **本轮实做**：① T9d Login.vue 构建+部署（loading 守卫+TOTP autocomplete；web 容器重建后双 8443 映射保住、心跳 9-11 秒恢复、新 bundle 含 one-time-code）；② BWG fail2ban ignoreip 清理（去失效 R3 旧 WAN、补 DMIT）；③ r4-watch 修 bug（`tr -d ' '` 删掉时间戳内部空格致 hb_fresh 恒 0——10-04 起 RETURNED 从未记录过；已修并见 10-10 03:35 RETURNED 日志）+ ping 目标改 R4 现 WAN 27.205.184.56（**R4 WAN 又从 120.221.100.7 漂移，10-08/09 起**）；④ 仓库 discovery/watchdog 加 -f + 旧 setup 脚本防呆注头（repo md5=现网三台 aea30ce6）。
+- **T4 破案**：DMIT authorized_keys "无注释 rsa key"=**本机 id_rsa_dmit**（10-01 与 pc-dmit-lax 同批的 RSA 伴生密钥，PC 经雅典娜→代理出口连 DMIT 的主体），30 天 869 次在用，未动。
+- **交付待用户**：导入 `F:\vps\backups\mgmt-cert-20261010.crt`（步骤见执行记录 T2 段）→ 8444 绿锁 → 验证登录保存密码气泡/TOTP 自动填充/回车单请求；P6 command= 方案已成文（执行记录附录 A）待另批窗口；R5/R6 现场电源仍待处置。
+- 次日晨检清单在执行记录末尾（MAC/18446/discovery/备份/BWG lastb/用户侧六项）。
+
+## 2026-10-10（五）multi-verify round-1 全舰核查+修复轮（详见 verify/round-1/核查报告.md）
+
+- **核查**：四方 AI（GLM/Kimi/Grok/Codex）核查系统/路由器/备份/代理安全+登录 bug。备份链健康（三处 md5 双验证+rotation 14 天）；无被破解迹象；初判"R4 半开僵尸"被裁决推翻（18444/18445=000 为温备静息设计）。
+- **已修复**：① 管理台证书重签（SAN 加 127.0.0.1+localhost）——浏览器密码保存阻断解除（待用户导入 `VPS远程工具包\DMIT管理台证书-20261010.crt`）；② BWG/TX sshd 加固（BWG 密码登录关闭）；③ R3 DO 兜底隧道自愈（18446=200）；④ R4 补 discovery v2（四端口+--fail）+cron；⑤ **R3/R4 WAN MAC 已固定**（R3=76:a7:c8:e0:4f:23/33、R4=4f:24/34，档案已更新，备份在各自 /root/network.bak-macpin-20261010-*）；⑥ discovery v2 三台统一（md5 aea30ce6）；⑦ standby 残留改名 .stale、r4-watch ping 目标更新。
+- **R3 恢复在线**（今晨重新上电，心跳 0min）；**R6 今晨 ~07:12 起失联**（13226 无监听+心跳停，疑似现场断电——与 R5 同模式，待现场）。
+- **挂起**：P5 DMIT 一把无注释 ssh-rsa root key 待用户认领；P6 路由器隧道密钥无 command= 限制（专项）；雅典娜排障口旧口令；医院 nft 未持久化；Login.vue 源码已改（TOTP autocomplete+回车防重）未部署。
+- **新现象记录**：排障口半开僵尸模式（ifup wan/重连后旧 -R 残留占口，手踢 50s 恢复或 ClientAlive 600s 自清）；md5 闸门实战拦截一次空文件（流式拉取必带 -y）。
+
+## 2026-10-09（二）R6 新上线即升级 DMIT（全绿，舰队 SN-R 系列接入完毕）
+
+- **SN-R6（rtr-673568）接入完成**：v1 老配置发现于 DO（13226）→ md5 闸门（d5daf251）v3 一次到位 → 13226 已在 DMIT、5 实例、心跳实时；绑 BWG+LAX 发布 v2（含 US-MEDIA）→ **主用东京出口双验**；ping_test 闭环 ok（国内 18ms）。探针：DMIT 盯五口 13223/24/25/26/27；DO 已去 13226。
+- **舰队 SN-R 系列全部就位**：R2/R3(待核)/R4/R5/R6 = DMIT 主台+东京交互+美西视频+三重兜底。R5/R6 为 10-09 新上线、一次升级到位（v3 标准流程两个成功样板）。
+- ⚠️ R3 心跳仍两边停（10-07 起）——SN-R 系列里唯一离线者，待现场核实。
+
+## 2026-10-09 R5 新上线即升级 DMIT 主台（v3 标准流程一次过）+ 雅典娜事件 + 医院库转发
+
+- **SN-R5（rtr-c46a25）新上线接入完成**：发现时走 v1 老配置（DO 主+10.10.0.1 目标+代理=DO 节点）。按 v3 标准流程一次到位：shell 经 DO 13225 → md5 闸门写入（v3 init+四端点 conf+四端口 discovery+agent 补丁+cron）→ **13225 已在 DMIT**、5 实例、心跳实时、agent "heartbeat ok"；绑 BWG+LAX 发布 v2（含 US-MEDIA 分流）→ **switch 主用东京出口 IP 双验 74.82.203.175**。探针：DMIT 盯 13223/13224/13225/13227 四口；DO 已去 13225。
+- **雅典娜事件（10-09 早）**：-L 转发绑口失败静默苟活（10-08 起），心跳实为停更（07:08 最后）——"看似在线"是时间巧合假象，与 R4 前案同型。用户断电重启后恢复（18222 重绑成功、心跳实时）。**排障口登录密码为旧口令 [REDACTED]（非舰队统一口令）**——已在执行记录标注。心跳仍在 DO 旧库（雅典娜管理面迁移=DO 退役前置，计划 D2）。
+- **医院 Oracle 转发（10.1.2.18 白名单线）**：雅典娜 nft 部署 DNAT（LAN 192.168.2.1:1521 → 10.10.10.15:1521）+ **SNAT 固定源 10.1.2.18**（白名单 IP）。用户客户端实测：TCP 握手通、TNS Connect 被服务端 RST——指向医院侧 sqlnet.ora INVITED_NODES 未放行该源。已建议医院侧核对/放行 10.1.2.18；**nft 规则未持久化**（重启丢失），验证通过后需写入 /etc/nftables.d/。
+- ⚠️ **R3 心跳两边都停（10-07 起）**——待核（下一动作：DO/DMIT 均无 R3 会话，需查 R3 现场）。
+
+## 2026-10-09 SN-R1 体检全过后计划性下线（告警属预期勿当故障）
+
+- R1（rtr-d3847d，13222）11 项体检全过（QUIC 顺序现场修正），用户决定下线。后续 offline/remote_ssh_down 告警=预期。再上线自愈（钩子恢复 cron+QUIC、隧道心跳自动回归）；配置全固化，回归流程见 SOP。
+
+## 2026-10-08 深夜 SN-R1 重新上线归队（v3 全套零现场操作）
+
+- 退役的 **SN-R1（rtr-d3847d，排障口 13222）已重新接入 DMIT 主台**：v3 三端点隧道（DMIT+TX+BWG，BWG 侧公钥补发）、心跳实时、绑定与配置对齐现役标准（BWG 主/LAX/TX-hy2/TX-vless，v8 已应用）、出口实测东京；root/网页口令归位统一值（网页 302 实测）、五行 crontab+防抹钩子、respawn 修复、平台预警 2048MB/h。R3/R4 客户网点侧仍离线（13227 未绑，疑似网点施工）。此前"DMIT 显示离线"原因=R1 从未迁移（v1 指向 DO 的 WG 旧路径已死）。教训与备份清单见凭证总览更新八；WiFi（WIFI-ZHISHANG）为用户域未动。
+
+## 2026-10-08 晚 R4 站点换线（新 WAN 120.221.100.7）复检全绿；R3 客户网点当前离线
+
+- **R4 站点已换宽带线路**：WAN 由 119.190.40.236（联通）变更为 **120.221.100.7**（DMIT sshd 日志 1696 次连接+实时会话实证，密钥指纹对上 R4 专属授权行）。换线后 00:00 定时重启正常，**上线流程全项复检通过**：隧道 v3 三端点、mihomo v8、网页登录三件套（UCI 密码=[REDACTED]/btoa 编码 2+1 行/firstLogin=0）、WiFi（U2.4/U5.8+save8888@）、crontab 五行（netprobe/connlog/spike-cap/每日重启）+rc.local 三钩子、出口=东京。设备档案已记录新 WAN。
+- **R3（客户网点）当前离线**：最后心跳 10-08 15:56 CST，13227 未绑定，WAN 182.46.13.66 无响应。若客户网点在施工/换线（与 R4 站点换线同期），属同类型站点操作；恢复后按 R4 流程复检即可。
+- 提醒：站点换线后如代理异常，优先核对 NODE-PICK 与各节点延迟（新线路到各节点质量需重新实测，netprobe 自动累积中）。
+
+## 2026-10-05 ⚠️ R4 定时重启后整机离线 8 小时（WAN 100% 不可达，需现场处置）；R3 重启验证通过
+
+- **R4（rtr-cd473f，坊子网警）**：最后心跳 10-04 23:59:51 CST（0 点重启前 9 秒）→ 00:00 定时重启 → **至今未回归**（发报告时 07:17）。证据：DMIT ping 其 WAN 119.190.40.236 **100% 丢**；13224 未绑定（无 -R）；metrics 零样本；平台 00:01:28 已告警 remote_ssh_down。**定性：设备/线路级离线（断电、光猫、或重启挂死），非重启机制问题**——R3 同刻重启 00:00:16 回归、crontab 四行全部存活（checkMem/netprobe/discovery/reboot），机制已实证。**注意**：若有人恰在重启中断电，存在闪存损坏风险（R2 前例），现场恢复后须按 R2 先例做文件完整性核查。
+- **现场处置单（给用户）**：①断电 10 秒再上电；②不回来查电源适配器/光猫/网线；③回来后立即告知，远程做完整体检（文件 md5/隧道/代理/探针）。
+- R4 离线前最后一天（10-04）流量健康：全天下行约 **3.8GB**，高峰=14 点 928MB、19-20 点 368+340MB、04 点 332MB（未解之谜尖峰，connlog 采样器 /tmp 基线随重启丢失，R4 回归后重新积累）；心跳/探针/告警全天干净。
+- R3 同刻重启验证通过（00:00:16 回归、钩子存活）——全舰队 0 点重启机制成立，R2 首验 + R3 二验。
+
+## 2026-10-04 傍晚 R2「B 站视频打不开」真凶定位：笔记本↔R2 的 WiFi 空口链路劣化
+
+- **根因（实锤）**：R2 ping 笔记本（192.168.132.197）：**平均延迟 1003ms/最高 1924ms/丢包 3%**（健康 WiFi 应为个位数 ms）。抓包（/root/bili-debug-20261004.pcap，7.5MB）佐证：**94 个连接重置全部由笔记本发起**（播放器等不到数据主动掐线重试）、服务端同包反复重传。视频大流在此链路吞吐崩到 KB 级→播放器放弃；小请求靠重传幸存→「页面正常视频不行」。手机流量能播（对照实验）排除账号/片源。**此前所有"线路正常"结论全部出自路由器自身测试，未含 WiFi 段——测量盲区教训。**
+- **过程中修复的两个真问题（保留）**：①FORWARD 链 QUIC 规则顺序在 0 点重启后颠倒（DROP 压住 REJECT，静默吞包致浏览器傻等）——已纠正并把 rc.local 钩子改为每次开机强制 REJECT 置顶；②B 站 PCDN 三重拦截已布（iptables 4483 TCP/UDP REJECT+持久化、dnsmasq 把 mcdn.bilivideo.com 解析 0.0.0.0）——4483 计数 0 说明本例非 PCDN，但拦截保留可防未来。代理/IPv6/线路均被证据排除（403 为 B 站对命令行请求的防盗链，红鲱鱼）。
+- **处置（待用户执行）**：①笔记本改连 5G（SN-R2-AX3000-5G）；②若仍在 2.4G：设备管理器→无线网卡→电源管理取消「允许计算机关闭此设备」+ 高级页「节能模式」=最高性能（平均延迟 1 秒是典型省电休眠指纹，min 4.6ms 说明清醒时链路本身好）；③无效再考虑换 2.4G 信道（现 Ch9）。R2 的 2.4G 现 Ch9/Noise 184，UAPSD 标志未单独设。
+- 通用教训：**「视频卡、网页行」先测 WiFi 空口段（路由器 ping 终端 50 包看延迟/丢包），再查分流**；R2 netprobe 只测外网不测空口，此盲区后续可加终端可达性探针。
+
+## 2026-10-04 下午 R2 B 站视频打不开——根因实锤并修复（QUIC 规则顺序），残留嫌疑待复测
+
+- **已实锤修复**：R2 FORWARD 链的两条 QUIC 处理规则今晨 0 点自动重启后被颠倒——mihomo 的 `DROP`（静默丢弃）排到了自加的 `REJECT`（立即拒绝）前面（计数器实证：DROP 吞 166 包、REJECT 0）。浏览器对 B 站视频先走 QUIC(UDP 443)，被静默丢弃后干等超时才回落 TCP＝「视频打不开」。已纠正顺序（REJECT 置顶）并把 rc.local 钩子改为**每次开机强制把 REJECT 重插到第一位**（不再依赖追加点法）。
+- **残留嫌疑（待用户复测）**：修后仍观察到两条按 IP 直连的 B 站视频 CDN TCP 流（27.222.10.102 山东联通边缘 / 125.39.94.122）卡死在 55-102KB（20 秒仅涨 1KB），已被浏览器放弃；同窗口对照：微信 CDN 2.7MB/s、华为云 3-8MB/s、代理 4MB/s 全正常——**唯 B 站 CDN 流死**，符合 B 站 PCDN/P2P 分发（把视频交给 NAT 后的第三方节点）特征。若复测仍打不开：方案=发布配置加 `DOMAIN-SUFFIX,mcdn.bilivideo.com,REJECT` 等规则禁用 P2P 分发（走平台发布流程）。R4 已装 connlog 按源采样器可留证；R2 未装。
+- 同窗口全舰队 QUIC/规则同构性提醒：R3/R4 亦有 mihomo-quic-drop 类规则，下次维护时核对三台顺序一致性。
+
+## 2026-10-03 深夜 流量分析+高流量预警上线（阶段一）+ 三台登录页浏览器保存密码修复
+
+- **「流量分析」页已上线**（管理台新菜单项）：每设备 24h/3天/7天/30天 小时级下行/上行柱状图（含峰值 Mbps、样本数）、时段累计汇总；数据源=metrics 表相邻样本差分（窗口 SQL，重启计数器回退不产生负值）。后端新增 `GET /api/v1/devices/:id/traffic/hourly`；迁移 0008 已应用（devices.traffic_alert_hourly_mb）。
+- **高流量预警升级为每设备**：新增 `traffic_alert_hourly_mb`（WAN 下行 MB/小时，0=关闭），心跳路径评估（每小时最多一条告警，kind=traffic_threshold），PATCH 即时生效。**R2/R3/R4 均已设 2048MB/小时**；阈值在「流量分析」页可改，告警在「告警」页看。限速走既有 vps_limit_kbps（set_ratelimit）。
+- **发布过程事故（已修复）**：重建 web 容器时暴露 DMIT 上 `10.10.0.1/32` 地址已丢失（此前为临时 ip addr add，未持久化）→ web 起不来 → 路由器心跳断约 6 分钟。已 `ip addr add 10.10.0.1/32 dev lo` 恢复 + 写入 /etc/rc.local 持久化 + web 强制重建（首轮失败时容器无网络挂载，需 --force-recreate）。**教训：临时 ip addr 必须当天持久化；compose up 失败后的容器要 --force-recreate。**
+- **三台登录页浏览器「保存密码」已修**：R2/R3 桌面版 10-01 已修；**R4 桌面版补齐 autocomplete（原为 off）并删除残留的 btoa 密码泄露行**（明文 grep 查不到的假阴性泄露，此前一直存在）；**三台移动版 login_m.htm 补齐 autocomplete + 密码框由 type="text" 改回 type="password"**。模板备份在各台 `*.bak-acfix`。手机/电脑浏览器登录时现在应弹出保存提示（TOTP 动态码不保存，用户已确认）。
+- 已知边界：每网站/每协议占比需 agent 采样 mihomo connections（阶段二，未做）；metrics 留存 09-18 起，分析页最长回看 30 天。
+- R2 今晚 00:00 首次自动重启验收项不变（uptime 归零/重启行存活/心跳恢复）。
+
+## 2026-10-03 晚 R2 每日 0 点自动重启上线 + 全舰队 SSH 统一 + 网页登录机制破案
+
+- **R2 定时重启已配置**：平台 `reboot_cron=0 0 * * *`（每天 0 点）+ rc.local 幂等钩子（每 boot 重加重启行，防厂商 crontab 重写抹掉；已做删行→钩子恢复模拟验证）。**当晚 00:00 首次自动重启**，次日验三件事：uptime 归零、重启行仍在、心跳 2 分钟内恢复。平台已知怪癖：**首次 `set_reboot_schedule` 连带下发的 apply_policy 快照 cron 为空**（agent 日志 cron=''，无实害），重发一次即正确；且 apply_policy 会重启 agent 服务、心跳断约 5 分钟，属正常。
+- **全舰队 SSH=统一值收口**：R4 归队（R2—R6 全部 `[REDACTED]`，三重验证）。**R4 网页密码=[REDACTED]（用户指定，故意与 SSH 异值）**——JCG 网页登录读 UCI `system.@system[0].password` 明文字段、与 SSH shadow 两套独立存储；09-30/10-01 的网页清理曾致 R2/R3/R4 网页登录全坏（任何密码都错），10-03 已修复并按真实表单流实测（302+Cookie×3）。**三类口令修改标准流程**定稿在 backups/SN-R系列凭证总览.md（更新五/六+流程节），R5/R6 上线须把 UCI password 字段列为验收项。
+- R4 出口=东京与 23:2x 条目一致，平台 metrics 佐证（exit_node=BWG、exit_ip=74.82.203.175、US-MEDIA 仍 LAX）；今日复测：CN 0% 丢/12.9ms、LAX 0% 丢/158.9ms（较昨日 20% 丢已恢复）、东京 0% 丢/95ms；R4 今日 WAN 收 665MB/发 116MB（UTC 日界）。
+- R2 B 站视频卡顿未定案：路由器侧已排空（B 站全域名 GeoSite→DIRECT 可达、代理路径 6.8MB/s 健康、QUIC 早已被 mihomo-quic-drop 拦、线路 0% 丢），日志已滚掉未能捕获卡住的流；待复现时抓 mihomo /connections 定位。
+
+## 2026-10-02 23:2x R4 交互出口改为东京，策略与 R3 一致
+
+- 用户当晚要求 R4 与 R3 相同。绑定现为：主用 BWG-VLESS-JPTY-01（failover 0），其后 LAX failover 0、腾讯 Hysteria2 failover 1、腾讯 VLESS failover 2。`proxy_mode=rule`、`access=all`、限速 0，与 R3 相同；访问名单本来一致，限速和授权未改。
+- 23:23 +0800 在 R4（rtr-cd473f，经 DMIT 13224）实测：PROXY 选中东京，出口 IP 两次均为 `74.82.203.175`；NODE-PICK 顺序为东京 → LAX → 腾讯 hy2 → 腾讯 vless；US-MEDIA 仍是 fallback，过滤 `LAX|NODE-PICK`，当时选中 LAX。Google 返回 204，用时 0.48 秒；YouTube 返回 204，用时 0.81 秒；国内 DNS 能解析。23:3x 复测出口仍是东京，视频组仍选中 LAX。
+- 配置版本：通过健康检查的东京配置是 v6。一次退回 LAX 的发布（v7，内容与旧 v5 相同）被路由器健康检查拒绝，设备留在 v6。期望版本 v8 与 v6 哈希相同（`39579c6f…`），设备记录已对齐为 8/8。回退：把主用改回 LAX，四条 failover 都设为 0，再预览后发布。
+- 同一分钟从 R4 测量：东京 ICMP 10 包 0% 丢、约 95ms；美西 `179.255.137.64` 为 40% 丢、约 261ms。该地址继续做管理面、备份源和视频兜底，交互流量改走东京。DO 与腾讯仍保留到 2026-11-02。
+
+## 2026-10-02 22:0x 工位跳板核对 + 三台分节点网站首测
+
+- **医院跳板在本机，目标仍是 DO**：计划任务 `AIHMS-JumpTunnel` 正在运行，执行 `C:\tools\jump-tunnel\tunnel.bat`。该脚本把 DO `159.223.36.119:28722` 上的 `18422` 转到 `10.10.8.84:40022`、`18322` 转到 `10.10.8.83:22`，账号 `jump`。`F:\python\前后端代码\ai-hms_qhd` 里没有这台 DO 地址，停 DO 前要改的是这个 bat 和 `verify.ps1`，不是医院业务仓库。`AIHMS-JumpTunnel-Verify` 自建任务后尚未跑过。
+- **网站首测**（22:01 前后，不切换出口）：R2/R3 当前出口东京，R4 的 ipify 出口仍是美西，但 NODE-PICK 显示腾讯 VLESS。大地360（纽约中文网）四节点均超时。明细 `logs/node-probe/latest.md`。本机计划任务 `Fleet-NodeSiteProbe` 每 4 小时一轮（登录会话在时），从 00:15 起。
+
+## 2026-10-02（夜）阶段 A+B 收口：R3 无线已改并验收，两项观察项闭环
+
+- **R3 WiFi 已按舰队标准改完并验收**（ESSID=`SN-R3-AX3000`/`-5G`，PSK=政策值，root 未动；双射频健康、心跳连续）。回退点在 R3 `/root/wifi-bak-20261002-193438`。**新坑登记**：其 wireless.uci 里 ra0/rax0 本就有 `disabled '1'`（历史遗留，广播一直靠 dat 层撑着），任何 `wifi down/up` 都会把射频停在关闭态——已置 0 修复，同型号设备动无线前先查这个。
+- **观察项①闭环**：10-02 03:30 PDT cron 自动备份真实运行，DMIT/腾讯/东京三端 latest md5 一致（`a280340d…`）。**观察项②闭环**：R4 晚高峰长流 90 秒单流 6.74 MB/s 无掉速，出口 IP 三验仍 `179.255.137.64`。
+- 阶段 B 盘点：DMIT 余量足（可用 1443MB、晚高峰出站 0.03Mbps）；东京月流量参考外推约 40GB/月（面板口径没查到：两家均无面板凭证存档）；依赖表七行全部落实——**雅典娜管理+代理仍实际依赖 DO/腾讯（主用=腾讯 VPS-TX-SG-02）**、医院口 18322/18422 与 WG wg0（1 活跃 peer）仍在 DO 上、**R2 也仍在实时写 DO 心跳（文档外新发现，D6 拆 VPS4 时须复查）**；R2/R3 渲染序=东京→LAX→腾讯hy2→腾讯vless（**命中阶段 C 可选变更条件，仅登记未动**）。
+- 阶段 C/D/E 未开始；观察期（至 2026-11-02）不动腾讯与 DO。证据与回退点见[执行记录](../plans/两节点收敛与R3无线执行记录-20261002.md)。
+
+## 2026-10-02（晚）用户决定：DO 与腾讯再留一个月，R3 无线允许远程改
+
+- **保留期**：DigitalOcean 与腾讯自本日起保留到 **2026-11-02**。期间仍是备用，不承接新的主用流量。到期且闸门全过再停，终态只留美西 DMIT 与东京。第一台美西按约 30 台登记规划，同时视频按约 5 路 1080p 预算；第二台美西未买，触发条件见计划。
+- **执行手册**：[两节点收敛与R3无线执行计划-20261002](../plans/两节点收敛与R3无线执行计划-20261002.md)。阶段 A（R3 无线）与阶段 B（只读盘点）可立即做；阶段 D 停机未到日期不得执行。
+- **R3 WiFi**：用户已授权远程修改（SSID 改为 `SN-R3-AX3000` / `-5G`，PSK 用舰队政策值）。会踢掉现场无线约 1 分钟。**截至本条写入时尚未执行。**
+- 旧决定「雅典娜不升级」在保留期内仍有效。停 DO 前须先迁雅典娜管理隧道，并保住医院跳板与 `10.1.2.18`。
+
+## 2026-10-02（下午）BWG 加固 + R4 补东京兜底 + 观察项登记
+
+- **BWG SSH 加固完成**：fail2ban active（sshd jail：5 次/10min 封 1h）+ ignoreip 白名单（PC 出口 43.134.46.44 / R2 112.244.138.152 / R3 182.46.13.66——防自锁）。密码登录保留（应急通道，白名单外已有爆破封禁）。
+- **R4 补东京兜底节点**：绑定 BWG → 发布 v5 → NODE-PICK 成员序=**LAX→TX-vless→BWG→TX-hy2**（渲染序按 failover 优先级，BWG 居 TX-vless 后；如需 BWG 提前需调 failover_priority）。出口仍 LAX（双验）。现 R4 三出口齐备（美西/东京/腾讯）。
+
+ succeeded in 697ms:
+# 保留远程通道的修复执行记录（2026-10-29 晚）
+
+授权：用户要求修复审查发现、记录清楚，并确保不影响远程操作。执行策略：逐台核验身份、私有备份、散列校验、脚本/配置离线检查、代理配置热加载、再次实际登录。没有重启设备、WAN、sshd、mgmt-tunnel、mihomo 或运行中的 API/agent，没有修改设备身份、密钥、RSSH_TARGET 或迁移数据库。
+
+## 本批完成
+
+| 对象 | 完成项 | 远程保护与验证 |
+| --- | --- | --- |
+| R5 昌乐 rtr-c46a25 / 13225 | 修复媒体空组、统一嵌套健康探测、修复全断恢复入口和看门狗；去掉重复 cron | 广州实际登录；GIA 实际登录；出网 HTTP 204、出口 GIA；反向进程保持 10354/10359 |
+| R3 安丘 rtr-38aa54 / 13227 | 同上；保留既有 cron 和每天重启策略 | 广州/GIA 实际登录；HTTP 204、出口 GIA；反向进程保持 26080/26085 |
+| R1 临朐 rtr-d3847d / 13222 | 22:13 实际登录后做同样修复；保留 192.168.132.1:22 目标 | 广州/GIA 实际登录；HTTP 204、出口 GIA；反向进程保持 3197/5522 |
+| 广州 | 单独限制外部 8443；下次自然启动绑定回环；新增 SSH 横幅观测 | 中继 PID 148976 未变化；回环 health=200；22/28722 未改；外部 TLS/HTTP 探测 000 |
+| 本地源码 | 模板显式媒体成员、AUTO 提交前验证、看门狗 v3、受控凭据读取、新设备广州前置验证与当前 BWG 地址 | 单元测试和构建；没有重刷设备，没有重建生产容器 |
+
+R1 在修复前已经恢复可登录，恢复原因未查明；不能把该恢复归因于本次修改。用户早前升级及其他操作与本次分开记录。
+
+## 时间与检查点
+
+- 21:59：R3/R5 修前登录、各组与管理通道基线。
+- 22:05：R5 首台完成；22:06 R3 完成。原 US-MEDIA=COMPATIBLE，修后显式 NODE-PICK。
+- 22:07：广州宿主单端口防护生效；没有重启 relay。
+- 22:09：复测发现 R3 的 AUTO 使用 Apple HTTP、NODE-PICK 使用 gstatic HTTPS，嵌套判定不一致。将 AUTO 与 NODE-PICK 统一为 gstatic HTTPS，并明确状态码 204；R3 实际出网恢复验证。
+- 22:11：R5 完成相同探测对齐。
+- 22:13—22:15：R1 恢复可登录后完成同批修复及探测对齐。
+- 最终验证独立重新登录广州和 GIA，三台均核对 DEVICE_ID；未把 LISTEN 或 HTTP health 当作 SSH 登录的替代。
+
+原始配置、私有备份、逐文件完整 SHA-256、验证快照在 gitignore 的 `backups/maintenance-20261029/`。配置含凭据，不能复制进报告或提交。
+
+| 设备 | 设备上首批备份目录 | AUTO 调整前的第二检查点 |
+| --- | --- | --- |
+| R5 | `/root/repair-20261029-220503` | `/etc/mihomo/config.yaml.before-auto-20261029-221058` |
+| R3 | `/root/repair-20261029-220558` | `/etc/mihomo/config.yaml.before-auto-20261029-220859` |
+| R1 | `/root/repair-20261029-221329` | `/etc/mihomo/config.yaml.before-auto-20261029-221433` |
+
+私有清单名分别为 `13225-20261029-220503-manifest.json`、`13227-20261029-220558-manifest.json`、`13222-20261029-221329-manifest.json`；其中记录媒体调整前/后的散列和远程进程。第二阶段 AUTO 调整有单独备份与快照。最终汇总为 `final-verification.json`、`final-file-hashes.json`。
+
+## 修复方式
+
+### 出口与媒体
+
+媒体组由实际 LAX 节点（如有）加末尾 NODE-PICK 显式组成。三台本轮只有 GIA/BWG，因此媒体组成员为 `[NODE-PICK]`。不再用 include-all 试图引入其他策略组，也不会空组落到 COMPATIBLE/DIRECT。
+
+AUTO 与 NODE-PICK 使用同一海外 HTTPS 探测目标，AUTO 设置 timeout=4000、expected-status=204、interval=120、lazy=false。三台最终为 `PROXY → AUTO → NODE-PICK → GIA`。配置热加载后有探测收敛过程；R3 曾短时回落直连，因此增加了实际出网复测，不能仅依赖 hot reload 的 204 返回码判成功。未从每个 LAN 客户端测试视频播放。
+
+### 自愈保护
+
+discovery 在任何失败 return 之前带起 tunnel-watchdog。看门狗以 mkdir 锁防重入，每分钟最多采样一次，连续三次五端点都失败后才尝试恢复，恢复间隔至少 600 秒。
+
+恢复只通过已实测支持的 ubus service signal 针对 `mgmt/mgmt2/mgmt3/mgmt4/mgmt5` 的心跳实例，不触碰 `rssh/rssh2`。若信号接口不可用，不回退为整组重启。R5 的重复 `#routermgmt-tunnelwd` cron 已移除，保留有开机补回路径的 discovery 入口。WAN 模式没有改为 heal。
+
+没有在人为阻断生产网络的情况下演练恢复；全断、重复调用、冷却和反向实例保护在隔离桩环境测试。真实端到端故障演练仍须另选窗口。
+
+### 广州收口与监控
+
+新增 `gz-mgmt-ingress.service`，只加一条 INPUT 非 lo、TCP dport 8443 的 REJECT；不改 SSH、不启用 UFW、不改整体防火墙策略。广州原 relay 服务文件已备份到 `/etc/systemd/system/gz-relay.service.bak-20261029-220744`。
+
+服务文件的下次启动绑定已由 0.0.0.0 改为 127.0.0.1。当前旧进程没有重启，因此 ss 仍显示 0.0.0.0:8443，但宿主规则对外限制已生效。外部 GIA 发起 HTTPS 探测为 000，回环为 200。此前本机单纯 socket connect 的“成功”不足以证明服务器实际公网可达（可能被本地透明代理提前应答）；最终使用真实 HTTP/TLS 探测和宿主规则核实，不把初查 TCP 成功当作原公网开放的充分证据。
+
+新增 `gz-rssh-probe.timer` 每约两分钟检查已监听排障口的 SSH 横幅，只记录状态变化，不登录、不杀连接；当前三个口均为 ssh_banner_ok。GIA 中继凭据只允许直接转发 8443，因此操作工具通过其既有 root 执行通道运行 nc 接到本机排障口，未放宽 permitopen 或更换凭据。
+
+## 验证
+
+- `go test ./internal/clash`：通过，覆盖无 LAX 时非空兜底、有 LAX 时顺序正确、嵌套健康地址一致等。
+- `python mgmt/agent/tests/test_recovery.py`：三项通过，覆盖备用端点存活、全断仍启动恢复、重复采样、冷却以及不信号反向 SSH。
+- shell 语法、相关 Python 编译检查和相关已跟踪差异的空白检查通过。
+- Linux amd64 后端构建通过，产物在 `backups/maintenance-20261029/routermgmt-server-linux-amd64`，SHA-256 为 `03b2e9d34bf278bf8e40e1129ebb7995484b27d239e4b04668d65f3a8bb036f7`；尚未上传替换运行实例。
+- 新设备广州 bootstrap 只读前置验证通过：受控凭据、已固定主机身份；没有执行新设备刷机/录入/公钥追加。完整新机流程未实机验收。
+- 原服务器/设备共用凭据的值没有轮换；仅将 push-via-gz.py 的内嵌值移到 gitignore 的受控文件，避免本轮改身份断连。历史脚本和其他敏感治理不在本次批量改动范围。
+
+## 未激活项、覆盖风险与下一步
+
+1. **后端生成模板尚未部署到正在运行的二进制。** 源码、测试及 Linux 构建已准备；本轮没有重启 API。现网三台配置属于本地热修复，平台版本号不变；旧后端重新发布配置可能覆盖该修复。下一步须在保留广州/GIA SSH 的条件下部署新后端，再按正常签名配置流程逐台重新发布并核对媒体组。不得在旧模板下直接“重新发布验证”。
+2. **新 handler 文件已落三台，但当前 agent 在启动时已经加载旧函数。** 为保留正在进行的管理任务，本轮没有重启 agent；提交前 AUTO 核对逻辑在下一次自然 agent 启动后才激活。要提前激活须先核对任务/事务空闲，再安排单独窗口。
+3. **其他设备未在线部署。** 本轮主/备反向口可实登的只有 R1/R3/R5；DMIT 当时无对应排障口监听。不能用健康心跳替代独立恢复通道，就向其他设备强推升级。
+4. **国内后端完全独立、容量均衡、全舰队身份治理未做。** 当前国内 SSH 入口已独立，心跳仍走广州→GIA→DMIT。没迁移数据库、启动双写主台或强制把全部站点切成负载均衡。
+
+## 回退原则
+
+每个设备均有原文件逐项备份，工具遇到配置加载或远程进程异常会恢复本批激活文件并热加载原配置，不会用 reboot/网络重启来回退。手工回退只恢复出问题的文件；不要直接重跑 flash-snr.py、setup-mgmt-tunnel.sh 或整套升级脚本。
+
+广州如需回退单端口限制，可停用 `gz-mgmt-ingress.service`（其 ExecStop 只删除本服务加的规则），恢复备份的 relay unit 后 daemon-reload；不需要重启 relay 或 ssh。回退会重新放宽 8443 的宿主规则，必须有明确理由。
+
+## 22:34—22:36 第二轮只读复核
+
+- R1/R3/R5 经广州和 GIA 均重新登录成功，DEVICE_ID 正确。三台反向 SSH PID 与修复时一致；15 个受核文件（每台配置、discovery、watchdog、handler、crontab）的完整 SHA-256 均与修后清单一致。
+- 三台 gstatic=204、YouTube 首页 HEAD=200，出口均为 GIA；PROXY=AUTO、AUTO=NODE-PICK、NODE-PICK=GIA、US-MEDIA=[NODE-PICK]。这不等于已逐台验收 LAN/Wi-Fi 视频播放。
+- 看门狗 sample 时间在查询时距当前 25/39/52 秒，均无失败计数、修复时间标记或残留锁 PID；说明本时点定时调用正常，没有发现看门狗恢复动作。并未运行脚本来人为制造该结果。
+- 广州 relay/ingress guard/观测 timer 均 active，中继仍为 PID 148976，回环 health=200，宿主单端口限制仍在。timer 最近两轮均报告三个 SSH 横幅正常。
+- R1 的 DO 管理备用口 18446 仍为 000，但广州 18443、GIA 18447 为 200；R3/R5 三个受测口为 200。本轮没有为修复备用坏腿重启现有通道。
+- DMIT 生产 API 实际二进制 SHA-256 为 `e7a90650413f90ecbdaabbdd97ad6ec2205022a5587083e4b5a15928cd22c7e9`，仍含旧模板 `LAX|NODE-PICK`，确认后端待部署项尚未消除。R3/R5 的 agent PID 仍为原进程，handler 文件与运行中已加载函数的区别仍需保留。
+- 管理库只读核查：R1/R3/R5 的心跳在 22:34 更新；R2 最后心跳为今天 13:27:59，R4 为 13:26:55，R6 为 13:27:01。R4 当前配置 v17、目标 v19；不能据此认定这些设备现场外网状态，但不能报告它们已恢复远程。DMIT 本时点仍没有 132xx 排障口监听。
+- 最近 45 分钟管理库无新任务记录。未写生产库、未重启服务、未发布配置、未确认告警。
+
+现场复核快照：`backups/maintenance-20261029/recheck-20261029-223454.json`。下一条精确动作仍是：先制定不打断现有 SSH 的后端正式激活/签名配置重新发布流程；对 R2/R4/R6 先核实现场上电和独立救援入口，不直接批量强推。
+
+## 22:46 再核远程与增加广州网页入口
+
+- R2(13223)、R4(13224)、R6(13226) 经广州尝试均 Connect failed，经 GIA 路径未取得 SSH 横幅；DMIT 无 132xx 监听。最后心跳仍分别为 13:27:59、13:26:55、13:27:01。本轮不能远程登录，不把历史出口 IP 当作当前出网证据。
+- 新增 `VPS远程工具包/管理台通道-广州.bat`、`scripts/gz-console-tunnel.py` 和访问说明。工作电脑经已固定身份的广州 SSH，把本机回环 8445 转到广州回环 8443；不开放公网管理端口，不改任何服务器服务。
+- `python scripts/gz-console-tunnel.py --check` 实测 health=200、网页首页=200，检测后本机临时隧道退出。未登录平台、未改账号/数据库。原 DMIT 本机 8444 入口保留。
+- 广州是入口，中继后端仍在 DMIT。更换网页入口不能解决旧模板覆盖问题。
+
+### 后端旧模板的发布建议（尚未执行）
+
+此次修复在 Go embed 模板中，需要更新 API 二进制，仅改服务器上的 YAML 源文件不会改变正在运行的生成器。设备 SSH、管理中继、代理及数据库可保留，不需要重启路由器或重新录入。
+
+当前服务启动即运行 sweeper 与告警 worker，还会检查管理员和签名文件，尚无已验证的后台任务单活开关；因此不能直接复制一个生产容器就承诺零中断蓝绿发布。应先确定后台任务单实例控制及现有签名/数据库/JWT 配置的完整复用，再做并行验证、代理切换和回退。若选择仅更新单个 API，则 SSH 可保持，但网页请求/任务轮询可能短暂重连，不能声称所有管理操作零中断。
+
+## 23:15—23:18 核对其他 AI 的失联解释（只读）
+
+### 本次实测
+
+- GIA 上 R2（58.58.177.226）、R6（58.58.185.138）确有服务器端 SSH 会话；R4（27.205.184.56）也有连接，其 Accepted publickey 指纹匹配 snR4。仅凭 IP 不作设备身份结论，已对照 authorized_keys 指纹。
+- R2 服务器端会话从 09:53 起存在约 13 小时，不能报告三台都在同一个连续重启循环；ESTABLISHED 也不能单独证明旧会话端到端仍活。
+- R4/R6 近期约每三分钟重新认证；23:15 的 GIA 仅监听 13222/13225/13227，没有 13223/13224/13226。无后三口占用者证据，不能据此诊断“僵尸占口”。日志中部分 denied connect 是本机经广州的受限中继凭据尝试 direct-tcpip，被 permitopen 拒绝，不是设备的反向端口绑定失败。
+- 设备公钥条目允许各自的 permitlisten；sshd 的 allowtcpforwarding=yes、disableforwarding=no。没有确认设备实际运行的命令是否包含 GIA 第二 -R，更不能把旧版仅 -L 的正常连接当作 -R 失败。
+
+### 升级关联与包内容
+
+管理库只读查询确认：三台均在 13:26—13:28 完成 agent_update，版本 **2026102905**，随后心跳停止。task=ok 是旧 agent 在延迟重启前上报的结果，不代表新 agent 启动后验收通过。
+
+检查服务器保留的同版本包（mtime 为该轮升级之前；未改包）：
+
+| 包 | SHA-256 | init | agent 端口选路 |
+| --- | --- | --- | --- |
+| 2026102905 | `4a3b414c6d32194713cfe3154b69853335d91f1c84400f20ab432f5339f56c11` | respawn 3600 5 5 | 无 mgmt_active_port / discovery 补丁 |
+| 2026102906 | `31d8124e1d444534e733a4e7cb71bbf44419212874394ce14f64786e28f5ea4a` | respawn 3600 0 0 | 同样缺失 |
+
+该轮升级复制的是包内 agent、handler、可选 init/access-fw；会覆盖先前刷机脚本注入到 agent 的端口选路逻辑。升级包中的主循环在心跳失败后继续轮询，没有由 agent init 直接调用 mgmt-tunnel restart 的路径。端口选路丢失能解释“备用隧道尚在但 agent 仍请求固定失效主地址”的风险；设备当前实际 MGMT_URL、进程退出日志和 mgmt-tunnel init 仍未取得，不能声称完整根因已闭环。
+
+源码中的升级回滚备份只包含 agent/handlers/access-fw，未覆盖被改写的 `/etc/init.d/routermgmt`；修复发布前应补足这一恢复缺口。不能把简单解压旧 agent 备份等同于已完整恢复旧 init。
+
+### 对午夜恢复的判断
+
+管理库 reboot_cron 均为 `0 0 * * *`，只证明期望策略，未能读取当前设备 crontab 验证实际执行。即便午夜正常重启，也不会补回缺失代码；上网、定时任务与现存连接都会经历重启过程，不能标为“零风险/必定恢复”。三台当前上网是否正常尚无现场/数据面实测，不能保证“上网不受任何影响”。
+
+安全下一步：保留现有 SSH 会话，不按连接年龄批量清理，不强推现存 2906 包；准备同时覆盖端口选路、恢复参数、完整回退及升级后心跳验收的新版本。午夜既有重启仅作观察机会；如果现场电脑可用，优先从 LAN 读取实际配置与日志，再修复 agent，避免盲目先重启整组隧道。本轮没有部署包、重启或清会话。
+
+web search: site.wiki.metacubex.one proxy providers health-check lazy url-test timeout expected-status proxy exclude-filter ...
+web search: 
+exec
+"C:\\Users\\Administrator\\AppData\\Local\\Microsoft\\WindowsApps\\pwsh.exe" -Command "rg -n '机场|订阅|mihomo|兜底' docs/INDEX.md AGENTS.md" in F:\vps
+exec
+"C:\\Users\\Administrator\\AppData\\Local\\Microsoft\\WindowsApps\\pwsh.exe" -Command "Get-Content -LiteralPath 'docs/plans/远程不断线修复执行记录-20261029.md' -TotalCount 48" in F:\vps
+ exited 1 in 578ms:
+ succeeded in 577ms:
+# 保留远程通道的修复执行记录（2026-10-29 晚）
+
+授权：用户要求修复审查发现、记录清楚，并确保不影响远程操作。执行策略：逐台核验身份、私有备份、散列校验、脚本/配置离线检查、代理配置热加载、再次实际登录。没有重启设备、WAN、sshd、mgmt-tunnel、mihomo 或运行中的 API/agent，没有修改设备身份、密钥、RSSH_TARGET 或迁移数据库。
+
+## 本批完成
+
+| 对象 | 完成项 | 远程保护与验证 |
+| --- | --- | --- |
+| R5 昌乐 rtr-c46a25 / 13225 | 修复媒体空组、统一嵌套健康探测、修复全断恢复入口和看门狗；去掉重复 cron | 广州实际登录；GIA 实际登录；出网 HTTP 204、出口 GIA；反向进程保持 10354/10359 |
+| R3 安丘 rtr-38aa54 / 13227 | 同上；保留既有 cron 和每天重启策略 | 广州/GIA 实际登录；HTTP 204、出口 GIA；反向进程保持 26080/26085 |
+| R1 临朐 rtr-d3847d / 13222 | 22:13 实际登录后做同样修复；保留 192.168.132.1:22 目标 | 广州/GIA 实际登录；HTTP 204、出口 GIA；反向进程保持 3197/5522 |
+| 广州 | 单独限制外部 8443；下次自然启动绑定回环；新增 SSH 横幅观测 | 中继 PID 148976 未变化；回环 health=200；22/28722 未改；外部 TLS/HTTP 探测 000 |
+| 本地源码 | 模板显式媒体成员、AUTO 提交前验证、看门狗 v3、受控凭据读取、新设备广州前置验证与当前 BWG 地址 | 单元测试和构建；没有重刷设备，没有重建生产容器 |
+
+R1 在修复前已经恢复可登录，恢复原因未查明；不能把该恢复归因于本次修改。用户早前升级及其他操作与本次分开记录。
+
+## 时间与检查点
+
+- 21:59：R3/R5 修前登录、各组与管理通道基线。
+- 22:05：R5 首台完成；22:06 R3 完成。原 US-MEDIA=COMPATIBLE，修后显式 NODE-PICK。
+- 22:07：广州宿主单端口防护生效；没有重启 relay。
+- 22:09：复测发现 R3 的 AUTO 使用 Apple HTTP、NODE-PICK 使用 gstatic HTTPS，嵌套判定不一致。将 AUTO 与 NODE-PICK 统一为 gstatic HTTPS，并明确状态码 204；R3 实际出网恢复验证。
+- 22:11：R5 完成相同探测对齐。
+- 22:13—22:15：R1 恢复可登录后完成同批修复及探测对齐。
+- 最终验证独立重新登录广州和 GIA，三台均核对 DEVICE_ID；未把 LISTEN 或 HTTP health 当作 SSH 登录的替代。
+
+原始配置、私有备份、逐文件完整 SHA-256、验证快照在 gitignore 的 `backups/maintenance-20261029/`。配置含凭据，不能复制进报告或提交。
+
+| 设备 | 设备上首批备份目录 | AUTO 调整前的第二检查点 |
+| --- | --- | --- |
+| R5 | `/root/repair-20261029-220503` | `/etc/mihomo/config.yaml.before-auto-20261029-221058` |
+| R3 | `/root/repair-20261029-220558` | `/etc/mihomo/config.yaml.before-auto-20261029-220859` |
+| R1 | `/root/repair-20261029-221329` | `/etc/mihomo/config.yaml.before-auto-20261029-221433` |
+
+私有清单名分别为 `13225-20261029-220503-manifest.json`、`13227-20261029-220558-manifest.json`、`13222-20261029-221329-manifest.json`；其中记录媒体调整前/后的散列和远程进程。第二阶段 AUTO 调整有单独备份与快照。最终汇总为 `final-verification.json`、`final-file-hashes.json`。
+
+## 修复方式
+
+### 出口与媒体
+
+媒体组由实际 LAX 节点（如有）加末尾 NODE-PICK 显式组成。三台本轮只有 GIA/BWG，因此媒体组成员为 `[NODE-PICK]`。不再用 include-all 试图引入其他策略组，也不会空组落到 COMPATIBLE/DIRECT。
+
+AUTO 与 NODE-PICK 使用同一海外 HTTPS 探测目标，AUTO 设置 timeout=4000、expected-status=204、interval=120、lazy=false。三台最终为 `PROXY → AUTO → NODE-PICK → GIA`。配置热加载后有探测收敛过程；R3 曾短时回落直连，因此增加了实际出网复测，不能仅依赖 hot reload 的 204 返回码判成功。未从每个 LAN 客户端测试视频播放。
+
+### 自愈保护
+
+discovery 在任何失败 return 之前带起 tunnel-watchdog。看门狗以 mkdir 锁防重入，每分钟最多采样一次，连续三次五端点都失败后才尝试恢复，恢复间隔至少 600 秒。
+
+
+web search: https://wiki.metacubex.one/config/proxy-providers/
+web search: 
+web search: https://raw.githubusercontent.com/MetaCubeX/mihomo/v1.19.31/adapter/outboundgroup/parser.go
+codex
+已确认一个关键细节：v1.19.31 对同一 provider 的相同探测 URL 会去重，不能据此认定两套 300 秒配置把测速负载翻倍。更需要优先核验的是：主链全断时能否真正切到机场，以及重启后缓存和订阅下载是否仍可用。
+web search: 
+web search: 
+web search: 
+web search: 
+web search: 
+web search: 
+codex
+还发现一个需要明确处理的边界：机场组首次加载失败且无缓存时，默认空组会落到 `COMPATIBLE`，行为是直连；这会让未配置 `DIRECT` 的 `US-MEDIA` 也可能直连。设备限额方面，错开测速只能降低并发，是否计入“在线设备”仍取决于机场的统计口径。
+web search: 
+web search: 'COMPATIBLE'
+codex
+**结论：先修平台覆盖风险、冷启动兜底和空组行为，再完成主链全断验收后铺开。CPU 瞬时 138% 和未经证实的“10 台限制”，都不能单独判为阻断。**
+
+以下依据你提供的实测及 **v1.19.31 源码**，未重新连接设备验证。
+
+1. **阻断：手工配置会被平台覆盖。**  
+   优先先模板化，并验证一次平台重发后配置仍完整。若暂时手工铺开，至少落实相关发布冻结、配置备份和恢复流程；“之后会模板化”尚未解决覆盖风险。
+
+2. **阻断：备用链的冷启动能力尚未证明。**  
+   `proxy: NODE-PICK` 合法，但它指定的是**订阅下载通道**：主链全断后，订阅无法经此通道刷新；机场节点自身并不因此经过主链。已有有效缓存仍可使用，所以应确保缓存位于持久目录、发布不会清除，并验证主链不可用时重新加载仍能使用机场。无缓存启动还需要经验证的独立获取路径或预置有效节点；订阅及节点域名的 DNS 也要能独立解析。[下载通道说明](https://wiki.metacubex.one/config/proxy-providers/#proxy)、[缓存加载源码](https://github.com/MetaCubeX/mihomo/blob/v1.19.31/component/resource/fetcher.go)
+
+3. **铺开前修正空组行为，并补故障验收。**  
+   `AIRPORT` 首次加载失败且无有效缓存时，默认空组回退为 `COMPATIBLE`，等效直连，可能让未配置 `DIRECT` 的 `US-MEDIA` 也直连。若媒体流量不允许这种行为，在 **AIRPORT 组内**显式设置：
+
+   ```yaml
+   empty-fallback: REJECT
+   ```
+
+   这只处理“组为空”，不处理“有节点但全部失效”。目前“加载成功、选中日本、主链正常”还未证明自动兜底：应验证**主链全断→自动切机场→真实业务通→主链恢复回切**，并覆盖订阅下载失败、有缓存重载。核对外层 `AUTO`、`US-MEDIA` 的探测已启用，探测 URL 与状态码要求对齐。[空组默认值](https://github.com/MetaCubeX/mihomo/blob/v1.19.31/adapter/outboundgroup/parser.go)、[COMPATIBLE 定义](https://wiki.metacubex.one/config/proxies/built-in/#compatible)
+
+4. **非阻断：CPU 先观察，不必立即放宽周期。**  
+   若监控按核累计，138% 约为占用 1.38 个核心；重点看持续时间、转发延迟、心跳、内存及 OOM。还需纠正一个常见判断：**此版本同一 provider 的相同探测 URL 会去重，不能认定两处 300 秒就把 38 节点测速翻倍**；外层组仍可能另测组成员。provider 定时检查内部并发上限为 10。[健康检查源码](https://github.com/MetaCubeX/mihomo/blob/v1.19.31/adapter/provider/healthcheck.go)
+
+   `300→600 秒`能降低探测频率，**不能直接降低单次峰值**，也会延长部分故障发现时间。若确有业务抖动，优先在 provider 层保留一批经过验证的节点。兜底用途建议先保留 `lazy: false`。
+
+5. **非阻断：补过滤词，避免泛化误杀。**  
+   provider 中可改为：
+
+   ```yaml
+   exclude-filter: '(剩余流量|套餐到期|到期时间|官网|公告|重置时间|节点超时.*更新订阅)'
+   ```
+
+   能覆盖已知提示节点；不要简单加入所有“超时”“更新”字样。此版本 provider 先按原始名称过滤，再添加 `AP | ` 前缀，无需把前缀写入表达式。过滤后检查真实节点数量及名单。[解析源码](https://github.com/MetaCubeX/mihomo/blob/v1.19.31/adapter/provider/provider.go)
+
+6. **设备限制：错开 interval 只能缓解并发，不能解决额度。**  
+   必须先确认机场限制的是设备数、来源公网 IP、连接数，还是某个时间窗内的活跃数。六台路由器之外，还要考虑其他客户端；`lazy: false` 即使没有业务也会建立探测连接，是否计入在线取决于机场。
+
+   错开订阅更新、测速启动时间有助于削峰，但**不能保证不触发设备上限**。先逐台增加并观察认证失败、限流；确有限额则使用允许多设备的授权或拆分账号。不要把健康检查“并发 10”与机场“设备限 10”混为一谈。
+
+7. **其他需要明确的行为。**
+   - `US-MEDIA → AIRPORT` 当前可能选日本；若要求美国出口或特定流媒体解锁，应另设符合条件的机场组。gstatic 204 只证明该探测可达，不能证明解锁、带宽或 UDP 可用。
+   - `fallback` 按成员顺序选择健康项，因此机场 56ms 不会仅因更快抢占主链；但**全员不健康时会返回首成员，末尾 `DIRECT` 不是无条件兜底**。[fallback 源码](https://github.com/MetaCubeX/mihomo/blob/v1.19.31/adapter/outboundgroup/fallback.go)
+   - 贴出的片段缺少顶层 `proxy-groups:`。若只是展示时省略，无需处理；若实际文件也是如此，则层级错误。平台最终渲染结果应使用同版本 `mihomo -t` 校验，再按单台、剩余设备分批验收。
+tokens used
+71,597

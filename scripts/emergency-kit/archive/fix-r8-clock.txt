@@ -1,0 +1,22 @@
+echo === 1. 时钟检查与同步 ===
+echo 当前时间: $(date -u)
+ntpd -d -q -p ntp.aliyun.com 2>/dev/null || ntpd -q -p pool.ntp.org 2>/dev/null || echo NTP_FAIL
+sleep 2
+echo 同步后: $(date -u)
+echo === 2. Agent 实际使用的地址 ===
+cat /tmp/mgmt_active_port 2>/dev/null || echo "无 mgmt_active_port"
+grep MGMT_URL /etc/routermgmt/agent.conf
+echo === 3. 心跳错误信息 ===
+cat /etc/routermgmt/state/hb.resp 2>/dev/null | head -3 || echo "无 hb.resp"
+cat /etc/routermgmt/state/hb.json 2>/dev/null | head -1 | cut -c1-60
+echo === 4. Agent 日志 ===
+logread | grep routermgmt | tail -5
+echo === 5. 重启 Agent（时钟同步后）===
+/etc/init.d/routermgmt restart
+sleep 8
+echo agent: $(ps w | grep -c [r]outermgmt-agent)
+echo === 6. 验证心跳发出 ===
+sleep 5
+cat /etc/routermgmt/state/hb.resp 2>/dev/null | head -3 || echo "无响应"
+logread | grep -E "heartbeat|心跳" | tail -3
+echo CLOCK_FIX_DONE

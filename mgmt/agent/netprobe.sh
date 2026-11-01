@@ -70,6 +70,7 @@ http_probe() { # $1=标签 $2=URL（经本机 mihomo 入口，按分流规则选
 probe cn 223.5.5.5
 probe vps 159.223.36.119
 probe tx 43.134.46.44
+probe bwg 74.82.203.175
 http_probe proxy https://www.google.com/generate_204
 http_probe gstatic https://www.gstatic.com/generate_204
 

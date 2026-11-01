@@ -1,0 +1,44 @@
+{
+  "round": null,
+  "created_at": null,
+  "tool": "tools/multi_ai_evidence.py",
+  "ais": {
+    "codex": {
+      "status": "present",
+      "files": [
+        {
+          "file": "检查_codex.md",
+          "normalized_to": "检查_codex_normalized.md",
+          "sha256_raw": "710799582098b8025d1a87da295d49c707d0d7cfca742f28d95e29c8ad50b484",
+          "bytes": 22518
+        }
+      ],
+      "reason": ""
+    },
+    "kimi": {
+      "status": "present",
+      "files": [
+        {
+          "file": "审查_kimi.md",
+          "normalized_to": "审查_kimi_normalized.md",
+          "sha256_raw": "c29c237b41b66ef76e91b5d4eaaa6d7c12ef8a5433749185c20e3f5dd1b99e61",
+          "bytes": 8246
+        }
+      ],
+      "reason": ""
+    },
+    "grok": {
+      "status": "present",
+      "files": [
+        {
+          "file": "审查_grok.md",
+          "normalized_to": "审查_grok_normalized.md",
+          "sha256_raw": "cfc1e3ee131073947b01cbad76956d078cf97961cdd82c6550641b24481221ad",
+          "bytes": 15747
+        }
+      ],
+      "reason": ""
+    }
+  },
+  "note": "本 manifest 只登记文件级证据（哈希/在席/缺席），不载结论；终审归人工。"
+}

@@ -1,0 +1,72 @@
+# 敏感与不可入库材料（统一优化 M08 / P07 最小允许清单原则）
+# 凭据与密钥
+登录信息与配置总表*.md
+backups/
+**/.env
+**/.env.*
+!**/.env.example
+**/prod-certs/
+*.pem
+*.key
+id_rsa*
+id_ed25519*
+.redact_pairs.json
+.mgmt-token
+ubus_token.txt
+scripts/clash-config-router.yaml
+scripts/clash-config-pc.yaml
+scripts/run.yaml
+scripts/run_back.json
+scripts/provision_router.py
+docs/设备引导包*.json
+docs/wg-*.conf
+docs/wg-*-qr.png
+VPS远程工具包/
+网络稳定性分析材料-20260927.md
+# 会话与数据
+docs/会话导出/
+webprobe/*.csv
+webprobe/*.log
+webprobe/network_watch/
+*.sqlite
+*.db
+# 大体积与生成物
+mgmt/frontend/node_modules/
+firmware/
+京东云AX6600雅典娜/
+.v2c/
+.video_agent/
+__pycache__/
+*.pyc
+docs/archive/
+
+# ===== ↑ 以上同步自 .gitignore（「从 .gitignore 同步」只重写以上部分）=====
+.git/
+.hg/
+.svn/
+node_modules/
+bower_components/
+jspm_packages/
+site-packages/
+venv/
+coverage/
+htmlcov/
+lcov-report/
+cmakefiles/
+cmake-build-*/
+bazel-*/
+pods/
+deriveddata/
+storybook-static/
+playwright-report/
+test-results/
+allure-results/
+allure-report/
+cdk.out/
+*.egg-info/
+*.dist-info/
+eggs/
+pip-wheel-metadata/
+wheels/
+# ----- ↑ 以上为 ZCode 默认排除规则（自定义规则请写在本行下方，不会被同步/恢复改动）-----
+# 自定义规则写在下方（本行提示可删除）

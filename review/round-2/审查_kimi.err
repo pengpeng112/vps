@@ -1,0 +1,218 @@
+• The task: review F:/vps/review/round-2/方案.md as an independent reviewer, read-only. Check coverage of user requirements, find issues (PCDN, upgrade process, flashing process, no impact to remote control). Give independent conclusions with reasons.
+
+  Let me read the plan file first.
+
+• I need to review this plan independently. Key evidence base: the plan references many prior facts (R7 case, SOP 增补（四）（五）（七）, flash-snr.py, checkpoints, etc.). I should check reference files in the repo to verify claims. Let me look at relevant files in F:/vps: docs/current/当前状态.md, docs/plans/, scripts like flash-snr.py, SOP files, and the review directory files （检查_codex.md, 审查_grok.raw, etc. — these might be other reviewers' outputs from round-1 or this round).
+
+  Wait — the working directory is F:/vps/review/round-2 which contains other review files. The task says "请你自由核查" — independent review. Other reviewers' files might be informative but I should form my own conclusions. Actually reading them could bias; but the instruction says I can read repo files freely. The primary duty: verify the plan against the actual repo (flash-snr.py, SOP, R7 case records, current state doc).
+
+  Key things to check:
+  1. Coverage of user requirement: PCDN + discovered problems, detailed upgrade process, flashing process improvement, online upgrade must not affect remote control and usage.
+  2. Technical issues: e.g., `pkill -f` may kill the ssh session itself if the pattern matches the command line? `pkill -f install_pdnterminal.sh` — if executed via ssh command containing that string, the ssh session's shell command line would contain "install_pdnterminal.sh" and pkill -f would match the shell running the command! That's a classic footgun: running `pkill -f install_pdnterminal.sh` via an SSH remote command — the remote bash -c command line contains the pattern, so pkill kills the invoking shell, severing the SSH session mid-execution. Actually with SSH exec, the remote sshd spawns `bash -c "pkill -f install_pdnterminal.sh; ..."` and pkill -f would match that bash process. This is a real risk — could kill the session (but not the tunnel itself; session would just drop). Mitigation: use pattern with bracket trick `[i]nstall_pdnterminal` in pkill too. Worth flagging.
+
+  Also `rm -rf /mnt/mmcblk0p6/lost+found` — removing lost+found on a mounted ext4; harmless-ish, recreated on fsck. Fine.
+
+  `umount` nested docker mount — ok.
+
+  Phase 3: rewriting /etc/crontabs/root and `/etc/init.d/cron restart` — restarting cron is fine.
+
+  R2 fix: moving exit 0 block — they say "R2 将 112-113 行块移至唯一 exit 0 之前" — need rc.local exit 0 unique at end. OK.
+
+  Phase 5: rm -rf on mounted partition while firmware auto-reformats at boot — claimed R7 conclusion. Verify against docs.
+
+  Section 5 claims about flash-snr.py checkpoints 15→18, flash-batch 12→14, TX/BWG pubkey distribution fixed, failover SQL fixed — "已落地（本轮 R9 复查产物）" — claims these were already implemented. Should verify in repo: scripts/flash-snr.py, flash-batch.py existence and checkpoint counts.
+
+  Order R2→R4→R3→R1: rationale? R2 worst first? Maybe fine but risk: starting with the most complex (R2 with dead code) first, before validating the process on a simpler machine. Actually R1 is the mildest case (no live process, already commented). Best practice: pilot on R1 first (lowest risk) then heavier machines. The plan orders R2 first — a risk point: if the procedure has a flaw, it breaks on the hardest machine. Counter-argument: R2 has the live installer, urgency. But R1 also matters less for usage? Not stated. Flag as a point: no rationale given; recommend piloting R1 (or do R1 first) to validate the runbook.
+
+  Also: verification "心跳 30 秒内两连拍" etc. Fine.
+
+  Missing items in coverage:
+  - User said "是不是还有 PCDN 和发现的问题" — i.e., also check for other discovered issues beyond PCDN. The plan covers PCDN + R2 dead code + QUIC REJECT self-heal for R5/R6. "发现的问题" — the plan mentions QUIC REJECT 首位 already ok on all online devices. WiFi states noted but explicitly not handled. That's arguably fine (recorded).
+  - Coverage seems good.
+
+  Potential technical issues to dig into:
+
+  1. pkill -f self-match risk (session kill). Real.
+  2. Phase 2: "先 ls 确认再删" binaries — ok.
+  3. Phase 3 init.d stop: `/etc/init.d/mbox stop` might kill something in use? They're PCDN leftovers; but `timeRestart` — name sounds like it could be a legitimate time-restart service? Actually it's listed as PCDN residue. Need repo evidence. If timeRestart is actually doing scheduled reboots (like factory's), removing it and adding cron reboot is a replacement. But on R1/R3/R4, where does the daily 00:00 reboot come from today? The plan says other three units rebooted at 00:00 this morning. From what? crontab #routermgmt-reboot presumably. So timeRestart is vendor. OK but verify via repo if possible.
+
+  4. Phase 5: `rm -rf /mnt/mmcblk0p6/{docker,lost+found}` — but the stated acceptance is "分区内无可执行文件" (R7 standard), yet Phase 5 deletes entire contents. If rm fails mid-way (e.g., open files in docker dir from dockerd), partial deletion. Pre-check for dockerd exists. But also busy files: rm -rf on files in use on Linux still unlinks fine. OK.
+
+  Also "下次开机驱动会重格为空 ext4" — if the driver reformats anyway at next boot, is rm needed? It changes runtime state (removes ammo). Fine.
+
+  5. Crontab rewrite: "保留其余行，仅去 factory checkMem 行" — need full crontab content; on R2 adding reboot line. But wait — R2 currently doesn't reboot daily; does R2's crontab lack the routermgmt-reboot line, or does rc.local dead code cause it? The plan says R2 rc.local exit 0 at line 111 blocks lines 112-113 (QUIC self-heal + daily reboot block). So the daily reboot block is in rc.local, not cron? Then adding `0 0 * * * /sbin/reboot` to crontab AND moving rc.local block — would that double the reboot mechanism? Plan says rc.local lines 112-113 contain "QUIC 自愈+每日重启块" — so rc.local sets up the daily reboot (maybe writing the cron line at boot). If R2 fix moves that block before exit 0, the boot-time block would set up daily reboot again; adding the crontab line directly too might be redundant or duplicate. Need to check what rc.local lines 112-113 actually do. If rc.local block writes `0 0 * * * reboot` into crontab at boot, then after R2 reboot, crontab gets the line from rc.local AND the manually added line → duplicate reboot lines (harmless but sloppy) or maybe rc.local greps for #routermgmt-reboot marker before adding. Can't know without repo files. Let me check the repo for rc.local template / flash-snr.py content.
+
+  Also Phase 6 R2 加验： "crontab -l 含 #routermgmt-reboot" — consistent with adding to crontab directly.
+
+  6. Snapshot backup path `backups/pcdn-clean-...` — where? On PC locally presumably. Fine.
+
+  7. Section 5 item 3 claims things "已落地" — verify scripts exist. Also "剩两台待刷之一" — verify against current state doc.
+
+  8. No verification that killing installer processes won't respawn: rc.local hooks only fire at boot; init.d mbox might restart installer — they disable init.d after killing; between Phase 1 and Phase 3 there's a window where init.d watchdog (if mbox service is a respawn watchdog) could restart the installer before it's disabled. Order: kill installer (P1) → delete scripts (P2) → disable init.d (P3). If mbox service monitors and restarts install scripts, between P1 and P3 it could respawn — but the scripts are deleted in P2 before init.d is touched; respawn would fail since script gone. Reasonable ordering actually. But if `start_client_manage` is the watchdog and it respawns installer from in-memory copy? Minor. Also the installer is "dormant" bash — fine.
+
+  Actually better order might be disable init.d first, but the file deletion mitigates. Low risk, could mention.
+
+  9. `pkill -f` on the *router* via ssh — the self-match issue: command `pkill -f install_pdnterminal.sh` run remotely via `ssh root@... "pkill -f install_pdnterminal.sh"` — remote side runs via `sh -c`, whose cmdline contains the pattern → pkill kills it, SSH session dies, subsequent commands in same session lost. Since each phase is separate commands, the impact is just that session dropping — but it could also kill... only that shell. Still: connection drops mid-run = alarm. The fix used in their own verification: `grep "[i]nstall_"` bracket trick — same trick needed in pkill. Solid finding #1.
+
+  10. Phase 4: removing cgi-* endpoints — are they perhaps used by the management plane (agent uploads backups?)? Plan says "仅 luci 应保留" and "不属正常管理面" — repo evidence needed: check agent code for cgi-upload usage. The management system might use /www/cgi-bin/cgi-backup for backups? Names: cgi-exec, cgi-upload, cgi-download, cgi-backup — these look like vendor cloud control endpoints. But need repo verification that routermgmt agent doesn't use them. If it does, removing breaks remote management = violates red line. Check repo.
+
+  11. Section 4 execution channel "PC → DMIT(28722) → 排障口（132xx) → 设备 root" — ok.
+
+  12. `sh -n /etc/rc.local` syntax check — busybox ash supports -n. ok.
+
+  13. Acceptance: "用户侧上网无感知" measured via curl through local proxy — decent.
+
+  14. R5/R6: add QUIC REJECT-SELFHEAL — references "R2-R6 竞态同源修复清单" — verify from repo.
+
+  15. flash-snr.py checkpoint 15→18: verify current count 15. And flash-batch 12→14.
+
+  16. Claims "旧链 scp 两行缺 f 前缀从未真正工作过" — f-string missing prefix bug; verify in repo history/scripts.
+
+  Let me explore the repo. Key paths: F:/vps/scripts/flash-snr.py, F:/vps/scripts/deploy-parallel-tunnel.py, docs/SOP files, docs/current/当前状态.md, and anything about R7 终审 / PCDN / cgi-bin.
+
+  Given the scale, I'll delegate exploration? I can do it myself with a few greps. Let me do targeted greps in parallel.
+
+• The greps ran in the working directory F:/vps/review/round-2 by default. I need to search F:/vps. Use path parameter.
+
+• There's a lot of material. This is a substantial review task — good candidate for delegating evidence-gathering to explore agents while I analyze. Let me plan what to verify:
+
+  1. flash-snr.py: checkpoint count (15?), whether it has the claimed "已落地" TX/BWG pubkey retry + failover SQL fixes, rc.local template content (exit 0 placement, install hooks commenting), cgi-bin cleanup.
+  2. R7 case: SOP 增补（四）（五）, the "四层" residue, dd/umount conclusion, "无法根除挂载" acceptance.
+  3. QUIC REJECT-SELFHEAL: R2-R6 race fix, which devices done.
+  4. Current state doc: R5/R6 status, 剩两台待刷， daily reboot mechanism (cron vs rc.local block).
+  5. cgi-bin endpoints: are they used by management plane? Check flash-snr.py removes them already in new flash flow.
+  6. The rc.local lines 96/98/111-113 claims.
+
+  Given the volume, I'll launch parallel explore agents:
+
+  Agent A: flash-snr.py analysis — checkpoint list/count, rc.local template handling (how it writes rc.local, exit 0, install hook lines, QUIC self-heal block, daily reboot), cgi-bin removal, TX/BWG pubkey distribution code (scp f-prefix bug fixed?), failover SQL (-U postgres), whether claimed "已落地" fixes are present. Also flash-batch.py existence and its 复验 12 items.
+
+  Agent B: docs — SOP file 新SN-R1刷机录入SOP-自动化-20260928.md 增补（四）（五）（七） content (R7 PCDN deep clean: four layers, dd erase, mount conclusion, sed 翻车）, QUIC REJECT-SELFHEAL race fix list (which of R2-R6 done), current state doc facts: R5/R6 offline, devices pending flash, daily 00:00 reboot mechanism (cron line? rc.local?), WiFi states.
+
+  Also verify/round-2/核查报告.md might be a verification report on round-1 changes — relevant for "已落地" claims.
+
+  Two explore agents, thorough. Let me also quickly check whether there's an agent.conf / management that uses cgi endpoints — agent A can grep scripts for cgi- usage. My earlier repo-wide grep for cgi-exec etc. matched only the listed files (SOP, flash-snr.py, 当前状态.md, flash-r9-resume.py, review files). Notably NOT matched in any agent/management source → suggests management plane doesn't use them. Good signal already.
+
+  Let me launch two explore agents in parallel.Excellent, very rich evidence. Now let me synthesize my independent review. Also I have my own technical analysis to add (pkill -f self-match, R2 crontab duplication, ordering, Phase 5 rm on mounted partition, etc.).
+
+  Let me carefully check key technical points:
+
+  **R2 crontab duplication**: Per agent-0, flash-snr.py writes `0 0 * * * /sbin/reboot #routermgmt-reboot` into crontab at flash time, and rc.local onboot-hooks block re-adds netprobe+discovery lines at boot (not reboot line). Wait — 当前状态.md:90 says rc.local/onboot-hooks 开机幂等重加 — which lines? Agent-0 said rc.local cron block (`:604`) re-adds "netprobe+discovery 两条", not the reboot line. So on R2, the plan claims lines 112-113 of rc.local are "QUIC 自愈+每日重启块". Per agent-0's reading of flash-snr.py, QUIC REJECT-SELFHEAL lives in /etc/init.d/mihomo, not rc.local. Hmm — but the plan's premise comes from "本会话上午实测" of the actual R2 rc.local. The rc.local on R2 may have a "cron 恢复块" that re-adds crontab lines including reboot? Agent-0 says the rc.local cron block re-adds netprobe+discovery两条. But older devices R1-R4 were flashed with an older version of the script — their rc.local may differ (they were flashed 09-28 to 10-02 era, before V14 etc.). Actually R1-R4 were among the earliest. So the rc.local on R2 having "QUIC 自愈+每日重启块" at lines 112-113 is plausible from a later manual addition (the QUIC self-heal was added 10-14 per 凭证总览 b64 整文件推送 — pushed to rc.local? No, to init.d/mihomo). Hmm, the 凭证总览 says the QUIC fix modified init.d/mihomo. But the plan claims R2 rc.local lines 112-113 contain QUIC 自愈 + 每日重启块.
+
+  I can't resolve this from the repo since it's live device state measured this morning (per the plan's section 一， this session's earlier work). The plan's first section says these are this-morning's实测. As a reviewer I can note: the specific line numbers (96/98, 111-113) have no historical documentation and can't be independently verified from repo; also there is an internal tension: if daily reboot on R1/R3/R4 works via crontab line (which they have, per flash-snr.py:369 written at flash time), why would R2 lack it and need the rc.local block for reboot? R2 was flashed with the same script era... Actually wait: R1/R3/R4 rebooted this morning at 00:00 — via crontab line presumably. R2 didn't reboot for 3 days. If R2's crontab also had the reboot line from flash time, it would have rebooted regardless of rc.local. So either R2's crontab lost the line (vendor rewrite? the rc.local cron-recovery block exists precisely because 厂商重写 crontab) — and the rc.local block at 112-113 is the recovery hook that re-adds it, which never runs due to exit 0 at 111. That's a coherent causal chain: vendor cron wipe removed the reboot line; rc.local recovery block is dead code due to misplaced exit 0; hence no daily reboot. The plan's fix: add the crontab line directly AND fix the rc.local block so the recovery hook works after next boot. That's coherent and actually mutually reinforcing, not duplicative harm — if both exist, crontab has one line (grep-idempotent re-add prevents duplicates). OK so my duplication concern is mitigated by idempotency, provided the rc.local block's re-add is grep-guarded. Worth a minor note: verify the block is idempotent to avoid duplicate crontab lines accumulating across boots.
+
+  **pkill self-match**: `pkill -f install_pdnterminal.sh` executed over SSH — remote command line is e.g. `sh -c 'pkill -f install_pdnterminal.sh; ...'`. pkill -f matches full cmdline; the sh -c process cmdline contains "install_pdnterminal.sh" → pkill kills the invoking shell → SSH session drops mid-Phase. This violates "不影响远程控制" in spirit (session drops; channel itself survives since it's a new connection each time via DMIT, but the running batch aborts). Notably their own verification command uses the bracket trick `grep "[i]nstall_"` — they know the trick but didn't apply it to pkill. Solid finding. Also note: pkill -f install_pdnterminal.sh would also match... the pattern appears in the pkill command itself. Yes. Real risk: busybox pkill behavior — busybox pkill -f matches against cmdline; the parent shell `sh -c` includes it. It will kill itself (exit code 137) and possibly report failure; subsequent commands in same SSH invocation die. Recommend `pkill -f "[i]nstall_pdnterminal"` or kill by explicit PID list from ps.
+
+  **Phase 5 rm -rf on mounted partition**: busy files fine on Linux. But one thing: `rm -rf /mnt/mmcblk0p6/lost+found` — removing lost+found of a mounted ext4 is harmless. Pre-check for nested docker mount: umount busy → skip recorded. OK. But also: is anything else on mmcblk0p6 that is legitimately needed? flash-snr.py:202 removes by-agent/by-daemon/by-watcher/initmindevice.sh/docker/data1 — a known list. The plan does `rm -rf {docker,lost+found}` per "实测残留清单" — fine since they enumerated what's actually there. Minor: if other unknown dirs exist, acceptance "ls 空" fails → they'd handle. OK.
+
+  **Phase 3 order**: kill installer (P1) → rm scripts (P2) → disable init.d (P3). If init.d mbox service is running as a watchdog that respawns installer, window P1→P3; but P2 deletes scripts so respawn fails. Acceptable. But also: `/etc/init.d/mbox stop` etc. might return nonzero if not running — plan says `[ -f ] && { stop; disable; rm }`, fine.
+
+  **Phase 6 残留六项 lists 7 items** — minor counting inconsistency: "残留六项" then lists: ps无进程； ls install_空； init.d 0; crontab无checkMem; rc.local无激活钩子； mmcblk0p6空； cgi-bin仅luci = 7 items. And "不影响六项" lists 6. Total 13, called 12. And R2 "加验" 3 items (sh -n、exit 0 唯一、crontab含reboot) → 16, but 验收标准 says "R2 十四项" (12+2). Inconsistencies in counting: Phase 6 says 12项全绿， R2加验 3项 → should be 15; section 六 says R2 十四项. Sloppy numbers — flag as consistency issue.
+
+  **flash-batch 复验 12→14**: actually 6 items per agent-0 (flash-batch.py:270-271). Plan claims 12→14. Factual error. Unless "12" refers to something else. Agent-0 found 6 判定项 (T/H/Q/M/C/P). So the plan's claim is wrong — significant factual error in section 五.2.
+
+  **终验 15→18**: currently 15-item list + 3 下发验证 = 18 checkpoints already; adding 3 new ones would make 18 in main list / 21 total. The plan's "15→18" understates current state (already 15+3) and the naming "新增三关卡" would yield 18 in main list. Minor framing issue; also stale "终验 11 关全过" string at :755. Worth noting: adding crontab #routermgmt-reboot check — but wait, main list item 6 is "crontab>=4条（C)" which implicitly includes reboot line? C=crontab routermgmt==4 in flash-batch. The new checkpoint ② "crontab 含 #routermgmt-reboot" is more specific — fine.
+
+  Also new checkpoint ① "rc.local exit 0 唯一且在末尾" — flash-snr.py already enforces this via :590/:605 (V14 fix). So the checkpoint formalizes existing behavior — good, no conflict.
+
+  **执行顺序 R2→R4→R3→R1**: plan gives no rationale. Risk: R2 is the most complex (dead code fix + crontab change) — doing it first before validating the runbook on a simpler unit (R1: no live process, hooks already commented) increases blast radius of procedural mistakes. Recommend R1 first as pilot. Counterpoint: R2/R3/R4 have live installers, urgency. But 5 min per machine; pilot-first costs nothing. Legit review point.
+
+  **R2 crontab change while cron runs**: rewriting /etc/crontabs/root + cron restart — no reboot needed; fine. Note: adding daily reboot to R2 means R2 will reboot tomorrow 00:00 — user requirement says don't affect usage; a daily reboot at midnight aligns with the other units' existing behavior. OK, and plan discloses it.
+
+  **Phase 0 快照 path**: `backups/pcdn-clean-{设备}-{日期}/` — local to PC presumably; fine.
+
+  **"安装器行已注释" R1**: plan Phase 3 says comment 96/98 lines; R1 already that state. Fine.
+
+  **Coverage vs user requirement**:
+  - "是不是还有 PCDN" — covered: the plan is built on this morning's 核查 findings (sections 一/二）. User asked "看看是不是还有" — the 核查 itself was already done in the earlier session turn; the plan summarizes. OK.
+  - "发现的问题" — covered: R2 rc.local dead code; QUIC REJECT for R5/R6 pending. WiFi states explicitly excluded with rationale (usage forms differ) — reasonable, recorded not handled.
+  - "详细的升级流程" — covered, Phase 0-7.
+  - "刷机流程完善" — covered section 五.
+  - "在线升级一定不要影响远程控制和使用" — the plan's hard boundary, and measures (no tunnel/agent/network changes, no reboot, cron restart only) are consistent. Residual risks to call out: pkill self-match session drop (my finding); /etc/init.d/cron restart is safe; rm of cgi endpoints verified no management dependency (agent-1 confirmed zero matches in mgmt tree — good). 
+
+  **Other technical findings**:
+
+  a) Phase 4 cgi-bin deletion: verified safe by repo evidence (mgmt tree zero references; R7/R8/R1-R4 prior deletion with "远程管理零影响实证"). Good — plan is sound here.
+
+  b) Phase 5: "下次开机驱动会重格为空 ext4" — wait, if the driver reformats at boot, then after R2's next 00:00 reboot (tomorrow), partition gets reformatted empty anyway — consistent. But for R1/R3/R4, they reboot daily too, so tomorrow all four get reformat; the online rm is about removing ammo today. Coherent. However one subtlety: R7's terminal state required umount+dd because at flash time they could; online they can't umount main partition (agent data? why can't they umount? presumably because busy or risk). Plan says keep mounted. R7 终审 says reformat-at-boot is固件固有 — so empty content suffices. OK.
+
+  c) pkill also Phase 1 verification uses bracket trick — good.
+
+  d) Phase 2: `/usr/bin/rathole` — wait, rathole is a tunnel tool; is rathole used by OUR management tunnels? Agent-0 noted flash-snr.py:197 deletes 不合规二进制 rathole/zcon-ng. Hmm — rathole is a legit reverse-tunnel tool; could the mgmt tunnel use rathole? flash-snr.py P5 lists rathole as 不合规. And tunnels are "隧道实例" (mihomo? gost?). Agent-1: management plane components are agent/隧道/handlers. If our tunnel stack used rathole, flash script wouldn't delete it. But R1-R4 "本轮实测均不存在" — so deleting is a no-op anyway. But caution: if on some device rathole exists AND is ours, deleting breaks tunnels. Evidence says it's classified as vendor PCDN in the flash script, and 实测不存在 on R1-R4. Low risk; mention as "先 ls 确认" already mitigates, but suggest also checking it's not referenced by our init.d before rm. Actually plan says "先 ls 确认再删" — but ls only confirms existence, not ownership. Minor note.
+
+  e) Phase 6 "心跳 30 秒内两连拍" as proof agent unaffected — fine.
+
+  f) 回退： cron rewrite — snapshot pushback restores; but note crontab rewritten file must preserve other lines — plan says "保留其余行". Risk: hand-editing the crontab content on PC based on snapshot; if device crontab changed between snapshot and push (unlikely in minutes), lost lines. Minor; suggest push within same session, verify diff before apply. OK to mention briefly.
+
+  g) Section 五.3 claims "旧链 scp 两行缺 f 前缀从未真正工作过" — agent-0 confirmed comment at :428-430 and current fix. "已落地" verified true.
+
+  h) "failover SQL 两处改 -U postgres 直连+UPDATE 结果校验" — true, but both places only warn, don't abort (:561, :743) — slightly weaker than "校验" implies; not a plan defect per se since plan doesn't claim abort.
+
+  i) "剩两台待刷之一" — docs don't name them; R10 档案已生成 (RSSH 13232) without a flash-complete entry — possible inconsistency: one of the two may already be mid-flash. Worth noting for acceptance criterion 4 wording ("下一台新设备（剩两台待刷之一）" — fine).
+
+  j) R5 status inconsistency: 当前状态.md:535 says R5 online, :525 says R5/R6 offline. Plan says R5/R6 离线. Per latest entry R5 may be online now — if so, plan could include R5. Flag as "待核实" — plan's premise (R5/R6 offline) may be stale per the doc's own newest entry. Good catch from agent-1.
+
+  k) "R7 案实证的休眠安装器" — docs don't record a live dormant installer on R7; the live-process claim for R2/R3/R4 comes from this morning's session (not in repo). Not falsifiable from repo; note as unverifiable-from-repo but plausible.
+
+  l) Phase 6 numbering vs 验收标准 numbering (12/14 vs 13/16) — already noted.
+
+  m) Section 四 title says "每台约 5 分钟" — with snapshots + 12+ verifications + heartbeat 30s two-beat checks, 5 min/台 is optimistic but not impossible. Minor.
+
+  n) pcdn-deepclean.py "与 flash-snr.py 共用验证口径" — fine.
+
+  o) One more: Phase 3 rc.local push "sh -n 语法校验 + 逐行 grep 验证" — but rc.local only takes effect at next boot; for R2 the moved block's effect (QUIC self-heal) won't apply until tomorrow's reboot. Between now and then, QUIC REJECT 首位 is currently OK (iptables already correct from 10-14 fix), and if the box doesn't reboot, order persists. Fine. But: does R2's rc.local currently have the QUIC self-heal block dead — and does /etc/init.d/mihomo on R2 also have REJECT-SELFHEAL (added 10-14 per docs)? Agent-1: R1-R4 all SELFHEAL=1 per 10-14 fix — that fix was init.d/mihomo append. So R2 already has self-heal in mihomo init; the rc.local 112-113 "QUIC 自愈+每日重启块" might be something else (maybe the older rc.local-based self-heal from an earlier era?). Slight confusion in plan's description vs documented mechanism (init.d/mihomo). The plan's claim that rc.local 112-113 contains QUIC self-heal contradicts the documented location (init.d/mihomo). Unless the 10-14 fix ALSO touched rc.local on R2... The docs say init.d/mihomo 追加两条. So plan's characterization of rc.local block 112-113 as "QUIC 自愈" is questionable/unverified. But since it comes from this morning's实测 of actual file content, maybe R2's rc.local genuinely has such a block (legacy). Can't falsify. I'll note: mechanism attribution conflicts with documented location of REJECT-SELFHEAL (init.d/mihomo), suggest re-confirming block content before moving it — moving a block whose semantics you haven't fully decoded is risky. Actually the plan does say Phase 0 snapshots pull rc.local original — and "逐行 grep 验证放置". OK.
+
+  p) Another genuine safety point: Phase 3 crontab rewrite adds reboot line to R2 — meaning R2 WILL reboot tomorrow 00:00. User said 不要影响远程控制和使用 — a daily reboot at midnight matches fleet norm; after reboot, R2's fixed rc.local runs for the first time — that's when the dead-code fix is actually exercised. If the edited rc.local has any error (e.g., block moved incorrectly), it manifests at 00:00 reboot — sh -n only checks syntax, not semantics. Acceptance criterion 3 covers checking next day. Reasonable, but worth noting residual risk: first real execution of new rc.local happens unattended at midnight; mitigations: snapshot rollback requires manual intervention next morning if something breaks. Acceptable with the documented acceptance check.
+
+  q) Also Phase 1: killing the installer while it's mid-write? It's dormant. Fine.
+
+  r) R1 hooks: "R1 安装器行已注释但脚本仍在" — Phase 2 deletes scripts; rc.local already commented; R1 init.d has 2 items. Fine.
+
+  s) Ordering claim "R2→R4→R3→R1" — already covered (pilot recommendation).
+
+  t) Section 五.1 关卡② "crontab 含 #routermgmt-reboot（出厂即有每日重启）" — flash-snr.py:369 already writes it at flash time; so this checkpoint validates existing behavior — good, but description "出厂即有" is already true; the checkpoint adds enforcement. Fine.
+
+  u) 验收标准 4: "三新关卡在下一台新设备实测通过" — depends on implementation; plan says tools "批准后实施，本轮仅为方案" — consistent.
+
+  v) One more check: "心跳 30 秒内两连拍" in Phase 0 baseline and Phase 6 — fine.
+
+  w) Plan says "QUIC 规则仅追加自愈不改语义" in boundary #2, and R5/R6 gets QUIC fix later. R1-R4 QUIC already首位. OK.
+
+  x) Coverage gap? User asked "是不是还有 PCDN 和发现的问题" — the plan answers based on this morning's check, but doesn't propose any re-scan for *other* unknown PCDN beyond the known R7-case signatures. E.g., are there other vendor persistence mechanisms not in the known checklist (uboot env, /etc/uci-defaults, rc.d symlinks vs init.d, /etc/rc.local.d, procd instances, hotplug.d)? The plan's Phase 6 residual checks cover the known six layers only. A deeper sweep (e.g., grep for vendor domains/IPs in /etc, check /etc/hotplug.d, uci-defaults, crontabs of other users) could be suggested as an enhancement. This is a legit "遗漏" point: the plan enumerates known残留 but doesn't include a discovery sweep for unknown mechanisms. Moderate value suggestion.
+
+  Also: netfilter — check for lingering iptables rules from PCDN (port 51002/9821/9800/60022 checks exist in flash P2 gate but not in online Phase 6!). flash-snr.py gate P2 checks 异常端口=0 (51002/9821/9800/60022). The online Phase 6 doesn't include listening-port check. Good catch — adding "异常端口=0" to Phase 6 would align with flash 口径 ("共用验证口径" claim in section 五 for pcdn-deepclean.py). Flag it.
+
+  y) 心跳两连拍 30秒 — heartbeat interval presumably 30s? fine.
+
+  Now structure the review:
+
+  A. 覆盖度与忠实度结论： overall good; list small gaps.
+  B. 事实性错误 (verified against repo):
+   1. flash-batch 复验 12→14 —— 实际 6 项 (flash-batch.py:270-271). 严重度： 事实错误， 影响方案可信度.
+   2. flash-snr 关卡 "15→18" 表述不准确： 现 15 项主表+3 项下发验证已是 18 判定点； 且 :755 文案仍写"终验 11 关" —— 新增后应为 18+3=21 判定点. 轻微.
+   3. R5/R6 离线前提可能与状态档最新条目冲突 （当前状态.md:535 说 R5 在线） —— 执行前需复核.
+   4. "休眠安装器（R7 案实证）" —— R7 案文档无休眠进程存活记载； R1-R4 存活进程来自今晨实测， 不可由仓库复核. 表述把证据来源张冠李戴 （轻微）.
+   5. QUIC 自愈位置： 文档记载在 /etc/init.d/mihomo (REJECT-SELFHEAL), 方案称 R2 rc.local 112-113 含"QUIC 自愈块" —— 与文档机制不一致； 行号 96/98/111-113 无历史记载， 仅有今晨实测. 执行前应以 Phase 0 快照为准逐行确认.
+  C. 技术风险 （自发）:
+   1. pkill -f 自匹配自杀 —— 高危实操坑： SSH 远端 sh -c 命令行含 pattern, pkill -f 会杀掉发起 shell, 会话中断. 方案自己复验命令已用 "[i]nstall_" 技巧却没在 pkill 上用. 建议 pkill -f "[i]nstall_pdnterminal" 或按 PID 杀.
+   2. 执行顺序 R2 先行无理据： R2 是最复杂一台 （死代码修复+crontab 变更）, 建议先用最轻的 R1 试点验证 runbook, 再走重型机. 
+   3. R2 crontab 新 reboot 行与 rc.local 恢复块叠加： 依赖恢复块的幂等性 (grep 去重）, 否则多次开机累积重复行 —— 建议 Phase 0 确认 R2 rc.local 块重加逻辑是幂等的.
+   4. 新 rc.local 首次真正执行在次日 00:00 无人值守重启时； sh -n 只查语法不查语义. 验收标准 3 已覆盖次日确认 —— 可接受但要点名.
+   5. Phase 6 残留清单缺少"异常端口=0" (flash 关卡 P2 的 51002/9821/9800/60022) —— 与方案自称"共用验证口径"不一致； 建议补上. 另外可考虑加一轮未知机制发现性扫描 (uci-defaults/hotplug.d/rc.d 符号链接/厂商域名 IP grep), 因为用户问的是"是不是还有 PCDN" —— 方案只清已知六层， 不含发现性扫描.
+   6. rm /usr/bin/rathole 等二进制： "先 ls 确认"只确认存在不确认归属； 建议删前确认无我方 init.d/隧道引用 （文档证据指向厂商， 且实测不存在， 风险低）.
+   7. Phase 5 umount 嵌套 docker 子挂载 busy 则跳过 —— 但随后 rm -rf 在仍挂载的子挂载点上删的是挂载内内容， 行为 OK; 不过若跳过 umount, rm 会删到子挂载里的内容 —— 其实这没问题. 跳过.
+   8. 计数不一致： "残留六项"实为 7 条； Phase 6 自称 12 项实为 13 项， R2 加验 3 条 → 15/16, 与验收标准"十二项全绿（R2 十四项）"对不上. 文案需统一.
+  D. 安全/边界符合性： cgi 端点删除安全性有仓库证据支持 (mgmt 树零引用， R7 删后 18 项全过， R1-R4 10-13 清理远程管理零影响实证）. cron restart 不涉网络 — 正确. 不动隧道/agent — 符合红线. base64+md5 对拍 — 符合 SOP 增补（四）.
+  E. 总评： 方案整体忠实、可执行， 主要修正是 1 处事实错误 (flash-batch 6 项）, 1 个实操坑 (pkill), 顺序建议， 口径计数统一.
+
+  Also mention verified-true claims to give credit: exit(7)/grep -c/-U postgres 已落地属实； SOP 增补（四）（七）引用属实； R7 终审口径属实； MAC/端口/防火墙栈一致； cgi 无管理依赖.
+
+  One more: 方案说 R5/R6 回线后"同流程补做 + QUIC REJECT-SELFHEAL" —— 与文档"R2-R6 修复清单剩 R5/R6"一致 ✓.
+
+  Also the plan's boundary #2 says "QUIC 规则仅追加自愈不改语义" but for R1-R4 no QUIC changes are made at all in this flow — the phrase covers R5/R6. Fine.
+
+  Also: 方案 Phase 3 "对 mbox/start_client_manage/timeRestart/hole/start_get_versionInfo 逐个 [ -f ] && {stop;disable;rm}" —— flash 脚本九件套还包括 netbox_daemon.service/zcon-edge-service/zcon-ng/start_jcgqos. 在线流程只列 5 个 （基于实测残留） — 合理， 但 Phase 6 "init.d 残留 0" 的口径应明确是对这 5 项还是对九件套. 建议对齐九件套清单. Minor.
+
+  Now write the final review in Chinese, structured, citing section numbers.
+
+To resume this session: kimi -r session_271e31fb-8b2e-4199-a48d-d0439927e93b

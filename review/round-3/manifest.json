@@ -1,0 +1,49 @@
+{
+  "round": 3,
+  "created_at": "2026-10-29 12:30:09",
+  "tool": "tools/multi_ai_evidence.py",
+  "ais": {
+    "grok": {
+      "status": "absent",
+      "files": [],
+      "reason": "You’ve reached your free Grok Build usage limit for now. Get SuperGrok for much higher limits, or try again later: https://grok.com/supergrok?referrer=grok-buildError: You’ve reached your free Gr"
+    },
+    "kimi": {
+      "status": "present",
+      "files": [
+        {
+          "file": "审查_kimi.raw",
+          "normalized_to": "审查_kimi",
+          "sha256_raw": "4d0c05ea1a938a1bb091fca987a7795eb394495dd4ada19c353d3b2e0955375e",
+          "bytes": 11650
+        }
+      ],
+      "reason": ""
+    },
+    "codex": {
+      "status": "present",
+      "files": [
+        {
+          "file": "检查_codex.md",
+          "normalized_to": "检查_codex_normalized.md",
+          "sha256_raw": "f0a8866d2741c8be6a78be77fd091a6eb436982a9e048bbf0204a72cbc540e79",
+          "bytes": 13548
+        }
+      ],
+      "reason": ""
+    },
+    "zcode": {
+      "status": "present",
+      "files": [
+        {
+          "file": "分歧表.md",
+          "normalized_to": "分歧表_normalized.md",
+          "sha256_raw": "43412c96e5b3a411cf1c766b5c53da9fb857decf8c8e089e0e4b6c9f248333a0",
+          "bytes": 4450
+        }
+      ],
+      "reason": ""
+    }
+  },
+  "note": "本 manifest 只登记文件级证据（哈希/在席/缺席），不载结论；终审归人工。"
+}

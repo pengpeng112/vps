@@ -57,6 +57,8 @@ const rateOptions = [
 // 改名 + VPS 停用/启用
 const nameEdit = ref('')
 const nameSaving = ref(false)
+const macEdit = ref('')
+const macSaving = ref(false)
 // 心跳指标里 exit_node=DIRECT 即代理已被远程停用（60s 心跳粒度）
 const proxyDisabled = computed(() => (detail.value.latest_metric?.exit_node ?? '') === 'DIRECT')
 
@@ -70,6 +72,7 @@ function fmtMS(ms?: number | null) { return ms == null ? '—' : `${ms} ms` }
 async function loadDetail() {
   detail.value = await api.get(`/api/v1/devices/${id}`)
   nameEdit.value = detail.value.device?.name || ''
+  macEdit.value = detail.value.device?.mac_addr || ''
   rateKbps.value = detail.value.device?.vps_limit_kbps ?? 0
   rebootCron.value = detail.value.device?.reboot_cron ?? ''
   proxyMode.value = detail.value.device?.proxy_mode || 'rule'
@@ -93,6 +96,21 @@ async function saveName() {
     message.error(e.message)
   } finally {
     nameSaving.value = false
+  }
+}
+
+async function saveMac() {
+  const v = macEdit.value.trim()
+  if (v === (detail.value.device?.mac_addr || '')) return
+  macSaving.value = true
+  try {
+    await api.patch(`/api/v1/devices/${id}`, { mac_addr: v })
+    message.success('MAC 已保存')
+    loadDetail()
+  } catch (e: any) {
+    message.error(e.message)
+  } finally {
+    macSaving.value = false
   }
 }
 
@@ -343,6 +361,10 @@ function taskStatusType(s: string) {
           <n-descriptions-item label="ID">{{ detail.device?.id }}</n-descriptions-item>
           <n-descriptions-item label="WG 地址">{{ detail.device?.wg_ip }}</n-descriptions-item>
           <n-descriptions-item label="型号">{{ detail.device?.hw_model || '—' }}</n-descriptions-item>
+          <n-descriptions-item label="MAC 地址">
+            <n-input v-model:value="macEdit" size="tiny" placeholder="标签/主 MAC" style="width: 170px" @keyup.enter="saveMac" />
+            <n-button size="tiny" :loading="macSaving" @click="saveMac" style="margin-left: 4px">保存</n-button>
+          </n-descriptions-item>
           <n-descriptions-item label="固件">{{ detail.device?.firmware_ver || '—' }}</n-descriptions-item>
           <n-descriptions-item label="出口 IP">{{ detail.device?.current_exit_ip || '—' }}</n-descriptions-item>
           <n-descriptions-item label="期望主节点">{{ detail.device?.current_node_name || '—' }}</n-descriptions-item>

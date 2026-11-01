@@ -327,6 +327,17 @@ task_apply_config() { # $1 任务 JSON（switch_node / reload_proxy）
     [ "$_healthy" = "1" ] && { probe_cn_direct || { sleep 3; probe_cn_direct || { _healthy=0; echo "cn_direct failed x2 $(date +%T)" > "$STATE_DIR/health.log"; }; }; }
     [ "$_healthy" = "1" ] && { probe_mgmt || { _healthy=0; echo "mgmt failed $(date +%T)" > "$STATE_DIR/health.log"; }; }
 
+    # Restore automatic failover before committing, with the transaction watchdog
+    # still armed. Failure follows the existing rollback path below.
+    _grp=$(oc_get_group PROXY)
+    if [ "$_healthy" = "1" ] && [ "$_type" = "switch_node" ] && [ -n "$_node" ]; then
+        oc_set_group PROXY AUTO || _healthy=0
+        sleep 1
+        _grp=$(oc_get_group PROXY)
+        [ "$_grp" = "AUTO" ] || _healthy=0
+        [ "$_healthy" = "1" ] && { _egress_ip=$(probe_egress) || _healthy=0; }
+    fi
+
     if [ "$_healthy" != "1" ]; then
         # 7. 健康检查失败 → 回滚（先备份/选择状态恢复，验证成功才报 rolled_back）
         kill "$(cat "$_txn/watchdog.pid" 2>/dev/null)" 2>/dev/null
@@ -347,7 +358,7 @@ task_apply_config() { # $1 任务 JSON（switch_node / reload_proxy）
     if [ -n "$_ver" ] && [ "$_ver" -gt "$_acc" ]; then
         echo "$_ver" > "$STATE_DIR/accepted_version"
     fi
-	persist_result "$_tid" "$_lease" ok "{\"exit_ip\":\"$_egress_ip\",\"version\":$_ver}"
+	persist_result "$_tid" "$_lease" ok "{\"exit_ip\":\"$_egress_ip\",\"version\":$_ver,\"proxy_group\":\"$_grp\"}"
 	log "task $_tid committed version=$_ver exit=$_egress_ip"
 	reapply_runtime_modes
 	return 0
@@ -670,8 +681,12 @@ task_collect_diag() {
 # set_wifi：远程开关 Wi-Fi（2026-09-23）。关闭时布防 5 分钟自动恢复兜底：
 # 管理心跳走有线/WAN 隧道不受影响；300 秒内无新的 set_wifi enabled=true 确认，
 # cron 每分钟巡检超时后自动重新启用并解除布防（防"远程关掉后联系不上"）。
+# 2026-10-01 开机持久化修复：wifi.enabled 标记"最近一次人工开启"；rc.local 三态
+# 判断（enabled→保持开 / disabled→主动关 / 都无=新设备默认关）。此前 rc.local 把
+# wifi.disabled 当"已启用"读，语义反向：开启状态一重启就被关，禁用状态反而开回。
 wifi_restore_disarm() {
     rm -f "$STATE_DIR/wifi.disabled"
+    date +%s > "$STATE_DIR/wifi.enabled"
     sed -i '/#routermgmt-wifi-restore/d' /etc/crontabs/root 2>/dev/null
     [ -x /etc/init.d/cron ] && /etc/init.d/cron restart 2>/dev/null
     return 0
@@ -679,6 +694,7 @@ wifi_restore_disarm() {
 
 wifi_restore_arm() {
     date +%s > "$STATE_DIR/wifi.disabled"
+    rm -f "$STATE_DIR/wifi.enabled"
     cat > /etc/routermgmt/wifi_restore.sh <<'EOS'
 #!/bin/sh
 # routermgmt Wi-Fi 自动恢复：布防 300 秒无确认则自动开回
@@ -686,12 +702,21 @@ _f="/etc/routermgmt/state/wifi.disabled"
 [ -f "$_f" ] || exit 0
 _now=$(date +%s); _ts=$(cat "$_f" 2>/dev/null || echo 0)
 [ $((_now - _ts)) -lt 300 ] && exit 0
-for _r in $(uci show wireless 2>/dev/null | sed -n 's/^\(wireless\.[^.=]*\)=wifi-device$/\1/p'); do
+_rlist="$(uci show wireless 2>/dev/null | sed -n 's/^\(wireless\.[^.=]*\)=wifi-device$/\1/p')"
+[ -z "$_rlist" ] && _rlist="$(uci show wireless 2>/dev/null | sed -n "s/^wireless\.[^.]*\.device='\([^']*\)'/wireless.\1/p" | sort -u)"
+for _r in $_rlist; do
     uci set "$_r.disabled=0"
 done
+# MTK 固件的 /sbin/wifi up 会关射频——检测到时跳过，纯 ifconfig
+_mt7981=0
+[ -d /etc/wireless/mediatek ] && _mt7981=1
+for _i in $(ls -d /sys/class/net/ra[0-9]* /sys/class/net/rax[0-9]* 2>/dev/null | sed 's|.*/||'); do
+    ifconfig "$_i" up 2>/dev/null
+done
 uci commit wireless
-wifi up 2>/dev/null || /sbin/wifi up 2>/dev/null
+[ "$_mt7981" = "0" ] && { wifi up 2>/dev/null || /sbin/wifi up 2>/dev/null; }
 rm -f "$_f"
+date +%s > /etc/routermgmt/state/wifi.enabled
 sed -i '/#routermgmt-wifi-restore/d' /etc/crontabs/root 2>/dev/null
 [ -x /etc/init.d/cron ] && /etc/init.d/cron restart 2>/dev/null
 logger -t routermgmt-agent "wifi auto-restored after timeout"
@@ -711,20 +736,41 @@ task_set_wifi() {
         true|false) ;;
         *) persist_result "$_tid" "$_lease" failed '{"error":"invalid params.enabled"}'; return ;;
     esac
+    # 段发现：标准 wifi-device + MT7981 风格（无线 iface 的 .device 指向的段名，如 RADIO2G）
+    _rlist="$(uci show wireless 2>/dev/null | sed -n 's/^\(wireless\.[^.=]*\)=wifi-device$/\1/p')"
+    [ -z "$_rlist" ] && _rlist="$(uci show wireless 2>/dev/null | sed -n "s/^wireless\.[^.]*\.device='\([^']*\)'/wireless.\1/p" | sort -u)"
     _n=0
-    for _r in $(uci show wireless 2>/dev/null | sed -n 's/^\(wireless\.[^.=]*\)=wifi-device$/\1/p'); do
+    for _r in $_rlist; do
         if [ "$_en" = "true" ]; then uci set "$_r.disabled=0"; else uci set "$_r.disabled=1"; fi
         _n=$((_n+1))
     done
     [ "$_n" -gt 0 ] || { persist_result "$_tid" "$_lease" failed '{"error":"no wifi-device found"}'; return 0; }
     uci commit wireless
+    # MTK 私有驱动固件（SN-R2 类）：uci 不驱动射频，必须直接 ifconfig 控制接口。
+    # 停用持久化由 $STATE_DIR/wifi.disabled 兜底（与 300s 自动恢复共用同一文件；
+    # rc.local 的 wifi-default-off 钩子读取该文件判断是否执行）。
+    _wl="$(ls -d /sys/class/net/ra[0-9]* /sys/class/net/rax[0-9]* /sys/class/net/rai[0-9]* /sys/class/net/rae[0-9]* 2>/dev/null | sed 's|.*/||' | tr '\n' ' ')"
+    [ -z "$_wl" ] && _wl="ra0 rax0"
+    _apply_mtk=0
+    for _i in $_wl; do
+        if [ "$_en" = "true" ]; then
+            ifconfig "$_i" up 2>/dev/null && _apply_mtk=1
+        else
+            ifconfig "$_i" down 2>/dev/null && _apply_mtk=1
+        fi
+    done
+    [ "$_apply_mtk" = "1" ] && log "set_wifi: MTK ifconfig applied ($_wl)"
+    # MTK 固件的 /sbin/wifi 是 nossiac Lua 版，up/down 行为与标准相反（up 反而关射频），
+    # 检测到 MT7981 风格时跳过 wifi 命令，纯 ifconfig 控制。
+    _mt7981=0
+    [ -d /etc/wireless/mediatek ] && _mt7981=1
     if [ "$_en" = "true" ]; then
-        wifi up 2>/dev/null || /sbin/wifi up 2>/dev/null
+        [ "$_mt7981" = "0" ] && { wifi up 2>/dev/null || /sbin/wifi up 2>/dev/null; }
         wifi_restore_disarm
         persist_result "$_tid" "$_lease" ok "{\"enabled\":true,\"radios\":$_n}"
         log "task $_tid wifi enabled radios=$_n"
     else
-        wifi down 2>/dev/null || /sbin/wifi down 2>/dev/null
+        [ "$_mt7981" = "0" ] && { wifi down 2>/dev/null || /sbin/wifi down 2>/dev/null; }
         wifi_restore_arm
         persist_result "$_tid" "$_lease" ok "{\"enabled\":false,\"radios\":$_n,\"auto_restore_s\":300}"
         log "task $_tid wifi disabled radios=$_n auto_restore=300s"

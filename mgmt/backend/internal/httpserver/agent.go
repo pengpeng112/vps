@@ -270,6 +270,25 @@ func (s *Server) handleHeartbeat(c *gin.Context) {
 			})
 		}
 	}
+	// 设备级小时流量预警（阶段一 2026-10-03）：WAN 下行最近1小时增量 ≥ 阈值(MB) 时告警，
+	// 去重键含小时桶（每设备每小时最多一条）；计算失败不阻塞心跳。
+	if accepted && dev.TrafficAlertHourlyMB > 0 {
+		var hourRx int64
+		if err := s.DB.Raw(`WITH s AS (
+			SELECT ts, wan_rx_bytes, LAG(wan_rx_bytes) OVER (ORDER BY ts) AS prx
+			FROM metrics
+			WHERE device_id = ? AND ts >= now() - interval '1 hour' AND wan_rx_bytes IS NOT NULL
+		) SELECT COALESCE(SUM(GREATEST(wan_rx_bytes - prx, 0)), 0) FROM s WHERE prx IS NOT NULL`,
+			dev.ID).Scan(&hourRx).Error; err == nil && hourRx >= int64(dev.TrafficAlertHourlyMB)*1e6 {
+			s.DB.Transaction(func(tx *gorm.DB) error {
+				s.alerts.Raise(tx, "traffic_threshold", &dev.ID, "warning",
+					fmt.Sprintf("设备 %s 最近1小时下行 %.2f GB 已达阈值 %d MB（高流量预警）",
+						dev.ID, float64(hourRx)/1e9, dev.TrafficAlertHourlyMB),
+					fmt.Sprintf("traffic_hourly:%s:%s", dev.ID, now.UTC().Format("2006010215")))
+				return nil
+			})
+		}
+	}
 	var fresh models.Device
 	if err := s.DB.Where("id=?", dev.ID).First(&fresh).Error; err != nil {
 		fresh = *dev

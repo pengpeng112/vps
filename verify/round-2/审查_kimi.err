@@ -1,0 +1,260 @@
+• The task: read-only code review. Read the four files. Start by reading the 变更说明.md and the three patches. These may be large; read them.
+
+  649 F:/vps/verify/round-2/diff_1_flash-snr.patch
+  156 F:/vps/verify/round-2/diff_2_flash-batch.patch
+  178 F:/vps/verify/round-2/diff_3_r7-finish2.patch
+   46 F:/vps/verify/round-2/变更说明.md
+ 1029 total
+• Now I should read the SOP "统一 SN 刷机流程 v2" section for cross-checking. Also diff_3 uses `re` but the import list is `import base64, json, os, subprocess, sys, time` — `re` is NOT imported in flash-r7-finish2.py! Line 126: `macs = dict(re.findall(...))` — NameError. Wait, check imports: line 11: `import base64, json, os, subprocess, sys, time`. No `re`. And line 126 uses `re.findall`. That's a bug — confirmed high severity (would crash at step D).
+
+  Let me check the SOP section. Grep for 「统一 SN 刷机流程 v2」 in the SOP file.
+
+  Also verify things I flagged mentally:
+
+  flash-snr.py issues:
+  1. push() no md5 verification (line 120-124) — self-acknowledged risk #2. Confirm: no integrity check. Severity high (57MB mihomo over dropbear). Also push writes to `/usr/bin/mihomo` directly — a partial write leaves corrupt binary; no temp+rename, no size check. And `o.read()` after shutdown_write waits for EOF but doesn't check exit status of `cat`. `c.exec_command(f"cat > '{remote}'")` — remote is single-quoted, fine for known paths.
+
+  2. alloc_rssh race: two concurrent runs both compute mx+1 — race (batch pre-allocates; acknowledged risk #3). Confirm. Severity medium.
+
+  3. Batch's next_ports: `mx` fallback 13229 but start default 13230, `base = max(mx+1, start)` — ports from 13230+. But flash-snr.alloc_rssh starts at 13223 with pool cap 13300; batch has no 13300 cap check — ports could exceed 13300 silently? next_ports never checks upper bound. Minor.
+
+  4. Batch lock race: `os.path.exists(LOCK)` then `open(LOCK,'w')` — TOCTOU between two batch invocations; two processes can both pass. Severity medium. Also lock not removed on crash (by design with 90-min expiry). Also `finally` removes lock if not found — but if exception raised during sweep after found devices? finally only removes when `not found or args.detect`. If exception mid-scan with found non-empty, lock stays — OK, expires in 90 min.
+
+  5. flash_one: `open(log, "w")` — log path `backups\.flash-N{n}.log`, fine. Note flash-snr.py writes credentials `.snr{N}-pw` etc. per num — parallel with distinct nums OK.
+
+  6. KNOWN_MAC_PREFIXES issue (self-acknowledged risk #1): `76:a7:c8:e0:4f:` prefix — wait, that's the PINNED MAC prefix used for managed devices (WAN = 76:a7:c8:e0:4f:2N). Factory devices have random MACs each boot. Also `a4:d8:ca:14:` — presumably current fleet factory MACs. Problem: a NEW factory device could have MAC starting with a4:d8:ca:14: (same OUI batch) → false negative skip (acknowledged). Worse inverse: is 76:a7:c8:e0:4f a "known device" prefix — factory devices never have it (random MAC), so fine. But also false positive risk? Factory device MAC is random per boot — could theoretically match. The bigger issue: whitelist uses prefix match — a factory device from same manufacturing batch as existing fleet (a4:d8:ca:14:xx) gets skipped → silently never flashed in --auto cron mode. Severity medium-high for automation intent. Confirm.
+
+  Also: fingerprint only checks wan/ra0 — if device in 132 net is e.g. Athena (nftables, different model) with telnet 23 open and password abc@1234? Athena password isn't abc@1234 presumably. But any other telnet device with root/abc@1234 gets wiped/flashed — e.g. another OpenWrt device not JCG AX3000. Model is read (`/tmp/sysinfo/model`) but NOT checked! info includes model but the factory decision ignores model. So a non-AX3000 device with default creds would be flashed with ARM64 mihomo etc. Severity high — model whitelist missing. Confirm: lines 62-70 — model only recorded in info string, never compared.
+
+  7. flash-snr.py: HOST global — Tel class created before HOST reassignment? No: HOST assigned at line 145 before Tel() at 153. Fine. But note `--host` used by batch. OK.
+
+  8. Telnet: `t.send("root")`, then password. If password wrong, "#" not in r → exit. Fine.
+
+  9. sed for shadow: HASH contains `$` chars — inside single quotes in sed 's|^root:...' — HASH has no `/` or `|` or `&`? md5-crypt charset is [./0-9A-Za-z] plus `$1$salt$` — `$` is fine in replacement? In sed replacement, `&` is special, `\` special. `$` fine. OK. But sent over telnet with t.send — the line contains single quotes... `f"sed -i 's|^root:[^:]*:|root:{HASH}:|' /etc/shadow"` — HASH contains no single quote. OK.
+
+  10. Step 2 shell block: `umount -l /mnt/mmcblk0p6 2>/dev/null; dd ...` — acknowledged risk #6: umount failure ignored, dd proceeds on mounted device. Confirm: line 199-200, `2>/dev/null` and `;` chaining — no check. dd writes to mounted block device → filesystem corruption risk while mounted; data could also be written back by fs caches. Also `dd ... count=256` zeros 256MB — wipes signature AND more (data). Intent is signature wipe; 256MB overkill but works. Severity high per ack. Also `umount /mnt/mmcblk0p6/docker` first — if /mnt/mmcblk0p6/docker not a separate mount, fails, fine.
+
+  Also ordering: rm -rf /mnt/mmcblk0p6/... happens (line 191) BEFORE umount (line 199) — deleting files on mounted disk, then dd zeroes device. rm before umount is actually needed to remove data. Order rm→umount→dd is correct-ish, but if umount fails, dd on mounted fs. Confirm problem.
+
+  11. fstab uci sections may not exist (`fstab.@mount[0]`) — errors suppressed, fine.
+
+  12. Line 202 awk dedup: `awk '!/^# disabled-pcdn-telnet:/ || !seen[...]++'` — this keeps all non-comment lines, and for comment lines dedups by $2. But on FIRST run (no comment lines), awk passes all; then sed comments telnet lines. On second run, the comment line matches first pattern → kept... wait `!/^# disabled-pcdn-telnet:/` is false for comment lines, so evaluates `!seen[$2]++` — keeps first occurrence. But then sed 's|^\(.*telnet.*\)$|# disabled...|' re-comments ALL telnet lines INCLUDING already-commented ones? Already-commented line is `# disabled-pcdn-telnet: telnetd ...` — contains "telnet" → sed wraps again → `# disabled-pcdn-telnet: # disabled-pcdn-telnet: telnetd...`. Then next run's awk dedup keys on $2 = "#" for double-wrapped... hmm, dedup uses `$2` after `/^# disabled-pcdn-telnet: /` — for single-wrapped, $2 is like `telnetd` or `/usr/sbin/telnetd`; double-wrapped $2="#". So double-wrapped lines survive dedup (key "#" unique once). Repeated reflash → alternating growth? Run2: line becomes double-wrapped. Run3: awk keeps double-wrapped (first pattern matches since starts with "# disabled-pcdn-telnet:") → dedup by $2="#", kept once; then sed wraps again → triple-wrapped, $2="#" — run4 dedup: two lines both $2="#" → keeps first only. So converges to one line but permanently growing prefix on the surviving line. Minor idempotency blemish — low severity. Also sed matches any line containing "telnet" — including possibly legit lines. Low.
+
+  13. Step 2 `uci set system.@system[0].password='__UCIPW__'` — plaintext PW into uci system password — replaces with UNIFIED_PW via .replace. Note even with --random-pw it uses UNIFIED_PW here (not PW) — inconsistency: random-pw mode still sets web password to unified. Low/medium bug: line 228 replace uses UNIFIED_PW regardless of args.random_pw. If --random-pw used, SSH password = random, web password = unified → mismatch; docs claim same. Severity medium (flag).
+
+  14. Step 4: `requests.post(...)` no status check; `dev = r.json()` could raise on non-JSON (500 HTML). Acknowledged risk #4 — confirm widespread: enroll, assignments/batch, ops, patch. `r.json()["items"][0]["task_id"]` after the loop uses LAST response (node 4 apply=True) — OK intentionally. But if any of the 4 posts fail, last may not be the apply one... The loop's r ends as node4's response. Fine if all succeed; no error check → KeyError/IndexError on failure rather than clean abort. Medium.
+
+  15. 防劫持闸门 (lines 252-265): builds `_sql = "SELECT count(*) ... WHERE id = '" + dev["id"] + "'"` — dev["id"] from API response; SQL injection surface is low (trusted server), but quoting: the outer ssh command wraps in double quotes, `_sql` contains single quotes — OK. But psql -c "..." inside ssh arg: `docker exec routermgmt-db-1 psql ... -t -c "SELECT..."` passed as single ssh argument — ssh concatenates args with spaces and remote shell parses; double quotes inside preserved. OK. Bigger issue: retry with `_env["MGMT_API_BASE"]` changed — but env change affects only the subprocess env, and the SSH command doesn't use MGMT_API_BASE at all! The check goes straight to psql on DMIT. Setting MGMT_API_BASE env does nothing for the subprocess (it only ssh's). The comment says "脚本内嵌 MGMT_API_BASE 纠正" but the retry re-runs identical SSH command with modified env that the command doesn't read. However — the real hijack was in the POST going to DO; the check detects that (count=0 in DMIT DB) and aborts. The retry with corrected env never re-POSTs the device, so retry can't fix anything. Actually wait — retry would only pass if first failed due to transient DB lag. The env change is dead code. Also the POST itself used M.BASE captured at import; not re-corrected. So retry is misleading but harmless. Severity low-medium （疑问/问题： 兜底纠正无效）.
+
+  16. Also `_sql` count check `== "1"` — if device exists duplicate? id unique. OK.
+
+  17. enroll response: `pkg["mgmt_url"] = "https://127.0.0.1:18443"` overwrite. OK.
+
+  18. Step 5 awk patch: matches `/^    while :; do$/` — depends on exact 4-space indent in routermgmt-agent.sh; brittle but guarded by grep -q mgmt_active_port. If pattern not found, awk copies file unchanged and no patch, but subsequent `grep -q "mgmt-port-discovery.sh >/dev/null"` sed also pattern-dependent. `sh -n` validates syntax only, not that patch applied — silent skip possible. Medium/低.
+
+  19. crontab `0 0 * * * /sbin/reboot` + also platform reboot_cron patch — intentional.
+
+  20. Step 6: `m = re.search(ssh-rsa ...)`; if dropbearkey outputs nothing (key missing), m None → skips ALL key distribution silently, continues to write tunnel.conf and restart tunnel — tunnel without authorized key will fail; only later health check in 终验 catches. Should abort. Medium.
+
+  21. tb_sh: `printf '%s\n' '...line_tb...'` — line_tb contains double quotes (permitopen="...") inside single quotes — fine. But `O='-i $K ...'` single-quoted then used as `scp $O` — word splitting intended. `$O` unquoted expansion splits — OK. `K=/root/.ssh/id_ed25519_txbackup` inside single-quoted O string references $K — when expanded via `scp $O`, `$K`... wait O contains literal `$K` since single quotes. Then `scp $O` — shell expands $O to words `-i $K -o ...` — but `$K` inside the VALUE of O is NOT re-expanded (no double expansion in shell). So scp gets literal `-i $K` → identity file literally named `$K` → fails! Classic bug. Unless... scp would fail to find file `$K`. Hmm, but they claim it worked (R7 used). Let me think again: `O='-i $K -o BatchMode=yes ...'`; `scp $O file...` — word splitting after parameter expansion; the split words are `-i`, `$K`, ... — `$K` is not recursively expanded. So scp tries identity file named `$K` → "Warning: Identity file $K not accessible". scp continues trying default keys/agent; DMIT root's default keys may include one accepted by TX/BWG? Maybe that's why it worked in practice (fallback to default key). Or maybe BatchMode fails. This is a real latent bug — severity medium （公钥分发依赖偶然 fallback). Confirm as 问题.
+
+  Also `set -e` with `scp ... >/dev/null 2>&1` failing → script exits before echo TB-AK-DONE → printed as 失败 — at least surfaced. OK.
+
+  22. Step 7 mihomo push 57MB via cat channel — no md5 (risk #2 confirmed). Also config: golden.yaml replace placeholders; if clash-config-router.yaml regexes fail, nodes_yaml="" → golden has empty proxies — silently broken config; mihomo may fail to start; final checks would catch egress fail. Medium-low.
+
+  23. init.d mihomo heredoc with REJECT-SELFHEAL — syntax: `( ... iptables ... ) &` inside start_service, fine. Heredoc 'EOS' quoted — no expansion. bash -n not run but `sh -n` isn't either for this generated file. Self-ack risk #5. The generated script: `start_service() { procd_open_instance ... procd_close_instance; ( ... ) & }` — procd_close_instance should be last? Having background subshell after close is fine for rc.common. Syntax looks valid. Low.
+
+  Note: in init.d, `wget http://127.0.0.1:9090/version` loop then `/etc/mihomo-ipt.sh`, then REJECT delete+insert. OK.
+
+  24. Step 8 wait_final: `rr = requests.get(...).json()` — no status check; exception if non-JSON breaks loop → crash. t["id"] KeyError if item lacks id. Medium-low.
+
+  Also `_fpq` SQL update via direct DB write bypassing API — data-plane manipulation; works but bypasses audit. It hardcodes node ids 5/3/2. If device not assigned (post failed), update affects 0 rows silently. Medium-low.
+
+  25. Step 9: WiFi sed on .dat files — SSID `__NAME__` replaced with NAME = "SN-R4-AX3000" — no shell-special chars. OK. rc.local rewrite: `sed -i '/# wifi-default-off/,$d'` deletes from marker to end, then appends new block + 'exit 0'. But step 2 earlier deleted install_mbox lines from rc.local; onboot-hooks insertion at step 5 `sed -i 's|^exit 0|...|'` — then step 9 deletes everything from '# wifi-default-off' to end and re-appends including exit 0 — preserves onboot-hooks line if it's BEFORE the wifi marker? onboot-hooks inserted at exit 0 which is after wifi block → deleted! Wait order: step5 sed replaces `^exit 0` with `onboot-hooks.sh\nexit 0`. rc.local then: [wifi block from previous flash? first flash none] ... Actually on first flash, rc.local has no '# wifi-default-off' marker, so `sed '/# wifi-default-off/,$d'` deletes nothing; append adds wifi block, cron-restore, exit 0 — appended AFTER existing 'exit 0' (which step5 turned into onboot-hooks\nexit 0). So new content after exit 0 is dead but harmless. On REFLASH: rc.local has marker → sed deletes from marker to end (including onboot-hooks? no—onboot-hooks was inserted at first 'exit 0' which is BEFORE the marker from previous flash... previous flash's appended block: marker ... 'exit 0'. The original 'exit 0' (with onboot-hooks before it) is before the marker. So onboot-hooks survives; sed deletes marker..end; append re-adds block+exit 0. Idempotent-ish. But grep -c onboot-hooks check R == '1' ok. Fine.
+
+  However step-5's `grep -q onboot-hooks /etc/rc.local || sed -i 's|^exit 0|...'` — if rc.local lacks 'exit 0', sed no-op → onboot-hooks never added but grep... grep runs first; if absent, sed may fail silently → check R in 终验 catches. OK.
+
+  26. macs regex: output `wan: xx` — pattern `(wan|br-lan|ra0|rax0): ([0-9a-f:]+)` matches. OK.
+
+  27. 终验 T check: `kv.get('T') == '2/1'` — grep -c counts; login.htm expects 2 occurrences, login_m.htm 1. If vendor firmware changes, fails — intended.
+
+  28. B check: `logread | grep -c 'heartbeat ok'` — heartbeat interval? Agent heartbeat maybe every 60s; by this point several minutes passed. OK-ish; but flash-r7-finish2 greps `/etc/routermgmt/logs/syslog` which doesn't exist (per 变更说明 R7 无该文件） — in finish2 line 65, heartbeat detection may always fail → "150秒未出现" but continues (not fatal). Consistent with note. Fine, informational.
+
+  29. 终验 W check curls LuCI at 192.168.132.1 hardcoded — with --host on other subnet (192.168.2.x), device LAN IP is still 192.168.132.1? The device LAN IP is presumably 192.168.132.1 regardless of which upstream it's on (host is WAN-side address). run(c,...) executes ON the device, curl to 192.168.132.1 = device's own LAN — fine. Also RSSH_TARGET=192.168.132.1:22 in tunnel.conf — device-side reverse forward target to its own LAN IP — consistent with AGENTS.md note （历史反向 SSH 目标 192.168.132.1:22). OK.
+
+  30. Step 11 `_switch_verify`: posts assignments batch with is_primary True apply True for node 5 then node 4. First call makes node5 primary — but node4 was primary with apply; switching to 5 applies. Then back to 4. After: failover_priority SQL earlier set... fine. Issue: egress IP comparison `_eg == expect_ip` — run() output may include trailing newline/whitespace → `run` returns decoded output including "\n" → `_eg` = "179.255.137.64\n" != "179.255.137.64" → always FAIL! Check run(): returns o.read()+e.read() decoded — no strip. curl outputs IP without newline typically (api.ipify.org returns bare IP, no trailing newline). So _eg might be exactly the IP. But stderr empty. Probably equals. Risky but likely OK. Hmm — but earlier in finish2: `eg = run(...)` logged with trailing maybe. Borderline — flag as 疑问 low.
+
+  Also `_switch_verify` hardcodes node 5 = LAX 179.255.137.64 and node 4 = 东京 74.82.203.175 — these are DMIT US and BWG JP. If node IDs differ per platform state, wrong. Assume fixed.
+
+  Also note: step 11 switches to node5 as primary apply=True, then node4. But the earlier failover_priority set node5 priority 0 (highest?) — after switching primary to 4... whatever, business logic.
+
+  31. After 终验 REJECT re-insert (line 641): unconditional re-assert — fine idempotent.
+
+  32. flash-snr step 4: on reflash, `dev.get("troubleshoot_port")` — POST /devices with same name returns existing dev? Depends on API. Fine.
+
+  33. `subprocess.run(VPS_SSH + [f'grep -q "snR{N}" ...'])` result unused —备案 output discarded; comment says 备案输出 but nothing printed except the later print. Low.
+
+  34. Credentials written to backups/.snrN-pw with PW plaintext — repo policy says reports shouldn't expose; but backups dir is their credential store. Not review scope.
+
+  35. flash-batch telnet_fingerprint: uses `#` prompt match — but banner of OpenWrt after login contains '#'? until(r"#") after password — ok. `cmd()` matches `#` within 4s. Race: prompt `#` could appear in command echo? The command echoes back via telnet? No local echo; shell prints output then prompt. acc accumulates; regex searches whole acc including earlier '#' from the login prompt match... Actually acc persists across until calls (local var per until call — acc = b"" each call). OK.
+
+  36. Batch: sweep range 2..254 skips .1 — factory device default LAN is .1! Wait — the PC connects to device LAN, device is 192.168.132.1. SUBNETS scan .2-.254, EXCLUDING .1 — the factory device at 192.168.132.1 would never be found! Hmm — but maybe in their setup, devices get WAN DHCP on 132/2 subnets from upstream router (Athena LAN), so factory devices appear as DHCP clients at .2+ on those subnets. flash-snr default host 192.168.132.1 is the LAN-side direct connection. Batch scans WAN-side addresses. If device only connected via LAN to PC at .1, batch misses it. By design probably (batch = devices plugged into upstream network). But .1 exclusion also skips e.g. 192.168.2.1 gateway — intentional to avoid touching gateways. OK, note as design assumption. Also 192.168.2.1 is the NTP server (company router) — excluded from scan, good.
+
+  37. Batch lock: `--detect` also takes the lock then removes in finally — concurrent --detect during active flash would see lock and print "上一轮刷机仍在进行" and return — OK.
+
+  38. flash_one timeout=1800 (30min) — mihomo 57MB push over slow link + waits; plausible. If timeout, subprocess.run raises TimeoutExpired → f.result() raises → main crashes, lock left (expires 90min), other threads? Exception propagates, ThreadPoolExecutor context waits for others. Results lost. Medium.
+
+  39. next_nums: parses `SN-R(\d+)` from names — names like "SN-R4-AX3000" → 4. Default base 8 if none — hardcoded 8 (fleet has R1-R7). If DB unreachable (ssh fail), stdout empty → nums empty → base=8 → could COLLIDE with existing R8 if query failed silently! r.stdout empty on ssh failure → assigns existing numbers → flash-snr POST may return existing device → wrong device config overwritten. Medium: no error check on the ssh query. Similarly next_ports fallback mx=13229 then base=max(mx+1, 13230)=13230 — on ssh failure allocates 13230+ which may collide with live ports; flash-snr alloc_rssh has BUSY check but batch path passes explicit --rssh, and flash-snr skips BUSY check when explicit port given. Confirm: flash-snr line 146: RSSH = int(args.rssh) if digit — no busy check. So batch ssh-failure → port collision → tunnel conflict. Medium-high. Confirm.
+
+  40. Batch parallel: all flash-snr children write to same files? `.snr{N}-pw` per N — distinct. `SN-R系列凭证总览.md` appended concurrently from multiple processes → interleaved/lost writes (append mode, single write() call of one line — on Windows, open(...,"a") then write then close; two processes could interleave but each write is small; CPython on Windows append is not atomic necessarily. Low-medium race. Also `SN-R{N}-凭证档案` distinct. And mgmt API token: M.token() per process — fine. ensure_tunnel: each child runs ensure_tunnel — tunnel already exists; concurrent ensure_tunnel might race to create duplicate local forwards (port 8444 conflict) — one fails? If ensure_tunnel binds 8444 and two processes try simultaneously, one gets EADDRINUSE. Unknown implementation — flag as 疑问 medium （并发下 ensure_tunnel 竞态）.
+
+  41. push() uses `cat > 'remote'` — for 57MB, channel.sendall without window management? paramiko handles flow control. dropbear closing early → short file, undetected (risk #2). Also push to /usr/bin/mihomo directly rather than temp+mv — crash mid-write leaves partial executable that procd respawns forever → boot loop-ish. High-ish but captured by final checks? mihomo version curl would fail → 终验 egress fail → caught. But openssl.new push: mv -f openssl.new openssl — if libssl push truncated, `openssl version` still prints (dynamic link might fail → command fails but run doesn't check). Actually if libcrypto truncated, openssl fails to run, and everything using openssl later (base64 in finish2, wget https?) breaks. run() doesn't check output for version string. "openssl3 全局替换完成" prints unconditionally. Confirm as problem: no verification. Medium-high.
+
+  42. Shell injection: most remote commands interpolate N (int from args.num — actually N = args.num string! `N = args.num` not int. f"snR{N}" etc. args.num is user-controlled string → used in shell commands on DMIT: `grep -q "snR{N}"` — N unsanitized → if N = `1" || rm -rf` … local CLI arg, low risk but it IS injection into remote ssh command. alloc_rssh does int(N). Line 246 f-string with N into ssh command. Batch passes str(num) ints. Low severity injection (local operator only). Also NAME = f"SN-R{N}-AX3000" goes into JSON and sed replacements — fine.
+
+  43. Step 2: `.replace('__UCIPW__', UNIFIED_PW)` — if password contained quote... it's fixed string. OK.
+
+  44. gen_creds: salt "snruni" fixed; md5_crypt called with f"snr{N}uni" — different salts. Fine.
+
+  45. Line 599: W check posts password base64 url-encoded only '=' replaced — base64 may contain '+' and '/' too! openssl base64 of password could contain '+' → in form body '+' = space → login fail → false FAIL. `sed 's/=/%3D/g'` insufficient; need + → %2B, / → %2F. Password "[REDACTED]" base64 = "U25SQDIwMjYhTWdtdA==" — contains no + or /. OK for this password but fragile. Low.
+
+  46. 终验 L check `netstat -ltn | grep -cE '1844[3-6]'` counts 18443-18446 listeners — v3 four endpoints → >=3 pass. OK.
+
+  47. Step 6 health curl checked but output not validated in step 6 (printed later). 终验 H catches. OK.
+
+  48. `dev2 = dev` — pointless aliasing (comment claims isolation; assignment doesn't isolate anything). Cosmetic. Low/无问题-harmless.
+
+  49. Batch: `found[:args.max]` then ports/nums allocation fine. Jobs log path uses nums — good.
+
+  50. r7-finish2: missing `import re` — line 11 imports don't include re; line 126 `re.findall` → NameError → crash after WiFi step, before writing 凭证档案？ Actually doc writing at line 145 uses macs — crash at 126, so D incomplete, E never runs. Confirmed bug high. Wait — check imports again: `import base64, json, os, subprocess, sys, time` and `import hashlib` at line 57. No re. Yes, NameError. But 变更说明 says R7 finished successfully... maybe they ran with a fix. As given in patch, it's a bug. High severity (would crash), though historical script — mark accordingly.
+
+  51. r7-finish2 put_file: `echo {b} | openssl base64 -d -A > {dst}` — b unquoted, base64 alphabet has no shell specials except `+` `/` `=` — safe unquoted? `/` fine, `+` fine in shell. Long lines — 57MB not through this path. md5 verified — good; returns md5 and compared. Good design vs flash-snr push. Note dst unquoted but fixed paths. OK.
+
+  52. r7-finish2 hb check: `time.strftime("%H") in hb` — local PC hour vs router hour (NTP CST?) — timezone mismatch → false negative, waits full 150s. Low.
+
+  53. finish2 C: egress expectation 东京 hardcoded. Fine.
+
+  54. finish2 E: exit(2) on fail. fine.
+
+  Now check SOP for 统一 SN 刷机流程 v2 to compare coverage — e.g., whether SOP requires steps missing in script (uhttpd/dropbear hardening, /www check, etc.). Grep the SOP.
+
+• I have everything I need. Now write the review. Organize per focus area, with file:line evidence (patch line numbers — I'll cite as diff file line or target file line; better to cite scripts/flash-snr.py line numbers as they appear in the new file, i.e., patch +N lines. The patch shows new file lines 1-643. E.g., push() at new-file line 115-119 (patch line 120-124). I'll cite "flash-snr.py:115" style using the new-file numbering (patch line minus 5).
+
+  Mapping: patch line N → file line N-5 for diff_1. For diff_2: patch line N → file line N-6? diff_2: line 6 is "+++ b/scripts/flash-batch.py" line 4, @@ at 5, content starts patch line 7 = file line 1. So file line = patchline - 6. diff_3 same: file line = patchline - 6.
+
+  Key findings to report:
+
+  flash-snr.py:
+  1. push() 无完整性校验 — file lines 120-124 (patch 120: `def push`). File lines: patch 120 → file 115. Confirmed problem, high. Also writes directly to final path /usr/bin/mihomo without temp+verify+rename; chmod separate. Also o.read() doesn't check exit status.
+  2. umount/dd 顺序 — file lines 194-195 (patch 199-200): umount failures suppressed, dd proceeds. Confirmed high. Also dd count=256 wipes 256MB (fine). Note SOP 六 says sed 教训： base64+md5 对拍 is the standard — flash-snr violates its own SOP.
+  3. openssl3 替换无验证 — file 230 (patch 235): mv then `openssl version | head -1` output unchecked; print unconditional. Medium.
+  4. alloc_rssh 竞态 — file 73-94: read-max-then-allocate no lock; single parallel runs race. Also `ss -tln | grep "127.0.0.1:{nxt} "` trailing space may not match (ss output has space after? "127.0.0.1:13230 " — ss -tln output format: Local Address:Port — "127.0.0.1:13230" followed by whitespace, so grep with trailing space works on ss but if line ends... there are more columns, so space exists. OK). Medium confirmed.
+  5. 防劫持闸门重试无效 — file 247-260: env MGMT_API_BASE change doesn't affect the SSH psql check; the POST was already done with old BASE; retry re-queries same DB only. It can only pass if first was transient. The claimed "纠正" is dead code. Medium. But the gate itself (abort if not in DMIT DB) works. Also SQL injection via dev["id"] low.
+  6. API 调用无状态码检查 — file 236-243, 262, 499-523 etc. Confirmed medium.
+  7. agent awk/sed 补丁可能静默不生效 — file 320-332: pattern anchored to exact indent; sh -n only checks syntax not patch presence. Medium/low.
+  8. dev2 = dev 不隔离 — cosmetic, 无实际问题（别名不是拷贝），低。
+  9. --random-pw 与 uci web 口令不一致 — file 223-228 replace uses UNIFIED_PW always. Medium.
+  10. 密钥分发 tb_sh 的 `$K` 不二次展开 — file 402: O='-i $K ...' then scp $O → literal $K. Confirmed real shell bug (medium) — unless它实际依赖默认 key fallback，意味 TX/BWG 分发可能一直静默失败而只打印"失败"不中止。
+  11. m = re.search ssh-rsa 失败时静默跳过整段公钥分发 — file 379: `if m:` else nothing, no abort. Medium.
+  12. mihomo config 占位符替换失败静默 — file 448-461: regex fail → empty nodes; golden pushed with empty proxies; mihomo起不来→终验拦截。低/中。
+  13. _switch_verify 出口比较未 strip — file 634-635: run() 不去尾换行；api.ipify 无换行，通常过，但脆弱。低（疑问）。
+  14. 终验覆盖度缺口： 未验 uhttpd 443 WAN 暴露、dropbear 监听地址、hotplug.d 残留、/www 后门、mmcblk0p6 未重新挂载（blkid 无签名）、crontab 厂商行（checkMem/factory）残留、init.d 本体删除核验、rc.local 无 install_mbox 核验。即 B 模式关心的面没有进入终验。中。P 关只查进程不查文件本体（rathole 二进制留档是决策，但无校验防止复活——无 rc.local/init.d 核验）。中。
+  15. W 关 base64 只转义 `=` — 低。
+  16. telnet 注释去重 awk/sed 复刷逐次叠加前缀 — 低。
+  17. N=args.num 未校验为数字 → 注入到 DMIT ssh grep 命令 — 低（本地操作者）。
+  18. `iptables -I FORWARD 1` at file 348 not error-checked; fine.
+  19. Step 5: uci -q delete network.wg0 — fine.
+
+  flash-batch.py:
+  20. 指纹未校验机型 — file 62-70 (patch 68-76... wait diff_2 file line = patch-6: model read file 58, decision file 62-70). model 只记录不判断 → 非 AX3000 默认口令设备会被刷。高。
+  21. MAC 前缀白名单假阴性（自认#1）确认 — file 25, 67-69。中。且 --auto cron 下静默跳过，无人知晓。另：76:a7:c8:e0:4f 前缀是已刷机设备 pin 段，出厂设备随机 MAC 理论上可能碰撞（概率极低）。
+  22. 进程锁 TOCTOU — file 114-120: exists check then write, two processes race. 中。且锁不原子（无 O_EXCL）。
+  23. next_nums/next_ports 无 SSH 失败检测 — file 80-95: ssh 失败 stdout 空 → base=8 编号冲突；ports fallback 13230 可能与现有监听冲突，且 flash-snr 显式 --rssh 跳过 BUSY 检查（diff_1 file 146）。中-高。另 next_ports 无 13300 上限（flash-snr 有）。低。
+  24. flash_one TimeoutExpired 未捕获 → 主线程崩溃、锁遗留、其他结果丢失 — file 98-104, 147-148。中。
+  25. 并发子进程共享资源：SN-R系列凭证总览.md 并发 append（diff_1 file 589）；M.ensure_tunnel 并发竞态（疑问，取决于实现）；平台 API 并发 POST /devices 唯一性依赖服务端。低-中。
+  26. sweep 扫 .2-.254 跳过 .1 — 设计假设（方式A DHCP），但直连 .1 的设备永远发现不了；文档已述方式B用 flash-snr。无问题/提示。
+  27. telnet_fingerprint 的 until(r"#") — '#' 可能早匹配（banner/motd 中的 #）→ 误判口令错误为成功？登录失败会显示 "incorrect" 无 #；banner 含 # 的情况少。低。
+  28. 锁在 finally 中 `if not found or args.detect: os.remove(LOCK)` — 若扫描中抛异常且 found 非空，锁保留（90 分钟兜底）符合设计。无问题。
+  29. --auto 发现设备也会全量刷——预期行为。
+
+  flash-r7-finish2.py:
+  30. 缺 `import re` — file 11 imports, file 126 uses re.findall → NameError，D 步 MAC 采集即崩，凭证档案与 E 终验不执行。确认问题，高（对该脚本本身）。虽为历史脚本，补丁形式提供的代码就是错的。
+  31. put_file base64+md5 对拍 — 好，与 SOP 一致。无问题。
+  32. hb 检测 grep /etc/routermgmt/logs/syslog — 文件不存在（自认），且 time.strftime("%H") 本地时区 vs 路由器。低。
+  33. 八关 vs 11 关：finish2 只有八关（历史），已被 flash-snr 取代。无问题（参考件）。
+  34. finish2 line 65 hb "ok" in hb — grep 输出含 "heartbeat ok" 才有 ok。低。
+
+  Also cross-check SOP: SOP 六 line 242 mandates "修远端脚本一律整文件 base64 推送+md5 对拍" — flash-snr 步骤5/7 的 heredoc 生成 init.d 与 push() 违反此标准 → 一致性问题。中。
+
+  Also step 2: `rm -rf /mnt/mmcblk0p6/...` before umount — file deletion on mounted fs then dd; if umount succeeds, dd wipes anyway. Order ok but umount-fail path is the issue.
+
+  One more: flash-snr step 4 line 246 subprocess result unused — 备案无声。低。
+
+  Also step 10 P 关： `ps w | grep -cE '...'` — SOP warns grep 自身计数假阳性； pattern 'zcon' etc. — grep process itself contains the pattern string? `grep -cE 'by_agent|netbox_daemon|zcon|rathole|watcher'` — the grep process cmdline contains "zcon" etc. → ps w shows it → count includes grep itself → P≥1 → FAIL always? BusyBox ps w output width? grep -cE with pattern containing zcon — the grep process's own cmdline includes the pattern text, so it matches → count at least 1 → P == '0' never true → PCDN残留=0 always FAIL! Wait, SOP line 244 explicitly warns "ps w | grep -c pattern 计数含 sh 包装+grep 自身（假阳性×2）". The script uses exactly this construct at file 607 (patch line 612). On busybox, ps w shows the sh -c wrapper and grep — both contain pattern strings → count ≥2. Unless run via exec_command without sh -c wrapper... exec_command runs via shell? paramiko exec_command runs command through the shell? Actually exec_command executes via the user's shell with -c on most servers (dropbear runs command directly? SSH exec requests run command via shell -c typically: dropbear runs "sh -c 'command'"). So ps w would show `sh -c echo "P=$(ps w | grep -cE '...')"` — contains 'zcon' etc → matches → count≥1. Hmm but they claim R7 passed 11 gates. Maybe busybox ps w truncates long cmdlines (ps w wide...). SOP says pgrep -x 截断（ps w）— ps w is wide mode. With `ps w`, cmdline may be truncated to width; the wrapper sh -c line contains full script including pattern... Actually the outer command is the whole multi-line script; ps w shows it truncated maybe before the grep pattern appears. Uncertain. But per their own SOP this is a known false-positive trap — worth flagging as 疑问/中： P 关可能永远 FAIL 或依赖 ps 截断偶然性。Similarly Q 关 uses iptables -S (fine). Also finish2 didn't have P. Flag.
+
+  Similarly `echo "B=$(logread | grep -c 'heartbeat ok')"` fine.
+
+  Also the L check: netstat grep -cE '1844[3-6]' — counts also... fine.
+
+  Also step 10 uses c = ssh(PW) — fine.
+
+  Note also flash-snr step 6 line 437 `grep 1844` counts instances. fine.
+
+  Also concern: 步骤 2 sed on login.htm uses `\t` in sed replacement — GNU sed vs busybox sed: `\t` in replacement is tab in busybox? busybox sed supports \t? Busybox sed does interpret \t in replacement? Actually busybox sed historically doesn't interpret \t in regex but does in replacement? Uncertain — cosmetic indent only. Skip or low.
+
+  Also `sed -i 's|^\(.*telnet.*\)$|...'` on /etc/init.d/done — if done has no telnet line, no-op. fine.
+
+  Prioritize. Also verify claim in 变更说明 risk list and confirm each: #1 confirmed, #2 confirmed, #3 confirmed, #4 confirmed, #5 reviewed (syntax looks valid; but not machine-verified — I could verify syntax by rendering... I can do a local bash -n check by extracting the heredoc! That's read-only. Let me do it: extract lines from the patch (the init.d content between <<'EOS' and EOS) and bash -n it.
+
+  Let me do that quickly — write to temp file? I'm forbidden to modify files... "禁止修改任何文件" — as read-only reviewer. Writing a temp file under /tmp is arguably modifying filesystem. I can pipe to bash -n via stdin? bash -n reads from stdin: `bash -n < <(sed ...)`. But target is /bin/sh (busybox ash), not bash. bash -n still catches gross syntax errors. Use stdin, no file writes.
+
+  Extract: diff_1 lines 466-484 (patch lines) = file content of init.d. Let me sed -n '466,484p' and strip leading '+'.SYNTAX_OK_BASH
+SYNTAX_OK_SH
+<-i>
+<$K>
+Confirmed both:
+  1. init.d heredoc syntax valid under bash -n and sh -n.
+  2. `$K` inside `$O` is NOT re-expanded — scp would receive literal `$K` as identity file path. Confirmed bug.
+
+  Now write the review. Organize by focus area / per change. Cite file:line using the NEW file line numbers (patch +5 offset for diff_1, +6 for diff_2/3). Let me recompute key line numbers:
+
+  diff_1 flash-snr.py (file line = patch line - 5):
+  - push() def: patch 120 → file 115; body 116-119.
+  - run(): file 121-123.
+  - alloc_rssh: file 68-89.
+  - step2 block: file 167-223; umount/dd: patch 199-200 → file 194-195; rm mnt: patch 191 → file 186.
+  - openssl3: patch 232-236 → file 227-231.
+  - 防劫持： patch 252-265 → file 247-260.
+  - enroll: patch 267 → file 262.
+  - agent patch awk: patch 320-332 → file 315-327.
+  - ssh-rsa m: patch 378-379 → file 373-374; `if m:` patch 379 → file 374.
+  - tb_sh O='-i $K': patch 402 → file 397; scp $O patch 403 → file 398.
+  - mihomo push: patch 442-444 → file 437-439.
+  - golden replace: patch 458-461 → file 453-456.
+  - init.d heredoc: patch 465-485 → file 460-480.
+  - wait_final: patch 497-504 → file 492-499.
+  - assignments loop: patch 506-510 → file 501-505.
+  - step9: patch 528-561 → file 523-556.
+  - 凭证总览 append: patch 589-590 → file 584-585.
+  - 终验： patch 593-623 → file 588-618; P 关 patch 607 → file 602; W 关 patch 599 → file 594.
+  - _switch_verify: patch 629-637 → file 624-632; _eg compare patch 635 → file 630.
+  - N=args.num: patch 144 → file 139. injection at patch 246 → file 241.
+
+  diff_2 flash-batch.py (file line = patch line - 6):
+  - KNOWN_MAC_PREFIXES: patch 25 → file 19.
+  - sweep: patch 28-36 → file 22-30.
+  - fingerprint: patch 39-72 → file 33-66; model unused: patch 63-70 → file 57-64.
+  - next_ports: patch 75-85 → file 69-79; fallback mx=13229 patch 83 → file 77.
+  - next_nums: patch 88-95 → file 82-89; base=8 patch 94 → file 88.
+  - flash_one: patch 98-104 → file 92-98.
+  - lock: patch 114-120 → file 108-114.
+  - finally remove: patch 130-132 → file 124-126.
+
+  diff_3 flash-r7-finish2.py (file line = patch - 6):
+  - imports: patch 11 → file 5? patch line 11 = `import base64...` → file line 5. re.findall: patch 126 → file 120.
+  - put_file: patch 37-40 → file 31-34.
+  - hb syslog: patch 65 → file 59.
+
+  Now compose the review in Chinese, organized by focus area with verdicts. Be thorough but compact.
+
+To resume this session: kimi -r session_c72e9328-62aa-47b7-ad04-6590397a6b19

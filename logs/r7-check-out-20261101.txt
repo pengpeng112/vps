@@ -1,0 +1,79 @@
+@@id
+access-fw.sh
+agent.conf
+connlog.sh
+handlers
+id_dropbear_mgmt
+logs
+mgmt-port-discovery.sh
+netprobe.sh
+@@procs
+19613 root     1301m S    /usr/bin/mihomo -d /etc/mihomo -f /etc/mihomo/config.yaml
+15036 root      1096 S    /usr/bin/ssh -i /etc/routermgmt/id_dropbear_mgmt -p 28722 -N -K 30 -T -o ExitOnForwardFailure=yes -y -L 1
+15037 root      1096 S    /usr/bin/ssh -i /etc/routermgmt/id_dropbear_mgmt -p 28722 -N -K 30 -T -o ExitOnForwardFailure=yes -y -L 1
+15042 root      1256 S    /bin/sh /etc/routermgmt/netprobe.sh
+@@T1_tunnelf
+VPS_HOST=134.175.151.213
+VPS_PORT=28722
+@@T2_gia
+1
+0
+0
+@@T3_do
+0
+0
+@@T4_respawn
+    procd_set_param respawn 3600 0 0
+    procd_set_param respawn 3600 0 0
+@@T5_selfheal
+329c6081caaa05595c13ff380687187b  /etc/routermgmt/self-heal.sh
+1
+no-pause
+@@T6_mgmturl
+MGMT_URL=https://127.0.0.1:18443
+@@T7_fw3
+firewall.@include[2].path='/etc/mihomo-ipt.sh'
+@@T8_clock
+1793493069 2026-11-01
+@@T11_egress
+154.36.139.155
+gstatic=204
+mgmt18443=200
+@@cfg
+53fe16ab876efb9e1bfcc577d4593437  /etc/mihomo/config.yaml
+4
+lazy_lines:
+167:      lazy: false
+196:    lazy: false
+207:    lazy: false
+218:  # 2026-10-26 lazy:false + interval 120（BWG 被墙事故复盘）：mihomo fallback 组默认
+providers:
+1
+3
+cf_nodes:
+6
+istarshine:
+1
+hy2:
+1
+@@api
+{"meta":true,"version":"v1.19.31"}
+
+{"alive":true,"all":["AUTO","US666-CN2GIA-01","EDGE-TUNNEL-V2","GIA-HY2-US-01","BWG-VLESS-JPTY-01","CF-CDN-GIA-01","CF2-CDN-GIA-01","DIRECT"],"dialer-proxy":"","emptyFallback":"COMPATIBLE","extra":{},"hidden":false,"hist
+{"alive":true,"all":["NODE-PICK","AIRPORT","DIRECT"],"dialer-proxy":"","emptyFallback":"COMPATIBLE","expectedStatus":"204","extra":{},"fixed":"","hidden":false,"history":[],"icon":"","interface":"","mptcp":false,"name":"AUTO","now":"NODE-PICK","provider-name":"","routing-mark":0,"smux":false,"testUrl":"https://www.gstatic.com/generate_204
+provider_names:
+"name":"AUTO"
+"name":"NODE-PICK"
+"name":"AIRPORT"
+"name":"DIRECT"
+"name":"CN-MEDIA"
+"name":"DIRECT"
+"name":"DOWNLOAD"
+"name":"DIRECT"
+
+@@mac
+network.@device[0].macaddr='76:a7:c8:e0:4f:37'
+network.wan.macaddr='76:a7:c8:e0:4f:27'
+@@webpw
+$ hash_len=33
+@@done

@@ -21,12 +21,16 @@ scripts/provision_router.py
 docs/设备引导包*.json
 docs/wg-*.conf
 docs/wg-*-qr.png
+docs/wg-peers/
 VPS远程工具包/
 网络稳定性分析材料-20260927.md
 # 会话与数据
 docs/会话导出/
 webprobe/*.csv
 webprobe/*.log
+webprobe/network_watch/
+logs/node-probe/
+logs/codex-reset/
 *.sqlite
 *.db
 # 大体积与生成物
@@ -37,4 +41,9 @@ firmware/
 .video_agent/
 __pycache__/
 *.pyc
-docs/archive/
+docs/archive/*
+!docs/archive/20261001-manifest.md
+!docs/archive/20261012-manifest.md
+!docs/archive/20261001-完结计划/
+docs/archive/20261001-完结计划/*
+!docs/archive/20261001-完结计划/*.md

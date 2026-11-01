@@ -1,0 +1,62 @@
+• Let me read the three specified files.
+
+• The user wants me to independently verify each claim in the two documents. The docs make claims about live network facts (sshd configs, certs, cron) which I cannot verify from local files — I can only verify claims about local source code (Login.vue) and assess internal consistency and plausibility. Let me map P1-P8, N1-N3:
+
+  The docs list: P1 BWG root密码登录+爆破, P2 R4隧道冗余降级, P3 证书SAN致浏览器不存密码, P4 MAC未固定, P5-P8 低危项, N1-N3 非问题判定. The docs themselves don't label P1-P8/N1-N3 explicitly, but map roughly:
+  - P1 = BWG sshd PasswordAuthentication yes + PermitRootLogin yes + 1023 lastb (C section)
+  - P2 = R4 redundancy degradation (D/E)
+  - P3 = cert SAN / browser password save (F + bug report)
+  - P4 = MAC未固定 (H1)
+  - P5-P8 = H2-H6 low items (standby残留, sing-box版本未查, DO 22 DENY, r4-watch失效?) — or G items: TX PermitRootLogin yes, R5断电, 心跳未验证...
+  - N1-N3 non-issues: DO 22 DENY (H4), 雅典娜已迁DMIT (H5), R5断电 (G)
+
+  I should verify:
+  1. Login.vue claims — I can check directly. The bug report says DOM layer has form/autocomplete/submit. Indeed lines 61-70 match. But I notice an important nuance: the login is done via `api.post` (XHR/fetch), not a native form submission — `@submit.prevent="login"` prevents the native submit and does AJAX. Chromium's password manager historically relies on form submission detection; with fetch-based login and `event.preventDefault()`, Chrome may NOT offer to save password even without cert errors. Actually Chrome does detect password via form submission or via navigation; with prevented submit + XHR, Chrome's password save prompt historically doesn't trigger reliably. This is a genuine doubt against the bug report's causal chain ("cert bypass is the direct cause"). Also there's a second issue: two-stage login (password + TOTP ticket) — the token isn't the password; Chrome saving password needs username+password fields submitted together. Additionally, Chrome does disable password saving on pages with certificate errors bypassed? Actually the real behavior: Chrome won't save passwords on pages loaded over a connection with cert errors. Hmm — the claim is plausible but the AJAX/preventDefault issue is an alternative/additional root cause the report misses. Worth flagging.
+
+  Also note: `@submit.prevent` — Chrome may still detect submit. Actually Chrome's password manager triggers on form submit events even when prevented? Historically, Chrome detects "password form submission" via the submit event/navigation; with SPA XHR, Chrome added heuristics — modern Chrome does offer save after XHR login if the form fields are recognized (it hooks into successful XHR?). The documented behavior: Chrome saves passwords when it detects a successful login — for SPAs it's unreliable. So "疑问" is fair.
+
+  Also the cert SAN issue: even with SAN fixed, self-signed cert still requires CA trust import (they do mention step 3). And Chrome won't show save prompt until cert trusted. So the fix plan is coherent. But the claim "DOM 层修复是对的，但它不是瓶颈" is partially unverifiable; the AJAX submit remains a risk that even after cert fix, save prompt may not appear. Actually with autocomplete attributes and a real form submit event, Chrome generally does prompt. There's nuance; flag as 疑问.
+
+  2. BWG P1: can't verify remotely (read-only, and I shouldn't SSH). Evidence is documented from live capture. Consistency: sshd_config main file PasswordAuthentication yes — but note sshd_config.d includes could override; report says "主文件", doesn't mention checking included files. Minor doubt. Also fail2ban active mitigates. Severity: high-ish but mitigated by fail2ban; root login with password on public internet = high. Confirm as plausible, evidence-based, severity 高.
+
+  3. R4 P2: internal consistency fine. Evidence: 4 dbclient vs 5, 000 probes, no cron discovery, tunnel.conf three endpoints. Plausible, severity 中 (main link healthy; risk only on DMIT failure). Confirm based on documented evidence; can't independently re-verify.
+
+  4. MAC P4: H1 evidence uci wan.macaddr empty, MAC drift observed. 低/中 severity. They say 上级无IP-MAC绑定, no impact. 低.
+
+  5. P5-P8 low items: H2 standby残留 (误恢复风险, 低), H3 sing-box版本未查 (未验证, 疑问), H6 r4-watch失效 (低), G1 TX PermitRootLogin yes (低). N1-N3: DO 22 DENY刻意 (确认无问题), 雅典娜迁DMIT (确认), R5断电现场问题 (确认非本轮).
+
+  6. Omitted risks — I should scan for gaps. Based on only these files + Login.vue + my knowledge:
+  - Login.vue security issues: plaintext secret displayed in setup stage (fine, first-time), no rate limiting visible client-side (server-side unknown). Token storage — `setToken(r.token)` — where stored? localStorage likely → XSS risk; can't verify without api.ts. Flag as worth checking (I can check api.ts? The user restricted reading: only the two verify docs + Login.vue. "不要读取 verify/ 下其他任何文件" — only verify/ restricted. But task scope says read those three files; scanning for omissions could justify reading more, but instructions list specific files to read. I could read mgmt/frontend/src/api.ts to check token storage — is that allowed? The user said read those files; not strictly forbidden to read others outside verify/. To be thorough but respectful, maybe minimal: check api.ts for token storage. It's within mgmt/frontend, not verify/. I think a quick read is acceptable and improves the audit. Let me do it.
+
+  Other omissions:
+  - TOTP setup flow: ticket-based, secret shown in DOM — ok.
+  - Cert validity notBefore 2026-09-17 — fine.
+  - BWG: dhclient port 68 normal.
+  - DMIT authorized_keys 10 lines, 7 with permitlisten — 3 without restriction? Worth noting which keys lack permitlisten (could allow inbound listening on DMIT if password... only key auth; a key without permitlisten can open remote forwards → potential exposure if key leaks). Omission candidate.
+  - backup.sh backups pushed to TX/BWG over what auth? txbackup key from DMIT — scope of that key not restricted? Omission: check ForceCommand/restrictions on backup key.
+  - R4 half-open zombie tunnels: dbclient without keepalive/ServerAliveInterval → root cause of 半开; omission: no autossh/keepalive tuning mentioned.
+  - Two-node convergence plan says DO/TX to be decommissioned after 2026-11-02 — BWG remains as exit; BWG sshd hardening should be done before DO retirement? Not really omission.
+  - 心跳表 metrics no created_at — minor.
+  - Browser password save: also password manager disabled because HTTPS with bypassed cert — fix includes CA import; after fix it should work, but AJAX submit caveat.
+  - DMIT lastb dictionary scans — port 22 open with key-only, fine.
+  - WG hub on DO still historical dependency — DO 22 DENY: management only via 28722; ok.
+  - No mention of TLS for 8443 being HTTP/2 or anything — fine.
+  - Login.vue: `@keyup.enter="login"` on n-form plus submit — double submission possible (keyup.enter triggers login AND submit). Minor bug: pressing Enter in password field may call login twice (keyup enter + form submit). loading guard mitigates partially but not a lock... loading=true set, but second call still proceeds since no guard on loading. Minor, low.
+  - Also `code` TOTP input lacks autocomplete="one-time-code" — minor UX.
+  - No CSRF concern if token-based.
+
+  Also omission: R4 tunnel.conf missing VPS4 — but also check R2/R3 have VPS4=DO; after DO retirement 2026-11-02, four-endpoint form needs rework — forward-looking, docs do note convergence plan elsewhere.
+
+  Also: DMIT 8443 docker-proxy bound to 127.0.0.1 AND 10.10.0.1 — WG interface exposure: any WG peer can reach管理台; acceptable but worth noting peer ACL.
+
+  Also sing-box/vless on 443 public: fine.
+
+  Also BWG 443udp hy2 + 22 password — P1 fix trivial: disable PasswordAuthentication.
+
+  Let me read api.ts quickly for token storage, and maybe check whether there's a cert generation script in mgmt/deploy to cite. But user said scan for omissions — reading mgmt/deploy is within scope of the audit but they said "读 ... 以及源码 Login.vue" then "另扫描两份文档未覆盖的遗漏风险". A light check of api.ts is fine. Let me do one Read of mgmt/frontend/src/api.ts (or api/ dir). Let me glob.
+
+  Actually to keep scope tight, one Glob + one Read is cheap. Do it.Now write the audit. I'm read-only; I cannot re-run live network commands, so for live-network claims my verification is: internal consistency, plausibility, whether evidence supports the conclusion, and whether evidence is missing. Be candid about that.
+
+  Structure: per item P1-P8, N1-N3, then omissions.
+
+To resume this session: kimi -r session_61c02f90-5059-4012-bdf1-b9834eb42ea4

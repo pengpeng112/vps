@@ -1,0 +1,156 @@
+diff --git a/scripts/flash-batch.py b/scripts/flash-batch.py
+new file mode 100644
+index 0000000..2dfcb8b
+--- /dev/null
++++ b/scripts/flash-batch.py
+@@ -0,0 +1,150 @@
++#!/usr/bin/env python3
++# -*- coding: utf-8 -*-
++"""SN-R 批量并行刷机驱动（2026-10-13 固化）
++用法：
++  python flash-batch.py            # 扫描两网段的出厂态设备并全部并行刷机
++  python flash-batch.py --detect   # 只探测不刷机
++  python flash-batch.py --auto     # cron 无人值守：无设备则静默退出
++发现条件：telnet(23) 开放 + root/abc@1234 可登 + MAC 不在现役清单（防误刷现役设备）。
++并行：每台一线程跑 flash-snr.py --host X --num N --rssh R（端口由本驱动预分配防竞争）。
++"""
++import argparse, json, os, re, socket, subprocess, sys, time
++from concurrent.futures import ThreadPoolExecutor
++
++REPO = r"F:\vps"
++LOCK = REPO + r"\backups\.flash-batch.lock"
++SUBNETS = ["192.168.132", "192.168.2"]
++FACTORY_PW = "abc@1234"
++# 现役/已知设备 MAC（含 WiFi 与 pin 段）——扫描命中即排除，绝不误刷
++KNOWN_MAC_PREFIXES = ["a4:d8:ca:14:", "76:a7:c8:e0:4f:"]
++
++def sweep(subnet, port=23, timeout=1):
++    hits = []
++    def probe(ip):
++        try:
++            s = socket.create_connection((ip, port), timeout); s.close(); hits.append(ip)
++        except OSError:
++            pass
++    with ThreadPoolExecutor(max_workers=64) as ex:
++        list(ex.map(probe, [f"{subnet}.{i}" for i in range(2, 255)]))
++    return sorted(hits)
++
++def telnet_fingerprint(ip):
++    """出厂态验证+取指纹；返回 (is_factory, info)"""
++    try:
++        s = socket.socket(); s.settimeout(5)
++        s.connect((ip, 23)); time.sleep(1.2)
++        try: s.recv(4096)
++        except OSError: pass
++        def until(p, t=5):
++            t0 = time.time(); acc = b""
++            while time.time() - t0 < t:
++                try:
++                    d = s.recv(4096)
++                    if d: acc += d
++                except socket.timeout: pass
++                if re.search(p, acc.decode(errors="replace")): return acc.decode(errors="replace")
++            return acc.decode(errors="replace")
++        until(r"login:"); s.sendall(b"root\n"); time.sleep(0.4); until(r"assword:")
++        s.sendall(FACTORY_PW.encode() + b"\n")
++        r = until(r"#", 5)
++        if "#" not in r:
++            s.close(); return False, "telnet登录失败(非出厂口令)"
++        def cmd(c):
++            s.sendall(c.encode() + b"\n"); time.sleep(0.6)
++            return until(r"#", 4)
++        macs = cmd("for I in wan ra0; do [ -d /sys/class/net/$I ] && echo $I $(cat /sys/class/net/$I/address); done")
++        model = cmd("cat /tmp/sysinfo/model 2>/dev/null | head -1")
++        s.close()
++        m = dict(re.findall(r"(wan|ra0): ([0-9a-f:]+)", macs))
++        info = f"model={model.strip().splitlines()[-1] if model.strip() else '?'} wan={m.get('wan','?')} ra0={m.get('ra0','?')}"
++        for pfx in KNOWN_MAC_PREFIXES:
++            if m.get("wan", "").startswith(pfx) or m.get("ra0", "").startswith(pfx):
++                return False, f"现役MAC匹配({pfx})——排除 " + info
++        return True, info
++    except Exception as e:
++        return False, f"探测异常: {e}"
++
++def next_ports(n, start=None):
++    """从 DMIT authorized_keys+监听取当前最大 132xx，预分配 n 个连续端口"""
++    r = subprocess.run(['ssh','-p','28722','-i','C:/Users/Administrator/.ssh/id_rsa_dmit','-o','IdentitiesOnly=yes',
++                        'root@179.255.137.64',
++                        "(grep -oE 'permitlisten=\"127.0.0.1:132[0-9]{2}\"' /root/.ssh/authorized_keys; ss -tln | grep -oE '127.0.0.1:132[0-9]{2}') | grep -oE '132[0-9]{2}' | sort -n | tail -1"],
++                       capture_output=True, text=True, timeout=30)
++    try:
++        mx = int(r.stdout.strip())
++    except ValueError:
++        mx = 13229
++    base = max(mx + 1, int(start) if start else 13230)
++    return [base + i for i in range(n)]
++
++def next_nums(n):
++    """平台现有 SN-R* 最大序号 +1 起取 n 个"""
++    r = subprocess.run(['ssh','-p','28722','-i','C:/Users/Administrator/.ssh/id_rsa_dmit','-o','IdentitiesOnly=yes',
++                        'root@179.255.137.64',
++                        'docker exec routermgmt-db-1 psql -U postgres -d routermgmt -t -c "SELECT name FROM devices WHERE name LIKE \'SN-R%\'"'],
++                       capture_output=True, text=True, timeout=30)
++    nums = [int(m.group(1)) for m in re.finditer(r"SN-R(\d+)", r.stdout)]
++    base = max(nums) + 1 if nums else 8
++    return list(range(base, base + n))
++
++def flash_one(ip, num, rssh, log):
++    p = subprocess.run([sys.executable, "-u", REPO + r"\scripts\flash-snr.py",
++                        "--num", str(num), "--rssh", str(rssh), "--host", ip],
++                       capture_output=True, text=True, timeout=1800, cwd=REPO + r"\scripts")
++    open(log, "w", encoding="utf-8").write(p.stdout + "\n" + p.stderr)
++    ok = p.returncode == 0
++    tail = [l for l in p.stdout.splitlines() if l.strip()][-3:]
++    return ok, num, ip, rssh, " | ".join(tail)
++
++def main():
++    ap = argparse.ArgumentParser()
++    ap.add_argument("--detect", action="store_true")
++    ap.add_argument("--auto", action="store_true", help="无人值守：无设备静默退出")
++    ap.add_argument("--max", type=int, default=4, help="单轮最多刷机台数")
++    args = ap.parse_args()
++
++    # 进程锁：防止 cron 周期与上一轮刷机重叠（锁文件 90 分钟自动失效兜底）
++    if os.path.exists(LOCK):
++        age = time.time() - os.path.getmtime(LOCK)
++        if age < 5400:
++            print(f"上一轮刷机仍在进行（锁 {int(age/60)} 分钟前），本轮退出")
++            return
++        print(f"⚠️ 检测到遗留刷机锁（{int(age/60)} 分钟）——上轮可能挂起，自动解锁续扫（详见 backups/.flash-N*.log）")
++    open(LOCK, "w").write(str(time.time()))
++
++    print(f"[{time.strftime('%F %T')}] 扫描出厂态设备（{', '.join(SUBNETS)}.0/24）...")
++    found = []
++    try:
++        for sn in SUBNETS:
++            for ip in sweep(sn):
++                isf, info = telnet_fingerprint(ip)
++                print(f"  {ip}: {'✓出厂态' if isf else '跳过'} — {info}")
++                if isf: found.append(ip)
++    finally:
++        if not found or args.detect:
++            os.remove(LOCK)
++    if not found:
++        print("未发现出厂态设备" + ("（auto 静默退出）" if args.auto else "——请确认设备已上电且 WAN/LAN 已接入两网段之一"))
++        return
++    if args.detect:
++        print(f"共 {len(found)} 台待刷: {found}")
++        return
++    found = found[:args.max]
++    ports = next_ports(len(found))
++    nums = next_nums(len(found))
++    print(f"刷机分配: {list(zip(found, nums, ports))}（并行）")
++    jobs = [(ip, nums[i], ports[i], REPO + rf"\backups\.flash-N{nums[i]}.log") for i, ip in enumerate(found)]
++    results = []
++    with ThreadPoolExecutor(max_workers=len(jobs)) as ex:
++        futs = [ex.submit(flash_one, *j) for j in jobs]
++        for f in futs:
++            results.append(f.result())
++    print(f"\n===== 批量结果 =====")
++    for ok, num, ip, rssh, tail in results:
++        print(f"  {'✅' if ok else '❌'} SN-R{num} @ {ip} (RSSH {rssh}): {tail}")
++    try: os.remove(LOCK)
++    except OSError: pass
++
++if __name__ == "__main__":
++    main()

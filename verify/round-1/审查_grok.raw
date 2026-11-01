@@ -1,0 +1,239 @@
+我按只读审查来做：先读指定的两份核查文档、`Login.vue` 和项目入口状态，再对照源码与现网描述逐条核验 P1–P8、N1–N3，并找文档未覆盖的遗漏风险。文档和入口已读完。接下来对照源码、运维脚本和现网配置，逐条核对 P1–P8、N1–N3，并查找文档未写到的风险。源码里已看到几处与文档可能冲突的点。接下来核证书生成、隧道模板、naive-ui 表单渲染和 Chromium 密码保存策略。证书和隧道还有两点要交叉验证：本机 8444 是否仍在、以及备份误恢复路径是否真的会踩到 standby 残留包。# 只读独立核查结论（round-1）
+
+本次未改任何文件、未登 BWG/TX/DO/路由器。对照了指定两份文档、`Login.vue`、仓库源码与 `docs/current/当前状态.md`。本机对已开着的 `127.0.0.1:8444` 做了只读 `openssl`。现网 sshd/lastb/排障口等论断，以文档自洽性与源码交叉验证为准，未在远端复跑。
+
+问题编号按你给的清单，并与证据文档段落对齐：P5=H2 温备残留包，P6=TX `PermitRootLogin`，P7=H6 `r4-watch`，P8=G 段 metrics 列名；N1=H4 DO 22 DENY，N2=H5 雅典娜已迁，N3=C 段「无异常成功登录 / 协议入站干净」。
+
+---
+
+## P1 BWG root 密码登录 + 爆破
+
+**【确认有问题】**　严重度：**高**
+
+BWG 公网 22 上 `PasswordAuthentication yes` + `PermitRootLogin yes`，与 10-01 安全审查、10-02「密码登录保留作应急通道」记载一致。证据称 lastb 1023 条、10-10 01:16 仍有字典试，fail2ban 在岗（failed 304 / banned 44 / current 1）。密钥链路 DMIT→BWG 已通，last 无异常成功会话，所以这是暴露面问题，不是已被攻破。fail2ban 只能挡同一来源快扫，挡不住慢速/分布式试。10-02 曾有意保留应急通道，现状仍是舰队里唯一对公网开放的 root 密码面。
+
+**证据：** `docs/reports/数据安全与抗识别审查-20261001.md:68-69`；`docs/current/当前状态.md` 10-02 下午条；`scripts/vps-harden.sh:67-69`（标准是 `PasswordAuthentication no` + `PermitRootLogin prohibit-password`）。
+
+**验证：**
+```bash
+ssh -i <txbackup> root@74.82.203.175 'sshd -T | grep -E "passwordauthentication|permitrootlogin"; fail2ban-client status sshd; lastb | wc -l; last -n 20'
+```
+
+---
+
+## P2 R4 隧道冗余降级
+
+**【确认有问题】（形态缺口）+【疑问】（「半开僵尸」）**　严重度：**中**
+
+确认成立的部分：
+
+- 无 `VPS4_HOST` → 4 个 dbclient（主 -L + -R + TX + BWG），与 `mgmt-tunnel-v3` 计数一致；R2/R3 有 VPS4 才是 5 实例。
+- R4 接入脚本本身就是三端点：`scripts/r4-onboard.py:19`、`scripts/deploy-parallel-tunnel.py:50-61`（无 VPS4）。10-08 当前状态已写「隧道 v3 三端点」。这是从未补齐，不是从四端点退下来。
+- crontab 无 discovery：10-08 记录的 R4 五行是 netprobe/connlog/spike-cap/每日重启，本来就没有 discovery。仓库 `onboot-hooks.sh:14` 会补这条，说明 R4 钩子未按现行标准落地。
+- `active_port` 空：无 cron 时 `/tmp/mgmt_active_port` 可以不存在；agent 回退 `agent.conf` 的 `MGMT_URL`（通常 `https://127.0.0.1:18443`）。主路 18443=200、排障口在，当前管理面可用。缺口是主台挂了以后自动选路。
+
+「半开僵尸」证据不足：`docs/operations/同型号设备接入标准-20261001.md:34` 写明正常态 `:18444/:18445=000` 是温备容器停着的设计行为。SSH 长连接不会每小时重新 auth，TX/BWG journal 近 2 小时 0 条与「隧道还活着」相容。当前状态 10-10 已另记全舰队 TX/BWG 8443 中继缺失，R2/R3 的 18444/18445 同样会是 000；证据表却只给 R2/R3 报了 18443/18446。
+
+影响：DMIT 主台故障时 R4 不能自动切备用管理面。代理（sing-box/mihomo）独立，不受影响。此时再给 R4 加 DO 的 VPS4，与 11-02 两节点收敛方向相反；更有效的是补 discovery + 处理全舰队 TX/BWG 8443 中继。
+
+**证据：** `mgmt/agent/init/mgmt-tunnel-v3:117-155`；`mgmt/agent/mgmt-port-discovery.sh:12-18`。
+
+**验证：**
+```sh
+# 经 DMIT 13224
+grep -E '^VPS[0-9]?_HOST=' /etc/routermgmt/tunnel.conf
+ps | grep -c dbclient
+cat /tmp/mgmt_active_port; crontab -l | grep discovery
+wc -c /etc/routermgmt/mgmt-port-discovery.sh
+for p in 18443 18444 18445 18446; do curl -sk -m2 -o /dev/null -w "$p:%{http_code}\n" https://127.0.0.1:$p/api/v1/health; done
+```
+
+---
+
+## P3 证书 SAN 导致浏览器不存密码
+
+**【确认有问题】**　严重度：**中**（每日使用摩擦）
+
+本机 2026-10-10 对现用入口实测：
+
+- `127.0.0.1:8444` 在听（SSH -L）。
+- 证书 `CN=10.10.0.1`，SAN **仅** `IP Address:10.10.0.1`，`notBefore=2026-09-17`，`notAfter=2028-12-20`。
+- `verify error:num=18:self-signed certificate`。
+
+与 bug 报告、`mgmt/deploy/docker-compose.prod.yml:7-9`（`-subj "/CN=10.10.0.1" -addext "subjectAltName=IP:10.10.0.1"`、`-days 825`）一致。`VPS远程工具包/管理台通道-DMIT.bat:10` 把浏览器指到 `https://127.0.0.1:8444`。
+
+DOM 层属实：`Login.vue:61-70` 有 username/password autocomplete、`attr-type="submit"`。naive-ui `NForm` 确实渲染原生 `<form>`（`mgmt/frontend/node_modules/naive-ui/es/form/src/Form.mjs:139`）。10-02 的 DOM 修复方向对，过不了证书层。
+
+Chromium 对「证书错误页上禁用密码保存」是既定策略：crbug 142818 #6「Not saving passwords for broken SSL was an explicit decision (r276298)」；UMA `PasswordManager.CertificateErrorsWhileSeeingForms` 注释写 SSL 错误时 password manager 会停。
+
+根因需要收窄：Chromium 拦的是**任意证书错误**（含 `AUTHORITY_INVALID`），不单是 SAN 不符。只把 `127.0.0.1` 写入 SAN、不把自签 CA 导入「受信任的根证书颁发机构」，地址栏仍是不信任证书，保存气泡仍不会出。bug 报告第 3 步（导入 CA）是必要步骤，第 1 步单独不够。WG 路径 `https://10.10.0.1:8443` 主机名匹配 SAN，未导入 CA 时同样是 broken SSL，密码保存同样会被禁用；报告写「不影响 WG 访问」在密码管理器意义上不成立。
+
+残留：`@submit.prevent` + 密码阶段用 XHR、成功后切 TOTP、URL 不变。证书绿锁之后仍可能不弹保存，要用「绿锁 + 实际弹出保存」做终验。
+
+**验证：**
+```bash
+echo Q | openssl s_client -connect 127.0.0.1:8444 | openssl x509 -noout -subject -dates -ext subjectAltName
+# 期望现状：SAN 仅 IP:10.10.0.1
+# 修复后：SAN 含 IP:127.0.0.1，且系统信任该 CA 后地址栏为锁形
+```
+
+---
+
+## P4 R3/R4 WAN MAC 未固定
+
+**【确认有问题】**　严重度：**中**（当前无绑定则为潜伏；一旦光猫做 IP-MAC 绑定升为高）
+
+机制成立：AX3000 出厂不烧有线 MAC，重启随机。`docs/current/当前状态.md` 10-09 条：R2 已固定，R3/R4「待用户点头」；`scripts/flash-snr.py:283-294` 已把固定写入刷机。证据称 R3 今晨 `02:e7:5d:aa:3b:2a` → `E2:3B:70:B4:D6:BA`、`uci wan.macaddr` 为空。本次未登 R3 复读 MAC，漂移数值以证据为准。上级现无绑定，所以今天全网能通，档案 MAC 会持续失真。
+
+**验证：**
+```sh
+uci -q get network.wan.macaddr; cat /sys/class/net/wan/address   # 经 13227/13224
+```
+
+---
+
+## P5 DMIT standby 残留 `latest-backup.tar.gz`
+
+**【确认有问题】**　严重度：**低**
+
+10-01 温备目录 `/opt/mgmt-standby/latest-backup.tar.gz`（证据：11M，Oct 1 20:30 PDT）与现行 `/opt/mgmt/backup.sh` → TX/BWG 链无关。`restore-latest.sh` 不在本仓库，现网脚本若仍读 standby 目录下的 `latest-backup.tar.gz`，会灌 10-01 旧库（当时 restore v1 还有静默跳过前科）。现行主链健康（见下节 A）降低了误用概率，文件名仍具误导性。
+
+**验证：**
+```bash
+ls -l /opt/mgmt-standby/latest-backup.tar.gz /opt/mgmt/backups/latest-backup.tar.gz
+grep -n latest-backup /opt/mgmt-standby/restore-latest.sh /opt/mgmt/restore-latest.sh 2>/dev/null
+```
+
+---
+
+## P6 TX `PermitRootLogin yes`
+
+**【确认有问题】**（语义）　严重度：**低**
+
+密码认证已关时，`PermitRootLogin yes` 实际效果接近 `prohibit-password`。建议改成显式值，避免以后有人打开密码认证时 root 密码立刻可用。不构成当前入侵面。
+
+**验证：** `sshd -T | grep -E 'permitrootlogin|passwordauthentication'`（TX）
+
+---
+
+## P7 `r4-watch.sh` ping 旧 WAN
+
+**【确认有问题】**　严重度：**低**
+
+10-08 换线：`119.190.40.236` → `120.221.100.7`（当前状态有 sshd 日志实证）。脚本仍 ping 旧地址则 ICMP 监视失效。证据称 psql `devices.last_heartbeat_at` 仍可用，所以平台心跳监视还在，失效的是这条独立 ping。R4 主链路已在 DMIT，该 cron 可更新或退役。
+
+**验证：**
+```bash
+grep -n '119.190.40.236\|120.221.100.7' /opt/r4-watch.sh
+crontab -l | grep r4-watch
+```
+
+---
+
+## P8 metrics 无 `created_at` / 心跳新鲜度未直接核
+
+**【无问题】**（生产）／核查方法有瑕疵　严重度：**低**（过程）
+
+`metrics` 时间列是 `ts`，没有 `created_at`：`mgmt/backend/internal/db/migrations/0001_init.sql:100-125`。心跳新鲜度应查 `devices.last_heartbeat_at`（同文件约 L24）。用错列名得到的是查询失败，不是心跳停。证据已改用 `last_heartbeat_at` + 排障口 + 18443=200，主链路判断站得住。标「部分未验证」诚实，本身不是缺陷。
+
+**验证：**
+```sql
+SELECT id, name, last_heartbeat_at FROM devices ORDER BY last_heartbeat_at DESC;
+SELECT device_id, ts FROM metrics ORDER BY ts DESC LIMIT 5;
+```
+
+---
+
+## N1 DO 22 端口 DENY，本机连 22 超时
+
+**【无问题】**　严重度：不适用
+
+`scripts/vps-harden.sh:108-109` 明确 `ufw deny 22/tcp`，SSH 只走 28722。证据 B 段与 hardening 脚本一致，是刻意配置。
+
+**验证：** `ufw status | grep -E '22|28722'`（DO）
+
+---
+
+## N2 雅典娜已迁 DMIT（D2）
+
+**【无问题】**（该条本身）　严重度：不适用
+
+当前状态 10-10：雅典娜 `rtr-5e1a8d`、排障口 13228、心跳在 DMIT。证据 D 段 13228=rtr-5e1a8d、DO 18222 已释放，与此一致。这是完成项，不是缺陷。代理仍由 DO 平台管、医院 nft 规则另案，见遗漏风险。
+
+**验证：** `ss -tlnp | grep 13228`（DMIT）；`grep DEVICE_ID /etc/routermgmt/agent.conf`（经 13228）
+
+---
+
+## N3 四台 VPS 无异常成功登录 / 协议入站干净
+
+**【疑问】**　严重度：不适用（需复验）
+
+「last 无异常 IP」与「vless/hy2 以外无其它入站」方向与 10-01 抗识别审查、ufw 设计一致。本次未复跑 `last`/`ss`。BWG 密码面是独立的 P1，不能从 N3 推出 BWG 登录面安全。协议面「干净」只覆盖入站监听，不含 SSH 爆破。
+
+**验证：**
+```bash
+# 四台
+last -n 30; ss -tulnp | grep -E ':22|:443|:28722|:51820|:8443'
+```
+
+---
+
+## 两份文档其它论断（摘要）
+
+| 论断 | 判定 | 说明 |
+|---|---|---|
+| A 备份链健康（cron 03:30、三日 md5 一致、DO 改道 `do-legacy-backup.tar.gz`） | **疑问**（架构一致，本次未复跑 md5） | 与当前状态 10-02 备份反转记载相符 |
+| B DMIT 8443 只绑回环/WG、排障口只绑 127.0.0.1、sshd 关密码 | **疑问**（设计一致） | `docker-compose.prod.yml:12-13` 只映射 `10.10.0.1:8443`；现网若另有 `127.0.0.1:8443`，是宿主机漂移 |
+| B DO 容器 Up、医院口 18322/18422 仍在 | **疑问** | 与当前状态「医院跳板仍指 DO」相符 |
+| D R2/R3 v3 完整、18443/18446=200 | **疑问** | 与 v3 标准流程相符；未登设备 |
+| D R5 13225 无监听=现场断电 | **疑问** | 10-09 刚上线，随后 WAN/电源中断与时间线相容 |
+| D R6 13226 无监听 | **疑问，且与当前状态冲突** | 10-09 写 R6 已在 DMIT 13226、5 实例；10-10 证据无监听。优先当新中断或查错机，不能当「未刷」 |
+| F 证书与 Login.vue DOM | **确认** | 本机 openssl + 源码已核 |
+| H3 sing-box 版本未查 | **疑问** | 无在野漏洞依据，保持未验证即可，不必升为 P |
+| bug 报告「n-form 渲染为 form」 | **确认** | `Form.mjs:139` |
+| bug 报告「Chromium 绕过证书错误禁用保存」 | **确认**（公开行为） | 本机未做浏览器自动化，与报告自承一致 |
+
+---
+
+## 文档未覆盖的遗漏风险
+
+1. **全舰队 TX/BWG 8443 管理中继缺失（中→高，HA）**  
+   当前状态 10-10：「TX mgmt-relay=failed → 全舰队 18444/18445 备用管理路径断头」。证据只把 000 写在 R4 头上。DMIT 主台故障时，R2/R3 的 TX/BWG 温备同样起不来；有 discovery 也只是跳过死端口。这比 R4 缺 VPS4 更大。  
+   **验证：** 在 TX/BWG 上 `ss -tln | grep 8443`；R2 上测 18444/18445。
+
+2. **雅典娜排障口仍是旧口令 `[REDACTED]`（中）**  
+   当前状态 10-09 与证据 D「旧口令可入」。SSH 口令不在舰队统一值，13228 只绑回环，仍是口令面不一致。证据未列入问题清单。
+
+3. **医院通道与 `10.1.2.18` 依赖仍在 DO（中，退役闸门）**  
+   证据写 18322/18422 监听中，未评估停 DO 的后果。当前状态：本机 `AIHMS-JumpTunnel` 仍指 `159.223.36.119`；`hosp_fwd` 已在 10-10 被外部刷新清空且未持久化。
+
+4. **compose 源码不绑 `127.0.0.1:8443`，bat 却转发该地址（低，配置漂移）**  
+   `docker-compose.prod.yml:12-13` 只有 `10.10.0.1:8443`。日常 bat 能用，说明现网另有映射或 `10.10.0.1` 在 lo 上另有转发。重建 web 容器时可能丢掉 8444 入口（10-03 已有 `10.10.0.1` 从 lo 丢失的事故）。
+
+5. **P3 修复后 TOTP 两阶段仍可能不弹保存（低，验收盲区）**  
+   `Login.vue:19-38,60-70`：密码提交被 preventDefault，成功后切 TOTP，URL 不变。证书绿锁是必要验收，不是充分验收。
+
+6. **R6 现网状态冲突（中，待核）**  
+   10-09 当前状态：13226@DMIT、5 实例、心跳实时。10-10 证据：13226 无监听。按「现场中断」查，不要按「未接入」处理。  
+   **验证：** `ss -tln | grep 13226`（DMIT/TX/DO）；`SELECT last_heartbeat_at FROM devices WHERE id='rtr-673568';`
+
+7. **fail2ban ignoreip 可能过期（低）**  
+   10-02 白名单含 R3 `182.46.13.66`、R4 当时未换线。R3/R4 WAN 都变过，旧 IP 留在 ignoreip 无害，新 WAN 不在名单里可能被自己的隧道重试误封。
+
+8. **DMIT `authorized_keys` 10 行、7 行 permitlisten（低）**  
+   舰队端口远少于此。可能残留 R1/旧雅典娜/重复行（证据称 TX/BWG 上 R4 公钥各 2 行）。多余 `permitlisten` 会占端口或留下旧设备入口。
+
+9. **登录页 TOTP 首次绑定把 secret/otpauth 写进 DOM（低）**  
+   `Login.vue:74-77`。自用管理台可接受，截图/肩窥会泄露第二因素种子。
+
+---
+
+## 总评
+
+站得住的实质问题：**P1（高）**、**P3（中，本机证书已实锤）**、**P4（中，待用户授权）**、**P2 的 discovery/三端点缺口（中）**。P5–P7 为卫生/监控项。P8、N1、N2 按所列含义不构成生产缺陷。N3 方向合理，缺本次复测。
+
+P2 里「半开僵尸」和「DMIT 挂则 R4 必然失联」写过了：18444/18445=000 符合温备静息设计；真正的 HA 缺口是全舰队 TX/BWG 8443 中继，证据未单列。
+
+P3 因果链成立，根因是「访问源处于 broken SSL」（SAN 不符 **加上** 自签未信任）。最小闭环是：重签 SAN（含 `IP:127.0.0.1`）**并且**导入 CA，再用绿锁+保存气泡验收。
+
+未覆盖且值得同轮登记的：TX/BWG 管理中继、雅典娜旧口令、医院通道仍在 DO、R6 监听消失、compose 与 8444 入口漂移。

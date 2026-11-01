@@ -6,11 +6,15 @@
   tasks      最近任务列表
   patch <json>           PATCH 设备字段（改名/时间）
 """
-import base64, hashlib, hmac, json, struct, subprocess, sys, time, uuid
+import base64, hashlib, hmac, json, os, struct, subprocess, sys, time, uuid
 import requests, urllib3
 urllib3.disable_warnings()
 
-BASE = "https://127.0.0.1:18444"
+# 2026-10-02 管理面迁 DMIT：默认仍指 DO 18444（雅典娜/R4 历史通道）；
+# 操作 R2/R3 一律用环境变量切 DMIT 主台：
+#   先开隧道: ssh -i ~/.ssh/id_rsa_dmit -N -L 8444:127.0.0.1:8443 root@179.255.137.64
+#   再执行:   set MGMT_API_BASE=https://127.0.0.1:8444  （或脚本内 os.environ）
+BASE = os.environ.get("MGMT_API_BASE", "https://127.0.0.1:18444")
 # 2026-09-27 M05：源码不再内嵌口令/TOTP——运行时从根目录台账读取；缺台账立即失败。
 LEDGER = r"F:\vps\登录信息与配置总表-20260917.md"
 def _ledger_pw():
@@ -42,11 +46,12 @@ def ensure_tunnel():
         return
     except Exception:
         pass
+    # multi-verify V2 修复（2026-10-13）：默认隧道目标由 DO 旧库改为 DMIT 主台（DO 冻结禁写）
     subprocess.Popen([r"D:\Program Files\Git\usr\bin\ssh.exe", "-f", "-N", "-p", "28722",
-                      "-i", "C:/Users/Administrator/.ssh/id_ed25519_digitalocean",
+                      "-i", "C:/Users/Administrator/.ssh/id_rsa_dmit",
                       "-o", "IdentitiesOnly=yes", "-o", "BatchMode=yes",
                       "-o", "ExitOnForwardFailure=yes", "-o", "ServerAliveInterval=30",
-                      "-L", "127.0.0.1:18444:10.10.0.1:8443", "root@159.223.36.119"],
+                      "-L", "127.0.0.1:18444:127.0.0.1:8443", "root@179.255.137.64"],
                      creationflags=0x00000008)
     for _ in range(10):
         try:

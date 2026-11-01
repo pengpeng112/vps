@@ -27,6 +27,8 @@ type Device struct {
 	EnrollCodeExpiresAt *time.Time
 	HWModel             string `gorm:"column:hw_model;size:128"`
 	FirmwareVer         string `gorm:"column:firmware_ver;size:128"`
+	// 设备标签/主 MAC（人工维护，识别物理设备用；2026-09-28）
+	MacAddr string `gorm:"column:mac_addr;size:32"`
 	LocationNote        string `gorm:"column:location_note;size:255"`
 	// pending|approved|revoked；online/offline 由 last_heartbeat_at 派生
 	LifecycleStatus string `gorm:"size:16;index"`
@@ -42,6 +44,8 @@ type Device struct {
 	VpsLimitKbps int `gorm:"column:vps_limit_kbps;default:0"`
 	// busybox crontab 五行；空=关闭。只允许白名单表达式（见 policy.go）
 	RebootCron string `gorm:"column:reboot_cron;size:64"`
+	// 高流量预警：WAN 下行小时阈值（MB，0=关闭）；心跳时评估，超标进 alerts（每小时内去重）
+	TrafficAlertHourlyMB int `gorm:"column:traffic_alert_hourly_mb;default:0"`
 	// 授权：enabled=false 立即停用；expires_at 为空表示永不过期
 	LicenseEnabled   bool       `gorm:"column:license_enabled;default:true"`
 	LicenseExpiresAt *time.Time `gorm:"column:license_expires_at"`

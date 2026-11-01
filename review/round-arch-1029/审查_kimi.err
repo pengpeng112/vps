@@ -1,0 +1,221 @@
+• The user wants a read-only review of two documents: `review/round-arch-1029/方案.md` and `docs/current/架构评估-20261029.md`. Read-only constraint. I should read these files, plus relevant context (docs/current/当前状态.md, maybe INDEX.md), and produce an evaluation.
+
+  Let me read the key files in parallel.
+
+• The 当前状态.md is large (593 lines). Let me read the rest of it (it was truncated at 50k chars in preview but said 593 lines total — the preview shows up to line 21 truncated). Let me read more of it, particularly recent entries (top of file seems reverse chronological... actually line 3 starts with 2026-10-12, so the file may not have today's entries? Let me page through the full output path or read with offsets). The preview got cut off due to size. Let me read the file in pages. Also check scripts/emergency-kit and relevant tunnel config docs.
+
+  Let me read the rest of 当前状态.md via the output_path file, and also look at relevant tunnel/ssh architecture docs.The Read tool keeps hitting the 50k preview cap. I need to page through the file with line offsets. 593 lines total. Let me read chunks: lines 22-300, 300-593. Actually the tool applies its own 1000-line cap but the output got truncated by the environment's 50k char cap. Let me read with line_offset and n_lines in smaller chunks in parallel.
+
+• The Read tool keeps returning the full file (it ignores my paging intent — I didn't pass line_offset). I need to pass line_offset explicitly. Let me read chunks with line_offset 22, n_lines ~150.The Read tool is ignoring line_offset? I didn't pass it — I keep calling Read with just path. I must pass line_offset explicitly. Let me do that. Actually in my calls above I only passed path. Let me pass line_offset=22.I keep calling Read with only path — I need to explicitly pass line_offset. I made the mistake of not including line_offset in the JSON. Let me delegate this to an explore subagent instead, since paging this 100KB file plus other context documents is bulky. Actually, let me just use Grep to find the recent relevant entries in 当前状态.md (dates 2026-10-2x, DMIT被墙, 广州, 66云, 腾讯云, etc.), which is more efficient.
+
+  Actually the file's newest entries are at top? No — line 3 is 2026-10-12, so it seems entries grow... the newest might be at the bottom. Let me grep for "2026-10-2" to find section headers.I accidentally passed `"type": ""`? No, I only passed pattern. The error says rg: unrecognized file type — maybe the tool injected an empty type param. Let me retry without type, explicitly.The file ends at line 593. Latest entry is 2026-10-19. So 当前状态.md does NOT cover today (10-29). The 架构评估 doc covers today's events. 
+
+  Now I should check key facts:
+  1. The emergency kit scripts (scripts/emergency-kit/) to understand tunnel.conf / VPS_HOSTs mechanism, and whether adding VPS6 is as simple as claimed.
+  2. Existing architecture: five endpoints (DMIT, BWG, DO, TX, 66云). Check flash-snr.py or tunnel.conf docs for the endpoint list.
+  3. The claims: 66云 GIA relay (s-relay) has channel to DMIT.
+  4. Question 2: 广州→DMIT SSH timeout but ping works — analyze root causes.
+  5. Question 4: DMIT unreachable from management PC — ordering of implementation.
+
+  This is a read-only review task. I should investigate repo docs to verify claims: tunnel.conf structure, v3 init script, endpoint count, autossh, reverse ports 1322x, hospital channel, WireGuard hub on DO, backup cron, etc. Also check the emergency-kit README.
+
+  Let me look at docs/INDEX.md and the emergency-kit and the v3 init script references. To conserve context, delegate exploration to explore agents. But I can also do targeted greps myself. Key questions to verify:
+
+  - tunnel.conf format and how VPS endpoints are enumerated (five endpoints claim).
+  - Whether devices' tunnel sshd host key verification (StrictHostKeyChecking) — adding 6th endpoint requires known_hosts updates.
+  - Port mapping: reverse ports 1322x are bound on DMIT; on 广州 server new ports needed (plan says "新增广州侧的对应端口" — but doesn't specify conflict-free mapping).
+  - The claim "两条线路完全独立" — but 国内线 still depends on DMIT backend (DMIT 后端 is the final hop). If DMIT itself is down (not just GFW-blocked from China), management still breaks. Also management PC → how does user reach DMIT? If DMIT unreachable from PC, user needs PC→广州→DMIT too.
+  - 广州 is 腾讯云 domestic — ICP/备案 issues for sshd on 22/28722? Port 22 fine. But Tencent Cloud security groups.
+  - 广州→DMIT SSH timeout but ping ok: root causes — GFW blocks based on TCP to that IP (when an IP is blocked by GFW, typically TCP SYN dropped to all ports, ICMP may still pass — so ping通但SSH超时 is the classic signature of GFW IP blocking: ICMP often not blocked, TCP SYN dropped). That's likely the root cause: DMIT IP is TCP-blocked at GFW for the 腾讯云 Guangzhou egress path too. So the relay via 广州 does NOT solve "DMIT被GFW封锁" at all — contradicting the plan's headline claim "DMIT 被墙 → 广州中继不受影响". Wait — the plan says 广州→DMIT SSH is currently timing out, attributed to "DMIT 部分劣化 or 云到云 TCP 问题". But if GFW blocks DMIT IP, then TCP from Guangzhou to DMIT will be dropped — the whole 广州→DMIT relay leg fails whenever DMIT is blocked, which is exactly the failure scenario the plan is supposed to fix! The backup is GIA relay (66云). So the plan as stated has a fundamental hole: the domestic line terminates at DMIT, which is the very node subject to GFW blocking. The real value is: 广州→66云GIA works (SSH可达), and GIA already has a channel to DMIT (s-relay). So the reliable path is 路由器→广州→GIA→DMIT, a 3-hop chain. Or better: move the management backend itself (heartbeat receiver / reverse tunnel hub) onto 广州, removing DMIT from the management path entirely.
+
+  Actually the deeper architectural critique: the plan keeps DMIT as the management backend ("DMIT 后端"). The GFW-blocking scenario kills 广州→DMIT leg. So claim "DMIT 被墙 → ✅ 广州中继不受影响" in section 五 is unverified/false unless GIA relay leg holds. The plan's section 七 says "到 DMIT 连通性 ✅ ping 156ms（SSH 待 DMIT 路由恢复后测）" — they haven't verified SSH. So the core link is unproven.
+
+  Question 1 answer: 不能完全保障。When DMIT is GFW-blocked (TCP-level), 广州→DMIT SSH also fails (same GFW, since 广州 server egress crosses the border). Only if the block is selective by source region/ISP (GFW blocking is usually destination-IP based for all domestic egress) — it's destination-based, so 广州 egress also blocked. The plan's fallback: GIA relay. Then dependency becomes GIA. So the real resilience chain: 广州→GIA→DMIT.
+
+  Also: what does the management backend actually need? Reverse SSH tunnels from routers to a hub. If the hub (DMIT) is blocked, better to terminate tunnels at 广州 directly and make 广州 the new hub (or mirror). The plan still funnels everything to DMIT backend, adding a hop without removing the GFW-vulnerable leg. Alternatively, since heartbeat/平台 are on DMIT, they could run a tunnel-concentrator on 广州 and forward via GIA (which is a premium CN2 GIA line, less likely blocked). 66云 GIA is the resilient leg.
+
+  Question 2: ping通 but SSH timeout from 广州 to DMIT:
+  - Most likely: GFW destination-IP block on DMIT IP — GFW blocks typically drop TCP SYN (all ports) while ICMP echo may still be allowed. So ping ok, TCP timeouts. This matches "DMIT IP 被 GFW 封锁" event today. Need evidence: check TCP to other ports (e.g., 22/80/443/8444/28722), check from 66云 (international host) to DMIT SSH — if reachable from abroad but not from any domestic source, it's GFW IP block, not DMIT-side failure.
+  - Other candidates: DMIT fail2ban/firewall blocking Tencent Cloud IP range; DMIT sshd overload; DMIT's own DDoS mitigation dropping SYNs; Tencent Cloud security group outbound (unlikely); route asymmetry. But "部分劣化" framing is probably wrong — likely continued GFW TCP block.
+  - Also note: GFW block sometimes only blocks specific ports. Test plan: mtr/tcping multiple ports from 广州 and from a domestic non-Tencent source; compare.
+
+  Question 3: new single points:
+  - 广州 server itself: single domestic relay, no backup. If it dies, management reverts to five international endpoints — OK, additive. But if应急包 switches everyone to 广州 only... the plan keeps old endpoints so fallback exists. Good.
+  - But the plan claims independence: "管理通道故障不影响上网" true; "国际线路故障不影响管理" only true if 广州→DMIT/GIA leg survives international degradation — 广州→GIA/DMIT legs ARE international egress from Tencent Cloud, subject to the same GFW. GIA premium line is more resilient but 66云 is a small provider — single point too.
+  - DMIT backend remains the single management backend (heartbeats, reverse ports, platform). The plan doesn't replicate the backend to 广州. So DMIT remains SPOF for management-plane functionality (not reachability but service). If DMIT host down, even 广州 relay useless. True fix: terminate tunnels on 广州 and run backend access via 广州.
+  - Also management PC→广州: user PC must reach 广州 (domestic, fine) — but the plan doesn't describe how the user/platform connects via 广州 (reverse port mapping on 广州 mirroring 1322x). It says "新增广州侧的对应端口" — vague. Port allocation conflicts? Need mapping doc.
+  - Security: 广州 server now holds SSH access to all devices (device private keys? No — devices connect out; but 广州 needs authorized_keys of devices, and 广州 has user keys to DMIT). 广州 becoming a high-value target: compromise of 广州 = MITM of management plane (it's a jump host; SSH relay via `ssh -W` or autossh forward — if they use TCP forwarding, the inner SSH is end-to-end encrypted between router and DMIT? Actually reverse tunnel: router SSHes to 广州:28722, 广州 forwards to DMIT. If forwarding is done by ssh -L/-R chaining, encryption is hop-by-hop, 广州 sees plaintext of inner channel? The inner channel is the router's SSH session to... hmm. If router establishes SSH to 广州 and 广州 runs an SSH client to DMIT with port forwarding (ssh -R), then the tunnel terminates at 广州 and a new one starts — 广州 holds keys and can access routers' forwarded ports. If instead 广州 does dumb TCP relay (socat/haproxy) from :28722 to DMIT:28722, then router's SSH is end-to-end to DMIT (host key verification matters) — better. Plan doesn't specify. That's a real security question.
+
+  Question 4: safe ordering given DMIT unreachable from management PC:
+  - Today: 6/7 devices on 66云 GIA for egress; DMIT unreachable from PC. Management to devices currently via...? If DMIT unreachable from PC but devices' tunnels to DMIT up, user can't use them. Devices currently managed via? Possibly via GIA fifth endpoint chain (router→GIA←DMIT←user) — but DMIT unreachable from user breaks that too. Or direct 应急.
+  - Safe order should be: 
+    0. Verify current reachability: which legs alive (PC→GIA? PC→广州? device→DMIT tunnels still up?). First establish a working management path NOT depending on DMIT-from-PC: e.g., PC→广州 (domestic, fine), 广州→GIA (verified SSH可达), GIA→devices (devices already have GIA endpoint). So immediate: use 广州 as PC-side jump to GIA to reach devices' GIA reverse ports. That gives control without touching devices.
+    1. Then add VPS6 to devices gradually (only after a control path exists) — never start by pushing config to devices while management is degraded.
+    2. Do not make 广州→DMIT a hard dependency until verified; prefer 广州→GIA.
+    3. Keep应急包 until new path proven; update应急包 target only after 广州 verified end-to-end.
+    4. Order of device push: least critical first, one at a time, verify heartbeat, keep old five endpoints.
+    5. R4 still on DMIT egress — egress switching is mihomo config; do it only after management redundancy exists.
+    
+  - Also: before pushing anything, snapshot/backup configs; the plan mentions auto backup — good.
+
+  Coverage check vs user requirements:
+  - "评估好不要影响使用和远程控制" — plan addresses with只增不改 + batch verification. Reasonable but lacks rollback detail and lacks "verify current reachability first" step.
+  - "远程控制和国外分两条线路，写清楚情况和线路" — covered by diagrams; but "完全独立" is overstated: the 国内线 still crosses the border (广州→DMIT/GIA), so it's not immune to GFW/international degradation. True separation would terminate management at 广州 (domestic hub).
+  - "我会申请个国内服务器单独作为控制服务器" — user intends the domestic server to BE the control server. The plan instead makes it a relay to DMIT backend. That deviates from the user's intent: user said "单独作为控制服务器" — meaning management plane should live on the domestic server, not merely relay. The plan under-delivers on this: keeps DMIT as backend. Point out as忠实度 issue — recommend making 广州 the actual hub (terminate reverse tunnels + heartbeat receiver + user/platform access), with DMIT as replica/backup.
+  - "先确保加固下各个设备远程" — "加固" here likely means make remote access robust (multi-endpoint), which the plan does. But also security hardening? Could be both. Plan covers endpoint addition.
+
+  Other issues to check in repo:
+  - tunnel.conf supports five VPS endpoints; adding sixth requires v3 init changes — plan acknowledges. Need to verify actual variable names (VPS1_HOST...VPS5_HOST?) and that six is a simple extension. Check flash-snr.py or tunnel template.
+  - autossh/ssh keepalive, ServerAlive settings; multiple concurrent reverse tunnels on same remote port: if device connects both DMIT:13222 and 广州:13222, port mapping must mirror; plan silent on 广州 port assignment. Need to verify no conflicts and firewall/security group open.
+  - 腾讯云 domestic server: port 22 open + 28722; Tencent security group; also国内云 requires ICP备案 only for HTTP/HTTPS domains — SSH fine. But sshd on云 gets scanned bruteforce heavily; fail2ban, key-only auth — plan says ssh-rsa兼容已配 — ssh-rsa (SHA-1) is weak/deprecated; enabling it weakens security; note it. Also they configured "SSH 双端口(22+28722)" — fine.
+  - The claim "Ubuntu 26.04" — Ubuntu 26.04 LTS would be released April 2026; plausible by 2026-10. Fine.
+  - 应急包 target update to 广州: if应急脚本 runs on-site (向日葵) and switches tunnel target to 广州, fine — domestic reachable. Good improvement.
+  - 雅典娜 uses nftables vs SN-R iptables — any script changes must respect; plan doesn't mention per-device差异 for tunnel push; tunnel.conf approach uniform. Fine.
+  - Heartbeat interval/port: reverse tunnels to DMIT:28722 with ports 1322x. On 广州, need same ports forwarded to DMIT — but if 广州→DMIT blocked, forwarding fails and the router's tunnel to 广州 may flap; devices' tunnel script may consider endpoint up while end-to-end is broken (tunnel to 广州 established but relay dead). Need health-check-aware failover: endpoint liveness should test end-to-end (heartbeat received by backend), not just TCP connect to 广州. Important subtle issue: adding a relay can create "false up" — device thinks managed, backend sees nothing. Mitigation: heartbeat-based判断.
+  - Timing: DMIT currently unreachable from PC — pushing config to devices now via what path? Must go through GIA leg. The plan doesn't state the execution channel for第一阶段. That's the Q4 answer.
+
+  Also check: does the current v3 tunnel script rotate endpoints automatically (failover)? From AGENTS.md: "deploy-parallel-tunnel.py" and tunnel with five endpoints. Let me quickly inspect scripts to verify names. Let me grep for VPS5_HOST / tunnel.conf in scripts.My Grep calls keep failing with "unrecognized file type" — I seem to be accidentally passing an empty `type` param. Let me be careful to omit it entirely. Also set up a todo list maybe. Let me just run the greps correctly.Key files to inspect:
+  - `mgmt/agent/tunnel.conf.example` — endpoint structure
+  - `mgmt/agent/init/mgmt-tunnel-v3` — how endpoints are used, failover logic, health check
+  - `scripts/emergency-kit/README.md` and fix-cmds.txt — emergency kit mechanism
+  - `docs/reports/昌乐R5远程诊断-20261029.md` — today's diagnostic (66云 switch)
+  - maybe `docs/operations/设备接入与隧道升级标准流程-v3-20261002.md`
+
+  Given the volume, I'll delegate a focused exploration to an explore subagent, asking specific questions, while I read the small emergency-kit files myself. Actually, let me read the key small files directly — tunnel.conf.example and mgmt-tunnel-v3 (probably small-ish), emergency README. And the R5 diagnostic report for today's facts.Very useful. Key facts:
+  - tunnel.conf on devices: VPS_HOST single value? The example shows a single VPS_HOST. But AGENTS.md says "five endpoints" — mgmt-tunnel-v3 presumably supports multiple. The emergency kit changes `VPS_HOST` to switch. Wait — fix-cmds uses `sed 's/^VPS_HOST=.../'` and `VPS_PORT` (note: VPS_PORT vs VPS_SSH_PORT inconsistency in the README command! README says `s/^VPS_PORT=.*/` but tunnel.conf.example uses `VPS_SSH_PORT`. Check fix-cmds.txt actual content.)
+
+  Also from R5 diagnostic: mgmt-tunnel-v3: reverse -R only to primary endpoint; TX/BWG/DO/GIA are -L backup management channels. So the "five endpoints" = primary -R + backup -L channels. This changes the analysis: adding a 6th endpoint (广州) as -L backup means if all international is down, device -L to 广州 works, but -L doesn't give server→device SSH login (per R5 report: "现有 -L 会话不能直接变成服务器向设备发起的 SSH 登录"). So if 广州 only gets an -L leg, you still cannot remotely SSH into the device via 广州 when DMIT is blocked — that's a CRITICAL gap in the plan. The plan must give 广州 an -R capability (reverse port) to actually restore remote control, not just heartbeat.
+
+  Wait — plan says "广州服务器装 sshd 双端口（22+28722)" and device tunnel.conf add VPS6_HOST. Need to check v3 init to see what each endpoint gets (-L vs -R). Let me read mgmt-tunnel-v3.
+
+  Also check fix-cmds.txt for the VPS_PORT vs VPS_SSH_PORT discrepancy — real bug in emergency kit docs maybe.
+
+  Let me read those files.Now I have the crucial architecture detail:
+
+  **v3 init script facts:**
+  - All -L forwards point at `MGMT_TARGET=10.10.0.1:8443` (the DMIT WireGuard mgmt IP?). Actually 10.10.0.1 is the hub. Wait — the comment says "所有端点最终都连到 DO 的 sshd（socat 只是 TCP 直通管）" — legacy comment. Endpoints are SSH servers (or socat straight-through to the hub sshd). The -L local ports 18443-18447 forward to MGMT_TARGET (hub mgmt API).
+  - Only the PRIMARY endpoint (VPS_HOST) gets -R reverse troubleshooting port. Backup endpoints only -L.
+  - Emergency kit works by rewriting VPS_HOST (primary) to GIA IP — meaning GIA must have sshd + authorized_keys + the -R port mapping, i.e., GIA acts as full endpoint with reverse ports. R5 diagnostic says "DO/GIA 均未看到 13225 监听" though.
+  - Note: the emergency kit changes primary to GIA — this also moves the -R reverse port to GIA. OK.
+
+  Important: the -L target 10.10.0.1:8443 — on which server is that reachable? The VPS endpoints forward -L to 10.10.0.1:8443 from their perspective — presumably 10.10.0.1 is the WireGuard hub on DO (per AGENTS.md "WireGuard hub 仍在 DO"). Wait, comment says "所有端点最终都连到 DO 的 sshd" — historically DO. After 10-02 migration to DMIT, MGMT_TARGET 10.10.0.1:8443 is presumably reachable from each VPS (WG hub). Hmm — AGENTS.md says 医院通道和 WireGuard hub 仍在 DO. So 10.10.0.1 might be the WG hub IP of... need care. The -L is executed on the router: `ssh -L 127.0.0.1:18443:10.10.0.1:8443 root@VPS` — the target 10.10.0.1:8443 is resolved from the VPS's network. So each VPS must reach 10.10.0.1:8443 (WG network). So 广州 server would need to join the WG network or have its own route to the mgmt backend!
+
+  This is a big technical gap in the plan: for the 广州 endpoint to provide the -L management API channel (heartbeat etc.), 广州 must reach 10.10.0.1:8443 — either by joining the WireGuard hub (on DO! which is international) or by the plan's "SSH接力" to DMIT. The plan says "SSH 接力：8443" to DMIT — the diagram shows 广州 → DMIT 后端 via SSH relay:8443. So 广州 needs its own tunnel to DMIT (or GIA) to reach the backend. OK — consistent with the plan. But then the "两条线路完全独立" claim fails again: the domestic line's last mile is still international (广州→DMIT/GIA). The only truly domestic-only segment is router→广州.
+
+  And for -R reverse troubleshooting via 广州： v3 only gives -R on primary. Adding VPS6 as backup gives -L only. In a total international outage, router→广州 -L works, heartbeat can flow 广州→GIA→hub. But remote SSH login to device (the -R port) would NOT exist on 广州 unless 广州 is made primary or the v3 script adds -R for VPS6. The plan claims "远程控制路由器" via 广州 — underdelivered unless they either (a) make 广州 primary (VPS_HOST), or (b) extend v3 with -R on VPS6. The plan's "v3 init 加第六端点支持" is vague about -R. This is a key finding: **作为第六端点（仅 -L）无法提供服务器侧发起 SSH 登录设备的排障能力** — exactly what the R5 diagnostic warned ("现有 -L 会话不能直接变成服务器向设备发起的 SSH 登录"). The plan's核心卖点（DMIT 被墙时仍能远程控制）需要 -R 落在广州，方案没写清楚。
+
+  Also known_hosts: v3 uses `-y` (accept any host key) when known_hosts lacks the endpoint IP, with a comment "备用端点直通 DO，密钥相同" — that assumption breaks for 广州 (different sshd, different host key). Adding 广州 as an endpoint means either accepting an unknown host key (-y, MITM-exposed on first connect) or pre-seeding known_hosts. The plan doesn't mention host key handling for the new endpoint. Security finding.
+
+  Also dropbear: KEY=/etc/routermgmt/id_dropbear_mgmt — routers use dropbear key. "ssh-rsa 兼容已配" on 广州 — because dropbear client may only support ssh-rsa? Enabling ssh-rsa (SHA-1) on the 广州 sshd weakens security; also OpenSSH newer versions deprecate. Minor but noteworthy.
+
+  Now, the emergency-kit README command `s/^VPS_PORT=.*/` matches v3's actual key name VPS_PORT (not VPS_SSH_PORT) — the tunnel.conf.example in mgmt/agent is the OLD v1 template (VPS_SSH_PORT), while v3 uses VPS_PORT. Fine, not a bug in the kit.
+
+  **Coverage of the four focus questions:**
+
+  Q1 （广州 as domestic relay when DMIT blocked by GFW): GFW IP blocking is destination-based; from 广州 Tencent egress, TCP to DMIT IP would also be dropped. Evidence today: ping OK, SSH timeout — classic GFW TCP-drop signature. So the planned primary relay leg fails exactly in the scenario it must cover. Only the GIA path （广州→66云→DMIT or 广州→66云 endpoint) survives, because GIA IP isn't blocked. So the relay should target GIA, not DMIT. Plan lists GIA as backup — should be flipped: GIA relay primary, DMIT direct secondary. Also, better: make 广州 terminate device tunnels itself (hub), removing international leg from the management path entirely — that's what "国内服务器单独作为控制服务器" actually means per user's words.
+
+  Q2 (ping通 SSH超时 root cause): explain GFW mechanics: IP blocked → TCP SYN dropped (all ports or specific), ICMP usually passes. Differential diagnosis: (a) GFW IP block (most likely given today's event and same signature from both PC and Tencent); (b) DMIT firewall/fail2ban blocking Tencent range (check DMIT side: other sources OK?); (c) Tencent outbound filtering. Tests: from 广州， tcping DMIT ports 22/28722/8444/others; from a second domestic network; from GIA/abroad. If all domestic sources fail all TCP ports while foreign sources succeed → GFW IP block. If only Tencent fails → DMIT-side ACL/fail2ban. Also check whether PC→DMIT fails on all ports similarly.
+
+  Q3 (new SPOF): 
+  - 广州 single domestic relay (no second domestic node) — acceptable while additive, but once 应急包 points only to 广州， failure of 广州 + international outage = total loss; mitigate by keeping GIA target as alternate in kit.
+  - DMIT backend remains SPOF for the management plane (hub 10.10.0.1:8443, platform, heartbeat DB, WG hub on DO too!). Wait — WG hub on DO, DO kept until 11-02. MGMT_TARGET=10.10.0.1:8443 — whose 8443? The mgmt backend. On DMIT now presumably (management API on DMIT, reachable via WG 10.10.0.1 from VPSs?). The -L target resolution happens on the endpoint VPS. If the hub network (WG, hub on DO) is involved, then DO retirement on 11-02 interacts: does 10.10.0.1 live on DO's WG? AGENTS.md: "医院通道和 WireGuard hub 仍在 DO". So the -L target 10.10.0.1:8443 is reachable via the WG network hubbed at DO! Then when DO retires 2026-11-02 (4 days away), every -L management channel dies unless hub migrates. The plan completely ignores this coupling —广州 relay to "DMIT 后端" via SSH on 8443 is actually a different path （广州 SSH to DMIT:8443? diagram says SSH 接力：8443 → DMIT 后端）. Hmm, 8444 is the mgmt console port per AGENTS.md (8444). The diagram says "SSH 接力：8443". Ambiguity worth flagging. Anyway: the plan must specify where 广州's relay terminates and how it reaches the mgmt API if WG hub moves.
+
+  - Also PC→management: plan focuses on device→hub, but user's own access (PC→DMIT 8444 console, PC→device via 1322x ports) also dies when DMIT blocked. The plan must include PC-side access via 广州 (e.g., PC→广州→GIA→DMIT 8444, or mirror reverse ports on 广州）. 方案.md doesn't address user-side access path at all. Actually 架构评估 section 六 doesn't either. Gap.
+
+  Q4 (safe ordering given DMIT unreachable from PC today):
+  Current reachability matrix (from R5 diagnostic + today's events): PC→DO:28722 works (login success). PC→DMIT intermittent. DO/GIA health 200. Devices have live -L sessions to DO/GIA (R5 had SSH inbound sessions from its site IP). So today's working management path: PC→DO (or PC→GIA? unclear, DMIT→GIA had key auth failures) → via WG hub on DO → device -L channels... but -L only gives agent API/heartbeat access from device side; server→device SSH needs -R on some endpoint. R5's -R on DMIT dead (no listen 13225). Hmm.
+
+  Safe ordering recommendation:
+  0. Freeze: no device changes until a verified PC→device path exists that does not depend on DMIT-from-PC. Today that candidate is PC→DO:28722→（现有连接） or via GIA.
+  1. Build & verify 广州 server-side first (no device touch): 广州 sshd, keys, 广州→GIA SSH, 广州→DMIT test (expect fail while blocked), relay service, WG/ backend reachability, mirror -R ports.
+  2. Verify PC→广州 and PC→广州→（GIA)→DMIT backend console path.
+  3. Pilot one device (least critical, e.g. R9/R10/R11 new ones? or a local-ish one): add VPS6 only, verify heartbeat via new leg + old legs intact.
+  4. Roll out rest one by one.
+  5. Only after 广州 path proven: update emergency kit target; switch R4 egress; decommission nothing.
+  6. Never: update应急包 to point solely at 广州 before 广州→backend leg survives a DMIT-block drill.
+
+  Also: "7台设备中6台已在66云GIA上" refers to egress (mihomo), not management. Management tunnels still primary→DMIT. During the DMIT block, devices with good international route to GIA can be switched by应急包. But pushing config now requires working access — today they used向日葵. So the safest is what I said: server-side first.
+
+  One more consistency check: 方案.md says "今天 DMIT IP 被 GFW 封锁 → 6 台设备中有 4 台失去远程控制" whereas 架构评估 timeline mentions R5/R2/R6/R3/R1 affected. "6台中4台" vs "7台中6台在66云" (user's question says 7 devices). Minor numeric inconsistencies between the two docs （方案 says 6台设备4台失控； 评估 timeline lists 5 sites). Flag as consistency nit.
+
+  方案.md says "广州服务器（134.175.151.213，已到位）" and 架构评估 says "Ubuntu 26.04". Also 方案.md: "GIA 的 s-relay 已有到 DMIT 的通道" — per R5 diagnostic, DMIT→GIA key auth partially failed, "原因未核实" — so the GIA relay channel is itself currently degraded/unverified. Flag.
+
+  Also "只增不改" claim vs "设备 tunnel.conf 加 VPS6_HOST" + "v3 init 加第六端点支持" — modifying the init script on all devices is not risk-free; a bad init push could break all tunnel instances at once (this is the highest-blast-radius step). Must push init change and conf change separately, init first (backward compatible), test on one device through a reboot/restart cycle.
+
+  Another: heartbeat/agent port selection "agent 按 18443→18444→18445→18446 顺序自动选路" — with VPS6 adding 18447, the agent (local agent code) must also know to try 18447; plan mentions v3 init but not the agent's port iteration. Check mgmt/agent for port list. Let me grep quickly for 18446/18447 in mgmt/agent.
+
+  Also the plan says "广州服务器装 sshd 双端口（22+28722) ✅ 已装好" and "ssh-rsa 兼容 ✅ 已配" — security: on a fresh Tencent Cloud host, exposing 22 with ssh-rsa enabled; ensure PasswordAuthentication off, fail2ban. Not mentioned. And 腾讯云 security group + potential 风控 for many inbound SSH tunnels from various IPs — fine.
+
+  Also potential issue: Tencent Cloud domestic servers require ICP filing only for web services on 80/443 with domain — not applicable. But 腾讯 security group default may block 28722 inbound — they say已开.
+
+  Also note v3 file's comment header says "四端点" but code has 5 — doc drift, minor.
+
+  Let me check the agent's port iteration to confirm whether adding 18447 needs agent change.
+
+• Good. Now I have solid facts:
+
+  - Five endpoints: primary DMIT (179.255.137.64, -L 18443 + -R), VPS2 TX (43.134.46.44), VPS3 BWG (74.82.203.175), VPS4 DO (159.223.36.119), VPS5 GIA (154.36.137.54). Each VPS's sshd is connected directly (not socat anymore — "TX sshd 直连"), so each endpoint's sshd must forward -L target 10.10.0.1:8443 — meaning each VPS reaches the mgmt backend at 10.10.0.1:8443 (WG network). And -y host key acceptance: each endpoint has its own host key now (comment about "直通 DO 密钥相同" is stale — endpoints are direct sshd, so known_hosts per-IP matters; the -y fallback accepts unknown keys → MITM exposure for new 广州 endpoint unless known_hosts seeded).
+
+  - mgmt-port-discovery tries 18443-18447 (five ports). Adding VPS6 → 18448 needs updating discovery + v3 init + flash-snr + tests (tunnel-conf-vectors.sh). The plan says "v3 init 加第六端点支持" but misses mgmt-port-discovery.sh and the test vectors and flash-snr.py template. Completeness gap.
+
+  - tunnel-watchdog.sh checks only 18443 (primary). If primary DMIT leg dies but backups live, watchdog may flap/restart tunnels unnecessarily. Worth noting when DMIT is primary and blocked: watchdog curl to 18443 fails → what does watchdog do? Probably restart tunnel. That could churn. Not plan-critical but relevant to "加固".
+
+  Let me check tunnel-watchdog quickly? It checks 18443 health; if fail → restart? One peek.Confirmed: watchdog only probes 18443 (primary endpoint local port). When DMIT (primary) is blocked, 18443 health fails → watchdog restarts the whole tunnel service every ~3 minutes — churning ALL legs including the healthy backup ones. That's exactly what likely happened today (R5 re-auth every ~2 min on DO — matches watchdog restart cycle!). The R5 diagnostic noted "DO 10:05—10:15 期间每约两分钟出现一次 R5 重新认证" — that's the watchdog restart loop. This is a major finding: the current "primary=DMIT + watchdog only checks primary" design turns a primary-leg failure into continuous full-tunnel churn, degrading the surviving backup legs. The plan doesn't address this. Real hardening: watchdog should accept any healthy local port (use mgmt-port-discovery logic), or probe all legs.
+
+  Also "DMIT 侧 rssh-reaper 兜住重启后的旧会话占口" — fine.
+
+  Now, do I need to check deploy-parallel-tunnel.py or 66云 s-relay claim? The 方案 says "GIA 的 s-relay 已有到 DMIT 的通道". R5 diagnostic says DMIT→GIA key auth intermittently failed. Enough evidence to flag as unverified.
+
+  Also check: does 66云 GIA VPS reach 10.10.0.1:8443? VPS5 endpoint exists since 10-26 and works (devices heartbeat via it per emergency kit success). Presumably yes via WG.
+
+  Now about "今天7台设备中6台已在66云GIA上" — that's egress. R4 still on DMIT.
+
+  I have enough for a thorough review. Now compose the review in Chinese, structured:
+
+  1. 总体结论
+  2. 对用户需求的覆盖度与忠实度
+     - 覆盖：分线架构图、只增不改、应急包更新 ✅
+     - 偏差：用户说"国内服务器单独作为控制服务器" — 方案把它降级为"中继"，管理后端仍在 DMIT。这是最大忠实度缺口。真正的"控制服务器"应终结设备隧道+承接心跳/排障口，DMIT 变副本/备用。方案相当于花了国内服务器却仍把命门留在 DMIT。
+  3. 四个重点问题
+     Q1: 不能保障。GFW 封 IP 是按目的地的，广州腾讯出境同样被丢 TCP。今天"ping通SSH超时"就是同特征。所以 DMIT 被墙时广州→DMIT 段照样断；方案里"DMIT被墙→广州中继不受影响"不成立，除非走 GIA 段。建议：接力目标主用 GIA（已验证 SSH 可达），DMIT 直连只作次要；并尽快实测而非"待 DMIT 路由恢复后测"。
+     Q2: 根因分析。最可能 GFW 对 DMIT IP 的 TCP 级封锁（ICMP 放行、TCP SYN 丢弃），证据：同一时段 PC→DMIT 也不通、R5 报告显示间歇。鉴别实验：广州同时 tcping DMIT 的 22/28722/8444/443；从 GIA/DO（境外）测同端口；从另一国内网络测。若"境内全端口超时、境外全通"→GFW IP 封；若仅腾讯段不通→DMIT 侧防火墙/fail2ban 封了腾讯段；若仅 28722 不通→端口级封锁。注意 R5 报告里"本机/DMIT→腾讯 22/28722 部分组合超时"说明腾讯云入向也可能有安全组/风控因素，需要分开测。
+     Q3: 新单点：
+     - a) 广州本身单点（无第二国内节点）；应急包若只指向广州，广州故障+国际断=全失联 → 应急包保留 GIA 为备选目标。
+     - b) DMIT 后端仍是管理面 SPOF（心跳库、平台、10.10.0.1:8443、排障口汇集）——方案只是加了到达 DMIT 的路径，没有消除 DMIT 单点。且 -L 目标 10.10.0.1:8443 依赖 WG 网络，WG hub 还在 DO，DO 11-02 退役（4 天后）——方案完全没提这个耦合，广州端点要通 -L 必须解决 10.10.0.1:8443 的可达性（加入 WG 或经 GIA/DMIT 接力），DO 退役前必须迁移 hub 否则所有 -L 全灭。
+     - c) "两条线完全独立"过度宣称：国内线末段（广州→DMIT/GIA）仍出海，仍受 GFW 影响；只是多了一层精品线缓冲。
+     - d) 用户侧访问路径缺失：方案只解决设备→后端，没有解决"我 PC → 管理面"（今天 PC→DMIT 不可达时我也无法操作）。需要 PC→广州→GIA→DMIT 8444 或广州镜像排障口。
+     Q4: 安全顺序（详见下）。
+
+  4. 我自发发现的问题（技术/安全/一致性）：
+     - P0: 第六端点只是 -L，无法远程登录设备。v3 里只有主端点有 -R。DMIT 被墙 + VPS6=广州（仅-L) 时，心跳能走广州，但服务器→设备的 SSH 排障口不存在——而这正是"远程控制路由器"的核心。R5 报告也明写"-L 会话不能变成服务器向设备发起的登录"。方案必须把 -R 镜像到广州（改 v3 给 VPS6 加 -R，或应急时把广州升主端点），否则核心承诺落空。
+     - P0: watchdog 只探 18443（主端点）。今天 DMIT 被封期间，每台设备的 watchdog 每 ~3 分钟全量重启 mgmt-tunnel，把存活的备用腿一起打断（R5 报告里 DO 侧每 2 分钟重认证就是这个循环）。这是"加固远程"必须先修的真 bug：改为按 mgmt-port-discovery 的 18443-18447 任一健康即不重拉。方案只字未提。
+     - P1: 主机密钥：v3 对未知端点用 -y 接受（注释假设"直通 DO 密钥相同"，但 flash-snr 显示现在是各端点独立 sshd 直连，注释已过时）。新增广州端点若不预置 known_hosts，首次连接 -y 裸接受 = 管理通道 MITM 敞口。方案未提 host key 分发。
+     - P1: ssh-rsa(SHA-1) 兼容在广州 sshd 上"已配"—— weakening; 应限定只对设备网段/仅必要时启用，且关闭密码登录、配 fail2ban；方案未提广州自身加固（用户原话"先确保加固下各个设备远程"也包含这台新服务器的暴露面）。
+     - P1: 改造清单不全：加第六端点不止 v3 init，还涉及 mgmt-port-discovery.sh（写死 18443-18447）、tunnel.conf.example、flash-snr.py 模板、tunnel-conf-vectors.sh 测试向量、watchdog。漏了 discovery，新腿不会被 agent 选路使用。
+     - P2: "假活"风险：隧道到广州建立≠端到端通（广州→GIA/DMIT 段死时 TCP 到广州仍成功）。端点健康判定必须以后端收到心跳为准，方案"逐台推送并验证心跳正常"方向对，但应明确验证的是后端侧心跳而非设备侧进程。
+     - P2: 数字不一致：方案.md 说"6 台设备中 4 台失控"，评估时间线列了 5 个站点受影响，用户说"7 台中 6 台在 GIA"。对外写报告前统一口径。
+     - P2: 应急包 README 的 sed 用 VPS_PORT（对），但 mgmt/agent/tunnel.conf.example 还是 v1 的 VPS_SSH_PORT——模板与实际 v3 键名不一致，未来照模板写 conf 会静默失效。顺手修正。
+     - P3: v3 init 头注释还写"四端点/所有端点直通 DO sshd"，与五端点直连现状不符，文档漂移。
+     - P3: 实施顺序里"R4 切 66 云"放在第二阶段，但今天 DMIT 不可达场景下 R4 恰是唯一还没冗余出口的设备；且出口切换（mihomo）与管理通道无关，可独立先做，不必等广州。
+
+  5. 建议的实施顺序（Q4 的回答 + 修正版）：
+     0. 冻结设备侧改动。先确认当前可用管理路径：PC→DO:28722（今天实测可登录）和 PC→GIA，把 DO 作为今天的操作跳板。
+     1. 只做服务器侧：广州 sshd 加固（禁密码、fail2ban、最小安全组）、装设备公钥、部署广州→GIA（主）/→DMIT（副）接力、打通 10.10.0.1:8443 可达性、镜像排障端口规划。此时设备零改动，零风险。
+     2. 验证 PC→广州→GIA→DMIT 控制台/排障口全链路（解决"我够不着 DMIT"）。
+     3. 修 watchdog 探活逻辑（先一台试点）。
+     4. 试点一台低风险设备加 VPS6（含 -R），验证后端心跳+广州侧排障口登录，观察 24h。
+     5. 分批推全舰队，每台验证后下一台。
+     6. 广州链路实测通过"DMIT 被封"演练后，才把应急包目标改为广州（且保留 GIA 备选）。
+     7. R4 出口切 GIA 独立进行，不阻塞上面任何一步。
+
+  Also answer "能否真正保障管理通道不中断" conclusively: 按现方案（广州→DMIT 接力为主）不能；改为广州→GIA 接力（或广州直接做 hub）后，DMIT 被墙场景可保，但引入新依赖 66云（单商家）。
+
+  Also note: user said "并调用codex 一起核查" in original需求 quoted in 方案.md — the user's current message doesn't ask me to call codex. Skip.
+
+  Also I should mention the 忠实度 on "先确保加固下各个设备远程但是一定不要影响使用和远程" — plan's只增不改+分批验证 is faithful; but the watchdog bug means "加固"需要先修既有缺陷，否则新端点加了也白加。
+
+  Length: keep organized but complete. This is a review deliverable — user asked to "写清楚". Use Chinese. Cite file paths with line numbers where relevant.
+
+  Should I write this into a review file? User constraint: 只读，禁止修改任何文件. So no file writes — deliver in chat. Good.
+
+To resume this session: kimi -r session_c4f2c4c0-66c1-44a1-892e-f3a42e9a5a79

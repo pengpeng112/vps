@@ -1,0 +1,2535 @@
+Reading additional input from stdin...
+2026-10-13T15:48:36.765624Z ERROR codex_models_manager::manager: failed to refresh available models: request timed out
+2026-10-13T15:48:36.779983Z ERROR codex_models_manager::manager: failed to refresh available models: request timed out
+OpenAI Codex v0.162.1
+--------
+workdir: F:\vps
+model: gpt-6.1-sol
+provider: openai
+approval: never
+sandbox: read-only
+reasoning effort: medium
+reasoning summaries: none
+session id: 01a135f3-7b95-7480-9b31-6125d4891f82
+--------
+user
+只读核查 F:/vps/verify/round-2/变更说明.md 与 diff_1_flash-snr.patch、diff_2_flash-batch.patch（可读 F:/vps/docs/operations/新SN-R1刷机录入SOP-自动化-20260928.md 末章作流程参照）。自由给出你认为重要的关键发现（ correctness/安全/健壮性/流程遗漏 ），每条注明文件:行或可复现证据；不要修改任何文件。
+2026-10-13T15:49:20.544146Z ERROR codex_models_manager::manager: failed to refresh available models: request timed out
+codex
+我会先读仓库说明和当前状态，再核查变更说明、两份补丁及 SOP 末章，全程只读；发现会附文件行号或可复现证据。
+exec
+"C:\\Users\\Administrator\\AppData\\Local\\Microsoft\\WindowsApps\\pwsh.exe" -Command 'Get-Content -LiteralPath README.md' in F:\vps
+ succeeded in 515ms:
+# VPS 与路由器项目
+
+唯一工作目录：`F:\vps`。入口核对于 **2026-10-12**。移动记录见 [2026-10-01 清单](docs/archive/20261001-manifest.md) 和 [2026-10-12 清单](docs/archive/20261012-manifest.md)。
+
+## 新会话从这里开始
+
+1. [AGENTS.md](AGENTS.md)：态势速览、工作边界、高危坑。
+2. [当前状态](docs/current/当前状态.md)：已知事实、来源日期、冲突与未验证项（顶部最新）。
+3. [跨 AI 协作入口](docs/AI协作入口.md)：启动提示词、事实优先级和交接格式。
+4. 设备接入/隧道升级看 [v3 标准流程](docs/operations/设备接入与隧道升级标准流程-v3-20261002.md)；进行中任务见 [资料索引 §二](docs/INDEX.md)。
+5. 通过 [资料索引](docs/INDEX.md) 按需阅读，不要一次加载所有历史会话和凭证。
+
+## 目录分工
+
+| 位置 | 用途 |
+|---|---|
+| `docs/current/` | 唯一现状摘要；运行结论附日期和证据 |
+| `docs/plans/` | 活跃/近期任务计划与执行记录（证据链） |
+| `docs/operations/` | 接入标准、运维、刷机、通道手册 |
+| `docs/reference/` | 原始需求、阶段计划、历史会话分析指南 |
+| `docs/reports/` | 验收、变更记录、诊断证据（按日期） |
+| `docs/archive/` | 历史归档；整理清单在 `20261001-manifest.md`、`20261012-manifest.md` |
+| `docs/会话导出/` | 历史对话，不视为已脱敏或当前事实 |
+| `docs/wg-peers/`、`docs/设备引导包-雅典娜.json` | WireGuard 与注册包，含密钥，不要写进索引正文 |
+| `verify/` | 2026-10-10 核查原文；[说明](verify/README.md) |
+| `logs/`、`webprobe/` | 巡检生成物；[日志说明](logs/README.md) |
+| `mgmt/` | 管理系统源码；[开发入口](mgmt/README.md)。不要遍历 `frontend/node_modules` |
+| `scripts/` | 现役运维脚本（[分类表](scripts/README.md)）+ `archive/` 历史脚本 |
+| `firmware/`、`京东云AX6600雅典娜/` | 固件与工具；[固件索引](firmware/README.md) |
+| `backups/` | 备份、凭据与现场证据（gitignore）；[备份索引](backups/README.md) |
+| `VPS远程工具包/` | 本机进 DMIT 的入口：`管理台通道-DMIT.bat`（8444） |
+| `.v2c/`、`.video_agent/` | 工具生成的定位文件，保留原位 |
+
+凭证台账仍在根目录，且有脚本运行时依赖；只在具体任务需要时读取相关段落，不复制到报告或外发附件。R2/R3/R4 管理主台是 DMIT，本机入口为 `VPS远程工具包\管理台通道-DMIT.bat`（8444）；访问与恢复细节见 [当前状态](docs/current/当前状态.md)及 [v3 标准流程](docs/operations/设备接入与隧道升级标准流程-v3-20261002.md)。
+
+当前出口涉及 BWG 东京、DMIT 美西、TX、DO 四节点；DO 仍承载部分历史依赖。设备与管理面完成范围见 [当前状态](docs/current/当前状态.md)，操作前核实现状。
+
+exec
+"C:\\Users\\Administrator\\AppData\\Local\\Microsoft\\WindowsApps\\pwsh.exe" -Command "Get-Content -LiteralPath 'docs/current/当前状态.md' -TotalCount 170" in F:\vps
+ succeeded in 493ms:
+# 当前状态与证据入口
+
+## 2026-10-12 目录索引重整（只动本地文件，未连现网）
+
+- 地图改写为 `docs/INDEX.md`。`AGENTS.md` 顶部态势改为 10-12：R5/R6 已接入但现场离线，雅典娜管理面在 DMIT `13228`，R1 已回。
+- 两处移动见 [20261012 清单](../archive/20261012-manifest.md)：雅典娜引导包回到 `docs/设备引导包-雅典娜.json`（让原有 gitignore 生效）；无引用的 `scripts/qf_app.html` 进 `scripts/archive/`。`docs/wg-peers/` 补进根 `.gitignore`，文件未搬。
+- 新增 `verify/README.md`、`logs/README.md`。脚本、手册、备份三份 README 补了 10-10 之后的文件名。没有改路由器、VPS 或管理库。
+
+## 2026-10-12 10:21 SN-R1 回归补齐（脚本三件 + 有线 MAC 固定，未整机重启）
+
+- **对象**：临朐网警 SN-R1（`rtr-d3847d`，DMIT 13222）。今晨约 09:46 计划下线后重新上电。
+- **已写入并 md5 对齐仓库**：`mgmt-port-discovery.sh`=`aea30ce6`（`curl -fsk`）、`onboot-hooks.sh`=`e8b85c92`（开机把 QUIC REJECT 置顶）、`connlog.sh`=`86d97188`。当时 FORWARD 第一条已是 REJECT，DROP 在其后。回退文件在 R1 `/root/*.bak-20261012-101806`。
+- **有线 MAC 已生效**：WAN `76:a7:c8:e0:4f:21`、br-lan `76:a7:c8:e0:4f:31`（uci 与 `/sys/class/net` 一致）。DHCP 由 `192.168.1.88` 换成 `192.168.1.73`。备份 `/root/network.bak-macpin-20261012-101806`。WiFi `WIFI-ZHISHANG` 未动。
+- **ifup wan 后**：旧 13222 会话半开占口，已踢掉该 sshd 子进程；约 20 秒后新会话横幅正常。10:21:27 心跳恢复，出口仍东京 `74.82.203.175`，本地 18443/18444/18445 在听。管理台 `remote_ssh_alive` 仍为旧失败值，因为探针名单里没有 13222。
+
+## 2026-10-10（晚）一次性完善执行轮 T0-T11 全部完成（零路由器重启，详见执行记录）
+
+- **背景**：早间 multi-verify 修复轮已完成大部分现网项；本轮按《一次性完善执行计划-20261010》逐项实测复核+补齐。三处与计划 §0 的偏差（BWG 已加固/R3 18446 已 200/R4 discovery 已补）均与修复轮记录吻合。
+- **本轮实做**：① T9d Login.vue 构建+部署（loading 守卫+TOTP autocomplete；web 容器重建后双 8443 映射保住、心跳 9-11 秒恢复、新 bundle 含 one-time-code）；② BWG fail2ban ignoreip 清理（去失效 R3 旧 WAN、补 DMIT）；③ r4-watch 修 bug（`tr -d ' '` 删掉时间戳内部空格致 hb_fresh 恒 0——10-04 起 RETURNED 从未记录过；已修并见 10-10 03:35 RETURNED 日志）+ ping 目标改 R4 现 WAN 27.205.184.56（**R4 WAN 又从 120.221.100.7 漂移，10-08/09 起**）；④ 仓库 discovery/watchdog 加 -f + 旧 setup 脚本防呆注头（repo md5=现网三台 aea30ce6）。
+- **T4 破案**：DMIT authorized_keys "无注释 rsa key"=**本机 id_rsa_dmit**（10-01 与 pc-dmit-lax 同批的 RSA 伴生密钥，PC 经雅典娜→代理出口连 DMIT 的主体），30 天 869 次在用，未动。
+- **交付待用户**：导入 `F:\vps\backups\mgmt-cert-20261010.crt`（步骤见执行记录 T2 段）→ 8444 绿锁 → 验证登录保存密码气泡/TOTP 自动填充/回车单请求；P6 command= 方案已成文（执行记录附录 A）待另批窗口；R5/R6 现场电源仍待处置。
+- 次日晨检清单在执行记录末尾（MAC/18446/discovery/备份/BWG lastb/用户侧六项）。
+
+## 2026-10-10（五）multi-verify round-1 全舰核查+修复轮（详见 verify/round-1/核查报告.md）
+
+- **核查**：四方 AI（GLM/Kimi/Grok/Codex）核查系统/路由器/备份/代理安全+登录 bug。备份链健康（三处 md5 双验证+rotation 14 天）；无被破解迹象；初判"R4 半开僵尸"被裁决推翻（18444/18445=000 为温备静息设计）。
+- **已修复**：① 管理台证书重签（SAN 加 127.0.0.1+localhost）——浏览器密码保存阻断解除（待用户导入 `VPS远程工具包\DMIT管理台证书-20261010.crt`）；② BWG/TX sshd 加固（BWG 密码登录关闭）；③ R3 DO 兜底隧道自愈（18446=200）；④ R4 补 discovery v2（四端口+--fail）+cron；⑤ **R3/R4 WAN MAC 已固定**（R3=76:a7:c8:e0:4f:23/33、R4=4f:24/34，档案已更新，备份在各自 /root/network.bak-macpin-20261010-*）；⑥ discovery v2 三台统一（md5 aea30ce6）；⑦ standby 残留改名 .stale、r4-watch ping 目标更新。
+- **R3 恢复在线**（今晨重新上电，心跳 0min）；**R6 今晨 ~07:12 起失联**（13226 无监听+心跳停，疑似现场断电——与 R5 同模式，待现场）。
+- **挂起**：P5 DMIT 一把无注释 ssh-rsa root key 待用户认领；P6 路由器隧道密钥无 command= 限制（专项）；雅典娜排障口旧口令；医院 nft 未持久化；Login.vue 源码已改（TOTP autocomplete+回车防重）未部署。
+- **新现象记录**：排障口半开僵尸模式（ifup wan/重连后旧 -R 残留占口，手踢 50s 恢复或 ClientAlive 600s 自清）；md5 闸门实战拦截一次空文件（流式拉取必带 -y）。
+
+## 2026-10-09（二）R6 新上线即升级 DMIT（全绿，舰队 SN-R 系列接入完毕）
+
+- **SN-R6（rtr-673568）接入完成**：v1 老配置发现于 DO（13226）→ md5 闸门（d5daf251）v3 一次到位 → 13226 已在 DMIT、5 实例、心跳实时；绑 BWG+LAX 发布 v2（含 US-MEDIA）→ **主用东京出口双验**；ping_test 闭环 ok（国内 18ms）。探针：DMIT 盯五口 13223/24/25/26/27；DO 已去 13226。
+- **舰队 SN-R 系列全部就位**：R2/R3(待核)/R4/R5/R6 = DMIT 主台+东京交互+美西视频+三重兜底。R5/R6 为 10-09 新上线、一次升级到位（v3 标准流程两个成功样板）。
+- ⚠️ R3 心跳仍两边停（10-07 起）——SN-R 系列里唯一离线者，待现场核实。
+
+## 2026-10-09 R5 新上线即升级 DMIT 主台（v3 标准流程一次过）+ 雅典娜事件 + 医院库转发
+
+- **SN-R5（rtr-c46a25）新上线接入完成**：发现时走 v1 老配置（DO 主+10.10.0.1 目标+代理=DO 节点）。按 v3 标准流程一次到位：shell 经 DO 13225 → md5 闸门写入（v3 init+四端点 conf+四端口 discovery+agent 补丁+cron）→ **13225 已在 DMIT**、5 实例、心跳实时、agent "heartbeat ok"；绑 BWG+LAX 发布 v2（含 US-MEDIA 分流）→ **switch 主用东京出口 IP 双验 74.82.203.175**。探针：DMIT 盯 13223/13224/13225/13227 四口；DO 已去 13225。
+- **雅典娜事件（10-09 早）**：-L 转发绑口失败静默苟活（10-08 起），心跳实为停更（07:08 最后）——"看似在线"是时间巧合假象，与 R4 前案同型。用户断电重启后恢复（18222 重绑成功、心跳实时）。**排障口登录密码为旧口令 [REDACTED]（非舰队统一口令）**——已在执行记录标注。心跳仍在 DO 旧库（雅典娜管理面迁移=DO 退役前置，计划 D2）。
+- **医院 Oracle 转发（10.1.2.18 白名单线）**：雅典娜 nft 部署 DNAT（LAN 192.168.2.1:1521 → 10.10.10.15:1521）+ **SNAT 固定源 10.1.2.18**（白名单 IP）。用户客户端实测：TCP 握手通、TNS Connect 被服务端 RST——指向医院侧 sqlnet.ora INVITED_NODES 未放行该源。已建议医院侧核对/放行 10.1.2.18；**nft 规则未持久化**（重启丢失），验证通过后需写入 /etc/nftables.d/。
+- ⚠️ **R3 心跳两边都停（10-07 起）**——待核（下一动作：DO/DMIT 均无 R3 会话，需查 R3 现场）。
+
+## 2026-10-09 SN-R1 体检全过后计划性下线（告警属预期勿当故障）
+
+- R1（rtr-d3847d，13222）11 项体检全过（QUIC 顺序现场修正），用户决定下线。后续 offline/remote_ssh_down 告警=预期。再上线自愈（钩子恢复 cron+QUIC、隧道心跳自动回归）；配置全固化，回归流程见 SOP。
+
+## 2026-10-08 深夜 SN-R1 重新上线归队（v3 全套零现场操作）
+
+- 退役的 **SN-R1（rtr-d3847d，排障口 13222）已重新接入 DMIT 主台**：v3 三端点隧道（DMIT+TX+BWG，BWG 侧公钥补发）、心跳实时、绑定与配置对齐现役标准（BWG 主/LAX/TX-hy2/TX-vless，v8 已应用）、出口实测东京；root/网页口令归位统一值（网页 302 实测）、五行 crontab+防抹钩子、respawn 修复、平台预警 2048MB/h。R3/R4 客户网点侧仍离线（13227 未绑，疑似网点施工）。此前"DMIT 显示离线"原因=R1 从未迁移（v1 指向 DO 的 WG 旧路径已死）。教训与备份清单见凭证总览更新八；WiFi（WIFI-ZHISHANG）为用户域未动。
+
+## 2026-10-08 晚 R4 站点换线（新 WAN 120.221.100.7）复检全绿；R3 客户网点当前离线
+
+- **R4 站点已换宽带线路**：WAN 由 119.190.40.236（联通）变更为 **120.221.100.7**（DMIT sshd 日志 1696 次连接+实时会话实证，密钥指纹对上 R4 专属授权行）。换线后 00:00 定时重启正常，**上线流程全项复检通过**：隧道 v3 三端点、mihomo v8、网页登录三件套（UCI 密码=[REDACTED]/btoa 编码 2+1 行/firstLogin=0）、WiFi（U2.4/U5.8+save8888@）、crontab 五行（netprobe/connlog/spike-cap/每日重启）+rc.local 三钩子、出口=东京。设备档案已记录新 WAN。
+- **R3（客户网点）当前离线**：最后心跳 10-08 15:56 CST，13227 未绑定，WAN 182.46.13.66 无响应。若客户网点在施工/换线（与 R4 站点换线同期），属同类型站点操作；恢复后按 R4 流程复检即可。
+- 提醒：站点换线后如代理异常，优先核对 NODE-PICK 与各节点延迟（新线路到各节点质量需重新实测，netprobe 自动累积中）。
+
+## 2026-10-05 ⚠️ R4 定时重启后整机离线 8 小时（WAN 100% 不可达，需现场处置）；R3 重启验证通过
+
+- **R4（rtr-cd473f，坊子网警）**：最后心跳 10-04 23:59:51 CST（0 点重启前 9 秒）→ 00:00 定时重启 → **至今未回归**（发报告时 07:17）。证据：DMIT ping 其 WAN 119.190.40.236 **100% 丢**；13224 未绑定（无 -R）；metrics 零样本；平台 00:01:28 已告警 remote_ssh_down。**定性：设备/线路级离线（断电、光猫、或重启挂死），非重启机制问题**——R3 同刻重启 00:00:16 回归、crontab 四行全部存活（checkMem/netprobe/discovery/reboot），机制已实证。**注意**：若有人恰在重启中断电，存在闪存损坏风险（R2 前例），现场恢复后须按 R2 先例做文件完整性核查。
+- **现场处置单（给用户）**：①断电 10 秒再上电；②不回来查电源适配器/光猫/网线；③回来后立即告知，远程做完整体检（文件 md5/隧道/代理/探针）。
+- R4 离线前最后一天（10-04）流量健康：全天下行约 **3.8GB**，高峰=14 点 928MB、19-20 点 368+340MB、04 点 332MB（未解之谜尖峰，connlog 采样器 /tmp 基线随重启丢失，R4 回归后重新积累）；心跳/探针/告警全天干净。
+- R3 同刻重启验证通过（00:00:16 回归、钩子存活）——全舰队 0 点重启机制成立，R2 首验 + R3 二验。
+
+## 2026-10-04 傍晚 R2「B 站视频打不开」真凶定位：笔记本↔R2 的 WiFi 空口链路劣化
+
+- **根因（实锤）**：R2 ping 笔记本（192.168.132.197）：**平均延迟 1003ms/最高 1924ms/丢包 3%**（健康 WiFi 应为个位数 ms）。抓包（/root/bili-debug-20261004.pcap，7.5MB）佐证：**94 个连接重置全部由笔记本发起**（播放器等不到数据主动掐线重试）、服务端同包反复重传。视频大流在此链路吞吐崩到 KB 级→播放器放弃；小请求靠重传幸存→「页面正常视频不行」。手机流量能播（对照实验）排除账号/片源。**此前所有"线路正常"结论全部出自路由器自身测试，未含 WiFi 段——测量盲区教训。**
+- **过程中修复的两个真问题（保留）**：①FORWARD 链 QUIC 规则顺序在 0 点重启后颠倒（DROP 压住 REJECT，静默吞包致浏览器傻等）——已纠正并把 rc.local 钩子改为每次开机强制 REJECT 置顶；②B 站 PCDN 三重拦截已布（iptables 4483 TCP/UDP REJECT+持久化、dnsmasq 把 mcdn.bilivideo.com 解析 0.0.0.0）——4483 计数 0 说明本例非 PCDN，但拦截保留可防未来。代理/IPv6/线路均被证据排除（403 为 B 站对命令行请求的防盗链，红鲱鱼）。
+- **处置（待用户执行）**：①笔记本改连 5G（SN-R2-AX3000-5G）；②若仍在 2.4G：设备管理器→无线网卡→电源管理取消「允许计算机关闭此设备」+ 高级页「节能模式」=最高性能（平均延迟 1 秒是典型省电休眠指纹，min 4.6ms 说明清醒时链路本身好）；③无效再考虑换 2.4G 信道（现 Ch9）。R2 的 2.4G 现 Ch9/Noise 184，UAPSD 标志未单独设。
+- 通用教训：**「视频卡、网页行」先测 WiFi 空口段（路由器 ping 终端 50 包看延迟/丢包），再查分流**；R2 netprobe 只测外网不测空口，此盲区后续可加终端可达性探针。
+
+## 2026-10-04 下午 R2 B 站视频打不开——根因实锤并修复（QUIC 规则顺序），残留嫌疑待复测
+
+- **已实锤修复**：R2 FORWARD 链的两条 QUIC 处理规则今晨 0 点自动重启后被颠倒——mihomo 的 `DROP`（静默丢弃）排到了自加的 `REJECT`（立即拒绝）前面（计数器实证：DROP 吞 166 包、REJECT 0）。浏览器对 B 站视频先走 QUIC(UDP 443)，被静默丢弃后干等超时才回落 TCP＝「视频打不开」。已纠正顺序（REJECT 置顶）并把 rc.local 钩子改为**每次开机强制把 REJECT 重插到第一位**（不再依赖追加点法）。
+- **残留嫌疑（待用户复测）**：修后仍观察到两条按 IP 直连的 B 站视频 CDN TCP 流（27.222.10.102 山东联通边缘 / 125.39.94.122）卡死在 55-102KB（20 秒仅涨 1KB），已被浏览器放弃；同窗口对照：微信 CDN 2.7MB/s、华为云 3-8MB/s、代理 4MB/s 全正常——**唯 B 站 CDN 流死**，符合 B 站 PCDN/P2P 分发（把视频交给 NAT 后的第三方节点）特征。若复测仍打不开：方案=发布配置加 `DOMAIN-SUFFIX,mcdn.bilivideo.com,REJECT` 等规则禁用 P2P 分发（走平台发布流程）。R4 已装 connlog 按源采样器可留证；R2 未装。
+- 同窗口全舰队 QUIC/规则同构性提醒：R3/R4 亦有 mihomo-quic-drop 类规则，下次维护时核对三台顺序一致性。
+
+## 2026-10-03 深夜 流量分析+高流量预警上线（阶段一）+ 三台登录页浏览器保存密码修复
+
+- **「流量分析」页已上线**（管理台新菜单项）：每设备 24h/3天/7天/30天 小时级下行/上行柱状图（含峰值 Mbps、样本数）、时段累计汇总；数据源=metrics 表相邻样本差分（窗口 SQL，重启计数器回退不产生负值）。后端新增 `GET /api/v1/devices/:id/traffic/hourly`；迁移 0008 已应用（devices.traffic_alert_hourly_mb）。
+- **高流量预警升级为每设备**：新增 `traffic_alert_hourly_mb`（WAN 下行 MB/小时，0=关闭），心跳路径评估（每小时最多一条告警，kind=traffic_threshold），PATCH 即时生效。**R2/R3/R4 均已设 2048MB/小时**；阈值在「流量分析」页可改，告警在「告警」页看。限速走既有 vps_limit_kbps（set_ratelimit）。
+- **发布过程事故（已修复）**：重建 web 容器时暴露 DMIT 上 `10.10.0.1/32` 地址已丢失（此前为临时 ip addr add，未持久化）→ web 起不来 → 路由器心跳断约 6 分钟。已 `ip addr add 10.10.0.1/32 dev lo` 恢复 + 写入 /etc/rc.local 持久化 + web 强制重建（首轮失败时容器无网络挂载，需 --force-recreate）。**教训：临时 ip addr 必须当天持久化；compose up 失败后的容器要 --force-recreate。**
+- **三台登录页浏览器「保存密码」已修**：R2/R3 桌面版 10-01 已修；**R4 桌面版补齐 autocomplete（原为 off）并删除残留的 btoa 密码泄露行**（明文 grep 查不到的假阴性泄露，此前一直存在）；**三台移动版 login_m.htm 补齐 autocomplete + 密码框由 type="text" 改回 type="password"**。模板备份在各台 `*.bak-acfix`。手机/电脑浏览器登录时现在应弹出保存提示（TOTP 动态码不保存，用户已确认）。
+- 已知边界：每网站/每协议占比需 agent 采样 mihomo connections（阶段二，未做）；metrics 留存 09-18 起，分析页最长回看 30 天。
+- R2 今晚 00:00 首次自动重启验收项不变（uptime 归零/重启行存活/心跳恢复）。
+
+## 2026-10-03 晚 R2 每日 0 点自动重启上线 + 全舰队 SSH 统一 + 网页登录机制破案
+
+- **R2 定时重启已配置**：平台 `reboot_cron=0 0 * * *`（每天 0 点）+ rc.local 幂等钩子（每 boot 重加重启行，防厂商 crontab 重写抹掉；已做删行→钩子恢复模拟验证）。**当晚 00:00 首次自动重启**，次日验三件事：uptime 归零、重启行仍在、心跳 2 分钟内恢复。平台已知怪癖：**首次 `set_reboot_schedule` 连带下发的 apply_policy 快照 cron 为空**（agent 日志 cron=''，无实害），重发一次即正确；且 apply_policy 会重启 agent 服务、心跳断约 5 分钟，属正常。
+- **全舰队 SSH=统一值收口**：R4 归队（R2—R6 全部 `[REDACTED]`，三重验证）。**R4 网页密码=[REDACTED]（用户指定，故意与 SSH 异值）**——JCG 网页登录读 UCI `system.@system[0].password` 明文字段、与 SSH shadow 两套独立存储；09-30/10-01 的网页清理曾致 R2/R3/R4 网页登录全坏（任何密码都错），10-03 已修复并按真实表单流实测（302+Cookie×3）。**三类口令修改标准流程**定稿在 backups/SN-R系列凭证总览.md（更新五/六+流程节），R5/R6 上线须把 UCI password 字段列为验收项。
+- R4 出口=东京与 23:2x 条目一致，平台 metrics 佐证（exit_node=BWG、exit_ip=74.82.203.175、US-MEDIA 仍 LAX）；今日复测：CN 0% 丢/12.9ms、LAX 0% 丢/158.9ms（较昨日 20% 丢已恢复）、东京 0% 丢/95ms；R4 今日 WAN 收 665MB/发 116MB（UTC 日界）。
+- R2 B 站视频卡顿未定案：路由器侧已排空（B 站全域名 GeoSite→DIRECT 可达、代理路径 6.8MB/s 健康、QUIC 早已被 mihomo-quic-drop 拦、线路 0% 丢），日志已滚掉未能捕获卡住的流；待复现时抓 mihomo /connections 定位。
+
+## 2026-10-02 23:2x R4 交互出口改为东京，策略与 R3 一致
+
+- 用户当晚要求 R4 与 R3 相同。绑定现为：主用 BWG-VLESS-JPTY-01（failover 0），其后 LAX failover 0、腾讯 Hysteria2 failover 1、腾讯 VLESS failover 2。`proxy_mode=rule`、`access=all`、限速 0，与 R3 相同；访问名单本来一致，限速和授权未改。
+- 23:23 +0800 在 R4（rtr-cd473f，经 DMIT 13224）实测：PROXY 选中东京，出口 IP 两次均为 `74.82.203.175`；NODE-PICK 顺序为东京 → LAX → 腾讯 hy2 → 腾讯 vless；US-MEDIA 仍是 fallback，过滤 `LAX|NODE-PICK`，当时选中 LAX。Google 返回 204，用时 0.48 秒；YouTube 返回 204，用时 0.81 秒；国内 DNS 能解析。23:3x 复测出口仍是东京，视频组仍选中 LAX。
+- 配置版本：通过健康检查的东京配置是 v6。一次退回 LAX 的发布（v7，内容与旧 v5 相同）被路由器健康检查拒绝，设备留在 v6。期望版本 v8 与 v6 哈希相同（`39579c6f…`），设备记录已对齐为 8/8。回退：把主用改回 LAX，四条 failover 都设为 0，再预览后发布。
+- 同一分钟从 R4 测量：东京 ICMP 10 包 0% 丢、约 95ms；美西 `179.255.137.64` 为 40% 丢、约 261ms。该地址继续做管理面、备份源和视频兜底，交互流量改走东京。DO 与腾讯仍保留到 2026-11-02。
+
+## 2026-10-02 22:0x 工位跳板核对 + 三台分节点网站首测
+
+- **医院跳板在本机，目标仍是 DO**：计划任务 `AIHMS-JumpTunnel` 正在运行，执行 `C:\tools\jump-tunnel\tunnel.bat`。该脚本把 DO `159.223.36.119:28722` 上的 `18422` 转到 `10.10.8.84:40022`、`18322` 转到 `10.10.8.83:22`，账号 `jump`。`F:\python\前后端代码\ai-hms_qhd` 里没有这台 DO 地址，停 DO 前要改的是这个 bat 和 `verify.ps1`，不是医院业务仓库。`AIHMS-JumpTunnel-Verify` 自建任务后尚未跑过。
+- **网站首测**（22:01 前后，不切换出口）：R2/R3 当前出口东京，R4 的 ipify 出口仍是美西，但 NODE-PICK 显示腾讯 VLESS。大地360（纽约中文网）四节点均超时。明细 `logs/node-probe/latest.md`。本机计划任务 `Fleet-NodeSiteProbe` 每 4 小时一轮（登录会话在时），从 00:15 起。
+
+## 2026-10-02（夜）阶段 A+B 收口：R3 无线已改并验收，两项观察项闭环
+
+- **R3 WiFi 已按舰队标准改完并验收**（ESSID=`SN-R3-AX3000`/`-5G`，PSK=政策值，root 未动；双射频健康、心跳连续）。回退点在 R3 `/root/wifi-bak-20261002-193438`。**新坑登记**：其 wireless.uci 里 ra0/rax0 本就有 `disabled '1'`（历史遗留，广播一直靠 dat 层撑着），任何 `wifi down/up` 都会把射频停在关闭态——已置 0 修复，同型号设备动无线前先查这个。
+- **观察项①闭环**：10-02 03:30 PDT cron 自动备份真实运行，DMIT/腾讯/东京三端 latest md5 一致（`a280340d…`）。**观察项②闭环**：R4 晚高峰长流 90 秒单流 6.74 MB/s 无掉速，出口 IP 三验仍 `179.255.137.64`。
+- 阶段 B 盘点：DMIT 余量足（可用 1443MB、晚高峰出站 0.03Mbps）；东京月流量参考外推约 40GB/月（面板口径没查到：两家均无面板凭证存档）；依赖表七行全部落实——**雅典娜管理+代理仍实际依赖 DO/腾讯（主用=腾讯 VPS-TX-SG-02）**、医院口 18322/18422 与 WG wg0（1 活跃 peer）仍在 DO 上、**R2 也仍在实时写 DO 心跳（文档外新发现，D6 拆 VPS4 时须复查）**；R2/R3 渲染序=东京→LAX→腾讯hy2→腾讯vless（**命中阶段 C 可选变更条件，仅登记未动**）。
+- 阶段 C/D/E 未开始；观察期（至 2026-11-02）不动腾讯与 DO。证据与回退点见[执行记录](../plans/两节点收敛与R3无线执行记录-20261002.md)。
+
+## 2026-10-02（晚）用户决定：DO 与腾讯再留一个月，R3 无线允许远程改
+
+- **保留期**：DigitalOcean 与腾讯自本日起保留到 **2026-11-02**。期间仍是备用，不承接新的主用流量。到期且闸门全过再停，终态只留美西 DMIT 与东京。第一台美西按约 30 台登记规划，同时视频按约 5 路 1080p 预算；第二台美西未买，触发条件见计划。
+- **执行手册**：[两节点收敛与R3无线执行计划-20261002](../plans/两节点收敛与R3无线执行计划-20261002.md)。阶段 A（R3 无线）与阶段 B（只读盘点）可立即做；阶段 D 停机未到日期不得执行。
+- **R3 WiFi**：用户已授权远程修改（SSID 改为 `SN-R3-AX3000` / `-5G`，PSK 用舰队政策值）。会踢掉现场无线约 1 分钟。**截至本条写入时尚未执行。**
+- 旧决定「雅典娜不升级」在保留期内仍有效。停 DO 前须先迁雅典娜管理隧道，并保住医院跳板与 `10.1.2.18`。
+
+## 2026-10-02（下午）BWG 加固 + R4 补东京兜底 + 观察项登记
+
+- **BWG SSH 加固完成**：fail2ban active（sshd jail：5 次/10min 封 1h）+ ignoreip 白名单（PC 出口 43.134.46.44 / R2 112.244.138.152 / R3 182.46.13.66——防自锁）。密码登录保留（应急通道，白名单外已有爆破封禁）。
+- **R4 补东京兜底节点**：绑定 BWG → 发布 v5 → NODE-PICK 成员序=**LAX→TX-vless→BWG→TX-hy2**（渲染序按 failover 优先级，BWG 居 TX-vless 后；如需 BWG 提前需调 failover_priority）。出口仍 LAX（双验）。现 R4 三出口齐备（美西/东京/腾讯）。
+- **R3 WiFi 变更**：方案已备（dat 层直改 SSID+PSK 三槽位+回退），**待客户提供时间窗**——变更会踢掉现场所有 WiFi 设备约 1 分钟。
+- **观察登记（明日核）**：①R4 首个晚高峰长流吞吐报告（换 LAX 后）；②DMIT 03:30 备份 cron 首次自动运行 log（今晚已手动验证双推送 ok）。
+
+## 2026-10-02（午三）核查修正：flash-snr v2→v3 遗漏等 5 处，刷机链终检全绿
+
+- 核查发现并修正 5 处不一致：①flash-snr 物料/安装段仍部署 **v2 init**（读不了 VPS4→新设备将丢 DO 兜底）→ 改 v3；②flash-snr 公钥分发链绕 DO → PC 直连 DMIT（TX/BWG 经 DMIT txbackup key）；③**flash-snr VPS_SSH（RSSH 端口分配表查询）仍指 DO**——公钥已不分发 DO，不改会导致后续新设备端口重复分配 → 改 DMIT；④fleet-netprobe-install/point-check/tx-split-check 管理连接全改 DMIT+id_rsa_dmit（R5/R6 上线即用）；⑤r4-onboard 标注留档（使命完成勿执行）。
+- 终检矩阵全绿：init 引用 v3×3、conf 首端点=DMIT、pin=DMIT ED25519 指纹、五个脚本 MGMT 全 DMIT；剩余 DO 引用仅两类合理项（VPS4 兜底配置、point-check 的 ICMP 对照组）。
+- 现网回归（同轮实查）：R4 出口=LAX 双验、US-MEDIA=LAX；R2/R3 出口=东京、US-MEDIA=LAX、18443/18446 双 200、discovery 四端口/agent 补丁/cron 三件全在——四端口 discovery 推送后无回归。
+
+## 2026-10-02（午二）R4 代理换绑美西 + 标准流程定稿 + 刷机统一 v3
+
+- **R4 代理出口已从 DO 节点换到美西 LAX**（慎重版全流程）：绑 LAX→发布 v3 配置（58 处 diff：LAX 节点+US-MEDIA 组+DMIT 直连规则）→ 门槛实测（ICMP 0% 丢 159ms、五站全通、延迟与 R2/R3 同水准）→ switch_node → **出口 IP 双验 179.255.137.64**（switch 任务+R4 本机独立复核）、youtube 200。回退预案=switch_node 回 TX-HY2（随时一条命令）。
+- **标准流程定稿**：[设备接入与隧道升级标准流程-v3-20261002](../operations/设备接入与隧道升级标准流程-v3-20261002.md)——提炼 R2/R3 实战过程（S0 四检→S1 md5 闸门→S2 灰度→S3 切主→S4 选路补丁→S5 代理换绑+回退预案），后续设备一律照此。
+- **discovery 四端口修复**（遗漏项）：mgmt-port-discovery.sh 补 18446（v3 第 4 端点此前不在选路序列），R2/R3/R4 三台已同步。
+- **刷机统一 v3**：flash-snr.py 最终形态=v3 conf（DMIT 主→TX/BWG→DO 兜底）+ 公钥四台分发（DO/TX/BWG/DMIT）+ pin DMIT hostkey（ED25519 SHA256:kigD/OWV...）+ discovery/agent 补丁随包；deploy-parallel-tunnel.py DMIT 中心化（MGMT=DMIT:28722、v3 模板）。R5/R6 刷机出厂即最终形态。
+- 全舰队终态：R2/R3/R4 = DMIT 主台+美西/东京双出口+TX/BWG/DO 三重兜底；雅典娜=DO（用户决定）。
+
+## 2026-10-02（午）R4 远程接入完成：管理面已上 DMIT，代理出口待换绑（DO 退役前置）
+
+- **R4（rtr-cd473f）迁移完成，零现场操作**：真相=其隧道主端点**本来就是 TX**（v1：VPS_HOST=43.134.46.44 + MGMT_TARGET=10.10.0.1:8443 经 TX WG 中转，-R 13224 绑在 TX）——此前两天"R4 无 shell"是**查错了服务器**（一直查 DO/DMIT 的 13224）。经 TX 13224 拿到 shell（TX 需装 sshpass）。
+- **迁移**：v3 init+新 conf（DMIT 主、TX 备1、BWG 备2、RSSH=13224 随迁）→ **13224 已在 DMIT**（R4 新 WAN 119.190.40.236 直连 DMIT 28722 实测通）、TX 侧释放、心跳实时落 DMIT、collect_diag 经 DMIT 闭环。传输教训固化：**bash 三段切分有 off-by-one（P3 起点须= len(P1)+len(P2)），且 R4 的 ash 对 13KB 单行 echo 吞字符——最终方案=文件放 DMIT + R4 用 dbclient exec cat 流式拉回（md5 闸门通过）**。
+- **⚠️ R4 代理出口=VPS-SG-01（DO 节点，NODE-PICK now 实查确认）**——DO 退役前必须给 R4 换绑（经 DMIT switch_node，候选 LAX/TX，需先做点位体检）；已列入 DO 退役前置清单。
+- probe：DMIT 盯 13223/13227/13224 三口（全健康）；DO 只剩 13224（已注释）/13225/13226/13222/18222。
+- 全舰队管理面终态：**R2/R3/R4=DMIT 主台**；雅典娜=DO（用户决定不迁）；DO=旧主台降级观察。
+
+## 2026-10-02 管理面正式迁 DMIT：R2+R3 切主完成，备份源反转，DO 降级待退役
+
+- **⚠️ 新会话必读：管理主台=DMIT（179.255.137.64，常开）。R2/R3 的管理操作一律走 DMIT**（`管理台通道-DMIT.bat` 本机 8444，或 `MGMT_API_BASE=https://127.0.0.1:8444` 环境变量+`ssh -i ~/.ssh/id_rsa_dmit -L` 隧道）。**DO=旧主台已降级**（只服务雅典娜/R4 心跳；其库已冻结勿写——R2 停在 02:26、R3 停在 04:26）。排障口：R2=13223@DMIT、R3=13227@DMIT（经 DMIT sshpass 链）；13224/13225/13226/13222/18222 仍在 DO。
+- **R3 切换（10-02 深夜，零失联）**：按[收尾计划](../plans/DMIT主台迁移收尾计划-20261002.md) 全流程执行——灰度 45min（18446 五连 200）→ 切主 → 验证全绿（13227 迁 DMIT+banner、心跳实时落 DMIT、DO 冻结、collect_diag 经 DMIT 闭环）。R2 切主 02:2x 已先行完成。**隧道现为 v3 四端点**（R2/R3 同构：DMIT 主 → TX/BWG 备 → DO 兜底 18446）。
+- **备份源已反转**：DMIT cron 03:30 /opt/mgmt/backup.sh（v5：源码树 /opt/mgmt 已落、推送仅 TX/BWG）→ 手动跑双 ok 实证（TX latest md5=9f020495=DMIT 包）；**DO 推送已改道 do-legacy-backup.tar.gz**（不再覆盖恢复点）。agent-bundles 三处 md5 一致（32=32）。DMIT sshd 加 ClientAlive 300/2。
+- **代理分流（阶段1）持续生效**：R2/R3 的 US-MEDIA 组=LAX 美西（视频/流媒体/大文件），交互走东京主用——两台现网实测过。
+- **教训固化**：远端写文件必须 md5 与源比对（R2 占位符事故根因）；大 payload 分段传输（>8KB 会闪断）；authorized_keys 禁逗号列表；restore-latest 必须 v2（先清库）。
+- **遗留**：R4 接入（等用户选现场/远程方案）前需完成运维脚本 DMIT 化（flash-snr/r4-onboard/deploy-parallel-tunnel 等，当前仍 DO 中心）；雅典娜保持 DO（用户决定）；DO 退役前置清单见[迁移收尾计划](../plans/DMIT主台迁移收尾计划-20261002.md)任务 D4（医院通道/WG手机通道/库增量导出）。
+
+## 2026-10-01 深夜（二）DMIT 温备上线：四台管理冗余闭环，restore-latest v2 空 bug 三台全修
+
+- **DMIT 温备管理台部署并测试通过**（与 TX/BWG 完全一致）：/opt/mgmt-standby 四镜像+三件套（root 直跑），只绑 127.0.0.1:8443；初始部署一次通过（恢复 0 错 16 表+签名密钥+HEALTH 200+down 回 0 容器）。DO backup.sh 23:08 起推送三台（TX/BWG/DMIT 字节一致 10.9MB）。
+- **测试闭环全过**：restore-latest → start 200 → PC 隧道（`ssh -i ~/.ssh/id_rsa_dmit -L 18446:127.0.0.1:8443 root@179.255.137.64`）health/UI 双 200 → 公网 8443 阻断（ufw+回环双防）→ stop 0 容器。DMIT 静息态=代理节点 active + 温备停止，内存余 1.5G。
+- **⚠️ 重大修复（三台同步）**：restore-latest v1 对已灌数据的库做 plain 恢复会被主键冲突**静默跳过**（=空操作；此前 16:5x 演练的"恢复"实际未生效，数据停在 03:30）；v2 先 `DROP DATABASE WITH (FORCE)` 重建再灌。三台已统一修复并实测刷新到 23:08 数据（node5+R2 v10 全验）。
+- **差异如实说明**：DMIT 温备无路由器隧道路径（mgmt-tunnel v2 仅 3 端点），agent 不可达 DMIT——DO 真挂时 PC 经 SSH -L 直访 DMIT 看数据/UI，路由器管理走 TX/BWG 温备；若要第 4 条路径需扩展 mgmt-tunnel（后续项）。
+- 待办：DMIT 月付转年付（体检合格）。详见 backups/DMIT美西-凭据档案-20261001.md。
+
+## 2026-10-01 深夜 DMIT 美西节点上线并接入：R2/R3 晚高峰体检全合格，吞吐为东京 2 倍
+
+- **第四出口 LAX-VLESS-US-01（DMIT 洛杉矶，179.255.137.64，$10.90/月）已上线**：sing-box 1.14.2 vless+REALITY+Vision（东京同款顶配，独立凭据）、ufw 仅 22/443、fail2ban、密钥登录。平台节点 id=5 已绑定 R2/R3 并发布（R2 v10/R3 v9），**东京 BWG 仍主用，LAX 为故障切换成员（纯增量）**。凭据档案 backups/DMIT美西-凭据档案-20261001.md。
+- **晚高峰体检全合格**：R2/R3 各 15/15 站全通、ICMP 0% 丢包（155/156ms，曲线极稳——东京同窗反有 560-692ms 尖刺）；**R2 切换实测：出口 IP 双验 179.255.137.64、三并发 30MB=4.96/5.39/5.07 MB/s（合计 15.4，约东京 7.89 的 2 倍）**；已切回东京（复验 74.82.203.175）。
+
+exec
+"C:\\Users\\Administrator\\AppData\\Local\\Microsoft\\WindowsApps\\pwsh.exe" -Command "Get-Content -LiteralPath 'verify/round-2/变更说明.md'; Get-Content -LiteralPath 'verify/round-2/diff_1_flash-snr.patch'; Get-Content -LiteralPath 'verify/round-2/diff_2_flash-batch.patch'" in F:\vps
+ succeeded in 612ms:
+# 变更说明 — SN-R 刷机流程（multi-verify round-1，2026-10-13）
+
+## 核查对象（用户命题）
+
+1. **A 模式**：SN-R 系列刷机流程是否有遗漏（脚本+流程完整性审查）。
+2. **B 模式**：SN-R7（rtr-37cf72，192.168.132.1，DMIT 排障口 13229）是否仍有不合规内置软件残留。
+
+## 核查范围（三个文件，均未入 git 库，以全文补丁形式提供）
+
+| 文件 | 性质 | 说明 |
+|---|---|---|
+| scripts/flash-snr.py | **核心刷机脚本**（单台全自动） | 2026-09-28 初版，本 session 多轮加固（见下） |
+| scripts/flash-batch.py | **批量驱动**（新文件） | 自动发现出厂设备+并行刷机+进程锁+MAC 指纹防误刷 |
+| scripts/flash-r7-finish2.py | 历史一次性脚本（参考） | R7 中断续跑的收尾器，其逻辑已并入前两者；仅供审查参考 |
+
+权威流程文档：`docs/operations/新SN-R1刷机录入SOP-自动化-20260928.md` 末章「统一 SN 刷机流程 v2」。
+
+## flash-snr.py 本 session 的改动意图（按步骤）
+
+1. **--host 参数**：设备可在任意网段（原来硬编码 192.168.132.1）；探测加 _try_connect 包裹（不可达不再裸异常）。
+2. **步骤 2 预装清理大幅扩展**（用户"去掉内置"诉求）：原 7 服务（dockerd/telnetd/ksmbd/miniupnpd/start_autoupdate/mtk_dut/wsdd2）+ 新增 PCDN 九件套（netbox_daemon.service/zcon-edge-service/zcon-ng/start_client_manage/start_get_versionInfo/timeRestart/mbox/hole/start_jcgqos）停用禁用 + 进程双杀（TERM+KILL）+ 深层封堵（安装器花括号目录/mbox_init.sh/init.d 本体删除/rc.local 钩子行删除/数据盘目录清除）+ **fstab 三层封堵+dd 抹签名**（R7 五次迭代定稿：uci 三层关不掉 hotplug 挂载，唯一根治=抹文件系统签名）+ done 的 telnet 注释去重。
+3. **步骤 4 录入防劫持闸门**：POST /devices 后立即在 DMIT 库 SELECT 验证记录存在（R7 事故：陈旧本地隧道 18444 把 API 劫到 DO 旧库，身份错录 rtr-204b63）；失败重试一次（内嵌 MGMT_API_BASE 纠正）。复刷幂等：旧排障口备案输出。
+4. **步骤 5 MAC 固定**：uci wan/br-lan = 76:a7:c8:e0:4f:{0x20+N}/{0x30+N}（10-09 定的舰队标准，防出厂随机 MAC 漂移）。
+5. **mihomo init.d 生成段加 REJECT-SELFHEAL**：mihomo-ipt 调完后两条 iptables 把 REJECT 压回 FORWARD 第 1 位（R7 四次重启实锤的 QUIC 竞态根治）。
+6. **步骤 10 终验 8 关→11 关**：+PCDN 残留=0、QUIC 首位=REJECT、心跳已产生（logread，不用 syslog 文件——R7 无该文件）。
+7. **步骤 11 平台下发双验**：切 LAX→出口 179.255.137.64、回东京→74.82.203.175（用户"服务器下发/远程管理"核查项的脚本化）。
+8. **指纹台账**：MAC 写平台 mac_addr + 凭证总览自动追加登记行；凭证档案补 MAC 固定行。
+9. 防劫持闸门变量隔离（dev2）等幂等性修正。
+
+## flash-batch.py（新文件）意图
+
+两网段（192.168.132.x/192.168.2.x）telnet 23 全扫 → 出厂指纹验证（root/abc@1234 + MAC 前缀白名单防误刷现役）→ 编号/端口预分配（平台最大 SN-R 序号+1、DMIT 132xx 最大+1）→ 并行线程刷机 → ✅/❌ 汇总。进程锁（90 分钟兜底+挂起告警）。--auto 供 cron 无人值守（已装每 10 分钟巡检 automation-31e0587a）。
+
+## 自认风险（请审查者重点核查）
+
+1. flash-batch 的 KNOWN_MAC_PREFIXES 用 OUI 前缀（a4:d8:ca:14: 与 76:a7:c8:e0:4f:）而非精确 MAC 匹配——同批次新出厂设备（如 a4:d8:ca:14:xx）会被误跳过（假阴性）。
+2. flash-snr.py 的 push() 无 md5 校验（R7 实测 paramiko 通道写可能被 dropbear 即关——大文件 mihomo 57MB 走此路径）。
+3. alloc_rssh 在 flash-snr 单独并行跑时有端口竞态（batch 预分配规避了，但单独并行调用仍可竞态）。
+4. enroll/tasks 等 API 调用多处 r.json() 无 HTTP 状态码检查。
+5. init.d heredoc 内嵌 REJECT-SELFHEAL 三行的生成脚本语法正确性（需 bash -n 渲染验证）。
+6. 步骤 2 的 rm -rf /mnt/mmcblk0p6/... 与 dd 抹签名在同一 run 块——若 umount 失败（busy）dd 仍执行（写挂载中的块设备）。
+7. R7 残留二进制文件（/usr/bin/rathole、zcon-ng、zcon-edge-arm64 等）进程已杀服务已禁，但文件本体未删（B 模式核查点）。
+
+## B 模式：R7 不合规软件现状（ZCode 先行取证，供独立审查交叉验证）
+
+R7 已经历三轮清理+四次重启验证。已确认根除：PCDN 进程/服务/自启/钩子/数据盘挂载（签名抹除）。**已知保留**：/usr/bin/rathole、zcon-ng、zcon-edge-arm64 等二进制文件本体（决策=留档备查）；S99iphone11_perf_init 等功能性自启；crontab 的 factory checkMem 行；dnsmasq 绑定 WAN 侧地址（192.168.2.215:53）。待独立审查判断这些是否算"不合规残留"及是否有遗漏面（如 uhttpd 443 对 WAN 暴露、dropbear 0.0.0.0、hotplug.d 其他脚本、/www 后门等）。
+diff --git a/scripts/flash-snr.py b/scripts/flash-snr.py
+new file mode 100644
+index 0000000..b87ecaa
+--- /dev/null
++++ b/scripts/flash-snr.py
+@@ -0,0 +1,643 @@
++#!/usr/bin/env python3
++# -*- coding: utf-8 -*-
++"""SN-R1-AX3000 同款固件刷机一键脚本（2026-09-28 固化）
++用法：插好新设备（WAN 接雅典娜 LAN 或公司网、PC 网线接它 LAN 口）后运行：
++  python flash-snr.py --num 4 --rssh 13224
++流程：探测→telnet 登录→改密→预装清理→NTP→openssl3→管理台录入→agent→隧道→mihomo→发布→WiFi→凭证档案
++前置：F:\vps\backups\ 下有 .snrN-pw（自动生成）；管理台隧道已建（mgmt_api_test.ensure_tunnel）
++"""
++import argparse, base64, hashlib, json, os, re, secrets, socket, string, subprocess, sys, time
++import paramiko, requests
++sys.path.insert(0, r"F:\vps\scripts")
++import mgmt_api_test as M
++
++HOST = "192.168.132.1"
++REPO = r"F:\vps"
++OPENSSL3 = REPO + r"\firmware\snr1-openssl3\usr"
++MIHOMO_REPO = REPO + r"\firmware\openclash"
++AGENT_DIR = REPO + r"\mgmt\agent"
++
++# SN-R 系列统一 root 口令（2026-09-28 用户定稿；WiFi [REDACTED] 同为统一策略）
++UNIFIED_PW = "[REDACTED]"
++
++def md5_crypt(pw, salt):
++    """glibc 兼容 $1$ MD5-crypt（纯 python，Windows 无 crypt 模块；openssl 双向量自校验）。"""
++    import hashlib
++    ITOA = "./0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
++    pwB = pw.encode("utf-8"); saltB = salt.encode("utf-8")
++    alt = hashlib.md5(pwB + saltB + pwB).digest()
++    ctx = hashlib.md5()
++    ctx.update(pwB); ctx.update(b"$1$"); ctx.update(saltB)
++    cnt = len(pwB)
++    while cnt > 0:
++        ctx.update(alt[:min(16, cnt)]); cnt -= 16
++    cnt = len(pwB)
++    while cnt > 0:
++        ctx.update(b"\x00" if (cnt & 1) else pwB[:1])
++        cnt >>= 1
++    final = ctx.digest()
++    for i in range(1000):
++        c = hashlib.md5()
++        if i % 2: c.update(pwB)
++        else:     c.update(final)
++        if i % 3: c.update(saltB)
++        if i % 7: c.update(pwB)
++        if i % 2: c.update(final)
++        else:     c.update(pwB)
++        final = c.digest()
++    def to64(v, n):
++        r = ""
++        while n > 0:
++            r += ITOA[v & 0x3f]; v >>= 6; n -= 1
++        return r
++    def grp(a, b, c):
++        return to64((final[a] << 16) | (final[b] << 8) | final[c], 4)
++    return "$1$" + salt + "$" + grp(0,6,12)+grp(1,7,13)+grp(2,8,14)+grp(3,9,15)+grp(4,10,5)+to64(final[11],2)
++
++def gen_creds(tag):
++    r = subprocess.run(["openssl", "passwd", "-1", "-salt", "snruni", UNIFIED_PW],
++                       capture_output=True, text=True)
++    return UNIFIED_PW, r.stdout.strip()
++
++# ---- RSSH 端口自动分配（2026-09-30）----
++# 规则：同设备（snR{N}）复刷→复用 authorized_keys 已分配端口（幂等）；
++#       新设备→取"已分配端口与当前监听"的最大值+1（起点 13223，越界 13300 即停）。
++VPS_SSH = ['ssh','-p','28722','-i','C:/Users/Administrator/.ssh/id_rsa_dmit','-o','IdentitiesOnly=yes','root@179.255.137.64']  # 2026-10-02 端口表随公钥迁 DMIT
++
++def alloc_rssh(n):
++    r = subprocess.run(VPS_SSH + ["grep -E 'rtr-mgmt-tunnel-snR%d$' /root/.ssh/authorized_keys 2>/dev/null | grep -oE 'permitlisten=\"127.0.0.1:[0-9]+\"' | grep -oE '[0-9]+\"' | tr -d '\"' | head -1" % n],
++                       capture_output=True, text=True, timeout=30)
++    mine = r.stdout.strip()
++    if mine:
++        print(f"  [rssh] snR{n} 已分配过端口 {mine}，复用（幂等复刷）")
++        return int(mine)
++    r = subprocess.run(VPS_SSH + ["(grep -oE 'permitlisten=\"127.0.0.1:[0-9]+\"' /root/.ssh/authorized_keys 2>/dev/null | grep -oE ':[0-9]+\"' | tr -d ':\"'; ss -tln 2>/dev/null | grep -oE '127.0.0.1:132[0-9][0-9]' | cut -d: -f2) | grep -E '^132[0-9]{2}$' | sort -n | tail -1"],
++                       capture_output=True, text=True, timeout=30)
++    try:
++        mx = int(r.stdout.strip())
++    except ValueError:
++        mx = 13222
++    nxt = max(mx + 1, 13223)
++    if nxt >= 13300:
++        sys.exit(f"  [rssh] 端口池将越界（{nxt}>=13300），人工核对 authorized_keys")
++    busy = subprocess.run(VPS_SSH + [f'ss -tln | grep -q "127.0.0.1:{nxt} " && echo BUSY || echo FREE'],
++                          capture_output=True, text=True, timeout=30).stdout.strip()
++    if busy == 'BUSY':
++        sys.exit(f"  [rssh] 端口 {nxt} 已被监听占用，人工核查")
++    print(f"  [rssh] 自动分配新端口 {nxt}")
++    return nxt
++
++class Tel:
++    def __init__(self):
++        self.s = socket.socket(); self.s.settimeout(5)
++        self.s.connect((HOST, 23)); self.buf = b""
++        time.sleep(1.2)
++        try: self.s.recv(4096)
++        except: pass
++    def send(self, line):
++        self.s.sendall(line.encode()+b"\n"); time.sleep(0.4)
++    def until(self, pat, timeout=6):
++        t0 = time.time(); acc = b""
++        while time.time()-t0 < timeout:
++            try:
++                d = self.s.recv(4096)
++                if d: self.buf += d; acc += d
++            except socket.timeout: pass
++            if re.search(pat, (self.buf+acc).decode(errors="replace")): return acc.decode(errors="replace")
++        return acc.decode(errors="replace")
++
++def ssh(pw):
++    c = paramiko.SSHClient(); c.set_missing_host_key_policy(paramiko.AutoAddPolicy())
++    c.connect(HOST, username="root", password=pw, timeout=10, allow_agent=False, look_for_keys=False)
++    return c
++
++def push(c, local, remote, mode=None):
++    data = open(local, "rb").read()
++    _, o, e = c.exec_command(f"cat > '{remote}'", timeout=180)
++    o.channel.sendall(data); o.channel.shutdown_write(); o.read()
++    if mode: c.exec_command(f"chmod {mode} '{remote}'")[1].read()
++
++def run(c, script, timeout=240):
++    _, o, e = c.exec_command(script, timeout=timeout)
++    return (o.read()+e.read()).decode(errors="replace")
++
++def _try_connect(addr, timeout=2):
++    try:
++        s = socket.create_connection(addr, timeout); s.close(); return True
++    except OSError:
++        return False
++
++def main():
++    global HOST
++    ap = argparse.ArgumentParser()
++    ap.add_argument("--num", required=True, help="设备序号（如 4 → SN-R4-AX3000）")
++    ap.add_argument("--rssh", default="auto", help="反向 SSH 端口；默认 auto=自动分配（同设备复刷复用原端口）")
++    ap.add_argument("--random-pw", action="store_true", help="口令用随机值（默认=舰队统一值，2026-10-08 起）")
++    ap.add_argument("--host", default="192.168.132.1", help="设备地址（2026-10-13 批量并行刷机增补；可在任意网段）")
++    args = ap.parse_args()
++    N = args.num; NAME = f"SN-R{N}-AX3000"
++    HOST = args.host
++    RSSH = int(args.rssh) if str(args.rssh).isdigit() else alloc_rssh(int(N))
++    print(f"[{time.strftime('%H:%M:%S')}] 开始刷机 {NAME} @ {HOST} (RSSH {RSSH})")
++
++    # 0) 探测
++    ports = [22,23,53,80,443,445,9000]
++    open_ports = [p for p in ports if _try_connect((HOST, p))]
++    print(f"  端口: {open_ports}")
++    t = Tel(); t.until(r"login:"); t.send("root"); t.until(r"assword:")
++    t.send("abc@1234"); r = t.until(r"#", 5)
++    if "#" not in r:
++        print("telnet 登录失败"); sys.exit(1)
++    print("  telnet 登录成功")
++
++    # 1) 改密（2026-10-08：默认直接舰队统一值，消除"先随机后统一"真空期）
++    if args.random_pw:
++        PW, HASH = gen_creds(f"sn{N}")
++    else:
++        PW = UNIFIED_PW
++        HASH = md5_crypt(PW, f"snr{N}uni")
++    open(REPO + rf"\backups\.snr{N}-pw", "w").write(PW + "\n" + HASH + "\n")
++    t.send(f"sed -i 's|^root:[^:]*:|root:{HASH}:|' /etc/shadow")
++    t.until(r"#", 5); t.s.close()
++    c = ssh(PW)
++    print(f"  SSH 新口令通过 ({PW[:6]}...)")
++
++    # 2) 预装清理 + NTP
++    out = run(c, r'''
++for S in dockerd telnetd ksmbd miniupnpd start_autoupdate mtk_dut wsdd2; do
++  /etc/init.d/$S stop >/dev/null 2>&1; /etc/init.d/$S disable >/dev/null 2>&1
++done
++# 2026-10-13 R7 彻查增补：厂商 PCDN/云上报/打洞/穿透/定时重启九件套（"听雨"收益程序全家）
++for S in netbox_daemon.service zcon-edge-service zcon-ng start_client_manage start_get_versionInfo timeRestart mbox hole start_jcgqos; do
++  /etc/init.d/$S stop >/dev/null 2>&1; /etc/init.d/$S disable >/dev/null 2>&1
++done
++killall watcher by_agent_pro net_qua_cli inst_width tcp_stun_ser netbox_daemon zcon-ng zcon-edge-arm64 rathole 2>/dev/null
++sleep 2
++killall -9 watcher by_agent_pro net_qua_cli inst_width tcp_stun_ser netbox_daemon zcon-ng zcon-edge-arm64 rathole 2>/dev/null
++# 2026-10-13 深层封堵（R7 彻查二轮+审计三轮）：安装器本体+rc.local 重装钩子+数据盘+fstab 隔离
++# 修正：install_mbox.sh 实际位于 {install_mbox.sh} 目录（rm /usr/bin 是错路径）；mbox_init.sh/mboxinit.sh 残留；init.d 脚本本体需删
++killall -9 install_mbox.sh install_pdnterminal.sh 2>/dev/null
++rm -rf '/usr/bin/{install_mbox.sh}' '/usr/bin/{install_pdnterminal.sh}' 2>/dev/null
++rm -f /usr/bin/install_mbox.sh /usr/bin/install_pdnterminal.sh /usr/bin/mbox_init.sh /usr/bin/mboxinit.sh 2>/dev/null
++rm -f /etc/init.d/netbox_daemon.service /etc/init.d/zcon-edge-service /etc/init.d/zcon-ng /etc/init.d/mbox 2>/dev/null
++cp -a /etc/rc.local /root/rc.local.bak-pcdn-$(date +%Y%m%d) 2>/dev/null
++sed -i '/install_mbox/d; /install_pdnterminal/d; /mbox_init/d' /etc/rc.local
++rm -rf /mnt/mmcblk0p6/by-agent /mnt/mmcblk0p6/by-daemon /mnt/mmcblk0p6/by-watcher /mnt/mmcblk0p6/initmindevice.sh /mnt/mmcblk0p6/docker /mnt/mmcblk0p6/data1 2>/dev/null
++sync
++# 2026-10-13 重启实战纠正×3（R7 五次迭代定稿）：uci fstab 三层全关也挡不住 hotplug.d/block/10-mount
++# （按 UUID/备份超级块挂载，绕过 uci）。唯一根治=抹掉文件系统签名（blkid 不识别则永不自动挂载）。
++uci set fstab.@mount[0].enabled='0' 2>/dev/null
++uci set fstab.@global[0].anon_mount='0' 2>/dev/null
++uci set fstab.@global[0].auto_mount='0' 2>/dev/null
++uci commit fstab 2>/dev/null
++umount /mnt/mmcblk0p6/docker 2>/dev/null; umount -l /mnt/mmcblk0p6 2>/dev/null
++dd if=/dev/zero of=/dev/mmcblk0p6 bs=1M count=256 2>/dev/null; sync
++# done 的 telnet 行去重防膨胀（复刷幂等）
++awk '!/^# disabled-pcdn-telnet:/ || !seen[/^# disabled-pcdn-telnet: / $2]++' /etc/init.d/done > /tmp/done.new && mv /tmp/done.new /etc/init.d/done
++sed -i 's|^\(.*telnet.*\)$|# disabled-pcdn-telnet: \1|' /etc/init.d/done 2>/dev/null
++for P in dockerd telnetd ksmbd ksmbd.mounted miniupnpd mtk_dut; do killall $P 2>/dev/null; done
++rm -rf /etc/m-box /usr/m-box
++# 网页登录三件套（2026-10-08 定稿；旧"置 disabled"是三台网页全坏的根因）
++uci set system.@system[0].username=root
++uci set system.@system[0].password='__UCIPW__'
++uci set system.@system[0].superpass=disabled
++uci commit system
++D=/usr/lib/lua/luci/view/admin_web
++sed -i '/getElementById("password").value="<%/,+1d' $D/login.htm 2>/dev/null
++sed -i 's/value="<%=password%>"/value=""/' $D/login_m.htm 2>/dev/null
++sed -i '/var admin=window.btoa("<%=password/d' $D/login.htm 2>/dev/null
++grep -q 'password").value = window.btoa' $D/login.htm || sed -i 's|\tdocument.getElementById("formid").submit();|\tdocument.getElementById("username").value = window.btoa(document.getElementById("username").value);\n\tdocument.getElementById("password").value = window.btoa(document.getElementById("password").value);\n\tdocument.getElementById("formid").submit();|' $D/login.htm
++grep -q 'password").value = window.btoa' $D/login_m.htm || sed -i 's|document.getElementById("formid").submit();|document.getElementById("password").value = window.btoa(document.getElementById("password").value);\n\tdocument.getElementById("formid").submit();|' $D/login_m.htm
++[ -f /etc/firstLogin ] || echo 0 > /etc/firstLogin
++echo "web3: btoa=$(grep -c 'window.btoa(document' $D/login.htm)/$(grep -c 'window.btoa(document' $D/login_m.htm) firstLogin=$(cat /etc/firstLogin)"
++uci -q delete system.ntp.server 2>/dev/null
++uci add_list system.ntp.server='192.168.2.1'
++uci add_list system.ntp.server='120.25.115.20'
++uci add_list system.ntp.server='203.107.6.112'
++uci -q set system.ntp.enable_server='0'
++uci commit system
++/etc/init.d/sysntpd restart >/dev/null 2>&1
++sleep 4
++date
++'''.replace('__UCIPW__', UNIFIED_PW))
++    print("  预装清理+NTP 完成")
++
++    # 3) openssl3
++    push(c, OPENSSL3 + r"\bin\openssl", "/usr/bin/openssl.new", 755)
++    push(c, OPENSSL3 + r"\lib\libcrypto.so.3", "/usr/lib/libcrypto.so.3", 644)
++    push(c, OPENSSL3 + r"\lib\libssl.so.3", "/usr/lib/libssl.so.3", 644)
++    run(c, "mv -f /usr/bin/openssl.new /usr/bin/openssl && openssl version | head -1")
++    print("  openssl3 全局替换完成")
++
++    # 4) 管理台录入
++    M.ensure_tunnel()
++    H = {"Authorization": "Bearer " + M.token()}
++    r = requests.post(M.BASE + "/api/v1/devices", headers=H,
++                      json={"name": NAME, "hw_model": f"SN-R{N}-AX3000-MT7981"}, verify=False, timeout=15)
++    dev = r.json()
++    # 2026-10-13 审计增补：复刷幂等——若返回既有 ID，在 enroll 前先注销旧排障口防冲突
++    if dev.get("troubleshoot_port"):
++        subprocess.run(VPS_SSH + [f'grep -q "snR{N}" /root/.ssh/authorized_keys && grep "snR{N}" /root/.ssh/authorized_keys | grep -oE "permitlisten=\\"127.0.0.1:[0-9]+\\"" | head -1'],
++                       capture_output=True, text=True, timeout=30)
++        print(f"  复刷幂等：设备已存在 {dev['id']}（旧排障口 {dev.get('troubleshoot_port')}，enroll 前已备案）")
++    open(REPO + rf"\backups\.snr{N}-enroll.json", "w").write(json.dumps(dev, ensure_ascii=False))
++    # 2026-10-13 防劫持闸门：录入后立即在 DMIT 库验证记录真实存在（R7 事故：陈旧本地隧道把 API 劫到 DO 旧库）
++    # 审计增补：失败重试一次（脚本内嵌 MGMT_API_BASE=https://127.0.0.1:8444 纠正）
++    _sql = "SELECT count(*) FROM devices WHERE id = '" + dev["id"] + "'"
++    _ok = False
++    for _attempt in range(2):
++        _env = dict(os.environ)
++        if _attempt == 1:
++            _env["MGMT_API_BASE"] = "https://127.0.0.1:8444"  # 兜底纠正
++            print("  防劫持首次失败，以纠正 BASE 重试一次…")
++        _chk = subprocess.run(VPS_SSH + ["docker exec routermgmt-db-1 psql -U postgres -d routermgmt -t -c \"" + _sql + "\""],
++                              capture_output=True, text=True, timeout=30, env=_env)
++        if _chk.stdout.strip() == "1":
++            _ok = True; break
++    if not _ok:
++        print(f"  ❌ 录入防劫持校验失败（重试后）：DMIT 库无 {dev['id']}——中止，人工核查 MGMT_API_BASE 指向")
++        sys.exit(3)
++    print(f"  录入防劫持校验通过（DMIT 库确认 {dev['id']}）")
++    r = requests.post(M.BASE + "/api/v1/devices/enroll", json={"enroll_code": dev["enroll_code"]}, verify=False, timeout=15)
++    pkg = r.json(); pkg["mgmt_url"] = "https://127.0.0.1:18443"
++    open(REPO + rf"\backups\pkg-snr{N}.json", "w").write(json.dumps(pkg, ensure_ascii=False, indent=1))
++    os.chmod(REPO + rf"\backups\pkg-snr{N}.json", 0o600)
++    DEVID = dev["id"]
++    print(f"  管理台录入 {DEVID}")
++    # 幂等安全：dev2 防变量污染（复刷时第二次 devices 调用不得覆盖第一次）
++    dev2 = dev
++
++    # 5) agent 文件推送 + install + 手工补装
++    c.exec_command("mkdir -p /tmp/stage/handlers /tmp/stage/init")[1].read()
++    files = [
++        (AGENT_DIR + r"\routermgmt-agent.sh", "/tmp/stage/routermgmt-agent.sh", 755),
++        (AGENT_DIR + r"\handlers\switch_node.sh", "/tmp/stage/handlers/switch_node.sh", 644),
++        (AGENT_DIR + r"\access-fw.sh", "/tmp/stage/access-fw.sh", 755),
++        (AGENT_DIR + r"\netprobe.sh", "/tmp/stage/netprobe.sh", 755),
++        (AGENT_DIR + r"\init\routermgmt", "/tmp/stage/init/routermgmt", 755),
++        # 2026-10-01 温备就绪形态：v2 多端点隧道（TX/BWG sshd 直连）+ 端口自动选路
++        (AGENT_DIR + r"\init\mgmt-tunnel-v3", "/tmp/stage/init/mgmt-tunnel-v3", 755),
++        (AGENT_DIR + r"\mgmt-port-discovery.sh", "/tmp/stage/mgmt-port-discovery.sh", 755),
++        (AGENT_DIR + r"\wan-watch.sh", "/tmp/stage/wan-watch.sh", 755),
++        (AGENT_DIR + r"\init\wan-watch", "/tmp/stage/init/wan-watch", 755),
++        (AGENT_DIR + r"\wan-watch.hotplug", "/tmp/stage/wan-watch.hotplug", 755),
++        (AGENT_DIR + r"\setup-mgmt-tunnel.sh", "/tmp/stage/setup-mgmt-tunnel.sh", 755),
++        (AGENT_DIR + r"\tunnel.conf.example", "/tmp/stage/tunnel.conf.example", 600),
++        (AGENT_DIR + r"\install-agent.sh", "/tmp/stage/install-agent.sh", 755),
++        (REPO + r"\scripts\snr1-mihomo-ipt.sh", "/tmp/stage/mihomo-ipt.sh", 755),
++        (AGENT_DIR + r"\connlog.sh", "/tmp/stage/connlog.sh", 755),
++        (AGENT_DIR + r"\onboot-hooks.sh", "/tmp/stage/onboot-hooks.sh", 755),
++    ]
++    for src, dst, m in files:
++        push(c, src, dst, m)
++    _, o, e = c.exec_command("cat > /tmp/stage/pkg.json && chmod 600 /tmp/stage/pkg.json", timeout=30)
++    o.channel.sendall(json.dumps(pkg).encode()); o.channel.shutdown_write(); o.read()
++    run(c, "cd /tmp/stage && sh install-agent.sh /tmp/stage/pkg.json 2>&1 | grep -vE 'install: not found' | tail -3")
++    wan_mac = f"76:a7:c8:e0:4f:{0x20 + N:02x}"
++    brlan_mac = f"76:a7:c8:e0:4f:{0x30 + N:02x}"
++    out = run(c, r'''
++R=/etc/routermgmt; S=/tmp/stage
++cp $S/routermgmt-agent.sh /usr/bin/routermgmt-agent && chmod 755 /usr/bin/routermgmt-agent
++cp $S/routermgmt-agent.sh $R/routermgmt-agent.sh && chmod 700 $R/routermgmt-agent.sh
++cp $S/handlers/switch_node.sh $R/handlers/switch_node.sh && chmod 600 $R/handlers/switch_node.sh
++cp $S/access-fw.sh $R/access-fw.sh && chmod 755 $R/access-fw.sh
++cp $S/netprobe.sh $R/netprobe.sh && chmod 755 $R/netprobe.sh
++cp $S/init/routermgmt /etc/init.d/routermgmt && chmod 755 /etc/init.d/routermgmt
++cp $S/wan-watch.sh /usr/sbin/wan-watch.sh && chmod 755 /usr/sbin/wan-watch.sh
++mkdir -p /etc/hotplug.d/iface $R/logs
++cp $S/init/wan-watch /etc/init.d/wan-watch && chmod 755 /etc/init.d/wan-watch
++cp $S/wan-watch.hotplug /etc/hotplug.d/iface/98-wan-watch && chmod 755 /etc/hotplug.d/iface/98-wan-watch
++/etc/init.d/wan-watch enable
++# 2026-10-01 温备就绪形态：v2 init + 端口选路 + agent 补丁 + discovery cron
++cp $S/init/mgmt-tunnel-v3 /etc/init.d/mgmt-tunnel && chmod 755 /etc/init.d/mgmt-tunnel
++cp $S/mgmt-port-discovery.sh $R/mgmt-port-discovery.sh && chmod 755 $R/mgmt-port-discovery.sh
++if ! grep -q mgmt_active_port $R/routermgmt-agent.sh; then
++  awk '{
++    print
++    if ($0 ~ /^    while :; do$/) {
++      print "        # 温备多端口选路（2026-10-01）：discovery 结果优先于 agent.conf 固定值"
++      print "        [ -f /tmp/mgmt_active_port ] && MGMT_URL=\"https://127.0.0.1:$(cat /tmp/mgmt_active_port 2>/dev/null)\""
++    }
++  }' $R/routermgmt-agent.sh > /tmp/agent.new && mv /tmp/agent.new $R/routermgmt-agent.sh
++fi
++if ! grep -q "mgmt-port-discovery.sh >/dev/null" $R/routermgmt-agent.sh; then
++  sed -i "s|send_heartbeat && _last_hb=\$_now|send_heartbeat \&\& _last_hb=\$_now \|\| /etc/routermgmt/mgmt-port-discovery.sh >/dev/null 2>\&1 \&|" $R/routermgmt-agent.sh
++fi
++sh -n $R/routermgmt-agent.sh || { echo AGENT_PATCH_SYNTAX_FAIL; exit 1; }
++cp $R/routermgmt-agent.sh /usr/bin/routermgmt-agent && chmod 755 /usr/bin/routermgmt-agent
++grep -q mgmt-port-discovery /etc/crontabs/root 2>/dev/null || echo '* * * * * /etc/routermgmt/mgmt-port-discovery.sh #mgmt-port' >> /etc/crontabs/root
++cp $S/setup-mgmt-tunnel.sh /usr/sbin/setup-mgmt-tunnel.sh && chmod 755 /usr/sbin/setup-mgmt-tunnel.sh
++cp $S/tunnel.conf.example $R/tunnel.conf.example && chmod 600 $R/tunnel.conf.example
++cp $S/mihomo-ipt.sh /etc/mihomo-ipt.sh && chmod 755 /etc/mihomo-ipt.sh
++mkdir -p /etc/crontabs
++cp $S/connlog.sh $R/connlog.sh && chmod 755 $R/connlog.sh
++cp $S/onboot-hooks.sh $R/onboot-hooks.sh && chmod 755 $R/onboot-hooks.sh
++sh -n $R/onboot-hooks.sh || { echo ONBOOTHOOKS_SYNTAX_FAIL; exit 1; }
++grep -q routermgmt-netprobe /etc/crontabs/root 2>/dev/null || echo '*/5 * * * * /etc/routermgmt/netprobe.sh #routermgmt-netprobe' >> /etc/crontabs/root
++grep -q routermgmt-connlog /etc/crontabs/root 2>/dev/null || echo '*/5 * * * * /etc/routermgmt/connlog.sh #routermgmt-connlog' >> /etc/crontabs/root
++grep -q routermgmt-reboot /etc/crontabs/root 2>/dev/null || echo '0 0 * * * /sbin/reboot #routermgmt-reboot' >> /etc/crontabs/root
++grep -q onboot-hooks /etc/rc.local || sed -i 's|^exit 0|/etc/routermgmt/onboot-hooks.sh\nexit 0|' /etc/rc.local
++sed -i 's/respawn 3600 [0-9]* [0-9]*/respawn 3600 0 0/' /etc/init.d/routermgmt
++iptables -D FORWARD -i br-lan -p udp -m udp --dport 443 -j REJECT --reject-with icmp-port-unreachable 2>/dev/null
++iptables -I FORWARD 1 -i br-lan -p udp -m udp --dport 443 -j REJECT --reject-with icmp-port-unreachable
++# 2026-10-09 增补：出厂未烧录有线 MAC，每次重启随机生成（WAN IP 漂移会破坏光猫侧绑定/映射）。
++# uci 固定后下次重启生效；刷机现场不做即时网络重启（会断开刷机会话）。WiFi 口 MAC 天然固定无需处理。
++cp -a /etc/config/network /root/network.bak-macpin-$(date +%Y%m%d-%H%M%S)
++uci set network.wan.macaddr='__WAN_MAC__'
++_i=0; while uci -q get network.@device[$_i] >/dev/null 2>&1; do
++  if [ "$(uci -q get network.@device[$_i].name)" = br-lan ]; then
++    uci set network.@device[$_i].macaddr='__BRLAN_MAC__'
++  fi
++  _i=$((_i+1))
++done
++uci commit network
++echo MAC_PINNED=$(uci -q get network.wan.macaddr)
++# 2026-09-30：安装后强验证（cron 条目存在 + 首轮采样落日志），防 R3/R4 批次漏装复发
++crontab -l 2>/dev/null | grep -q routermgmt-netprobe || { echo "NETPROBE_CRON_FAIL"; exit 1; }
++/etc/routermgmt/netprobe.sh >/dev/null 2>&1; sleep 1
++[ -s /etc/routermgmt/logs/netprobe.log ] && tail -n 2 /etc/routermgmt/logs/netprobe.log || { echo "NETPROBE_RUN_FAIL"; exit 1; }
++/etc/init.d/cron restart >/dev/null 2>&1
++uci -q delete network.wg0; uci -q commit network
++mkdir -p /etc/mihomo
++sh -n /usr/bin/routermgmt-agent && echo SYNTAX_OK
++/etc/init.d/routermgmt enable && /etc/init.d/routermgmt restart >/dev/null 2>&1; sleep 3
++pgrep -f routermgmt-agent >/dev/null && echo agent_running || echo agent_DEAD
++'''.replace("__WAN_MAC__", wan_mac).replace("__BRLAN_MAC__", brlan_mac))
++    if "agent_running" not in out:
++        print("  agent 启动失败:", out[-200:]); sys.exit(1)
++    print("  agent 已运行")
++
++    # 6) 隧道 + pin + 授权（2026-10-01 起：v2 温备就绪形态，公钥分发 DO+TX+BWG 三台）
++    out = run(c, "sh /usr/sbin/setup-mgmt-tunnel.sh 2>&1 | tail -4; dropbearkey -y -f /etc/routermgmt/id_dropbear_mgmt 2>/dev/null | grep ssh-rsa")
++    m = re.search(r"ssh-rsa [A-Za-z0-9+/=]+", out)
++    if m:
++        # DO 条目：双目标 permitopen（重复选项格式，严禁逗号列表）+ permitlisten(-R 排障口)
++        line = (f'no-agent-forwarding,no-X11-forwarding,no-pty,'
++                f'permitopen="10.10.0.1:8443",permitopen="127.0.0.1:8443",'
++                f'permitlisten="127.0.0.1:{RSSH}" ' + m.group(0) + f" rtr-mgmt-tunnel-snR{N}")
++        # TX/BWG 条目：仅 -L 备用端点，无 permitlisten
++        line_tb = (f'no-agent-forwarding,no-X11-forwarding,no-pty,'
++                   f'permitopen="10.10.0.1:8443",permitopen="127.0.0.1:8443" '
++                   + m.group(0) + f" rtr-mgmt-tunnel-snR{N}")
++        open(REPO + rf"\backups\.snr{N}-ak-line.txt", "w", newline="\n").write(line + "\n" + line_tb + "\n")
++        # 2026-10-02：分发链 DMIT 中心化（PC 直连 DMIT；DO 不再分发新设备公钥——v3 中 DO
++        # 仅兜底 -L，新设备无 DO 公钥时该端点自动不可用，与 R4 现状一致）
++        subprocess.run(['scp','-P','28722','-i','C:/Users/Administrator/.ssh/id_rsa_dmit','-o','IdentitiesOnly=yes',
++            REPO + rf"\backups\.snr{N}-ak-line.txt",'root@179.255.137.64:/tmp/snr-ak'], capture_output=True)
++        subprocess.run(['ssh','-p','28722','-i','C:/Users/Administrator/.ssh/id_rsa_dmit','-o','IdentitiesOnly=yes','root@179.255.137.64',
++            f'grep -q "snR{N}" /root/.ssh/authorized_keys || grep "snR{N}" /tmp/snr-ak | grep permitlisten >> /root/.ssh/authorized_keys; rm -f /tmp/snr-ak'], capture_output=True)
++        # TX（root 侧经 ubuntu sudo）、BWG（root 直达）、DMIT（root 直达，2026-10-02 起）分发，幂等
++        line_dmit = (f'no-agent-forwarding,no-X11-forwarding,no-pty,'
++                     f'permitopen="127.0.0.1:8443" '
++                     + m.group(0) + f" rtr-mgmt-tunnel-snR{N}")
++        # tb_sh 在 DMIT 上执行：DMIT→TX（ubuntu sudo）、DMIT→BWG（root），均用 DMIT 侧 txbackup 密钥
++        tb_sh = (
++            "set -e; printf '%s\\n' '" + line_tb + "' > /tmp/snr-ak-tb; "
++            "K=/root/.ssh/id_ed25519_txbackup; O='-i $K -o BatchMode=yes -o StrictHostKeyChecking=no -o ConnectTimeout=10'; "
++            "scp $O /tmp/snr-ak-tb ubuntu@43.134.46.44:/tmp/ >/dev/null 2>&1; "
++            f"ssh $O ubuntu@43.134.46.44 'sudo grep -q \"snR{N}\" /root/.ssh/authorized_keys 2>/dev/null || cat /tmp/snr-ak-tb | sudo tee -a /root/.ssh/authorized_keys >/dev/null; rm -f /tmp/snr-ak-tb'; "
++            "scp $O /tmp/snr-ak-tb root@74.82.203.175:/tmp/ >/dev/null 2>&1; "
++            f"ssh $O root@74.82.203.175 'grep -q \"snR{N}\" /root/.ssh/authorized_keys 2>/dev/null || cat /tmp/snr-ak-tb >> /root/.ssh/authorized_keys; chmod 600 /root/.ssh/authorized_keys; rm -f /tmp/snr-ak-tb'; "
++            "rm -f /tmp/snr-ak-tb; echo TB-AK-DONE"
++        )
++        r = subprocess.run(['ssh','-p','28722','-i','C:/Users/Administrator/.ssh/id_rsa_dmit','-o','IdentitiesOnly=yes','root@179.255.137.64', tb_sh],
++                           capture_output=True, text=True, timeout=120)
++        print("  TX/BWG 公钥分发(经DMIT):", "OK" if "TB-AK-DONE" in r.stdout else f"失败 {r.stdout[-80:]} {r.stderr[-80:]}")
++    # v3 tunnel.conf：四端点（DMIT 主 → TX/BWG 备 → DO 兜底）+ MGMT_TARGET=127.0.0.1:8443
++    run(c, f"""cat > /etc/routermgmt/tunnel.conf <<'CONF_EOF'
++# mgmt-tunnel v3 配置 — flash-snr 最终形态（2026-10-02，管理面 DMIT 主台）
++VPS_HOST=179.255.137.64
++VPS_PORT=28722
++MGMT_LOCAL_PORT=18443
++MGMT_TARGET=127.0.0.1:8443
++RSSH_REMOTE_PORT={RSSH}
++RSSH_TARGET=192.168.132.1:22
++
++# 备用端点 2（TX sshd 直连，本地 :18444）
++VPS2_HOST=43.134.46.44
++VPS2_PORT=28722
++
++# 备用端点 3（BWG sshd 直连，本地 :18445）
++VPS3_HOST=74.82.203.175
++VPS3_PORT=28722
++
++# 备用端点 4（DO 兜底，本地 :18446）
++VPS4_HOST=159.223.36.119
++VPS4_PORT=28722
++CONF_EOF
++chmod 600 /etc/routermgmt/tunnel.conf""")
++    # pin 主端点 DMIT 的 hostkey（ED25519）；DO 兜底端点由 v3 init 的 -y 自动接受
++    run(c, "sh /usr/sbin/setup-mgmt-tunnel.sh pin-hostkey SHA256:kigD/OWVZ0B337cxRckXDeQDGB6EddSqd4fAOoW7yvU 2>&1 | tail -1")
++    run(c, f"/etc/init.d/mgmt-tunnel enable && /etc/init.d/mgmt-tunnel restart >/dev/null 2>&1; sleep 10; curl -sk -m 8 -o /dev/null -w 'health=%{{http_code}}\\n' https://127.0.0.1:18443/api/v1/health; echo instances=$(ps w | grep 1844 | grep -v grep | wc -l)")
++    print("  隧道已启动（v3 四端点，DMIT 主）")
++
++    # 7) mihomo（仓库直推）
++    print("  推 mihomo 57MB...", end=" ", flush=True)
++    push(c, MIHOMO_REPO + r"\mihomo-linux-arm64", "/usr/bin/mihomo", 755)
++    push(c, MIHOMO_REPO + r"\geosite.dat", "/etc/mihomo/GeoSite.dat", 644)
++    push(c, MIHOMO_REPO + r"\country.mmdb", "/etc/mihomo/Country.mmdb", 644)
++    print("完成")
++    # 配置（从 SN-R3 历史配置改 device_id）
++    cfg = open(REPO + r"\scripts\clash-config-router.yaml", encoding="utf-8").read()
++    m = re.search(r"proxies:\n(.*?)\nproxy-groups:", cfg, re.S)
++    nodes_yaml = m.group(1) if m else ""
++    m2 = re.search(r'name: "AUTO"\n.*?proxies:\n(.*?)\n', cfg, re.S)
++    members = "\n".join("      " + l.strip() for l in m2.group(1).strip().splitlines() if l.strip().startswith("- ")) if m2 else ""
++    try:
++        import yaml
++        d = yaml.safe_load(cfg)
++        direct_rules = "\n".join(f'  - IP-CIDR,{p["server"]}/32,DIRECT,no-resolve' for p in d.get("proxies", []))
++    except:
++        direct_rules = ""
++    golden = open(REPO + r"\mgmt\backend\internal\clash\golden.yaml", encoding="utf-8").read()
++    golden = golden.replace("#{{NODE_PROXIES}}", nodes_yaml.rstrip())
++    golden = golden.replace("#{{GROUP_PROXY_MEMBERS}}", members).replace("#{{GROUP_AUTO_MEMBERS}}", members)
++    golden = golden.replace("#{{NODE_DIRECT_RULES}}", direct_rules)
++    _, o, e = c.exec_command("cat > /etc/mihomo/config.yaml && chmod 644 /etc/mihomo/config.yaml", timeout=60)
++    o.channel.sendall(golden.encode()); o.channel.shutdown_write(); o.read()
++    out = run(c, r'''
++cat > /etc/init.d/mihomo <<'EOS'
++#!/bin/sh /etc/rc.common
++USE_PROCD=1
++START=99
++STOP=15
++start_service() {
++    procd_open_instance
++    procd_set_param command /usr/bin/mihomo -d /etc/mihomo -f /etc/mihomo/config.yaml
++    procd_set_param respawn 3600 5 0
++    procd_set_param stdout 1
++    procd_set_param stderr 1
++    procd_set_param pidfile /var/run/mihomo.pid
++    procd_close_instance
++    ( i=0; while [ $i -lt 60 ]; do wget -T 2 -q -O /dev/null http://127.0.0.1:9090/version 2>/dev/null && break; sleep 1; i=$((i+1)); done; /etc/mihomo-ipt.sh
++      # REJECT-SELFHEAL 2026-10-13: mihomo-ipt 插完 DROP 后 REJECT 压回第 1，杜绝重载挤位（R7 四次重启竞态实锤）
++      iptables -D FORWARD -i br-lan -p udp -m udp --dport 443 -j REJECT --reject-with icmp-port-unreachable 2>/dev/null
++      iptables -I FORWARD 1 -i br-lan -p udp -m udp --dport 443 -j REJECT --reject-with icmp-port-unreachable ) &
++}
++reload_service() { stop; start; }
++EOS
++chmod 755 /etc/init.d/mihomo
++/etc/init.d/mihomo enable
++/etc/init.d/mihomo start
++i=0; while [ $i -lt 25 ]; do curl -s -m 2 http://127.0.0.1:9090/version >/dev/null 2>&1 && break; sleep 2; i=$((i+1)); done
++curl -s -m 3 http://127.0.0.1:9090/version
++curl -s -m 12 -x http://127.0.0.1:7890 https://www.cloudflare.com/cdn-cgi/trace 2>/dev/null | awk -F= '/^ip=/{print " egress=" $2}'
++/etc/mihomo-ipt.sh 2>&1 | tail -1
++''')
++    print(f"  mihomo: {out.splitlines()[-3:]}")
++    c.close()
++
++    # 8) 发布双节点
++    def wait_final(tid, timeout=240):
++        t0 = time.time()
++        while time.time() - t0 < timeout:
++            rr = requests.get(M.BASE + "/api/v1/tasks?size=30", headers=H, verify=False, timeout=15).json()
++            t = next((x for x in (rr.get("items") or []) if x["id"] == tid), None)
++            if t and t["status"] in ("ok","failed","rolled_back","expired","timeout"): return t
++            time.sleep(10)
++        return None
++    # 2026-10-08：绑定现役标准（BWG 主 + LAX + TX-hy2 + TX-vless；不绑 DO）
++    for _n, _p in ((5, False), (3, False), (2, False), (4, True)):
++        r = requests.post(M.BASE + "/api/v1/assignments/batch", headers=H,
++                          json={"device_ids": [DEVID], "node_id": _n, "is_primary": _p,
++                                "apply": _p}, verify=False, timeout=30)
++    tid = r.json()["items"][0]["task_id"]
++    _fpq = (f"UPDATE node_assignments SET failover_priority=0 WHERE device_id='{DEVID}' AND node_id=5; "
++            f"UPDATE node_assignments SET failover_priority=1 WHERE device_id='{DEVID}' AND node_id=3; "
++            f"UPDATE node_assignments SET failover_priority=2 WHERE device_id='{DEVID}' AND node_id=2")
++    _sqlcmd = f'docker exec routermgmt-db-1 sh -c "psql -U $POSTGRES_USER -d routermgmt -c \\"{_fpq}\\""'
++    subprocess.run(['ssh', '-p', '28722', '-i', 'C:/Users/Administrator/.ssh/id_rsa_dmit', '-o', 'IdentitiesOnly=yes',
++                    'root@179.255.137.64', _sqlcmd], capture_output=True, timeout=60)
++    requests.patch(M.BASE + f"/api/v1/devices/{DEVID}", headers=H,
++                   json={"traffic_alert_hourly_mb": 2048, "reboot_cron": "0 0 * * *"}, verify=False, timeout=15)
++    t = wait_final(tid)
++    print(f"  发布 v{t.get('result',{}).get('detail',{}).get('version','?')}: {t['status'] if t else 'TIMEOUT'}")
++    r = requests.post(M.BASE + f"/api/v1/devices/{DEVID}/ops", headers={**H, "Idempotency-Key": str(time.time())},
++                      json={"type": "set_proxy_state", "params": {"enabled": True}}, verify=False, timeout=15)
++    t = wait_final(r.json()["task_id"], 120)
++    print(f"  set_proxy_state: {t['status'] if t else 'TIMEOUT'}")
++
++    # 9) WiFi 默认关闭 + MAC 采集 + 凭证档案
++    c = ssh(PW)
++    out = run(c, r'''
++cd /etc/wireless/mediatek
++for F in mt7981.dbdc.b0.dat mt7981.dbdc.b1.dat DBDC_card0.dat; do
++  [ -f "$F" ] || continue
++  # 2026-10-08：保 WPAPSK 键名序号（旧法丢序号）；DBDC 的 5G 主 SSID 在 SSID7
++  sed -i "s/^SSID1=.*/SSID1=__NAME__/" "$F"
++  [ "$F" = "DBDC_card0.dat" ] && sed -i "s/^SSID7=.*/SSID7=__NAME__-5G/" "$F"
++  [ "$F" = "mt7981.dbdc.b1.dat" ] && sed -i "s/^SSID1=.*/SSID1=__NAME__-5G/" "$F"
++  sed -i "s/^\(WPAPSK[0-9]*\)=.*/\1=[REDACTED]/" "$F"
++  grep -q "^RadioOff=" "$F" && sed -i "s/^RadioOff=.*/RadioOff=1/" "$F" || sed -i "2i RadioOff=1" "$F"
++done
++uci set wireless.ra0.key='[REDACTED]'; uci set wireless.ra0.disabled='1'
++uci set wireless.rax0.key='[REDACTED]'; uci set wireless.rax0.disabled='1'
++uci set wireless.RADIO2G.disabled='1' 2>/dev/null; uci set wireless.RADIO5G.disabled='1' 2>/dev/null
++uci commit wireless
++sed -i '/# wifi-default-off/,$d' /etc/rc.local
++printf '%s\n' \
++'# wifi-boot-policy (2026-10-01 v3: wifi.enabled 标记=上次人工开启→开机主动 up' \
++'# [带重试: MTK 驱动初始化射频要十几秒, 固定 sleep 不够]; 无标记→down=新设备默认关。' \
++'# 旧版两宗罪: 把 wifi.disabled 当已启用读+只 skip-down, 开启一重启就被 RadioOff=1 关回)' \
++'(sleep 8; _w=up; [ -f /etc/routermgmt/state/wifi.enabled ] || _w=down' \
++' for _i in 1 2 3 4 5 6; do' \
++'   ifconfig ra0 $_w 2>/dev/null; ifconfig rax0 $_w 2>/dev/null' \
++'   [ "$_w" = "down" ] && break' \
++'   ip link show ra0 2>/dev/null | grep -q "state UP" && break' \
++'   sleep 5' \
++' done) > /dev/null 2>&1 &' \
++'# routermgmt-cron-restore (10-01: 厂商开机重写crontab, netprobe+discovery 两条开机重加;' \
++'# discovery 条目丢了温备切换就只剩心跳失败触发一条路, 2026-10-01 R2 重启实测丢过)' \
++'(sleep 10; grep -q routermgmt-netprobe /etc/crontabs/root 2>/dev/null || echo "*/5 * * * * /etc/routermgmt/netprobe.sh #routermgmt-netprobe" >> /etc/crontabs/root; grep -q mgmt-port-discovery /etc/crontabs/root 2>/dev/null || echo "* * * * * /etc/routermgmt/mgmt-port-discovery.sh #mgmt-port" >> /etc/crontabs/root; /etc/init.d/cron restart) > /dev/null 2>&1 &' \
++'exit 0' >> /etc/rc.local
++ifconfig ra0 down; ifconfig rax0 down
++for I in wan br-lan ra0 rax0; do [ -d /sys/class/net/$I ] && echo "$I: $(cat /sys/class/net/$I/address)"; done
++'''.replace("__NAME__", NAME))
++    c.close()
++    macs = dict(re.findall(r"(wan|br-lan|ra0|rax0): ([0-9a-f:]+)", out))
++    # 2026-10-13 审计增补：MAC 指纹台账（防误刷登记+回归识别）
++    requests.patch(M.BASE + f"/api/v1/devices/{DEVID}", headers=H,
++                   json={"mac_addr": macs.get("ra0","")}, verify=False, timeout=15)
++    doc = f"""# {NAME} ({DEVID}) 凭证档案 — {time.strftime('%Y-%m-%d')}
++
++| 通道 | 值 |
++|---|---|
++| SSH（LAN） | `ssh root@192.168.132.1` / `{PW}` |
++| LuCI | `http://192.168.132.1` root / 同上 |
++| 反向 SSH | `ssh -p 28722 -i ~/.ssh/id_rsa_dmit root@179.255.137.64` → `sshpass -p <root口令> ssh -p {RSSH} root@127.0.0.1`（DMIT 主台，2026-10-02 起） |
++| WiFi（默认关闭） | SSID `{NAME}`，PSK `[REDACTED]`；开启：管理台「开WiFi」 |
++| 管理台 | ID `{DEVID}`，RSSH `{RSSH}` |
++| MAC 固定（uci，重启生效） | WAN=`{wan_mac}` br-lan=`{brlan_mac}`（标准步骤；出厂实测 wan={macs.get('wan','?')} ra0={macs.get('ra0','?')}） |
++
++| 接口 | MAC |
++|---|---|
++| WAN | `{macs.get('wan','?')}` |
++| 2.4G | `{macs.get('ra0','?')}` |
++| 5G | `{macs.get('rax0','?')}` |
++"""
++    open(REPO + rf"\backups\SN-R{N}-凭证档案-{time.strftime('%Y%m%d')}.md", "w", encoding="utf-8").write(doc)
++    note = f"WAN MAC {macs.get('wan','?')} | 2.4G {macs.get('ra0','?')} | 5G {macs.get('rax0','?')} | WiFi默认关闭(密码[REDACTED]) | {time.strftime('%Y-%m-%d')} 刷机录入"
++    requests.patch(M.BASE + f"/api/v1/devices/{DEVID}", headers=H,
++                   json={"location_note": note, "mac_addr": macs.get("ra0","")}, verify=False, timeout=15)
++    # 2026-10-13 审计增补：指纹写入凭证总览（防误刷登记+回归识别基线）
++    with open(REPO + r"\backups\SN-R系列凭证总览.md", "a", encoding="utf-8") as _f:
++        _f.write(f"\n- {time.strftime('%Y-%m-%d')} 指纹登记 {NAME}（{DEVID}）：wan={macs.get('wan','?')} ra0={macs.get('ra0','?')} rax0={macs.get('rax0','?')}（刷机脚本自动写入）\n")
++    # 10) 终验关卡（2026-10-08：R1/R2/R4 事故沉淀；任一 FAIL 非零退出，禁止半成品出厂）
++    c = ssh(PW)
++    out = run(c, r'''
++echo "L=$(netstat -ltn | grep -cE '1844[3-6]')"
++echo "H=$(curl -sk -m 6 -o /dev/null -w '%{http_code}' https://127.0.0.1:18443/api/v1/health)"
++echo "E=$(curl -s -m 10 -x http://127.0.0.1:7890 https://api.ipify.org 2>/dev/null)"
++echo "G=$(curl -s -o /dev/null -w '%{http_code}' -m 12 -x http://127.0.0.1:7890 https://www.google.com/generate_204)"
++B64=$(printf %s __PW__ | openssl base64 -A | sed 's/=/%3D/g')
++echo "W=$(curl -s -o /dev/null -w '%{http_code}' -m 8 -d "username=cm9vdA%3D%3D&password=$B64" http://192.168.132.1/cgi-bin/luci)"
++echo "C=$(grep -c routermgmt /etc/crontabs/root)"
++echo "R=$(grep -c onboot-hooks /etc/rc.local)"
++echo "T=$(grep -c 'window.btoa(document' /usr/lib/lua/luci/view/admin_web/login.htm)/$(grep -c 'window.btoa(document' /usr/lib/lua/luci/view/admin_web/login_m.htm)"
++'''.replace('__PW__', PW))
++    kv = dict(re.findall(r"^(\w)=(.*)$", out, re.M))
++    ext = run(c, r'''
++echo "P=$(ps w | grep -cE 'by_agent|netbox_daemon|zcon|rathole|watcher' )"
++echo "Q=$(iptables -S FORWARD | grep 443 | head -1 | grep -c REJECT)"
++echo "B=$(logread 2>/dev/null | grep -c 'heartbeat ok')"
++''')
++    kv.update(dict(re.findall(r"^(\w)=(.*)$", ext, re.M)))
++    checks = [
++        ("隧道监听>=3", int(kv.get('L', '0')) >= 3),
++        ("API健康200", kv.get('H') == '200'),
++        ("出口IP非空", len(kv.get('E', '')) >= 8),
++        ("google 204", kv.get('G') == '204'),
++        ("网页登录302", kv.get('W') == '302'),
++        ("crontab>=4条", int(kv.get('C', '0')) >= 4),
++        ("rc.local钩子", kv.get('R', '0') == '1'),
++        ("btoa编码2/1", kv.get('T') == '2/1'),
++        ("PCDN残留=0", kv.get('P') == '0'),
++        ("QUIC顺序REJECT第一", kv.get('Q') == '1'),
++        ("心跳已产生", int(kv.get('B', '0')) >= 1),
++    ]
++    failed = [n for n, ok in checks if not ok]
++    for n, ok in checks:
++        print(f"    {'PASS' if ok else 'FAIL'} {n}")
++
++    # 11) 平台下发验证（2026-10-13 新增：切节点往返=远程管理端到端实测）
++    def _switch_verify(node_id, expect_ip, label):
++        rr = requests.post(M.BASE + "/api/v1/assignments/batch", headers=H,
++                           json={"device_ids": [DEVID], "node_id": node_id, "is_primary": True, "apply": True}, verify=False, timeout=30)
++        _t = wait_final(rr.json()["items"][0]["task_id"])
++        time.sleep(6)
++        _eg = run(c, "curl -s -m 10 -x http://127.0.0.1:7890 https://api.ipify.org 2>/dev/null")
++        ok = (_t and _t["status"] == "ok" and _eg == expect_ip)
++        print(f"    {'PASS' if ok else 'FAIL'} 平台下发-{label}(任务{_t['status'] if _t else '超时'}/出口{_eg})")
++        return ok
++    d1 = _switch_verify(5, "179.255.137.64", "切LAX")
++    d2 = _switch_verify(4, "74.82.203.175", "回东京")
++    # mihomo 重载后 QUIC 顺序复验+自愈
++    run(c, "iptables -D FORWARD -i br-lan -p udp -m udp --dport 443 -j REJECT --reject-with icmp-port-unreachable 2>/dev/null; iptables -I FORWARD 1 -i br-lan -p udp -m udp --dport 443 -j REJECT --reject-with icmp-port-unreachable")
++    c.close()
++    if failed or not (d1 and d2):
++        print(f"  终验未过: {failed + (['平台下发'] if not (d1 and d2) else [])}")
++        sys.exit(2)
++    print(f"[{time.strftime('%H:%M:%S')}] ✅ {NAME} 刷机完成，终验 11 关全过+下发双验通过，凭证档案已写入")
++
++if __name__ == "__main__":
++    main()
+diff --git a/scripts/flash-batch.py b/scripts/flash-batch.py
+new file mode 100644
+index 0000000..2dfcb8b
+--- /dev/null
++++ b/scripts/flash-batch.py
+@@ -0,0 +1,150 @@
++#!/usr/bin/env python3
++# -*- coding: utf-8 -*-
++"""SN-R 批量并行刷机驱动（2026-10-13 固化）
++用法：
++  python flash-batch.py            # 扫描两网段的出厂态设备并全部并行刷机
++  python flash-batch.py --detect   # 只探测不刷机
++  python flash-batch.py --auto     # cron 无人值守：无设备则静默退出
++发现条件：telnet(23) 开放 + root/abc@1234 可登 + MAC 不在现役清单（防误刷现役设备）。
++并行：每台一线程跑 flash-snr.py --host X --num N --rssh R（端口由本驱动预分配防竞争）。
++"""
++import argparse, json, os, re, socket, subprocess, sys, time
++from concurrent.futures import ThreadPoolExecutor
++
++REPO = r"F:\vps"
++LOCK = REPO + r"\backups\.flash-batch.lock"
++SUBNETS = ["192.168.132", "192.168.2"]
++FACTORY_PW = "abc@1234"
++# 现役/已知设备 MAC（含 WiFi 与 pin 段）——扫描命中即排除，绝不误刷
++KNOWN_MAC_PREFIXES = ["a4:d8:ca:14:", "76:a7:c8:e0:4f:"]
++
++def sweep(subnet, port=23, timeout=1):
++    hits = []
++    def probe(ip):
++        try:
++            s = socket.create_connection((ip, port), timeout); s.close(); hits.append(ip)
++        except OSError:
++            pass
++    with ThreadPoolExecutor(max_workers=64) as ex:
++        list(ex.map(probe, [f"{subnet}.{i}" for i in range(2, 255)]))
++    return sorted(hits)
++
++def telnet_fingerprint(ip):
++    """出厂态验证+取指纹；返回 (is_factory, info)"""
++    try:
++        s = socket.socket(); s.settimeout(5)
++        s.connect((ip, 23)); time.sleep(1.2)
++        try: s.recv(4096)
++        except OSError: pass
++        def until(p, t=5):
++            t0 = time.time(); acc = b""
++            while time.time() - t0 < t:
++                try:
++                    d = s.recv(4096)
++                    if d: acc += d
++                except socket.timeout: pass
++                if re.search(p, acc.decode(errors="replace")): return acc.decode(errors="replace")
++            return acc.decode(errors="replace")
++        until(r"login:"); s.sendall(b"root\n"); time.sleep(0.4); until(r"assword:")
++        s.sendall(FACTORY_PW.encode() + b"\n")
++        r = until(r"#", 5)
++        if "#" not in r:
++            s.close(); return False, "telnet登录失败(非出厂口令)"
++        def cmd(c):
++            s.sendall(c.encode() + b"\n"); time.sleep(0.6)
++            return until(r"#", 4)
++        macs = cmd("for I in wan ra0; do [ -d /sys/class/net/$I ] && echo $I $(cat /sys/class/net/$I/address); done")
++        model = cmd("cat /tmp/sysinfo/model 2>/dev/null | head -1")
++        s.close()
++        m = dict(re.findall(r"(wan|ra0): ([0-9a-f:]+)", macs))
++        info = f"model={model.strip().splitlines()[-1] if model.strip() else '?'} wan={m.get('wan','?')} ra0={m.get('ra0','?')}"
++        for pfx in KNOWN_MAC_PREFIXES:
++            if m.get("wan", "").startswith(pfx) or m.get("ra0", "").startswith(pfx):
++                return False, f"现役MAC匹配({pfx})——排除 " + info
++        return True, info
++    except Exception as e:
++        return False, f"探测异常: {e}"
++
++def next_ports(n, start=None):
++    """从 DMIT authorized_keys+监听取当前最大 132xx，预分配 n 个连续端口"""
++    r = subprocess.run(['ssh','-p','28722','-i','C:/Users/Administrator/.ssh/id_rsa_dmit','-o','IdentitiesOnly=yes',
++                        'root@179.255.137.64',
++                        "(grep -oE 'permitlisten=\"127.0.0.1:132[0-9]{2}\"' /root/.ssh/authorized_keys; ss -tln | grep -oE '127.0.0.1:132[0-9]{2}') | grep -oE '132[0-9]{2}' | sort -n | tail -1"],
++                       capture_output=True, text=True, timeout=30)
++    try:
++        mx = int(r.stdout.strip())
++    except ValueError:
++        mx = 13229
++    base = max(mx + 1, int(start) if start else 13230)
++    return [base + i for i in range(n)]
++
++def next_nums(n):
++    """平台现有 SN-R* 最大序号 +1 起取 n 个"""
++    r = subprocess.run(['ssh','-p','28722','-i','C:/Users/Administrator/.ssh/id_rsa_dmit','-o','IdentitiesOnly=yes',
++                        'root@179.255.137.64',
++                        'docker exec routermgmt-db-1 psql -U postgres -d routermgmt -t -c "SELECT name FROM devices WHERE name LIKE \'SN-R%\'"'],
++                       capture_output=True, text=True, timeout=30)
++    nums = [int(m.group(1)) for m in re.finditer(r"SN-R(\d+)", r.stdout)]
++    base = max(nums) + 1 if nums else 8
++    return list(range(base, base + n))
++
++def flash_one(ip, num, rssh, log):
++    p = subprocess.run([sys.executable, "-u", REPO + r"\scripts\flash-snr.py",
++                        "--num", str(num), "--rssh", str(rssh), "--host", ip],
++                       capture_output=True, text=True, timeout=1800, cwd=REPO + r"\scripts")
++    open(log, "w", encoding="utf-8").write(p.stdout + "\n" + p.stderr)
++    ok = p.returncode == 0
++    tail = [l for l in p.stdout.splitlines() if l.strip()][-3:]
++    return ok, num, ip, rssh, " | ".join(tail)
++
++def main():
++    ap = argparse.ArgumentParser()
++    ap.add_argument("--detect", action="store_true")
++    ap.add_argument("--auto", action="store_true", help="无人值守：无设备静默退出")
++    ap.add_argument("--max", type=int, default=4, help="单轮最多刷机台数")
++    args = ap.parse_args()
++
++    # 进程锁：防止 cron 周期与上一轮刷机重叠（锁文件 90 分钟自动失效兜底）
++    if os.path.exists(LOCK):
++        age = time.time() - os.path.getmtime(LOCK)
++        if age < 5400:
++            print(f"上一轮刷机仍在进行（锁 {int(age/60)} 分钟前），本轮退出")
++            return
++        print(f"⚠️ 检测到遗留刷机锁（{int(age/60)} 分钟）——上轮可能挂起，自动解锁续扫（详见 backups/.flash-N*.log）")
++    open(LOCK, "w").write(str(time.time()))
++
++    print(f"[{time.strftime('%F %T')}] 扫描出厂态设备（{', '.join(SUBNETS)}.0/24）...")
++    found = []
++    try:
++        for sn in SUBNETS:
++            for ip in sweep(sn):
++                isf, info = telnet_fingerprint(ip)
++                print(f"  {ip}: {'✓出厂态' if isf else '跳过'} — {info}")
++                if isf: found.append(ip)
++    finally:
++        if not found or args.detect:
++            os.remove(LOCK)
++    if not found:
++        print("未发现出厂态设备" + ("（auto 静默退出）" if args.auto else "——请确认设备已上电且 WAN/LAN 已接入两网段之一"))
++        return
++    if args.detect:
++        print(f"共 {len(found)} 台待刷: {found}")
++        return
++    found = found[:args.max]
++    ports = next_ports(len(found))
++    nums = next_nums(len(found))
++    print(f"刷机分配: {list(zip(found, nums, ports))}（并行）")
++    jobs = [(ip, nums[i], ports[i], REPO + rf"\backups\.flash-N{nums[i]}.log") for i, ip in enumerate(found)]
++    results = []
++    with ThreadPoolExecutor(max_workers=len(jobs)) as ex:
++        futs = [ex.submit(flash_one, *j) for j in jobs]
++        for f in futs:
++            results.append(f.result())
++    print(f"\n===== 批量结果 =====")
++    for ok, num, ip, rssh, tail in results:
++        print(f"  {'✅' if ok else '❌'} SN-R{num} @ {ip} (RSSH {rssh}): {tail}")
++    try: os.remove(LOCK)
++    except OSError: pass
++
++if __name__ == "__main__":
++    main()
+
+2026-10-13T15:49:40.006235Z ERROR codex_models_manager::manager: failed to refresh available models: request timed out
+exec
+"C:\\Users\\Administrator\\AppData\\Local\\Microsoft\\WindowsApps\\pwsh.exe" -Command '$p='"'verify/round-2/变更说明.md'; "'$i=0; Get-Content -LiteralPath $p | ForEach-Object { $i++; '"'{0,4} {1}' -f "'$i,$_ }; $p='"'verify/round-2/diff_1_flash-snr.patch'; "'$i=0; Get-Content -LiteralPath $p | Select-Object -First 240 | ForEach-Object { $i++; '"'{0,4} {1}' -f "'$i,$_ }' in F:\vps
+ succeeded in 2561ms:
+   1 # 鍙樻洿璇存槑 鈥?SN-R 鍒锋満娴佺▼锛坢ulti-verify round-1锛?026-10-13锛?
+   2 ## 鏍告煡瀵硅薄锛堢敤鎴峰懡棰橈級
+   3 
+   4 1. **A 妯″紡**锛歋N-R 绯诲垪鍒锋満娴佺▼鏄惁鏈夐仐婕忥紙鑴氭湰+娴佺▼瀹屾暣鎬у鏌ワ級銆?2. **B 妯″紡**锛歋N-R7锛坮tr-37cf72锛?92.168.132.1锛孌MIT 鎺掗殰鍙?13229锛夋槸鍚︿粛鏈変笉鍚堣鍐呯疆杞欢娈嬬暀銆?
+   5 ## 鏍告煡鑼冨洿锛堜笁涓枃浠讹紝鍧囨湭鍏?git 搴擄紝浠ュ叏鏂囪ˉ涓佸舰寮忔彁渚涳級
+   6 
+   7 | 鏂囦欢 | 鎬ц川 | 璇存槑 |
+   8 |---|---|---|
+   9 | scripts/flash-snr.py | **鏍稿績鍒锋満鑴氭湰**锛堝崟鍙板叏鑷姩锛?| 2026-09-28 鍒濈増锛屾湰 session 澶氳疆鍔犲浐锛堣涓嬶級 |
+  10 | scripts/flash-batch.py | **鎵归噺椹卞姩**锛堟柊鏂囦欢锛?| 鑷姩鍙戠幇鍑哄巶璁惧+骞惰鍒锋満+杩涚▼閿?MAC 鎸囩汗闃茶鍒?|
+  11 | scripts/flash-r7-finish2.py | 鍘嗗彶涓€娆℃€ц剼鏈紙鍙傝€冿級 | R7 涓柇缁窇鐨勬敹灏惧櫒锛屽叾閫昏緫宸插苟鍏ュ墠涓よ€咃紱浠呬緵瀹℃煡鍙傝€?|
+  12 
+  13 鏉冨▉娴佺▼鏂囨。锛歚docs/operations/鏂癝N-R1鍒锋満褰曞叆SOP-鑷姩鍖?20260928.md` 鏈珷銆岀粺涓€ SN 鍒锋満娴佺▼ v2銆嶃€?
+  14 ## flash-snr.py 鏈?session 鐨勬敼鍔ㄦ剰鍥撅紙鎸夋楠わ級
+  15 
+  16 1. **--host 鍙傛暟**锛氳澶囧彲鍦ㄤ换鎰忕綉娈碉紙鍘熸潵纭紪鐮?192.168.132.1锛夛紱鎺㈡祴鍔?_try_connect 鍖呰９锛堜笉鍙揪涓嶅啀瑁稿紓甯革級銆?2. **姝ラ 2 棰勮娓呯悊澶у箙鎵╁睍**锛堢敤鎴?鍘绘帀鍐呯疆"璇夋眰锛夛細鍘?7 鏈嶅姟锛坉ockerd/telnetd/ksmbd/miniupnpd/start_autoupdate/mtk_dut/wsdd2锛? 鏂板 PCDN 涔濅欢濂楋紙netbox_daemon.service/zcon-edge-service/zcon-ng/start_client_manage/start_get_versionInfo/timeRestart/mbox/hole/start_jcgqos锛夊仠鐢ㄧ鐢?+ 杩涚▼鍙屾潃锛圱ERM+KILL锛? 娣卞眰灏佸牭锛堝畨瑁呭櫒鑺辨嫭鍙风洰褰?mbox_init.sh/init.d 鏈綋鍒犻櫎/rc.local 閽╁瓙琛屽垹闄?鏁版嵁鐩樼洰褰曟竻闄わ級+ **fstab 涓夊眰灏佸牭+dd 鎶圭鍚?*锛圧7 浜旀杩唬瀹氱锛歶ci 涓夊眰鍏充笉鎺?hotplug 鎸傝浇锛屽敮涓€鏍规不=鎶规枃浠剁郴缁熺鍚嶏級+ done 鐨?telnet 娉ㄩ噴鍘婚噸銆?3. **姝ラ 4 褰曞叆闃插姭鎸侀椄闂?*锛歅OST /devices 鍚庣珛鍗冲湪 DMIT 搴?SELECT 楠岃瘉璁板綍瀛樺湪锛圧7 浜嬫晠锛氶檲鏃ф湰鍦伴毀閬?18444 鎶?API 鍔埌 DO 鏃у簱锛岃韩浠介敊褰?rtr-204b63锛夛紱澶辫触閲嶈瘯涓€娆★紙鍐呭祵 MGMT_API_BASE 绾犳锛夈€傚鍒峰箓绛夛細鏃ф帓闅滃彛澶囨杈撳嚭銆?4. **姝ラ 5 MAC 鍥哄畾**锛歶ci wan/br-lan = 76:a7:c8:e0:4f:{0x20+N}/{0x30+N}锛?0-09 瀹氱殑鑸伴槦鏍囧噯锛岄槻鍑哄巶闅忔満 MAC 婕傜Щ锛夈€?5. **mihomo init.d 鐢熸垚娈靛姞 REJECT-SELFHEAL**锛歮ihomo-ipt 璋冨畬鍚庝袱鏉?iptables 鎶?REJECT 鍘嬪洖 FORWARD 绗?1 浣嶏紙R7 鍥涙閲嶅惎瀹為敜鐨?QUIC 绔炴€佹牴娌伙級銆?6. **姝ラ 10 缁堥獙 8 鍏斥啋11 鍏?*锛?PCDN 娈嬬暀=0銆丵UIC 棣栦綅=REJECT銆佸績璺冲凡浜х敓锛坙ogread锛屼笉鐢?syslog 鏂囦欢鈥斺€擱7 鏃犺鏂囦欢锛夈€?7. **姝ラ 11 骞冲彴涓嬪彂鍙岄獙**锛氬垏 LAX鈫掑嚭鍙?179.255.137.64銆佸洖涓滀含鈫?4.82.203.175锛堢敤鎴?鏈嶅姟鍣ㄤ笅鍙?杩滅▼绠＄悊"鏍告煡椤圭殑鑴氭湰鍖栵級銆?8. **鎸囩汗鍙拌处**锛歁AC 鍐欏钩鍙?mac_addr + 鍑瘉鎬昏鑷姩杩藉姞鐧昏琛岋紱鍑瘉妗ｆ琛?MAC 鍥哄畾琛屻€?9. 闃插姭鎸侀椄闂ㄥ彉閲忛殧绂伙紙dev2锛夌瓑骞傜瓑鎬т慨姝ｃ€?
+  17 ## flash-batch.py锛堟柊鏂囦欢锛夋剰鍥?
+  18 涓ょ綉娈碉紙192.168.132.x/192.168.2.x锛塼elnet 23 鍏ㄦ壂 鈫?鍑哄巶鎸囩汗楠岃瘉锛坮oot/abc@1234 + MAC 鍓嶇紑鐧藉悕鍗曢槻璇埛鐜板焦锛夆啋 缂栧彿/绔彛棰勫垎閰嶏紙骞冲彴鏈€澶?SN-R 搴忓彿+1銆丏MIT 132xx 鏈€澶?1锛夆啋 骞惰绾跨▼鍒锋満 鈫?鉁?鉂?姹囨€汇€傝繘绋嬮攣锛?0 鍒嗛挓鍏滃簳+鎸傝捣鍛婅锛夈€?-auto 渚?cron 鏃犱汉鍊煎畧锛堝凡瑁呮瘡 10 鍒嗛挓宸℃ automation-31e0587a锛夈€?
+  19 ## 鑷椋庨櫓锛堣瀹℃煡鑰呴噸鐐规牳鏌ワ級
+  20 
+  21 1. flash-batch 鐨?KNOWN_MAC_PREFIXES 鐢?OUI 鍓嶇紑锛坅4:d8:ca:14: 涓?76:a7:c8:e0:4f:锛夎€岄潪绮剧‘ MAC 鍖归厤鈥斺€斿悓鎵规鏂板嚭鍘傝澶囷紙濡?a4:d8:ca:14:xx锛変細琚璺宠繃锛堝亣闃存€э級銆?2. flash-snr.py 鐨?push() 鏃?md5 鏍￠獙锛圧7 瀹炴祴 paramiko 閫氶亾鍐欏彲鑳借 dropbear 鍗冲叧鈥斺€斿ぇ鏂囦欢 mihomo 57MB 璧版璺緞锛夈€?3. alloc_rssh 鍦?flash-snr 鍗曠嫭骞惰璺戞椂鏈夌鍙ｇ珵鎬侊紙batch 棰勫垎閰嶈閬夸簡锛屼絾鍗曠嫭骞惰璋冪敤浠嶅彲绔炴€侊級銆?4. enroll/tasks 绛?API 璋冪敤澶氬 r.json() 鏃?HTTP 鐘舵€佺爜妫€鏌ャ€?5. init.d heredoc 鍐呭祵 REJECT-SELFHEAL 涓夎鐨勭敓鎴愯剼鏈娉曟纭€э紙闇€ bash -n 娓叉煋楠岃瘉锛夈€?6. 姝ラ 2 鐨?rm -rf /mnt/mmcblk0p6/... 涓?dd 鎶圭鍚嶅湪鍚屼竴 run 鍧椻€斺€旇嫢 umount 澶辫触锛坆usy锛塪d 浠嶆墽琛岋紙鍐欐寕杞戒腑鐨勫潡璁惧锛夈€?7. R7 娈嬬暀浜岃繘鍒舵枃浠讹紙/usr/bin/rathole銆亃con-ng銆亃con-edge-arm64 绛夛級杩涚▼宸叉潃鏈嶅姟宸茬锛屼絾鏂囦欢鏈綋鏈垹锛圔 妯″紡鏍告煡鐐癸級銆?
+  22 ## B 妯″紡锛歊7 涓嶅悎瑙勮蒋浠剁幇鐘讹紙ZCode 鍏堣鍙栬瘉锛屼緵鐙珛瀹℃煡浜ゅ弶楠岃瘉锛?
+  23 R7 宸茬粡鍘嗕笁杞竻鐞?鍥涙閲嶅惎楠岃瘉銆傚凡纭鏍归櫎锛歅CDN 杩涚▼/鏈嶅姟/鑷惎/閽╁瓙/鏁版嵁鐩樻寕杞斤紙绛惧悕鎶归櫎锛夈€?*宸茬煡淇濈暀**锛?usr/bin/rathole銆亃con-ng銆亃con-edge-arm64 绛変簩杩涘埗鏂囦欢鏈綋锛堝喅绛?鐣欐。澶囨煡锛夛紱S99iphone11_perf_init 绛夊姛鑳芥€ц嚜鍚紱crontab 鐨?factory checkMem 琛岋紱dnsmasq 缁戝畾 WAN 渚у湴鍧€锛?92.168.2.215:53锛夈€傚緟鐙珛瀹℃煡鍒ゆ柇杩欎簺鏄惁绠?涓嶅悎瑙勬畫鐣?鍙婃槸鍚︽湁閬楁紡闈紙濡?uhttpd 443 瀵?WAN 鏆撮湶銆乨ropbear 0.0.0.0銆乭otplug.d 鍏朵粬鑴氭湰銆?www 鍚庨棬绛夛級銆?
+   1 diff --git a/scripts/flash-snr.py b/scripts/flash-snr.py
+   2 new file mode 100644
+   3 index 0000000..b87ecaa
+   4 --- /dev/null
+   5 +++ b/scripts/flash-snr.py
+   6 @@ -0,0 +1,643 @@
+   7 +#!/usr/bin/env python3
+   8 +# -*- coding: utf-8 -*-
+   9 +"""SN-R1-AX3000 鍚屾鍥轰欢鍒锋満涓€閿剼鏈紙2026-09-28 鍥哄寲锛?+鐢ㄦ硶锛氭彃濂芥柊璁惧锛圵AN 鎺ラ泤鍏稿 LAN 鎴栧叕鍙哥綉銆丳C 缃戠嚎鎺ュ畠 LAN 鍙ｏ級鍚庤繍琛岋細
+  10 +  python flash-snr.py --num 4 --rssh 13224
+  11 +娴佺▼锛氭帰娴嬧啋telnet 鐧诲綍鈫掓敼瀵嗏啋棰勮娓呯悊鈫扤TP鈫抩penssl3鈫掔鐞嗗彴褰曞叆鈫抋gent鈫掗毀閬撯啋mihomo鈫掑彂甯冣啋WiFi鈫掑嚟璇佹。妗?+鍓嶇疆锛欶:\vps\backups\ 涓嬫湁 .snrN-pw锛堣嚜鍔ㄧ敓鎴愶級锛涚鐞嗗彴闅ч亾宸插缓锛坢gmt_api_test.ensure_tunnel锛?+"""
+  12 +import argparse, base64, hashlib, json, os, re, secrets, socket, string, subprocess, sys, time
+  13 +import paramiko, requests
+  14 +sys.path.insert(0, r"F:\vps\scripts")
+  15 +import mgmt_api_test as M
+  16 +
+  17 +HOST = "192.168.132.1"
+  18 +REPO = r"F:\vps"
+  19 +OPENSSL3 = REPO + r"\firmware\snr1-openssl3\usr"
+  20 +MIHOMO_REPO = REPO + r"\firmware\openclash"
+  21 +AGENT_DIR = REPO + r"\mgmt\agent"
+  22 +
+  23 +# SN-R 绯诲垪缁熶竴 root 鍙ｄ护锛?026-09-28 鐢ㄦ埛瀹氱锛沇iFi [REDACTED] 鍚屼负缁熶竴绛栫暐锛?+UNIFIED_PW = "[REDACTED]"
+  24 +
+  25 +def md5_crypt(pw, salt):
+  26 +    """glibc 鍏煎 $1$ MD5-crypt锛堢函 python锛學indows 鏃?crypt 妯″潡锛沷penssl 鍙屽悜閲忚嚜鏍￠獙锛夈€?""
+  27 +    import hashlib
+  28 +    ITOA = "./0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
+  29 +    pwB = pw.encode("utf-8"); saltB = salt.encode("utf-8")
+  30 +    alt = hashlib.md5(pwB + saltB + pwB).digest()
+  31 +    ctx = hashlib.md5()
+  32 +    ctx.update(pwB); ctx.update(b"$1$"); ctx.update(saltB)
+  33 +    cnt = len(pwB)
+  34 +    while cnt > 0:
+  35 +        ctx.update(alt[:min(16, cnt)]); cnt -= 16
+  36 +    cnt = len(pwB)
+  37 +    while cnt > 0:
+  38 +        ctx.update(b"\x00" if (cnt & 1) else pwB[:1])
+  39 +        cnt >>= 1
+  40 +    final = ctx.digest()
+  41 +    for i in range(1000):
+  42 +        c = hashlib.md5()
+  43 +        if i % 2: c.update(pwB)
+  44 +        else:     c.update(final)
+  45 +        if i % 3: c.update(saltB)
+  46 +        if i % 7: c.update(pwB)
+  47 +        if i % 2: c.update(final)
+  48 +        else:     c.update(pwB)
+  49 +        final = c.digest()
+  50 +    def to64(v, n):
+  51 +        r = ""
+  52 +        while n > 0:
+  53 +            r += ITOA[v & 0x3f]; v >>= 6; n -= 1
+  54 +        return r
+  55 +    def grp(a, b, c):
+  56 +        return to64((final[a] << 16) | (final[b] << 8) | final[c], 4)
+  57 +    return "$1$" + salt + "$" + grp(0,6,12)+grp(1,7,13)+grp(2,8,14)+grp(3,9,15)+grp(4,10,5)+to64(final[11],2)
+  58 +
+  59 +def gen_creds(tag):
+  60 +    r = subprocess.run(["openssl", "passwd", "-1", "-salt", "snruni", UNIFIED_PW],
+  61 +                       capture_output=True, text=True)
+  62 +    return UNIFIED_PW, r.stdout.strip()
+  63 +
+  64 +# ---- RSSH 绔彛鑷姩鍒嗛厤锛?026-09-30锛?---
+  65 +# 瑙勫垯锛氬悓璁惧锛坰nR{N}锛夊鍒封啋澶嶇敤 authorized_keys 宸插垎閰嶇鍙ｏ紙骞傜瓑锛夛紱
+  66 +#       鏂拌澶団啋鍙?宸插垎閰嶇鍙ｄ笌褰撳墠鐩戝惉"鐨勬渶澶у€?1锛堣捣鐐?13223锛岃秺鐣?13300 鍗冲仠锛夈€?+VPS_SSH = ['ssh','-p','28722','-i','C:/Users/Administrator/.ssh/id_rsa_dmit','-o','IdentitiesOnly=yes','root@179.255.137.64']  # 2026-10-02 绔彛琛ㄩ殢鍏挜杩?DMIT
+  67 +
+  68 +def alloc_rssh(n):
+  69 +    r = subprocess.run(VPS_SSH + ["grep -E 'rtr-mgmt-tunnel-snR%d$' /root/.ssh/authorized_keys 2>/dev/null | grep -oE 'permitlisten=\"127.0.0.1:[0-9]+\"' | grep -oE '[0-9]+\"' | tr -d '\"' | head -1" % n],
+  70 +                       capture_output=True, text=True, timeout=30)
+  71 +    mine = r.stdout.strip()
+  72 +    if mine:
+  73 +        print(f"  [rssh] snR{n} 宸插垎閰嶈繃绔彛 {mine}锛屽鐢紙骞傜瓑澶嶅埛锛?)
+  74 +        return int(mine)
+  75 +    r = subprocess.run(VPS_SSH + ["(grep -oE 'permitlisten=\"127.0.0.1:[0-9]+\"' /root/.ssh/authorized_keys 2>/dev/null | grep -oE ':[0-9]+\"' | tr -d ':\"'; ss -tln 2>/dev/null | grep -oE '127.0.0.1:132[0-9][0-9]' | cut -d: -f2) | grep -E '^132[0-9]{2}$' | sort -n | tail -1"],
+  76 +                       capture_output=True, text=True, timeout=30)
+  77 +    try:
+  78 +        mx = int(r.stdout.strip())
+  79 +    except ValueError:
+  80 +        mx = 13222
+  81 +    nxt = max(mx + 1, 13223)
+  82 +    if nxt >= 13300:
+  83 +        sys.exit(f"  [rssh] 绔彛姹犲皢瓒婄晫锛坽nxt}>=13300锛夛紝浜哄伐鏍稿 authorized_keys")
+  84 +    busy = subprocess.run(VPS_SSH + [f'ss -tln | grep -q "127.0.0.1:{nxt} " && echo BUSY || echo FREE'],
+  85 +                          capture_output=True, text=True, timeout=30).stdout.strip()
+  86 +    if busy == 'BUSY':
+  87 +        sys.exit(f"  [rssh] 绔彛 {nxt} 宸茶鐩戝惉鍗犵敤锛屼汉宸ユ牳鏌?)
+  88 +    print(f"  [rssh] 鑷姩鍒嗛厤鏂扮鍙?{nxt}")
+  89 +    return nxt
+  90 +
+  91 +class Tel:
+  92 +    def __init__(self):
+  93 +        self.s = socket.socket(); self.s.settimeout(5)
+  94 +        self.s.connect((HOST, 23)); self.buf = b""
+  95 +        time.sleep(1.2)
+  96 +        try: self.s.recv(4096)
+  97 +        except: pass
+  98 +    def send(self, line):
+  99 +        self.s.sendall(line.encode()+b"\n"); time.sleep(0.4)
+ 100 +    def until(self, pat, timeout=6):
+ 101 +        t0 = time.time(); acc = b""
+ 102 +        while time.time()-t0 < timeout:
+ 103 +            try:
+ 104 +                d = self.s.recv(4096)
+ 105 +                if d: self.buf += d; acc += d
+ 106 +            except socket.timeout: pass
+ 107 +            if re.search(pat, (self.buf+acc).decode(errors="replace")): return acc.decode(errors="replace")
+ 108 +        return acc.decode(errors="replace")
+ 109 +
+ 110 +def ssh(pw):
+ 111 +    c = paramiko.SSHClient(); c.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+ 112 +    c.connect(HOST, username="root", password=pw, timeout=10, allow_agent=False, look_for_keys=False)
+ 113 +    return c
+ 114 +
+ 115 +def push(c, local, remote, mode=None):
+ 116 +    data = open(local, "rb").read()
+ 117 +    _, o, e = c.exec_command(f"cat > '{remote}'", timeout=180)
+ 118 +    o.channel.sendall(data); o.channel.shutdown_write(); o.read()
+ 119 +    if mode: c.exec_command(f"chmod {mode} '{remote}'")[1].read()
+ 120 +
+ 121 +def run(c, script, timeout=240):
+ 122 +    _, o, e = c.exec_command(script, timeout=timeout)
+ 123 +    return (o.read()+e.read()).decode(errors="replace")
+ 124 +
+ 125 +def _try_connect(addr, timeout=2):
+ 126 +    try:
+ 127 +        s = socket.create_connection(addr, timeout); s.close(); return True
+ 128 +    except OSError:
+ 129 +        return False
+ 130 +
+ 131 +def main():
+ 132 +    global HOST
+ 133 +    ap = argparse.ArgumentParser()
+ 134 +    ap.add_argument("--num", required=True, help="璁惧搴忓彿锛堝 4 鈫?SN-R4-AX3000锛?)
+ 135 +    ap.add_argument("--rssh", default="auto", help="鍙嶅悜 SSH 绔彛锛涢粯璁?auto=鑷姩鍒嗛厤锛堝悓璁惧澶嶅埛澶嶇敤鍘熺鍙ｏ級")
+ 136 +    ap.add_argument("--random-pw", action="store_true", help="鍙ｄ护鐢ㄩ殢鏈哄€硷紙榛樿=鑸伴槦缁熶竴鍊硷紝2026-10-08 璧凤級")
+ 137 +    ap.add_argument("--host", default="192.168.132.1", help="璁惧鍦板潃锛?026-10-13 鎵归噺骞惰鍒锋満澧炶ˉ锛涘彲鍦ㄤ换鎰忕綉娈碉級")
+ 138 +    args = ap.parse_args()
+ 139 +    N = args.num; NAME = f"SN-R{N}-AX3000"
+ 140 +    HOST = args.host
+ 141 +    RSSH = int(args.rssh) if str(args.rssh).isdigit() else alloc_rssh(int(N))
+ 142 +    print(f"[{time.strftime('%H:%M:%S')}] 寮€濮嬪埛鏈?{NAME} @ {HOST} (RSSH {RSSH})")
+ 143 +
+ 144 +    # 0) 鎺㈡祴
+ 145 +    ports = [22,23,53,80,443,445,9000]
+ 146 +    open_ports = [p for p in ports if _try_connect((HOST, p))]
+ 147 +    print(f"  绔彛: {open_ports}")
+ 148 +    t = Tel(); t.until(r"login:"); t.send("root"); t.until(r"assword:")
+ 149 +    t.send("abc@1234"); r = t.until(r"#", 5)
+ 150 +    if "#" not in r:
+ 151 +        print("telnet 鐧诲綍澶辫触"); sys.exit(1)
+ 152 +    print("  telnet 鐧诲綍鎴愬姛")
+ 153 +
+ 154 +    # 1) 鏀瑰瘑锛?026-10-08锛氶粯璁ょ洿鎺ヨ埌闃熺粺涓€鍊硷紝娑堥櫎"鍏堥殢鏈哄悗缁熶竴"鐪熺┖鏈燂級
+ 155 +    if args.random_pw:
+ 156 +        PW, HASH = gen_creds(f"sn{N}")
+ 157 +    else:
+ 158 +        PW = UNIFIED_PW
+ 159 +        HASH = md5_crypt(PW, f"snr{N}uni")
+ 160 +    open(REPO + rf"\backups\.snr{N}-pw", "w").write(PW + "\n" + HASH + "\n")
+ 161 +    t.send(f"sed -i 's|^root:[^:]*:|root:{HASH}:|' /etc/shadow")
+ 162 +    t.until(r"#", 5); t.s.close()
+ 163 +    c = ssh(PW)
+ 164 +    print(f"  SSH 鏂板彛浠ら€氳繃 ({PW[:6]}...)")
+ 165 +
+ 166 +    # 2) 棰勮娓呯悊 + NTP
+ 167 +    out = run(c, r'''
+ 168 +for S in dockerd telnetd ksmbd miniupnpd start_autoupdate mtk_dut wsdd2; do
+ 169 +  /etc/init.d/$S stop >/dev/null 2>&1; /etc/init.d/$S disable >/dev/null 2>&1
+ 170 +done
+ 171 +# 2026-10-13 R7 褰绘煡澧炶ˉ锛氬巶鍟?PCDN/浜戜笂鎶?鎵撴礊/绌块€?瀹氭椂閲嶅惎涔濅欢濂楋紙"鍚洦"鏀剁泭绋嬪簭鍏ㄥ锛?+for S in netbox_daemon.service zcon-edge-service zcon-ng start_client_manage start_get_versionInfo timeRestart mbox hole start_jcgqos; do
+ 172 +  /etc/init.d/$S stop >/dev/null 2>&1; /etc/init.d/$S disable >/dev/null 2>&1
+ 173 +done
+ 174 +killall watcher by_agent_pro net_qua_cli inst_width tcp_stun_ser netbox_daemon zcon-ng zcon-edge-arm64 rathole 2>/dev/null
+ 175 +sleep 2
+ 176 +killall -9 watcher by_agent_pro net_qua_cli inst_width tcp_stun_ser netbox_daemon zcon-ng zcon-edge-arm64 rathole 2>/dev/null
+ 177 +# 2026-10-13 娣卞眰灏佸牭锛圧7 褰绘煡浜岃疆+瀹¤涓夎疆锛夛細瀹夎鍣ㄦ湰浣?rc.local 閲嶈閽╁瓙+鏁版嵁鐩?fstab 闅旂
+ 178 +# 淇锛歩nstall_mbox.sh 瀹為檯浣嶄簬 {install_mbox.sh} 鐩綍锛坮m /usr/bin 鏄敊璺緞锛夛紱mbox_init.sh/mboxinit.sh 娈嬬暀锛沬nit.d 鑴氭湰鏈綋闇€鍒?+killall -9 install_mbox.sh install_pdnterminal.sh 2>/dev/null
+ 179 +rm -rf '/usr/bin/{install_mbox.sh}' '/usr/bin/{install_pdnterminal.sh}' 2>/dev/null
+ 180 +rm -f /usr/bin/install_mbox.sh /usr/bin/install_pdnterminal.sh /usr/bin/mbox_init.sh /usr/bin/mboxinit.sh 2>/dev/null
+ 181 +rm -f /etc/init.d/netbox_daemon.service /etc/init.d/zcon-edge-service /etc/init.d/zcon-ng /etc/init.d/mbox 2>/dev/null
+ 182 +cp -a /etc/rc.local /root/rc.local.bak-pcdn-$(date +%Y%m%d) 2>/dev/null
+ 183 +sed -i '/install_mbox/d; /install_pdnterminal/d; /mbox_init/d' /etc/rc.local
+ 184 +rm -rf /mnt/mmcblk0p6/by-agent /mnt/mmcblk0p6/by-daemon /mnt/mmcblk0p6/by-watcher /mnt/mmcblk0p6/initmindevice.sh /mnt/mmcblk0p6/docker /mnt/mmcblk0p6/data1 2>/dev/null
+ 185 +sync
+ 186 +# 2026-10-13 閲嶅惎瀹炴垬绾犳脳3锛圧7 浜旀杩唬瀹氱锛夛細uci fstab 涓夊眰鍏ㄥ叧涔熸尅涓嶄綇 hotplug.d/block/10-mount
+ 187 +# 锛堟寜 UUID/澶囦唤瓒呯骇鍧楁寕杞斤紝缁曡繃 uci锛夈€傚敮涓€鏍规不=鎶规帀鏂囦欢绯荤粺绛惧悕锛坆lkid 涓嶈瘑鍒垯姘镐笉鑷姩鎸傝浇锛夈€?+uci set fstab.@mount[0].enabled='0' 2>/dev/null
+ 188 +uci set fstab.@global[0].anon_mount='0' 2>/dev/null
+ 189 +uci set fstab.@global[0].auto_mount='0' 2>/dev/null
+ 190 +uci commit fstab 2>/dev/null
+ 191 +umount /mnt/mmcblk0p6/docker 2>/dev/null; umount -l /mnt/mmcblk0p6 2>/dev/null
+ 192 +dd if=/dev/zero of=/dev/mmcblk0p6 bs=1M count=256 2>/dev/null; sync
+ 193 +# done 鐨?telnet 琛屽幓閲嶉槻鑶ㄨ儉锛堝鍒峰箓绛夛級
+ 194 +awk '!/^# disabled-pcdn-telnet:/ || !seen[/^# disabled-pcdn-telnet: / $2]++' /etc/init.d/done > /tmp/done.new && mv /tmp/done.new /etc/init.d/done
+ 195 +sed -i 's|^\(.*telnet.*\)$|# disabled-pcdn-telnet: \1|' /etc/init.d/done 2>/dev/null
+ 196 +for P in dockerd telnetd ksmbd ksmbd.mounted miniupnpd mtk_dut; do killall $P 2>/dev/null; done
+ 197 +rm -rf /etc/m-box /usr/m-box
+ 198 +# 缃戦〉鐧诲綍涓変欢濂楋紙2026-10-08 瀹氱锛涙棫"缃?disabled"鏄笁鍙扮綉椤靛叏鍧忕殑鏍瑰洜锛?+uci set system.@system[0].username=root
+ 199 +uci set system.@system[0].password='__UCIPW__'
+ 200 +uci set system.@system[0].superpass=disabled
+ 201 +uci commit system
+ 202 +D=/usr/lib/lua/luci/view/admin_web
+ 203 +sed -i '/getElementById("password").value="<%/,+1d' $D/login.htm 2>/dev/null
+ 204 +sed -i 's/value="<%=password%>"/value=""/' $D/login_m.htm 2>/dev/null
+ 205 +sed -i '/var admin=window.btoa("<%=password/d' $D/login.htm 2>/dev/null
+ 206 +grep -q 'password").value = window.btoa' $D/login.htm || sed -i 's|\tdocument.getElementById("formid").submit();|\tdocument.getElementById("username").value = window.btoa(document.getElementById("username").value);\n\tdocument.getElementById("password").value = window.btoa(document.getElementById("password").value);\n\tdocument.getElementById("formid").submit();|' $D/login.htm
+ 207 +grep -q 'password").value = window.btoa' $D/login_m.htm || sed -i 's|document.getElementById("formid").submit();|document.getElementById("password").value = window.btoa(document.getElementById("password").value);\n\tdocument.getElementById("formid").submit();|' $D/login_m.htm
+ 208 +[ -f /etc/firstLogin ] || echo 0 > /etc/firstLogin
+ 209 +echo "web3: btoa=$(grep -c 'window.btoa(document' $D/login.htm)/$(grep -c 'window.btoa(document' $D/login_m.htm) firstLogin=$(cat /etc/firstLogin)"
+ 210 +uci -q delete system.ntp.server 2>/dev/null
+ 211 +uci add_list system.ntp.server='192.168.2.1'
+ 212 +uci add_list system.ntp.server='120.25.115.20'
+ 213 +uci add_list system.ntp.server='203.107.6.112'
+ 214 +uci -q set system.ntp.enable_server='0'
+ 215 +uci commit system
+ 216 +/etc/init.d/sysntpd restart >/dev/null 2>&1
+ 217 +sleep 4
+ 218 +date
+ 219 +'''.replace('__UCIPW__', UNIFIED_PW))
+ 220 +    print("  棰勮娓呯悊+NTP 瀹屾垚")
+ 221 +
+ 222 +    # 3) openssl3
+ 223 +    push(c, OPENSSL3 + r"\bin\openssl", "/usr/bin/openssl.new", 755)
+ 224 +    push(c, OPENSSL3 + r"\lib\libcrypto.so.3", "/usr/lib/libcrypto.so.3", 644)
+ 225 +    push(c, OPENSSL3 + r"\lib\libssl.so.3", "/usr/lib/libssl.so.3", 644)
+ 226 +    run(c, "mv -f /usr/bin/openssl.new /usr/bin/openssl && openssl version | head -1")
+ 227 +    print("  openssl3 鍏ㄥ眬鏇挎崲瀹屾垚")
+ 228 +
+ 229 +    # 4) 绠＄悊鍙板綍鍏?+    M.ensure_tunnel()
+ 230 +    H = {"Authorization": "Bearer " + M.token()}
+ 231 +    r = requests.post(M.BASE + "/api/v1/devices", headers=H,
+ 232 +                      json={"name": NAME, "hw_model": f"SN-R{N}-AX3000-MT7981"}, verify=False, timeout=15)
+ 233 +    dev = r.json()
+ 234 +    # 2026-10-13 瀹¤澧炶ˉ锛氬鍒峰箓绛夆€斺€旇嫢杩斿洖鏃㈡湁 ID锛屽湪 enroll 鍓嶅厛娉ㄩ攢鏃ф帓闅滃彛闃插啿绐?+    if dev.get("troubleshoot_port"):
+ 235 +        subprocess.run(VPS_SSH + [f'grep -q "snR{N}" /root/.ssh/authorized_keys && grep "snR{N}" /root/.ssh/authorized_keys | grep -oE "permitlisten=\\"127.0.0.1:[0-9]+\\"" | head -1'],
+ 236 +                       capture_output=True, text=True, timeout=30)
+ 237 +        print(f"  澶嶅埛骞傜瓑锛氳澶囧凡瀛樺湪 {dev['id']}锛堟棫鎺掗殰鍙?{dev.get('troubleshoot_port')}锛宔nroll 鍓嶅凡澶囨锛?)
+ 238 +    open(REPO + rf"\backups\.snr{N}-enroll.json", "w").write(json.dumps(dev, ensure_ascii=False))
+ 239 +    # 2026-10-13 闃插姭鎸侀椄闂細褰曞叆鍚庣珛鍗冲湪 DMIT 搴撻獙璇佽褰曠湡瀹炲瓨鍦紙R7 浜嬫晠锛氶檲鏃ф湰鍦伴毀閬撴妸 API 鍔埌 DO 鏃у簱锛?+    # 瀹¤澧炶ˉ锛氬け璐ラ噸璇曚竴娆★紙鑴氭湰鍐呭祵 MGMT_API_BASE=https://127.0.0.1:8444 绾犳锛?+    _sql = "SELECT count(*) FROM devices WHERE id = '" + dev["id"] + "'"
+ 240 +    _ok = False
+
+exec
+"C:\\Users\\Administrator\\AppData\\Local\\Microsoft\\WindowsApps\\pwsh.exe" -Command "Get-Content -LiteralPath 'docs/operations/新SN-R1刷机录入SOP-自动化-20260928.md' -Tail 210" in F:\vps
+ succeeded in 488ms:
+## 补充工具
+
+| 场景 | 命令 |
+|---|---|
+| 已刷设备改统一口令 | `python F:\vps\scripts\unify-pw.py`（接入哪台改哪台，自动识别设备 ID） |
+| 重启后 mihomo 二进制丢失（overlay 特性） | 重推 `firmware/openclash/mihomo-linux-arm64` → `/usr/bin/mihomo`（chmod 755）→ `/etc/init.d/mihomo restart` |
+| WiFi 远程开关 | 管理台「开WiFi/关WiFi」（agent ≥2026092823，MTK 驱动通道实测闭环） |
+
+## 刷机后快速验收（可选，1 分钟）
+```
+# 管理台侧
+ping_test / collect_diag / reload_proxy / set_proxy_state 各发一次
+# 路由器侧
+ss -tln（23/445/9000 不存在）；date（时钟正确）；ip link show ra0（DOWN）
+```
+
+## 2026-10-08 刷机流程升级（R1 再上线 + R2/R4 事故全量沉淀，flash-snr.py 已同步实现）
+
+**口令策略**：刷机默认直接写舰队统一值（SSH=网页=统一值；`--random-pw` 才用随机）。消除"先随机后 unify"的两步真空期。
+
+**新增部署项**（老设备漏装是 R4 探针缺失、R2 视频事故的根源）：
+1. `connlog.sh`（按源+域名归因大流量，*/5）
+2. `onboot-hooks.sh`（开机幂等恢复四条 cron + 强制 QUIC REJECT 置顶——防厂商重写 crontab、防 DROP 压住 REJECT 造成"视频打不开"）
+3. 每日 0 点定时重启行 + rc.local 调用 onboot-hooks
+4. respawn 统一 `3600 0 0`（无限重试）
+5. 绑定现役标准：BWG 主 + LAX + TX-hy2 + TX-vless（failover 0/0/1/2），**不再绑 DO**
+6. 平台字段随刷机写入：小时预警 2048MB、reboot_cron
+
+**WiFi dat 层**：保留 WPAPSK 键名序号（`=`）；DBDC_card0.dat 的 5G 主 SSID 在 **SSID7** 槽位。
+
+**终验关卡（8 项，任一 FAIL 非零退出，禁止半成品出厂）**：隧道监听≥3 / API 健康 200 / 出口 IP 非空 / google 204 / **网页登录 302（base64 表单流，注意 sed 的 %3D 单百分号——双 %% 会造成假阴性）** / crontab≥4 / rc.local 钩子 / btoa 2/1。
+
+**退役设备回归流程**（R1 实战模板）：
+1. 密钥核查：DMIT authorized_keys 指纹比对（退役早的设备会缺 BWG/TX 公钥——补发）
+2. 隧道 v3 三/四端点重部署 + agent.conf SUB_URL 重指 127.0.0.1:18443
+3. 平台：绑定改现役标准（删 DO 旧成员需 SQL，先备份行）→ preview/revision → apply → 出口验证
+4. 设备加固全套（口令/网页三件套/cron/钩子/respawn/QUIC 顺序）
+5. 特例注意：部分老设备 dropbear/uhttpd 不监听 127.0.0.1——本机自测一律走 192.168.132.1
+
+**运维红线**（沿用+新增）：SN-R 系列全部 iptables（雅典娜 nftables 勿混用）；SN-R1 历史反向目标 192.168.132.1:22；无人值守站点慎配 0 点重启（R4 曾断 33.5h）；WiFi 域名/密码若用户自设（如 R4 的 U2.4/R1 的 WIFI-ZHISHANG）**勿擅自改回标准名**，先问用户。
+
+## 网页管理界面三项强制检查（2026-10-08 增，缺一即"密码正确也登不进"）
+
+背景：10-08 排障发现三台网页登录全坏（两层叠加：UCI 密码字段为空/被清 + 登录模板丢失 base64 编码），修复后固化为刷机后必查项。
+
+1. **UCI 密码字段必须设置**（网页登录比对源，独立于 shadow）：
+   `uci set system.@system[0].password='<网页密码>'; uci set system.@system[0].username='root'; uci commit system`
+2. **登录模板必须带 btoa 编码**（服务端把表单密码按 base64 解码）：
+   `grep -c 'window.btoa(document' /usr/lib/lua/luci/view/admin_web/login.htm`（桌面版应 ≥2）
+   `grep -c 'window.btoa(document' /usr/lib/lua/luci/view/admin_web/login_m.htm`（移动版应 ≥1）
+   若为 0：用 R4 修复版模板（含编码行、无泄露行）覆盖，勿用 2026-10-01 前的旧修复版（缺编码，已致 R2/R3 回归）。
+3. **/etc/firstLogin 必须存在**（缺文件 = 手机版登录页 500）：
+   `[ -f /etc/firstLogin ] || echo 0 > /etc/firstLogin`
+
+**验收（浏览器完整流程，不能只用 curl 直发 base64）**：桌面与手机 UA 各测一次页面 200 + 表单登录 302/Set-Cookie；失败先删 `/tmp/luci-token`（登录锁）再试。
+
+## 台账与凭证
+- 台账：`F:\vps\backups\SN-R系列凭证总览.md`（统一口令/MAC/RSSH 端口分配）
+- 每台详情：`F:\vps\backups\SN-R{n}-凭证档案-*.md`
+
+## 手工流程存档（2026-09-28 上午，前三台 SN-R2/R3 用）
+见 git 历史或 SN-R3 刷机会话记录；关键坑均已固化进脚本：
+- busybox 无 install/base64/timeout/httpd
+- MTK WiFi：uci 只是镜像，真实配置 /etc/wireless/mediatek/*.dat；/sbin/wifi up/down 行为反直觉
+- dropbear 2020.81：只认 RSA 公钥；-y 不落盘 known_hosts（留空 + init 兜底 -y）
+- 时钟停在出厂时间 → 心跳 401（NTP 必须裸 IP）
+- 雅典娜离线时 mihomo 传输：仓库直推最稳
+
+### 2026-10-09 增补：WAN/LAN MAC 固定（标准步骤）
+
+**背景**：AX3000 固件出厂未烧录有线 MAC，每次重启随机生成，WAN IP 随之漂移（光猫侧 IP-MAC 绑定/端口映射会失效）。R2 实测确认，uci 固定后重启验证不变。
+
+**刷机时必做**（在初始化网络配置阶段执行）：
+
+```sh
+# WAN MAC 固定（末字节建议用 19 这类固定值，逐台错开）
+uci set network.wan.macaddr='76:a7:c8:e0:4f:19'
+# br-lan MAC 固定（与 WAN 错开末字节，避免两个网段同 MAC）
+i=0; while uci -q get network.@device[$i] >/dev/null 2>&1; do
+  if [ "$(uci -q get network.@device[$i].name)" = br-lan ]; then
+    uci set network.@device[$i].macaddr='76:a7:c8:e0:4f:1a'
+  fi
+  i=$((i+1))
+done
+uci commit network
+```
+
+验收：重启后 `cat /sys/class/net/wan/address` 与设定值一致、WAN IP 不漂移。WiFi 口 MAC（a4:d8:ca OUI）天然固定，无需处理。台账需登记每台固定值与回退备份路径（`/root/network.bak-macpin-*`）。
+
+#### 评估确认（2026-10-09，方案可行性六项全过）
+
+**可行性六项**：①机制=OpenWrt 原生 uci，netifd 每次启动自动应用（R2 二次重启实测不变）；②合法性=首字节 0x76 满足本地管理位+单播位（不撞厂商 OUI）；③唯一性=WAN/LAN 错开末字节、不同台按编号错开；④冲突面=grep 确认 wireless/firewall/dhcp/MTK dat 均无 macaddr 引用；⑤副作用=管理隧道认 SSH 指纹不认 MAC（改动全程在线），WiFi 口天然固定无需处理；⑥回退=两行 uci + 备份，一条 `uci delete` 即还原。
+
+**边界（执行者须知）**：①只对**新刷设备**自动生效（flash-snr.py 按 N 错开末字节），已上线设备（R2 手动已做、R3/R4 待用户点头）不追溯、不动生产；②固定前缀 76:a7:c8:e0:4f 是约定俗成，满足"本地管理+单播+全局唯一"即可，换前缀不影响正确性；③WiFi MAC 不在本步骤范围（天然固定）。
+
+### 2026-10-10 增补：异构设备（雅典娜类）接入标准
+
+**适用**：非 SN-R 系 AX3000 的 OpenWrt 设备（如雅典娜 JDCloud RE-CS-02/LibWrt）。本次雅典娜 v3 迁移实战沉淀。
+
+**照搬 SN-R 流程的部分**：v3 隧道（端点按需裁剪）、当前版 agent+多端口补丁、mgmt-port-discovery、connlog、respawn 修复、md5 门禁、authorized_keys 舰队格式。
+
+**必须裁剪/禁改的部分（红线）**：
+1. **nftables 设备禁部署任何 iptables 脚本**（mihomo-ipt.sh/QUIC REJECT/access-fw.sh 一律不上）；onboot-hooks 用"仅 cron 恢复"变体（模板见 athena-upgrade.py 内 ONBOOT_ATH）。
+2. **家庭/医院依赖设备不加每日 0 点重启**。
+3. handlers/switch_node.sh 不动（代理发布体系不同，绑定为 0 前平台不会推送）。
+4. 密码不统一（异构设备保持自己的口令，台账单列）。
+
+**异构设备已知坑**：无 base64 命令（用 `openssl base64 -d`）；无 coreutils install（cp+chmod 代）；sshpass 双跳链 nohup 后台任务会随会话死（重启类操作改 crond 触发：临时 cron 行+自删脚本）；文件传输用两跳 scp+md5 门禁（有 sftp-server 时最稳）。
+
+**验收口径**：四实例起、18443 健康 200、discovery 选路文件生成、心跳新库秒级、旧库冻结、mihomo 原进程 PID 不变、nft 表清单与迁移前一致、医院/公司依赖规则逐条比对。
+
+### 2026-10-13 增补：R7 刷机实战新坑（四条，全实测）
+
+1. **陈旧本地隧道劫持管理 API**：mgmt_api_test 默认 BASE=127.0.0.1:18444，若本机残留旧隧道（R7 案例中指向 DO 旧库），录入会静默落到错误平台（症状：设备 agent.conf 的 DEVICE_ID 在 DMIT 库查不到）。**录入前必须**：`netstat -ano | grep 18444` 核对隧道归属，或显式 `MGMT_API_BASE=https://127.0.0.1:8444`（已验明指向 DMIT 的端口），录入后立即在 DMIT 库 `SELECT` 验证记录存在。
+2. **R7 类新机无 /etc/routermgmt/logs/syslog 文件**（logread 落文件机制未配）：心跳验证用 `logread | grep heartbeat` 或平台 DB，别 grep 文件得"无心跳"假阴性。
+3. **paramiko exec 通道写可能被 dropbear 即关**（"Socket is closed"）：小文件（conf/pem）改用命令内嵌 base64 + `openssl base64 -d -A` 落盘 + md5 对拍（雅典娜标准同款）。
+4. **pgrep -x 匹配不了 15 字符截断进程名**（routermgmt-agent→routermgmt-agen）：进程核验一律 `ps w | grep xxx | grep -v grep`。
+
+**中断续跑方法**（R7 实战两次验证）：中断后先 SSH 探断点标志（shadow 哈希前缀 $1$snrNuni=步骤1过；m-box 删除/telnet 停用=步骤2过；libcrypto.so.3=步骤3过；/etc/routermgmt 目录+隧道进程=步骤5-6过；出口 IP 非直连=步骤8过；SSID=SN-Rx=步骤9过），从断点步骤起复刻脚本命令块续跑，禁止盲目重跑全量（telnet 已关、口令已改，全量必挂）。
+
+**新设备授权公钥范围**（2026-10 起现行设计）：DMIT（-L+-R）+ TX/BWG（仅 -L）；**不再分发 DO**——DO 端点(v3 conf 里保留)因无公钥自动不可用，八关"隧道监听>=3"按 18443/44/45 三口判定。
+
+### 2026-10-13 增补（二）：内置不合规程序清理清单（重大）+ 平台下发验收项
+
+**背景**：R7 刷机后彻查发现 09-28 版清理清单只覆盖了 dockerd/telnet 等表层，厂商"听雨"PCDN 收益程序全家仍在运行（含 rathole 内网穿透回传隧道、zcon 边缘节点全接口监听 51002）。**R2-R6 同固件大概率同病**。
+
+**九件套停用清单**（flash-snr.py 已内置，手工清理同用）：
+```
+服务：netbox_daemon.service zcon-edge-service zcon-ng start_client_manage start_get_versionInfo timeRestart mbox hole start_jcgqos
+进程：watcher by_agent_pro net_qua_cli inst_width tcp_stun_ser netbox_daemon zcon-ng zcon-edge-arm64 rathole
+```
+验收口径：`ps` 无上述进程、`netstat -ltn` 无 51002/9821/9800/60022、rc.d 无对应 S 链接。timeRestart 必禁（与平台 reboot_cron 冲突）。保留功能类：led/wapp/easymesh/igmpproxy/mtkhnat 等。
+
+**平台下发验收（新增出厂验收项）**：切节点往返测试——主用切 LAX→任务 ok+出口 179.255.137.64，切回 BWG→任务 ok+出口 74.82.203.175；同时复验 QUIC 顺序（mihomo 重载后 REJECT 仍需第一，乱了现场 -D/-I 1 修正）。
+
+---
+
+# 统一 SN 刷机流程 v2（2026-10-13 定稿——R7 全流程实战沉淀，取代散落的分段增补）
+
+> **单入口**：`scripts/flash-snr.py`（每台设备）；**批量并行**：`scripts/flash-batch.py`（自动发现+并行+锁）。历史增补（10-08/10-09/10-13 三批）已全部合入脚本，本节为权威操作手册。
+
+## 一、接入方式（二选一，均支持）
+
+| 方式 | 接法 | 地址 |
+|---|---|---|
+| A 级联（推荐批量） | 设备 WAN 口插 R7 或雅典娜的 LAN 口，上电 | 由上级 DHCP 自动分配（192.168.132.x / 192.168.2.x），flash-batch 自动发现 |
+| B 直连 | PC 网线接设备 LAN 口 | 192.168.132.1（flash-snr.py 默认值） |
+
+自动刷机定时器（每 10 分钟 `flash-batch.py --auto`）在方式 A 下**插上电源即自动刷完并核查**，无需人工。
+
+## 二、单台流程（flash-snr.py 内置，全自动 11 步）
+
+0 端口探测→1 telnet(abc@1234) 改舰队口令→2 预装清理（**含 PCDN 九件套：netbox_daemon/zcon×3/client_manage/versionInfo/timeRestart/mbox/hole/jcgqos + by-agent 全家 + rathole 穿透**）+web 三件套+NTP→3 openssl3→4 平台录入（**防劫持闸门：录入后立即 DMIT 库验证记录存在**）→5 管理栈（agent+多端口补丁+discovery/connlog/netprobe/onboot-hooks+cron 四行+respawn+QUIC+**MAC 固定 76:a7:c8:e0:4f:{0x20+N}/{0x30+N}**）→6 v3 四端点隧道+公钥三台分发→7 mihomo→8 发布绑定（BWG 主+LAX+TX-hy2+TX-vless）+告警 2048+00:00 重启→9 WiFi 默认关+凭证档案→10 终验 **11 关**→11 **平台下发双验**。
+
+## 三、终验 11 关 + 下发双验（即用户四问的脚本化）
+
+| # | 关卡 | 判定 |
+|---|---|---|
+| 1-8 | 八关（原样） | 隧道≥3/API200/出口IP/google204/网页302/cron≥4/rc.local/btoa2÷1 |
+| 9 | **PCDN 残留=0** | ps 无 by_agent/netbox/zcon/rathole/watcher |
+| 10 | **QUIC 顺序** | FORWARD 首条 443 规则=REJECT（mihomo 重载后自愈+复验） |
+| 11 | **心跳已产生** | logread 有 heartbeat ok（勿 grep syslog 文件） |
+| 下发① | **切 LAX** | 任务 ok + 出口=179.255.137.64 |
+| 下发② | **回东京** | 任务 ok + 出口=74.82.203.175 |
+
+四问对照：漏项=11 关全查；服务器下发=下发①②；远程管理=同（任务链+排障口）；内置清理=第 2 步+第 9 关。
+
+## 四、批量并行（flash-batch.py）
+
+`python flash-batch.py`（或 `--detect` 只探测 / `--auto` 无人值守）。内置：两网段全扫（telnet 23）→出厂指纹验证（root/abc@1234 + **MAC 白名单防误刷现役**）→编号/端口预分配（平台最大序号+1、DMIT 132xx 最大+1）→并行线程刷机→汇总 ✅/❌。进程锁防重叠（90 分钟兜底）。日志：`backups/.flash-N{num}.log`。
+
+## 五、失败续跑（检查点法，勿全量重跑）
+
+中断后 SSH（舰队口令）探断点标志：shadow 前缀 `$1$snrNuni`=步骤1过；m-box 删+telnet 停=步骤2过；libcrypto.so.3=3过；/etc/routermgmt+隧道=5-6过；出口非直连=8过；SSID=SN-Rx=9过。从断点复刻命令块续跑。R7 实战两次验证。
+
+## 六、已知坑（全部脚本内已规避/记录）
+
+陈旧本地隧道劫持 API（防劫持闸门）、syslog 文件缺失（logread）、paramiko 通道写（大文件 exec+sendall 仍用，小文件 b64+openssl）、pgrep -x 截断（ps w）、VPS_SSH_PORT 键名陷阱、QUIC 随时复发（第 10 关+自愈）、nohup 随会话死（不经 sshpass 链的不受影响；刷机脚本全程前台不受影响）。
+
+### 2026-10-13 增补（三）：脚本全链路审计——五处缺陷修复（R7 案例实测证据）
+
+**审计触发**：用户要求核查生成流程遗漏。逐段通读 flash-snr.py / flash-batch.py，五处真问题全部修复：
+
+1. **安装器删除路径错误**（R7 实测残留）：`rm /usr/bin/install_mbox.sh` 目标不存在——文件实际在 `/usr/bin/{install_mbox.sh}` 目录内；同时补删 `mbox_init.sh/mboxinit.sh`。flash-snr 已改为 rm -rf 花括号目录 + rm -f 四件套。
+2. **init.d 脚本本体残留**（R7 实测）：禁用只改 rc.d 链接，脚本本体 `/etc/init.d/netbox_daemon.service/zcon×2/mbox` 仍在，设备重启/被源覆盖即复活。flash-snr 已加 rm -f 本体。
+3. **done 的 telnet 注释行复刷膨胀**（R7 实测：两行并存，**但都是已注释的死行，功能无影响**）：去重 awk 已加。
+4. **防劫持闸门单次失败即终止**：改为失败重试一次（脚本内嵌 MGMT_API_BASE=8444 纠正）。
+5. **幂等安全**：dev/dev2 变量隔离（防复刷 enroll 包被覆写）；复刷时旧排障口备案输出。
+
+**同步完善**：MAC 指纹写平台 mac_addr + 凭证总览自动追加登记行（防误刷+回归识别双用途）；凭证档案补 MAC 固定行；flash-batch 遗留锁>90 分钟打印挂起告警；WATCHDOG 双保险。
+
+**遗留未决（不改的原因）**：mmcblk0p6 出厂分区删除=破坏性操作（怕影响厂商恢复路径），只隔离不删除；rathole 二进制未删（进程清除+服务禁用已切断，/usr/bin/rathole 文件保留备查）；DATA 盘数据保留（数据1/ 只删 PCDN 目录）。
+
+### 2026-10-13 增补（四）：重启实战验证沉淀——两处"教科书级"根因与最终根治（R7 四次重启迭代）
+
+**方法论**：静态清理后必须做**真实重启验证**（PC 经被测设备上网的场景注意断网代价，优先借用夜间定时重启收尾）。R7 四次重启迭代出的两个根因：
+
+**根因一：QUIC 顺序竞态（全舰队潜伏）**
+- 现象：每次开机/重载后 REJECT 与 DROP 的先后随机。
+- 根因：`/etc/mihomo-ipt.sh` 自己用 `-I FORWARD 1` 插 DROP——**它每次执行都必然把 REJECT 挤到第二位**；onboot-hooks 只在开机 20 秒后修一次，mihomo-ipt 在其后跑就翻案。
+- **根治（已定稿）**：`/etc/init.d/mihomo` 的启动行在调用 mihomo-ipt 之后追加 REJECT 自压两条（REJECT-SELFHEAL 标记）——mihomo 每次启动/重载最终恒为 REJECT 第一。flash-snr.py 的 init.d 生成段已同步。
+- ⚠️ R2-R6 同病（mihomo-ipt 同源），修复=同样两条自压命令，待授权逐台做。
+
+**根因二：数据盘挂载的"九命猫"（三层 uci 封堵全部无效）**
+- 逐层破案：注释 fstab target 行无效（blockd 按 UUID 挂载）→ mount 块 enabled=0 无效（全局 anon_mount/auto_mount=1 自动挂未配置分区）→ 全局关掉仍无效（**hotplug.d/block/10-mount 直接按签名挂载，绕过 uci**；dd 抹头部后还能按 ext4 备份超级块挂回）。
+- **根治（已定稿）**：卸载（含嵌套 /docker 子挂载，必要时 umount -l）+ `dd if=/dev/zero bs=1M count=256` 抹签名（blkid 不再识别=所有自动挂载路径永久死亡）。分区只剩惰性 docker 元数据，无任何可执行物，抹除零风险。
+
+**sed 教训（本轮翻车三次）**：经 SSH 多层转义对远端文件做 sed 插行/替换是雷区——`58a\` 多行会塌成一行（命令被注释吞掉且 `sh -n` 照样通过）、`\&` 破坏子 shell 括号、`\|` 丢字。**修远端脚本一律整文件 base64 推送+md5 对拍**（雅典娜标准同款）。
+
+**其他口径坑**：`ps w | grep -c pattern` 计数含 sh 包装+grep 自身（假阳性×2）；自启检查必须只数 `rc.d/S*`（K9=停止标记非自启）。
+
+2026-10-13T15:50:23.359618Z ERROR codex_models_manager::manager: failed to refresh available models: request timed out
+exec
+"C:\\Users\\Administrator\\AppData\\Local\\Microsoft\\WindowsApps\\pwsh.exe" -Command '$i=0; Get-Content -Encoding UTF8 -LiteralPath '"'verify/round-2/diff_1_flash-snr.patch' | ForEach-Object { "'$i++; if($i -ge 200 -and $i -le 460){'"'{0,4} {1}' -f "'$i,$_} }' in F:\vps
+ succeeded in 1788ms:
+ 200 +dd if=/dev/zero of=/dev/mmcblk0p6 bs=1M count=256 2>/dev/null; sync
+ 201 +# done 的 telnet 行去重防膨胀（复刷幂等）
+ 202 +awk '!/^# disabled-pcdn-telnet:/ || !seen[/^# disabled-pcdn-telnet: / $2]++' /etc/init.d/done > /tmp/done.new && mv /tmp/done.new /etc/init.d/done
+ 203 +sed -i 's|^\(.*telnet.*\)$|# disabled-pcdn-telnet: \1|' /etc/init.d/done 2>/dev/null
+ 204 +for P in dockerd telnetd ksmbd ksmbd.mounted miniupnpd mtk_dut; do killall $P 2>/dev/null; done
+ 205 +rm -rf /etc/m-box /usr/m-box
+ 206 +# 网页登录三件套（2026-10-08 定稿；旧"置 disabled"是三台网页全坏的根因）
+ 207 +uci set system.@system[0].username=root
+ 208 +uci set system.@system[0].password='__UCIPW__'
+ 209 +uci set system.@system[0].superpass=disabled
+ 210 +uci commit system
+ 211 +D=/usr/lib/lua/luci/view/admin_web
+ 212 +sed -i '/getElementById("password").value="<%/,+1d' $D/login.htm 2>/dev/null
+ 213 +sed -i 's/value="<%=password%>"/value=""/' $D/login_m.htm 2>/dev/null
+ 214 +sed -i '/var admin=window.btoa("<%=password/d' $D/login.htm 2>/dev/null
+ 215 +grep -q 'password").value = window.btoa' $D/login.htm || sed -i 's|\tdocument.getElementById("formid").submit();|\tdocument.getElementById("username").value = window.btoa(document.getElementById("username").value);\n\tdocument.getElementById("password").value = window.btoa(document.getElementById("password").value);\n\tdocument.getElementById("formid").submit();|' $D/login.htm
+ 216 +grep -q 'password").value = window.btoa' $D/login_m.htm || sed -i 's|document.getElementById("formid").submit();|document.getElementById("password").value = window.btoa(document.getElementById("password").value);\n\tdocument.getElementById("formid").submit();|' $D/login_m.htm
+ 217 +[ -f /etc/firstLogin ] || echo 0 > /etc/firstLogin
+ 218 +echo "web3: btoa=$(grep -c 'window.btoa(document' $D/login.htm)/$(grep -c 'window.btoa(document' $D/login_m.htm) firstLogin=$(cat /etc/firstLogin)"
+ 219 +uci -q delete system.ntp.server 2>/dev/null
+ 220 +uci add_list system.ntp.server='192.168.2.1'
+ 221 +uci add_list system.ntp.server='120.25.115.20'
+ 222 +uci add_list system.ntp.server='203.107.6.112'
+ 223 +uci -q set system.ntp.enable_server='0'
+ 224 +uci commit system
+ 225 +/etc/init.d/sysntpd restart >/dev/null 2>&1
+ 226 +sleep 4
+ 227 +date
+ 228 +'''.replace('__UCIPW__', UNIFIED_PW))
+ 229 +    print("  预装清理+NTP 完成")
+ 230 +
+ 231 +    # 3) openssl3
+ 232 +    push(c, OPENSSL3 + r"\bin\openssl", "/usr/bin/openssl.new", 755)
+ 233 +    push(c, OPENSSL3 + r"\lib\libcrypto.so.3", "/usr/lib/libcrypto.so.3", 644)
+ 234 +    push(c, OPENSSL3 + r"\lib\libssl.so.3", "/usr/lib/libssl.so.3", 644)
+ 235 +    run(c, "mv -f /usr/bin/openssl.new /usr/bin/openssl && openssl version | head -1")
+ 236 +    print("  openssl3 全局替换完成")
+ 237 +
+ 238 +    # 4) 管理台录入
+ 239 +    M.ensure_tunnel()
+ 240 +    H = {"Authorization": "Bearer " + M.token()}
+ 241 +    r = requests.post(M.BASE + "/api/v1/devices", headers=H,
+ 242 +                      json={"name": NAME, "hw_model": f"SN-R{N}-AX3000-MT7981"}, verify=False, timeout=15)
+ 243 +    dev = r.json()
+ 244 +    # 2026-10-13 审计增补：复刷幂等——若返回既有 ID，在 enroll 前先注销旧排障口防冲突
+ 245 +    if dev.get("troubleshoot_port"):
+ 246 +        subprocess.run(VPS_SSH + [f'grep -q "snR{N}" /root/.ssh/authorized_keys && grep "snR{N}" /root/.ssh/authorized_keys | grep -oE "permitlisten=\\"127.0.0.1:[0-9]+\\"" | head -1'],
+ 247 +                       capture_output=True, text=True, timeout=30)
+ 248 +        print(f"  复刷幂等：设备已存在 {dev['id']}（旧排障口 {dev.get('troubleshoot_port')}，enroll 前已备案）")
+ 249 +    open(REPO + rf"\backups\.snr{N}-enroll.json", "w").write(json.dumps(dev, ensure_ascii=False))
+ 250 +    # 2026-10-13 防劫持闸门：录入后立即在 DMIT 库验证记录真实存在（R7 事故：陈旧本地隧道把 API 劫到 DO 旧库）
+ 251 +    # 审计增补：失败重试一次（脚本内嵌 MGMT_API_BASE=https://127.0.0.1:8444 纠正）
+ 252 +    _sql = "SELECT count(*) FROM devices WHERE id = '" + dev["id"] + "'"
+ 253 +    _ok = False
+ 254 +    for _attempt in range(2):
+ 255 +        _env = dict(os.environ)
+ 256 +        if _attempt == 1:
+ 257 +            _env["MGMT_API_BASE"] = "https://127.0.0.1:8444"  # 兜底纠正
+ 258 +            print("  防劫持首次失败，以纠正 BASE 重试一次…")
+ 259 +        _chk = subprocess.run(VPS_SSH + ["docker exec routermgmt-db-1 psql -U postgres -d routermgmt -t -c \"" + _sql + "\""],
+ 260 +                              capture_output=True, text=True, timeout=30, env=_env)
+ 261 +        if _chk.stdout.strip() == "1":
+ 262 +            _ok = True; break
+ 263 +    if not _ok:
+ 264 +        print(f"  ❌ 录入防劫持校验失败（重试后）：DMIT 库无 {dev['id']}——中止，人工核查 MGMT_API_BASE 指向")
+ 265 +        sys.exit(3)
+ 266 +    print(f"  录入防劫持校验通过（DMIT 库确认 {dev['id']}）")
+ 267 +    r = requests.post(M.BASE + "/api/v1/devices/enroll", json={"enroll_code": dev["enroll_code"]}, verify=False, timeout=15)
+ 268 +    pkg = r.json(); pkg["mgmt_url"] = "https://127.0.0.1:18443"
+ 269 +    open(REPO + rf"\backups\pkg-snr{N}.json", "w").write(json.dumps(pkg, ensure_ascii=False, indent=1))
+ 270 +    os.chmod(REPO + rf"\backups\pkg-snr{N}.json", 0o600)
+ 271 +    DEVID = dev["id"]
+ 272 +    print(f"  管理台录入 {DEVID}")
+ 273 +    # 幂等安全：dev2 防变量污染（复刷时第二次 devices 调用不得覆盖第一次）
+ 274 +    dev2 = dev
+ 275 +
+ 276 +    # 5) agent 文件推送 + install + 手工补装
+ 277 +    c.exec_command("mkdir -p /tmp/stage/handlers /tmp/stage/init")[1].read()
+ 278 +    files = [
+ 279 +        (AGENT_DIR + r"\routermgmt-agent.sh", "/tmp/stage/routermgmt-agent.sh", 755),
+ 280 +        (AGENT_DIR + r"\handlers\switch_node.sh", "/tmp/stage/handlers/switch_node.sh", 644),
+ 281 +        (AGENT_DIR + r"\access-fw.sh", "/tmp/stage/access-fw.sh", 755),
+ 282 +        (AGENT_DIR + r"\netprobe.sh", "/tmp/stage/netprobe.sh", 755),
+ 283 +        (AGENT_DIR + r"\init\routermgmt", "/tmp/stage/init/routermgmt", 755),
+ 284 +        # 2026-10-01 温备就绪形态：v2 多端点隧道（TX/BWG sshd 直连）+ 端口自动选路
+ 285 +        (AGENT_DIR + r"\init\mgmt-tunnel-v3", "/tmp/stage/init/mgmt-tunnel-v3", 755),
+ 286 +        (AGENT_DIR + r"\mgmt-port-discovery.sh", "/tmp/stage/mgmt-port-discovery.sh", 755),
+ 287 +        (AGENT_DIR + r"\wan-watch.sh", "/tmp/stage/wan-watch.sh", 755),
+ 288 +        (AGENT_DIR + r"\init\wan-watch", "/tmp/stage/init/wan-watch", 755),
+ 289 +        (AGENT_DIR + r"\wan-watch.hotplug", "/tmp/stage/wan-watch.hotplug", 755),
+ 290 +        (AGENT_DIR + r"\setup-mgmt-tunnel.sh", "/tmp/stage/setup-mgmt-tunnel.sh", 755),
+ 291 +        (AGENT_DIR + r"\tunnel.conf.example", "/tmp/stage/tunnel.conf.example", 600),
+ 292 +        (AGENT_DIR + r"\install-agent.sh", "/tmp/stage/install-agent.sh", 755),
+ 293 +        (REPO + r"\scripts\snr1-mihomo-ipt.sh", "/tmp/stage/mihomo-ipt.sh", 755),
+ 294 +        (AGENT_DIR + r"\connlog.sh", "/tmp/stage/connlog.sh", 755),
+ 295 +        (AGENT_DIR + r"\onboot-hooks.sh", "/tmp/stage/onboot-hooks.sh", 755),
+ 296 +    ]
+ 297 +    for src, dst, m in files:
+ 298 +        push(c, src, dst, m)
+ 299 +    _, o, e = c.exec_command("cat > /tmp/stage/pkg.json && chmod 600 /tmp/stage/pkg.json", timeout=30)
+ 300 +    o.channel.sendall(json.dumps(pkg).encode()); o.channel.shutdown_write(); o.read()
+ 301 +    run(c, "cd /tmp/stage && sh install-agent.sh /tmp/stage/pkg.json 2>&1 | grep -vE 'install: not found' | tail -3")
+ 302 +    wan_mac = f"76:a7:c8:e0:4f:{0x20 + N:02x}"
+ 303 +    brlan_mac = f"76:a7:c8:e0:4f:{0x30 + N:02x}"
+ 304 +    out = run(c, r'''
+ 305 +R=/etc/routermgmt; S=/tmp/stage
+ 306 +cp $S/routermgmt-agent.sh /usr/bin/routermgmt-agent && chmod 755 /usr/bin/routermgmt-agent
+ 307 +cp $S/routermgmt-agent.sh $R/routermgmt-agent.sh && chmod 700 $R/routermgmt-agent.sh
+ 308 +cp $S/handlers/switch_node.sh $R/handlers/switch_node.sh && chmod 600 $R/handlers/switch_node.sh
+ 309 +cp $S/access-fw.sh $R/access-fw.sh && chmod 755 $R/access-fw.sh
+ 310 +cp $S/netprobe.sh $R/netprobe.sh && chmod 755 $R/netprobe.sh
+ 311 +cp $S/init/routermgmt /etc/init.d/routermgmt && chmod 755 /etc/init.d/routermgmt
+ 312 +cp $S/wan-watch.sh /usr/sbin/wan-watch.sh && chmod 755 /usr/sbin/wan-watch.sh
+ 313 +mkdir -p /etc/hotplug.d/iface $R/logs
+ 314 +cp $S/init/wan-watch /etc/init.d/wan-watch && chmod 755 /etc/init.d/wan-watch
+ 315 +cp $S/wan-watch.hotplug /etc/hotplug.d/iface/98-wan-watch && chmod 755 /etc/hotplug.d/iface/98-wan-watch
+ 316 +/etc/init.d/wan-watch enable
+ 317 +# 2026-10-01 温备就绪形态：v2 init + 端口选路 + agent 补丁 + discovery cron
+ 318 +cp $S/init/mgmt-tunnel-v3 /etc/init.d/mgmt-tunnel && chmod 755 /etc/init.d/mgmt-tunnel
+ 319 +cp $S/mgmt-port-discovery.sh $R/mgmt-port-discovery.sh && chmod 755 $R/mgmt-port-discovery.sh
+ 320 +if ! grep -q mgmt_active_port $R/routermgmt-agent.sh; then
+ 321 +  awk '{
+ 322 +    print
+ 323 +    if ($0 ~ /^    while :; do$/) {
+ 324 +      print "        # 温备多端口选路（2026-10-01）：discovery 结果优先于 agent.conf 固定值"
+ 325 +      print "        [ -f /tmp/mgmt_active_port ] && MGMT_URL=\"https://127.0.0.1:$(cat /tmp/mgmt_active_port 2>/dev/null)\""
+ 326 +    }
+ 327 +  }' $R/routermgmt-agent.sh > /tmp/agent.new && mv /tmp/agent.new $R/routermgmt-agent.sh
+ 328 +fi
+ 329 +if ! grep -q "mgmt-port-discovery.sh >/dev/null" $R/routermgmt-agent.sh; then
+ 330 +  sed -i "s|send_heartbeat && _last_hb=\$_now|send_heartbeat \&\& _last_hb=\$_now \|\| /etc/routermgmt/mgmt-port-discovery.sh >/dev/null 2>\&1 \&|" $R/routermgmt-agent.sh
+ 331 +fi
+ 332 +sh -n $R/routermgmt-agent.sh || { echo AGENT_PATCH_SYNTAX_FAIL; exit 1; }
+ 333 +cp $R/routermgmt-agent.sh /usr/bin/routermgmt-agent && chmod 755 /usr/bin/routermgmt-agent
+ 334 +grep -q mgmt-port-discovery /etc/crontabs/root 2>/dev/null || echo '* * * * * /etc/routermgmt/mgmt-port-discovery.sh #mgmt-port' >> /etc/crontabs/root
+ 335 +cp $S/setup-mgmt-tunnel.sh /usr/sbin/setup-mgmt-tunnel.sh && chmod 755 /usr/sbin/setup-mgmt-tunnel.sh
+ 336 +cp $S/tunnel.conf.example $R/tunnel.conf.example && chmod 600 $R/tunnel.conf.example
+ 337 +cp $S/mihomo-ipt.sh /etc/mihomo-ipt.sh && chmod 755 /etc/mihomo-ipt.sh
+ 338 +mkdir -p /etc/crontabs
+ 339 +cp $S/connlog.sh $R/connlog.sh && chmod 755 $R/connlog.sh
+ 340 +cp $S/onboot-hooks.sh $R/onboot-hooks.sh && chmod 755 $R/onboot-hooks.sh
+ 341 +sh -n $R/onboot-hooks.sh || { echo ONBOOTHOOKS_SYNTAX_FAIL; exit 1; }
+ 342 +grep -q routermgmt-netprobe /etc/crontabs/root 2>/dev/null || echo '*/5 * * * * /etc/routermgmt/netprobe.sh #routermgmt-netprobe' >> /etc/crontabs/root
+ 343 +grep -q routermgmt-connlog /etc/crontabs/root 2>/dev/null || echo '*/5 * * * * /etc/routermgmt/connlog.sh #routermgmt-connlog' >> /etc/crontabs/root
+ 344 +grep -q routermgmt-reboot /etc/crontabs/root 2>/dev/null || echo '0 0 * * * /sbin/reboot #routermgmt-reboot' >> /etc/crontabs/root
+ 345 +grep -q onboot-hooks /etc/rc.local || sed -i 's|^exit 0|/etc/routermgmt/onboot-hooks.sh\nexit 0|' /etc/rc.local
+ 346 +sed -i 's/respawn 3600 [0-9]* [0-9]*/respawn 3600 0 0/' /etc/init.d/routermgmt
+ 347 +iptables -D FORWARD -i br-lan -p udp -m udp --dport 443 -j REJECT --reject-with icmp-port-unreachable 2>/dev/null
+ 348 +iptables -I FORWARD 1 -i br-lan -p udp -m udp --dport 443 -j REJECT --reject-with icmp-port-unreachable
+ 349 +# 2026-10-09 增补：出厂未烧录有线 MAC，每次重启随机生成（WAN IP 漂移会破坏光猫侧绑定/映射）。
+ 350 +# uci 固定后下次重启生效；刷机现场不做即时网络重启（会断开刷机会话）。WiFi 口 MAC 天然固定无需处理。
+ 351 +cp -a /etc/config/network /root/network.bak-macpin-$(date +%Y%m%d-%H%M%S)
+ 352 +uci set network.wan.macaddr='__WAN_MAC__'
+ 353 +_i=0; while uci -q get network.@device[$_i] >/dev/null 2>&1; do
+ 354 +  if [ "$(uci -q get network.@device[$_i].name)" = br-lan ]; then
+ 355 +    uci set network.@device[$_i].macaddr='__BRLAN_MAC__'
+ 356 +  fi
+ 357 +  _i=$((_i+1))
+ 358 +done
+ 359 +uci commit network
+ 360 +echo MAC_PINNED=$(uci -q get network.wan.macaddr)
+ 361 +# 2026-09-30：安装后强验证（cron 条目存在 + 首轮采样落日志），防 R3/R4 批次漏装复发
+ 362 +crontab -l 2>/dev/null | grep -q routermgmt-netprobe || { echo "NETPROBE_CRON_FAIL"; exit 1; }
+ 363 +/etc/routermgmt/netprobe.sh >/dev/null 2>&1; sleep 1
+ 364 +[ -s /etc/routermgmt/logs/netprobe.log ] && tail -n 2 /etc/routermgmt/logs/netprobe.log || { echo "NETPROBE_RUN_FAIL"; exit 1; }
+ 365 +/etc/init.d/cron restart >/dev/null 2>&1
+ 366 +uci -q delete network.wg0; uci -q commit network
+ 367 +mkdir -p /etc/mihomo
+ 368 +sh -n /usr/bin/routermgmt-agent && echo SYNTAX_OK
+ 369 +/etc/init.d/routermgmt enable && /etc/init.d/routermgmt restart >/dev/null 2>&1; sleep 3
+ 370 +pgrep -f routermgmt-agent >/dev/null && echo agent_running || echo agent_DEAD
+ 371 +'''.replace("__WAN_MAC__", wan_mac).replace("__BRLAN_MAC__", brlan_mac))
+ 372 +    if "agent_running" not in out:
+ 373 +        print("  agent 启动失败:", out[-200:]); sys.exit(1)
+ 374 +    print("  agent 已运行")
+ 375 +
+ 376 +    # 6) 隧道 + pin + 授权（2026-10-01 起：v2 温备就绪形态，公钥分发 DO+TX+BWG 三台）
+ 377 +    out = run(c, "sh /usr/sbin/setup-mgmt-tunnel.sh 2>&1 | tail -4; dropbearkey -y -f /etc/routermgmt/id_dropbear_mgmt 2>/dev/null | grep ssh-rsa")
+ 378 +    m = re.search(r"ssh-rsa [A-Za-z0-9+/=]+", out)
+ 379 +    if m:
+ 380 +        # DO 条目：双目标 permitopen（重复选项格式，严禁逗号列表）+ permitlisten(-R 排障口)
+ 381 +        line = (f'no-agent-forwarding,no-X11-forwarding,no-pty,'
+ 382 +                f'permitopen="10.10.0.1:8443",permitopen="127.0.0.1:8443",'
+ 383 +                f'permitlisten="127.0.0.1:{RSSH}" ' + m.group(0) + f" rtr-mgmt-tunnel-snR{N}")
+ 384 +        # TX/BWG 条目：仅 -L 备用端点，无 permitlisten
+ 385 +        line_tb = (f'no-agent-forwarding,no-X11-forwarding,no-pty,'
+ 386 +                   f'permitopen="10.10.0.1:8443",permitopen="127.0.0.1:8443" '
+ 387 +                   + m.group(0) + f" rtr-mgmt-tunnel-snR{N}")
+ 388 +        open(REPO + rf"\backups\.snr{N}-ak-line.txt", "w", newline="\n").write(line + "\n" + line_tb + "\n")
+ 389 +        # 2026-10-02：分发链 DMIT 中心化（PC 直连 DMIT；DO 不再分发新设备公钥——v3 中 DO
+ 390 +        # 仅兜底 -L，新设备无 DO 公钥时该端点自动不可用，与 R4 现状一致）
+ 391 +        subprocess.run(['scp','-P','28722','-i','C:/Users/Administrator/.ssh/id_rsa_dmit','-o','IdentitiesOnly=yes',
+ 392 +            REPO + rf"\backups\.snr{N}-ak-line.txt",'root@179.255.137.64:/tmp/snr-ak'], capture_output=True)
+ 393 +        subprocess.run(['ssh','-p','28722','-i','C:/Users/Administrator/.ssh/id_rsa_dmit','-o','IdentitiesOnly=yes','root@179.255.137.64',
+ 394 +            f'grep -q "snR{N}" /root/.ssh/authorized_keys || grep "snR{N}" /tmp/snr-ak | grep permitlisten >> /root/.ssh/authorized_keys; rm -f /tmp/snr-ak'], capture_output=True)
+ 395 +        # TX（root 侧经 ubuntu sudo）、BWG（root 直达）、DMIT（root 直达，2026-10-02 起）分发，幂等
+ 396 +        line_dmit = (f'no-agent-forwarding,no-X11-forwarding,no-pty,'
+ 397 +                     f'permitopen="127.0.0.1:8443" '
+ 398 +                     + m.group(0) + f" rtr-mgmt-tunnel-snR{N}")
+ 399 +        # tb_sh 在 DMIT 上执行：DMIT→TX（ubuntu sudo）、DMIT→BWG（root），均用 DMIT 侧 txbackup 密钥
+ 400 +        tb_sh = (
+ 401 +            "set -e; printf '%s\\n' '" + line_tb + "' > /tmp/snr-ak-tb; "
+ 402 +            "K=/root/.ssh/id_ed25519_txbackup; O='-i $K -o BatchMode=yes -o StrictHostKeyChecking=no -o ConnectTimeout=10'; "
+ 403 +            "scp $O /tmp/snr-ak-tb ubuntu@43.134.46.44:/tmp/ >/dev/null 2>&1; "
+ 404 +            f"ssh $O ubuntu@43.134.46.44 'sudo grep -q \"snR{N}\" /root/.ssh/authorized_keys 2>/dev/null || cat /tmp/snr-ak-tb | sudo tee -a /root/.ssh/authorized_keys >/dev/null; rm -f /tmp/snr-ak-tb'; "
+ 405 +            "scp $O /tmp/snr-ak-tb root@74.82.203.175:/tmp/ >/dev/null 2>&1; "
+ 406 +            f"ssh $O root@74.82.203.175 'grep -q \"snR{N}\" /root/.ssh/authorized_keys 2>/dev/null || cat /tmp/snr-ak-tb >> /root/.ssh/authorized_keys; chmod 600 /root/.ssh/authorized_keys; rm -f /tmp/snr-ak-tb'; "
+ 407 +            "rm -f /tmp/snr-ak-tb; echo TB-AK-DONE"
+ 408 +        )
+ 409 +        r = subprocess.run(['ssh','-p','28722','-i','C:/Users/Administrator/.ssh/id_rsa_dmit','-o','IdentitiesOnly=yes','root@179.255.137.64', tb_sh],
+ 410 +                           capture_output=True, text=True, timeout=120)
+ 411 +        print("  TX/BWG 公钥分发(经DMIT):", "OK" if "TB-AK-DONE" in r.stdout else f"失败 {r.stdout[-80:]} {r.stderr[-80:]}")
+ 412 +    # v3 tunnel.conf：四端点（DMIT 主 → TX/BWG 备 → DO 兜底）+ MGMT_TARGET=127.0.0.1:8443
+ 413 +    run(c, f"""cat > /etc/routermgmt/tunnel.conf <<'CONF_EOF'
+ 414 +# mgmt-tunnel v3 配置 — flash-snr 最终形态（2026-10-02，管理面 DMIT 主台）
+ 415 +VPS_HOST=179.255.137.64
+ 416 +VPS_PORT=28722
+ 417 +MGMT_LOCAL_PORT=18443
+ 418 +MGMT_TARGET=127.0.0.1:8443
+ 419 +RSSH_REMOTE_PORT={RSSH}
+ 420 +RSSH_TARGET=192.168.132.1:22
+ 421 +
+ 422 +# 备用端点 2（TX sshd 直连，本地 :18444）
+ 423 +VPS2_HOST=43.134.46.44
+ 424 +VPS2_PORT=28722
+ 425 +
+ 426 +# 备用端点 3（BWG sshd 直连，本地 :18445）
+ 427 +VPS3_HOST=74.82.203.175
+ 428 +VPS3_PORT=28722
+ 429 +
+ 430 +# 备用端点 4（DO 兜底，本地 :18446）
+ 431 +VPS4_HOST=159.223.36.119
+ 432 +VPS4_PORT=28722
+ 433 +CONF_EOF
+ 434 +chmod 600 /etc/routermgmt/tunnel.conf""")
+ 435 +    # pin 主端点 DMIT 的 hostkey（ED25519）；DO 兜底端点由 v3 init 的 -y 自动接受
+ 436 +    run(c, "sh /usr/sbin/setup-mgmt-tunnel.sh pin-hostkey SHA256:kigD/OWVZ0B337cxRckXDeQDGB6EddSqd4fAOoW7yvU 2>&1 | tail -1")
+ 437 +    run(c, f"/etc/init.d/mgmt-tunnel enable && /etc/init.d/mgmt-tunnel restart >/dev/null 2>&1; sleep 10; curl -sk -m 8 -o /dev/null -w 'health=%{{http_code}}\\n' https://127.0.0.1:18443/api/v1/health; echo instances=$(ps w | grep 1844 | grep -v grep | wc -l)")
+ 438 +    print("  隧道已启动（v3 四端点，DMIT 主）")
+ 439 +
+ 440 +    # 7) mihomo（仓库直推）
+ 441 +    print("  推 mihomo 57MB...", end=" ", flush=True)
+ 442 +    push(c, MIHOMO_REPO + r"\mihomo-linux-arm64", "/usr/bin/mihomo", 755)
+ 443 +    push(c, MIHOMO_REPO + r"\geosite.dat", "/etc/mihomo/GeoSite.dat", 644)
+ 444 +    push(c, MIHOMO_REPO + r"\country.mmdb", "/etc/mihomo/Country.mmdb", 644)
+ 445 +    print("完成")
+ 446 +    # 配置（从 SN-R3 历史配置改 device_id）
+ 447 +    cfg = open(REPO + r"\scripts\clash-config-router.yaml", encoding="utf-8").read()
+ 448 +    m = re.search(r"proxies:\n(.*?)\nproxy-groups:", cfg, re.S)
+ 449 +    nodes_yaml = m.group(1) if m else ""
+ 450 +    m2 = re.search(r'name: "AUTO"\n.*?proxies:\n(.*?)\n', cfg, re.S)
+ 451 +    members = "\n".join("      " + l.strip() for l in m2.group(1).strip().splitlines() if l.strip().startswith("- ")) if m2 else ""
+ 452 +    try:
+ 453 +        import yaml
+ 454 +        d = yaml.safe_load(cfg)
+ 455 +        direct_rules = "\n".join(f'  - IP-CIDR,{p["server"]}/32,DIRECT,no-resolve' for p in d.get("proxies", []))
+ 456 +    except:
+ 457 +        direct_rules = ""
+ 458 +    golden = open(REPO + r"\mgmt\backend\internal\clash\golden.yaml", encoding="utf-8").read()
+ 459 +    golden = golden.replace("#{{NODE_PROXIES}}", nodes_yaml.rstrip())
+ 460 +    golden = golden.replace("#{{GROUP_PROXY_MEMBERS}}", members).replace("#{{GROUP_AUTO_MEMBERS}}", members)
+
+exec
+"C:\\Users\\Administrator\\AppData\\Local\\Microsoft\\WindowsApps\\pwsh.exe" -Command '$i=0; Get-Content -Encoding UTF8 -LiteralPath '"'verify/round-2/diff_2_flash-batch.patch' | ForEach-Object { "'$i++; '"'{0,4} {1}' -f "'$i,$_ }; $i=0; Get-Content -Encoding UTF8 -LiteralPath '"'verify/round-2/变更说明.md' | ForEach-Object { "'$i++; '"'{0,4} {1}' -f "'$i,$_ }' in F:\vps
+ succeeded in 1809ms:
+   1 diff --git a/scripts/flash-batch.py b/scripts/flash-batch.py
+   2 new file mode 100644
+   3 index 0000000..2dfcb8b
+   4 --- /dev/null
+   5 +++ b/scripts/flash-batch.py
+   6 @@ -0,0 +1,150 @@
+   7 +#!/usr/bin/env python3
+   8 +# -*- coding: utf-8 -*-
+   9 +"""SN-R 批量并行刷机驱动（2026-10-13 固化）
+  10 +用法：
+  11 +  python flash-batch.py            # 扫描两网段的出厂态设备并全部并行刷机
+  12 +  python flash-batch.py --detect   # 只探测不刷机
+  13 +  python flash-batch.py --auto     # cron 无人值守：无设备则静默退出
+  14 +发现条件：telnet(23) 开放 + root/abc@1234 可登 + MAC 不在现役清单（防误刷现役设备）。
+  15 +并行：每台一线程跑 flash-snr.py --host X --num N --rssh R（端口由本驱动预分配防竞争）。
+  16 +"""
+  17 +import argparse, json, os, re, socket, subprocess, sys, time
+  18 +from concurrent.futures import ThreadPoolExecutor
+  19 +
+  20 +REPO = r"F:\vps"
+  21 +LOCK = REPO + r"\backups\.flash-batch.lock"
+  22 +SUBNETS = ["192.168.132", "192.168.2"]
+  23 +FACTORY_PW = "abc@1234"
+  24 +# 现役/已知设备 MAC（含 WiFi 与 pin 段）——扫描命中即排除，绝不误刷
+  25 +KNOWN_MAC_PREFIXES = ["a4:d8:ca:14:", "76:a7:c8:e0:4f:"]
+  26 +
+  27 +def sweep(subnet, port=23, timeout=1):
+  28 +    hits = []
+  29 +    def probe(ip):
+  30 +        try:
+  31 +            s = socket.create_connection((ip, port), timeout); s.close(); hits.append(ip)
+  32 +        except OSError:
+  33 +            pass
+  34 +    with ThreadPoolExecutor(max_workers=64) as ex:
+  35 +        list(ex.map(probe, [f"{subnet}.{i}" for i in range(2, 255)]))
+  36 +    return sorted(hits)
+  37 +
+  38 +def telnet_fingerprint(ip):
+  39 +    """出厂态验证+取指纹；返回 (is_factory, info)"""
+  40 +    try:
+  41 +        s = socket.socket(); s.settimeout(5)
+  42 +        s.connect((ip, 23)); time.sleep(1.2)
+  43 +        try: s.recv(4096)
+  44 +        except OSError: pass
+  45 +        def until(p, t=5):
+  46 +            t0 = time.time(); acc = b""
+  47 +            while time.time() - t0 < t:
+  48 +                try:
+  49 +                    d = s.recv(4096)
+  50 +                    if d: acc += d
+  51 +                except socket.timeout: pass
+  52 +                if re.search(p, acc.decode(errors="replace")): return acc.decode(errors="replace")
+  53 +            return acc.decode(errors="replace")
+  54 +        until(r"login:"); s.sendall(b"root\n"); time.sleep(0.4); until(r"assword:")
+  55 +        s.sendall(FACTORY_PW.encode() + b"\n")
+  56 +        r = until(r"#", 5)
+  57 +        if "#" not in r:
+  58 +            s.close(); return False, "telnet登录失败(非出厂口令)"
+  59 +        def cmd(c):
+  60 +            s.sendall(c.encode() + b"\n"); time.sleep(0.6)
+  61 +            return until(r"#", 4)
+  62 +        macs = cmd("for I in wan ra0; do [ -d /sys/class/net/$I ] && echo $I $(cat /sys/class/net/$I/address); done")
+  63 +        model = cmd("cat /tmp/sysinfo/model 2>/dev/null | head -1")
+  64 +        s.close()
+  65 +        m = dict(re.findall(r"(wan|ra0): ([0-9a-f:]+)", macs))
+  66 +        info = f"model={model.strip().splitlines()[-1] if model.strip() else '?'} wan={m.get('wan','?')} ra0={m.get('ra0','?')}"
+  67 +        for pfx in KNOWN_MAC_PREFIXES:
+  68 +            if m.get("wan", "").startswith(pfx) or m.get("ra0", "").startswith(pfx):
+  69 +                return False, f"现役MAC匹配({pfx})——排除 " + info
+  70 +        return True, info
+  71 +    except Exception as e:
+  72 +        return False, f"探测异常: {e}"
+  73 +
+  74 +def next_ports(n, start=None):
+  75 +    """从 DMIT authorized_keys+监听取当前最大 132xx，预分配 n 个连续端口"""
+  76 +    r = subprocess.run(['ssh','-p','28722','-i','C:/Users/Administrator/.ssh/id_rsa_dmit','-o','IdentitiesOnly=yes',
+  77 +                        'root@179.255.137.64',
+  78 +                        "(grep -oE 'permitlisten=\"127.0.0.1:132[0-9]{2}\"' /root/.ssh/authorized_keys; ss -tln | grep -oE '127.0.0.1:132[0-9]{2}') | grep -oE '132[0-9]{2}' | sort -n | tail -1"],
+  79 +                       capture_output=True, text=True, timeout=30)
+  80 +    try:
+  81 +        mx = int(r.stdout.strip())
+  82 +    except ValueError:
+  83 +        mx = 13229
+  84 +    base = max(mx + 1, int(start) if start else 13230)
+  85 +    return [base + i for i in range(n)]
+  86 +
+  87 +def next_nums(n):
+  88 +    """平台现有 SN-R* 最大序号 +1 起取 n 个"""
+  89 +    r = subprocess.run(['ssh','-p','28722','-i','C:/Users/Administrator/.ssh/id_rsa_dmit','-o','IdentitiesOnly=yes',
+  90 +                        'root@179.255.137.64',
+  91 +                        'docker exec routermgmt-db-1 psql -U postgres -d routermgmt -t -c "SELECT name FROM devices WHERE name LIKE \'SN-R%\'"'],
+  92 +                       capture_output=True, text=True, timeout=30)
+  93 +    nums = [int(m.group(1)) for m in re.finditer(r"SN-R(\d+)", r.stdout)]
+  94 +    base = max(nums) + 1 if nums else 8
+  95 +    return list(range(base, base + n))
+  96 +
+  97 +def flash_one(ip, num, rssh, log):
+  98 +    p = subprocess.run([sys.executable, "-u", REPO + r"\scripts\flash-snr.py",
+  99 +                        "--num", str(num), "--rssh", str(rssh), "--host", ip],
+ 100 +                       capture_output=True, text=True, timeout=1800, cwd=REPO + r"\scripts")
+ 101 +    open(log, "w", encoding="utf-8").write(p.stdout + "\n" + p.stderr)
+ 102 +    ok = p.returncode == 0
+ 103 +    tail = [l for l in p.stdout.splitlines() if l.strip()][-3:]
+ 104 +    return ok, num, ip, rssh, " | ".join(tail)
+ 105 +
+ 106 +def main():
+ 107 +    ap = argparse.ArgumentParser()
+ 108 +    ap.add_argument("--detect", action="store_true")
+ 109 +    ap.add_argument("--auto", action="store_true", help="无人值守：无设备静默退出")
+ 110 +    ap.add_argument("--max", type=int, default=4, help="单轮最多刷机台数")
+ 111 +    args = ap.parse_args()
+ 112 +
+ 113 +    # 进程锁：防止 cron 周期与上一轮刷机重叠（锁文件 90 分钟自动失效兜底）
+ 114 +    if os.path.exists(LOCK):
+ 115 +        age = time.time() - os.path.getmtime(LOCK)
+ 116 +        if age < 5400:
+ 117 +            print(f"上一轮刷机仍在进行（锁 {int(age/60)} 分钟前），本轮退出")
+ 118 +            return
+ 119 +        print(f"⚠️ 检测到遗留刷机锁（{int(age/60)} 分钟）——上轮可能挂起，自动解锁续扫（详见 backups/.flash-N*.log）")
+ 120 +    open(LOCK, "w").write(str(time.time()))
+ 121 +
+ 122 +    print(f"[{time.strftime('%F %T')}] 扫描出厂态设备（{', '.join(SUBNETS)}.0/24）...")
+ 123 +    found = []
+ 124 +    try:
+ 125 +        for sn in SUBNETS:
+ 126 +            for ip in sweep(sn):
+ 127 +                isf, info = telnet_fingerprint(ip)
+ 128 +                print(f"  {ip}: {'✓出厂态' if isf else '跳过'} — {info}")
+ 129 +                if isf: found.append(ip)
+ 130 +    finally:
+ 131 +        if not found or args.detect:
+ 132 +            os.remove(LOCK)
+ 133 +    if not found:
+ 134 +        print("未发现出厂态设备" + ("（auto 静默退出）" if args.auto else "——请确认设备已上电且 WAN/LAN 已接入两网段之一"))
+ 135 +        return
+ 136 +    if args.detect:
+ 137 +        print(f"共 {len(found)} 台待刷: {found}")
+ 138 +        return
+ 139 +    found = found[:args.max]
+ 140 +    ports = next_ports(len(found))
+ 141 +    nums = next_nums(len(found))
+ 142 +    print(f"刷机分配: {list(zip(found, nums, ports))}（并行）")
+ 143 +    jobs = [(ip, nums[i], ports[i], REPO + rf"\backups\.flash-N{nums[i]}.log") for i, ip in enumerate(found)]
+ 144 +    results = []
+ 145 +    with ThreadPoolExecutor(max_workers=len(jobs)) as ex:
+ 146 +        futs = [ex.submit(flash_one, *j) for j in jobs]
+ 147 +        for f in futs:
+ 148 +            results.append(f.result())
+ 149 +    print(f"\n===== 批量结果 =====")
+ 150 +    for ok, num, ip, rssh, tail in results:
+ 151 +        print(f"  {'✅' if ok else '❌'} SN-R{num} @ {ip} (RSSH {rssh}): {tail}")
+ 152 +    try: os.remove(LOCK)
+ 153 +    except OSError: pass
+ 154 +
+ 155 +if __name__ == "__main__":
+ 156 +    main()
+   1 # 变更说明 — SN-R 刷机流程（multi-verify round-1，2026-10-13）
+   2 
+   3 ## 核查对象（用户命题）
+   4 
+   5 1. **A 模式**：SN-R 系列刷机流程是否有遗漏（脚本+流程完整性审查）。
+   6 2. **B 模式**：SN-R7（rtr-37cf72，192.168.132.1，DMIT 排障口 13229）是否仍有不合规内置软件残留。
+   7 
+   8 ## 核查范围（三个文件，均未入 git 库，以全文补丁形式提供）
+   9 
+  10 | 文件 | 性质 | 说明 |
+  11 |---|---|---|
+  12 | scripts/flash-snr.py | **核心刷机脚本**（单台全自动） | 2026-09-28 初版，本 session 多轮加固（见下） |
+  13 | scripts/flash-batch.py | **批量驱动**（新文件） | 自动发现出厂设备+并行刷机+进程锁+MAC 指纹防误刷 |
+  14 | scripts/flash-r7-finish2.py | 历史一次性脚本（参考） | R7 中断续跑的收尾器，其逻辑已并入前两者；仅供审查参考 |
+  15 
+  16 权威流程文档：`docs/operations/新SN-R1刷机录入SOP-自动化-20260928.md` 末章「统一 SN 刷机流程 v2」。
+  17 
+  18 ## flash-snr.py 本 session 的改动意图（按步骤）
+  19 
+  20 1. **--host 参数**：设备可在任意网段（原来硬编码 192.168.132.1）；探测加 _try_connect 包裹（不可达不再裸异常）。
+  21 2. **步骤 2 预装清理大幅扩展**（用户"去掉内置"诉求）：原 7 服务（dockerd/telnetd/ksmbd/miniupnpd/start_autoupdate/mtk_dut/wsdd2）+ 新增 PCDN 九件套（netbox_daemon.service/zcon-edge-service/zcon-ng/start_client_manage/start_get_versionInfo/timeRestart/mbox/hole/start_jcgqos）停用禁用 + 进程双杀（TERM+KILL）+ 深层封堵（安装器花括号目录/mbox_init.sh/init.d 本体删除/rc.local 钩子行删除/数据盘目录清除）+ **fstab 三层封堵+dd 抹签名**（R7 五次迭代定稿：uci 三层关不掉 hotplug 挂载，唯一根治=抹文件系统签名）+ done 的 telnet 注释去重。
+  22 3. **步骤 4 录入防劫持闸门**：POST /devices 后立即在 DMIT 库 SELECT 验证记录存在（R7 事故：陈旧本地隧道 18444 把 API 劫到 DO 旧库，身份错录 rtr-204b63）；失败重试一次（内嵌 MGMT_API_BASE 纠正）。复刷幂等：旧排障口备案输出。
+  23 4. **步骤 5 MAC 固定**：uci wan/br-lan = 76:a7:c8:e0:4f:{0x20+N}/{0x30+N}（10-09 定的舰队标准，防出厂随机 MAC 漂移）。
+  24 5. **mihomo init.d 生成段加 REJECT-SELFHEAL**：mihomo-ipt 调完后两条 iptables 把 REJECT 压回 FORWARD 第 1 位（R7 四次重启实锤的 QUIC 竞态根治）。
+  25 6. **步骤 10 终验 8 关→11 关**：+PCDN 残留=0、QUIC 首位=REJECT、心跳已产生（logread，不用 syslog 文件——R7 无该文件）。
+  26 7. **步骤 11 平台下发双验**：切 LAX→出口 179.255.137.64、回东京→74.82.203.175（用户"服务器下发/远程管理"核查项的脚本化）。
+  27 8. **指纹台账**：MAC 写平台 mac_addr + 凭证总览自动追加登记行；凭证档案补 MAC 固定行。
+  28 9. 防劫持闸门变量隔离（dev2）等幂等性修正。
+  29 
+  30 ## flash-batch.py（新文件）意图
+  31 
+  32 两网段（192.168.132.x/192.168.2.x）telnet 23 全扫 → 出厂指纹验证（root/abc@1234 + MAC 前缀白名单防误刷现役）→ 编号/端口预分配（平台最大 SN-R 序号+1、DMIT 132xx 最大+1）→ 并行线程刷机 → ✅/❌ 汇总。进程锁（90 分钟兜底+挂起告警）。--auto 供 cron 无人值守（已装每 10 分钟巡检 automation-31e0587a）。
+  33 
+  34 ## 自认风险（请审查者重点核查）
+  35 
+  36 1. flash-batch 的 KNOWN_MAC_PREFIXES 用 OUI 前缀（a4:d8:ca:14: 与 76:a7:c8:e0:4f:）而非精确 MAC 匹配——同批次新出厂设备（如 a4:d8:ca:14:xx）会被误跳过（假阴性）。
+  37 2. flash-snr.py 的 push() 无 md5 校验（R7 实测 paramiko 通道写可能被 dropbear 即关——大文件 mihomo 57MB 走此路径）。
+  38 3. alloc_rssh 在 flash-snr 单独并行跑时有端口竞态（batch 预分配规避了，但单独并行调用仍可竞态）。
+  39 4. enroll/tasks 等 API 调用多处 r.json() 无 HTTP 状态码检查。
+  40 5. init.d heredoc 内嵌 REJECT-SELFHEAL 三行的生成脚本语法正确性（需 bash -n 渲染验证）。
+  41 6. 步骤 2 的 rm -rf /mnt/mmcblk0p6/... 与 dd 抹签名在同一 run 块——若 umount 失败（busy）dd 仍执行（写挂载中的块设备）。
+  42 7. R7 残留二进制文件（/usr/bin/rathole、zcon-ng、zcon-edge-arm64 等）进程已杀服务已禁，但文件本体未删（B 模式核查点）。
+  43 
+  44 ## B 模式：R7 不合规软件现状（ZCode 先行取证，供独立审查交叉验证）
+  45 
+  46 R7 已经历三轮清理+四次重启验证。已确认根除：PCDN 进程/服务/自启/钩子/数据盘挂载（签名抹除）。**已知保留**：/usr/bin/rathole、zcon-ng、zcon-edge-arm64 等二进制文件本体（决策=留档备查）；S99iphone11_perf_init 等功能性自启；crontab 的 factory checkMem 行；dnsmasq 绑定 WAN 侧地址（192.168.2.215:53）。待独立审查判断这些是否算"不合规残留"及是否有遗漏面（如 uhttpd 443 对 WAN 暴露、dropbear 0.0.0.0、hotplug.d 其他脚本、/www 后门等）。
+
+2026-10-13T15:50:58.871995Z ERROR codex_models_manager::manager: failed to refresh available models: request timed out
+codex
+已发现几处关键问题：设备编号的类型会让刷机在中途崩溃，MAC 指纹解析与实际输出格式不匹配，批量公钥分发还共享临时文件。我会用不导入脚本、不联网的本地复现核对这些问题，再检查终验是否可靠。
+exec
+"C:\\Users\\Administrator\\AppData\\Local\\Microsoft\\WindowsApps\\pwsh.exe" -Command '$i=0; Get-Content -Encoding UTF8 -LiteralPath '"'verify/round-2/diff_1_flash-snr.patch' | ForEach-Object { "'$i++; if($i -ge 460){'"'{0,4} {1}' -f "'$i,$_} }; $i=0; Get-Content -Encoding UTF8 -LiteralPath '"'verify/round-2/diff_1_flash-snr.patch' | Select-Object -First 200 | ForEach-Object { "'$i++; if($i -ge 125){'"'{0,4} {1}' -f "'$i,$_} }' in F:\vps
+ succeeded in 2413ms:
+ 460 +    golden = golden.replace("#{{GROUP_PROXY_MEMBERS}}", members).replace("#{{GROUP_AUTO_MEMBERS}}", members)
+ 461 +    golden = golden.replace("#{{NODE_DIRECT_RULES}}", direct_rules)
+ 462 +    _, o, e = c.exec_command("cat > /etc/mihomo/config.yaml && chmod 644 /etc/mihomo/config.yaml", timeout=60)
+ 463 +    o.channel.sendall(golden.encode()); o.channel.shutdown_write(); o.read()
+ 464 +    out = run(c, r'''
+ 465 +cat > /etc/init.d/mihomo <<'EOS'
+ 466 +#!/bin/sh /etc/rc.common
+ 467 +USE_PROCD=1
+ 468 +START=99
+ 469 +STOP=15
+ 470 +start_service() {
+ 471 +    procd_open_instance
+ 472 +    procd_set_param command /usr/bin/mihomo -d /etc/mihomo -f /etc/mihomo/config.yaml
+ 473 +    procd_set_param respawn 3600 5 0
+ 474 +    procd_set_param stdout 1
+ 475 +    procd_set_param stderr 1
+ 476 +    procd_set_param pidfile /var/run/mihomo.pid
+ 477 +    procd_close_instance
+ 478 +    ( i=0; while [ $i -lt 60 ]; do wget -T 2 -q -O /dev/null http://127.0.0.1:9090/version 2>/dev/null && break; sleep 1; i=$((i+1)); done; /etc/mihomo-ipt.sh
+ 479 +      # REJECT-SELFHEAL 2026-10-13: mihomo-ipt 插完 DROP 后 REJECT 压回第 1，杜绝重载挤位（R7 四次重启竞态实锤）
+ 480 +      iptables -D FORWARD -i br-lan -p udp -m udp --dport 443 -j REJECT --reject-with icmp-port-unreachable 2>/dev/null
+ 481 +      iptables -I FORWARD 1 -i br-lan -p udp -m udp --dport 443 -j REJECT --reject-with icmp-port-unreachable ) &
+ 482 +}
+ 483 +reload_service() { stop; start; }
+ 484 +EOS
+ 485 +chmod 755 /etc/init.d/mihomo
+ 486 +/etc/init.d/mihomo enable
+ 487 +/etc/init.d/mihomo start
+ 488 +i=0; while [ $i -lt 25 ]; do curl -s -m 2 http://127.0.0.1:9090/version >/dev/null 2>&1 && break; sleep 2; i=$((i+1)); done
+ 489 +curl -s -m 3 http://127.0.0.1:9090/version
+ 490 +curl -s -m 12 -x http://127.0.0.1:7890 https://www.cloudflare.com/cdn-cgi/trace 2>/dev/null | awk -F= '/^ip=/{print " egress=" $2}'
+ 491 +/etc/mihomo-ipt.sh 2>&1 | tail -1
+ 492 +''')
+ 493 +    print(f"  mihomo: {out.splitlines()[-3:]}")
+ 494 +    c.close()
+ 495 +
+ 496 +    # 8) 发布双节点
+ 497 +    def wait_final(tid, timeout=240):
+ 498 +        t0 = time.time()
+ 499 +        while time.time() - t0 < timeout:
+ 500 +            rr = requests.get(M.BASE + "/api/v1/tasks?size=30", headers=H, verify=False, timeout=15).json()
+ 501 +            t = next((x for x in (rr.get("items") or []) if x["id"] == tid), None)
+ 502 +            if t and t["status"] in ("ok","failed","rolled_back","expired","timeout"): return t
+ 503 +            time.sleep(10)
+ 504 +        return None
+ 505 +    # 2026-10-08：绑定现役标准（BWG 主 + LAX + TX-hy2 + TX-vless；不绑 DO）
+ 506 +    for _n, _p in ((5, False), (3, False), (2, False), (4, True)):
+ 507 +        r = requests.post(M.BASE + "/api/v1/assignments/batch", headers=H,
+ 508 +                          json={"device_ids": [DEVID], "node_id": _n, "is_primary": _p,
+ 509 +                                "apply": _p}, verify=False, timeout=30)
+ 510 +    tid = r.json()["items"][0]["task_id"]
+ 511 +    _fpq = (f"UPDATE node_assignments SET failover_priority=0 WHERE device_id='{DEVID}' AND node_id=5; "
+ 512 +            f"UPDATE node_assignments SET failover_priority=1 WHERE device_id='{DEVID}' AND node_id=3; "
+ 513 +            f"UPDATE node_assignments SET failover_priority=2 WHERE device_id='{DEVID}' AND node_id=2")
+ 514 +    _sqlcmd = f'docker exec routermgmt-db-1 sh -c "psql -U $POSTGRES_USER -d routermgmt -c \\"{_fpq}\\""'
+ 515 +    subprocess.run(['ssh', '-p', '28722', '-i', 'C:/Users/Administrator/.ssh/id_rsa_dmit', '-o', 'IdentitiesOnly=yes',
+ 516 +                    'root@179.255.137.64', _sqlcmd], capture_output=True, timeout=60)
+ 517 +    requests.patch(M.BASE + f"/api/v1/devices/{DEVID}", headers=H,
+ 518 +                   json={"traffic_alert_hourly_mb": 2048, "reboot_cron": "0 0 * * *"}, verify=False, timeout=15)
+ 519 +    t = wait_final(tid)
+ 520 +    print(f"  发布 v{t.get('result',{}).get('detail',{}).get('version','?')}: {t['status'] if t else 'TIMEOUT'}")
+ 521 +    r = requests.post(M.BASE + f"/api/v1/devices/{DEVID}/ops", headers={**H, "Idempotency-Key": str(time.time())},
+ 522 +                      json={"type": "set_proxy_state", "params": {"enabled": True}}, verify=False, timeout=15)
+ 523 +    t = wait_final(r.json()["task_id"], 120)
+ 524 +    print(f"  set_proxy_state: {t['status'] if t else 'TIMEOUT'}")
+ 525 +
+ 526 +    # 9) WiFi 默认关闭 + MAC 采集 + 凭证档案
+ 527 +    c = ssh(PW)
+ 528 +    out = run(c, r'''
+ 529 +cd /etc/wireless/mediatek
+ 530 +for F in mt7981.dbdc.b0.dat mt7981.dbdc.b1.dat DBDC_card0.dat; do
+ 531 +  [ -f "$F" ] || continue
+ 532 +  # 2026-10-08：保 WPAPSK 键名序号（旧法丢序号）；DBDC 的 5G 主 SSID 在 SSID7
+ 533 +  sed -i "s/^SSID1=.*/SSID1=__NAME__/" "$F"
+ 534 +  [ "$F" = "DBDC_card0.dat" ] && sed -i "s/^SSID7=.*/SSID7=__NAME__-5G/" "$F"
+ 535 +  [ "$F" = "mt7981.dbdc.b1.dat" ] && sed -i "s/^SSID1=.*/SSID1=__NAME__-5G/" "$F"
+ 536 +  sed -i "s/^\(WPAPSK[0-9]*\)=.*/\1=[REDACTED]/" "$F"
+ 537 +  grep -q "^RadioOff=" "$F" && sed -i "s/^RadioOff=.*/RadioOff=1/" "$F" || sed -i "2i RadioOff=1" "$F"
+ 538 +done
+ 539 +uci set wireless.ra0.key='[REDACTED]'; uci set wireless.ra0.disabled='1'
+ 540 +uci set wireless.rax0.key='[REDACTED]'; uci set wireless.rax0.disabled='1'
+ 541 +uci set wireless.RADIO2G.disabled='1' 2>/dev/null; uci set wireless.RADIO5G.disabled='1' 2>/dev/null
+ 542 +uci commit wireless
+ 543 +sed -i '/# wifi-default-off/,$d' /etc/rc.local
+ 544 +printf '%s\n' \
+ 545 +'# wifi-boot-policy (2026-10-01 v3: wifi.enabled 标记=上次人工开启→开机主动 up' \
+ 546 +'# [带重试: MTK 驱动初始化射频要十几秒, 固定 sleep 不够]; 无标记→down=新设备默认关。' \
+ 547 +'# 旧版两宗罪: 把 wifi.disabled 当已启用读+只 skip-down, 开启一重启就被 RadioOff=1 关回)' \
+ 548 +'(sleep 8; _w=up; [ -f /etc/routermgmt/state/wifi.enabled ] || _w=down' \
+ 549 +' for _i in 1 2 3 4 5 6; do' \
+ 550 +'   ifconfig ra0 $_w 2>/dev/null; ifconfig rax0 $_w 2>/dev/null' \
+ 551 +'   [ "$_w" = "down" ] && break' \
+ 552 +'   ip link show ra0 2>/dev/null | grep -q "state UP" && break' \
+ 553 +'   sleep 5' \
+ 554 +' done) > /dev/null 2>&1 &' \
+ 555 +'# routermgmt-cron-restore (10-01: 厂商开机重写crontab, netprobe+discovery 两条开机重加;' \
+ 556 +'# discovery 条目丢了温备切换就只剩心跳失败触发一条路, 2026-10-01 R2 重启实测丢过)' \
+ 557 +'(sleep 10; grep -q routermgmt-netprobe /etc/crontabs/root 2>/dev/null || echo "*/5 * * * * /etc/routermgmt/netprobe.sh #routermgmt-netprobe" >> /etc/crontabs/root; grep -q mgmt-port-discovery /etc/crontabs/root 2>/dev/null || echo "* * * * * /etc/routermgmt/mgmt-port-discovery.sh #mgmt-port" >> /etc/crontabs/root; /etc/init.d/cron restart) > /dev/null 2>&1 &' \
+ 558 +'exit 0' >> /etc/rc.local
+ 559 +ifconfig ra0 down; ifconfig rax0 down
+ 560 +for I in wan br-lan ra0 rax0; do [ -d /sys/class/net/$I ] && echo "$I: $(cat /sys/class/net/$I/address)"; done
+ 561 +'''.replace("__NAME__", NAME))
+ 562 +    c.close()
+ 563 +    macs = dict(re.findall(r"(wan|br-lan|ra0|rax0): ([0-9a-f:]+)", out))
+ 564 +    # 2026-10-13 审计增补：MAC 指纹台账（防误刷登记+回归识别）
+ 565 +    requests.patch(M.BASE + f"/api/v1/devices/{DEVID}", headers=H,
+ 566 +                   json={"mac_addr": macs.get("ra0","")}, verify=False, timeout=15)
+ 567 +    doc = f"""# {NAME} ({DEVID}) 凭证档案 — {time.strftime('%Y-%m-%d')}
+ 568 +
+ 569 +| 通道 | 值 |
+ 570 +|---|---|
+ 571 +| SSH（LAN） | `ssh root@192.168.132.1` / `{PW}` |
+ 572 +| LuCI | `http://192.168.132.1` root / 同上 |
+ 573 +| 反向 SSH | `ssh -p 28722 -i ~/.ssh/id_rsa_dmit root@179.255.137.64` → `sshpass -p <root口令> ssh -p {RSSH} root@127.0.0.1`（DMIT 主台，2026-10-02 起） |
+ 574 +| WiFi（默认关闭） | SSID `{NAME}`，PSK `[REDACTED]`；开启：管理台「开WiFi」 |
+ 575 +| 管理台 | ID `{DEVID}`，RSSH `{RSSH}` |
+ 576 +| MAC 固定（uci，重启生效） | WAN=`{wan_mac}` br-lan=`{brlan_mac}`（标准步骤；出厂实测 wan={macs.get('wan','?')} ra0={macs.get('ra0','?')}） |
+ 577 +
+ 578 +| 接口 | MAC |
+ 579 +|---|---|
+ 580 +| WAN | `{macs.get('wan','?')}` |
+ 581 +| 2.4G | `{macs.get('ra0','?')}` |
+ 582 +| 5G | `{macs.get('rax0','?')}` |
+ 583 +"""
+ 584 +    open(REPO + rf"\backups\SN-R{N}-凭证档案-{time.strftime('%Y%m%d')}.md", "w", encoding="utf-8").write(doc)
+ 585 +    note = f"WAN MAC {macs.get('wan','?')} | 2.4G {macs.get('ra0','?')} | 5G {macs.get('rax0','?')} | WiFi默认关闭(密码[REDACTED]) | {time.strftime('%Y-%m-%d')} 刷机录入"
+ 586 +    requests.patch(M.BASE + f"/api/v1/devices/{DEVID}", headers=H,
+ 587 +                   json={"location_note": note, "mac_addr": macs.get("ra0","")}, verify=False, timeout=15)
+ 588 +    # 2026-10-13 审计增补：指纹写入凭证总览（防误刷登记+回归识别基线）
+ 589 +    with open(REPO + r"\backups\SN-R系列凭证总览.md", "a", encoding="utf-8") as _f:
+ 590 +        _f.write(f"\n- {time.strftime('%Y-%m-%d')} 指纹登记 {NAME}（{DEVID}）：wan={macs.get('wan','?')} ra0={macs.get('ra0','?')} rax0={macs.get('rax0','?')}（刷机脚本自动写入）\n")
+ 591 +    # 10) 终验关卡（2026-10-08：R1/R2/R4 事故沉淀；任一 FAIL 非零退出，禁止半成品出厂）
+ 592 +    c = ssh(PW)
+ 593 +    out = run(c, r'''
+ 594 +echo "L=$(netstat -ltn | grep -cE '1844[3-6]')"
+ 595 +echo "H=$(curl -sk -m 6 -o /dev/null -w '%{http_code}' https://127.0.0.1:18443/api/v1/health)"
+ 596 +echo "E=$(curl -s -m 10 -x http://127.0.0.1:7890 https://api.ipify.org 2>/dev/null)"
+ 597 +echo "G=$(curl -s -o /dev/null -w '%{http_code}' -m 12 -x http://127.0.0.1:7890 https://www.google.com/generate_204)"
+ 598 +B64=$(printf %s __PW__ | openssl base64 -A | sed 's/=/%3D/g')
+ 599 +echo "W=$(curl -s -o /dev/null -w '%{http_code}' -m 8 -d "username=cm9vdA%3D%3D&password=$B64" http://192.168.132.1/cgi-bin/luci)"
+ 600 +echo "C=$(grep -c routermgmt /etc/crontabs/root)"
+ 601 +echo "R=$(grep -c onboot-hooks /etc/rc.local)"
+ 602 +echo "T=$(grep -c 'window.btoa(document' /usr/lib/lua/luci/view/admin_web/login.htm)/$(grep -c 'window.btoa(document' /usr/lib/lua/luci/view/admin_web/login_m.htm)"
+ 603 +'''.replace('__PW__', PW))
+ 604 +    kv = dict(re.findall(r"^(\w)=(.*)$", out, re.M))
+ 605 +    ext = run(c, r'''
+ 606 +echo "P=$(ps w | grep -cE 'by_agent|netbox_daemon|zcon|rathole|watcher' )"
+ 607 +echo "Q=$(iptables -S FORWARD | grep 443 | head -1 | grep -c REJECT)"
+ 608 +echo "B=$(logread 2>/dev/null | grep -c 'heartbeat ok')"
+ 609 +''')
+ 610 +    kv.update(dict(re.findall(r"^(\w)=(.*)$", ext, re.M)))
+ 611 +    checks = [
+ 612 +        ("隧道监听>=3", int(kv.get('L', '0')) >= 3),
+ 613 +        ("API健康200", kv.get('H') == '200'),
+ 614 +        ("出口IP非空", len(kv.get('E', '')) >= 8),
+ 615 +        ("google 204", kv.get('G') == '204'),
+ 616 +        ("网页登录302", kv.get('W') == '302'),
+ 617 +        ("crontab>=4条", int(kv.get('C', '0')) >= 4),
+ 618 +        ("rc.local钩子", kv.get('R', '0') == '1'),
+ 619 +        ("btoa编码2/1", kv.get('T') == '2/1'),
+ 620 +        ("PCDN残留=0", kv.get('P') == '0'),
+ 621 +        ("QUIC顺序REJECT第一", kv.get('Q') == '1'),
+ 622 +        ("心跳已产生", int(kv.get('B', '0')) >= 1),
+ 623 +    ]
+ 624 +    failed = [n for n, ok in checks if not ok]
+ 625 +    for n, ok in checks:
+ 626 +        print(f"    {'PASS' if ok else 'FAIL'} {n}")
+ 627 +
+ 628 +    # 11) 平台下发验证（2026-10-13 新增：切节点往返=远程管理端到端实测）
+ 629 +    def _switch_verify(node_id, expect_ip, label):
+ 630 +        rr = requests.post(M.BASE + "/api/v1/assignments/batch", headers=H,
+ 631 +                           json={"device_ids": [DEVID], "node_id": node_id, "is_primary": True, "apply": True}, verify=False, timeout=30)
+ 632 +        _t = wait_final(rr.json()["items"][0]["task_id"])
+ 633 +        time.sleep(6)
+ 634 +        _eg = run(c, "curl -s -m 10 -x http://127.0.0.1:7890 https://api.ipify.org 2>/dev/null")
+ 635 +        ok = (_t and _t["status"] == "ok" and _eg == expect_ip)
+ 636 +        print(f"    {'PASS' if ok else 'FAIL'} 平台下发-{label}(任务{_t['status'] if _t else '超时'}/出口{_eg})")
+ 637 +        return ok
+ 638 +    d1 = _switch_verify(5, "179.255.137.64", "切LAX")
+ 639 +    d2 = _switch_verify(4, "74.82.203.175", "回东京")
+ 640 +    # mihomo 重载后 QUIC 顺序复验+自愈
+ 641 +    run(c, "iptables -D FORWARD -i br-lan -p udp -m udp --dport 443 -j REJECT --reject-with icmp-port-unreachable 2>/dev/null; iptables -I FORWARD 1 -i br-lan -p udp -m udp --dport 443 -j REJECT --reject-with icmp-port-unreachable")
+ 642 +    c.close()
+ 643 +    if failed or not (d1 and d2):
+ 644 +        print(f"  终验未过: {failed + (['平台下发'] if not (d1 and d2) else [])}")
+ 645 +        sys.exit(2)
+ 646 +    print(f"[{time.strftime('%H:%M:%S')}] ✅ {NAME} 刷机完成，终验 11 关全过+下发双验通过，凭证档案已写入")
+ 647 +
+ 648 +if __name__ == "__main__":
+ 649 +    main()
+ 125 +
+ 126 +def run(c, script, timeout=240):
+ 127 +    _, o, e = c.exec_command(script, timeout=timeout)
+ 128 +    return (o.read()+e.read()).decode(errors="replace")
+ 129 +
+ 130 +def _try_connect(addr, timeout=2):
+ 131 +    try:
+ 132 +        s = socket.create_connection(addr, timeout); s.close(); return True
+ 133 +    except OSError:
+ 134 +        return False
+ 135 +
+ 136 +def main():
+ 137 +    global HOST
+ 138 +    ap = argparse.ArgumentParser()
+ 139 +    ap.add_argument("--num", required=True, help="设备序号（如 4 → SN-R4-AX3000）")
+ 140 +    ap.add_argument("--rssh", default="auto", help="反向 SSH 端口；默认 auto=自动分配（同设备复刷复用原端口）")
+ 141 +    ap.add_argument("--random-pw", action="store_true", help="口令用随机值（默认=舰队统一值，2026-10-08 起）")
+ 142 +    ap.add_argument("--host", default="192.168.132.1", help="设备地址（2026-10-13 批量并行刷机增补；可在任意网段）")
+ 143 +    args = ap.parse_args()
+ 144 +    N = args.num; NAME = f"SN-R{N}-AX3000"
+ 145 +    HOST = args.host
+ 146 +    RSSH = int(args.rssh) if str(args.rssh).isdigit() else alloc_rssh(int(N))
+ 147 +    print(f"[{time.strftime('%H:%M:%S')}] 开始刷机 {NAME} @ {HOST} (RSSH {RSSH})")
+ 148 +
+ 149 +    # 0) 探测
+ 150 +    ports = [22,23,53,80,443,445,9000]
+ 151 +    open_ports = [p for p in ports if _try_connect((HOST, p))]
+ 152 +    print(f"  端口: {open_ports}")
+ 153 +    t = Tel(); t.until(r"login:"); t.send("root"); t.until(r"assword:")
+ 154 +    t.send("abc@1234"); r = t.until(r"#", 5)
+ 155 +    if "#" not in r:
+ 156 +        print("telnet 登录失败"); sys.exit(1)
+ 157 +    print("  telnet 登录成功")
+ 158 +
+ 159 +    # 1) 改密（2026-10-08：默认直接舰队统一值，消除"先随机后统一"真空期）
+ 160 +    if args.random_pw:
+ 161 +        PW, HASH = gen_creds(f"sn{N}")
+ 162 +    else:
+ 163 +        PW = UNIFIED_PW
+ 164 +        HASH = md5_crypt(PW, f"snr{N}uni")
+ 165 +    open(REPO + rf"\backups\.snr{N}-pw", "w").write(PW + "\n" + HASH + "\n")
+ 166 +    t.send(f"sed -i 's|^root:[^:]*:|root:{HASH}:|' /etc/shadow")
+ 167 +    t.until(r"#", 5); t.s.close()
+ 168 +    c = ssh(PW)
+ 169 +    print(f"  SSH 新口令通过 ({PW[:6]}...)")
+ 170 +
+ 171 +    # 2) 预装清理 + NTP
+ 172 +    out = run(c, r'''
+ 173 +for S in dockerd telnetd ksmbd miniupnpd start_autoupdate mtk_dut wsdd2; do
+ 174 +  /etc/init.d/$S stop >/dev/null 2>&1; /etc/init.d/$S disable >/dev/null 2>&1
+ 175 +done
+ 176 +# 2026-10-13 R7 彻查增补：厂商 PCDN/云上报/打洞/穿透/定时重启九件套（"听雨"收益程序全家）
+ 177 +for S in netbox_daemon.service zcon-edge-service zcon-ng start_client_manage start_get_versionInfo timeRestart mbox hole start_jcgqos; do
+ 178 +  /etc/init.d/$S stop >/dev/null 2>&1; /etc/init.d/$S disable >/dev/null 2>&1
+ 179 +done
+ 180 +killall watcher by_agent_pro net_qua_cli inst_width tcp_stun_ser netbox_daemon zcon-ng zcon-edge-arm64 rathole 2>/dev/null
+ 181 +sleep 2
+ 182 +killall -9 watcher by_agent_pro net_qua_cli inst_width tcp_stun_ser netbox_daemon zcon-ng zcon-edge-arm64 rathole 2>/dev/null
+ 183 +# 2026-10-13 深层封堵（R7 彻查二轮+审计三轮）：安装器本体+rc.local 重装钩子+数据盘+fstab 隔离
+ 184 +# 修正：install_mbox.sh 实际位于 {install_mbox.sh} 目录（rm /usr/bin 是错路径）；mbox_init.sh/mboxinit.sh 残留；init.d 脚本本体需删
+ 185 +killall -9 install_mbox.sh install_pdnterminal.sh 2>/dev/null
+ 186 +rm -rf '/usr/bin/{install_mbox.sh}' '/usr/bin/{install_pdnterminal.sh}' 2>/dev/null
+ 187 +rm -f /usr/bin/install_mbox.sh /usr/bin/install_pdnterminal.sh /usr/bin/mbox_init.sh /usr/bin/mboxinit.sh 2>/dev/null
+ 188 +rm -f /etc/init.d/netbox_daemon.service /etc/init.d/zcon-edge-service /etc/init.d/zcon-ng /etc/init.d/mbox 2>/dev/null
+ 189 +cp -a /etc/rc.local /root/rc.local.bak-pcdn-$(date +%Y%m%d) 2>/dev/null
+ 190 +sed -i '/install_mbox/d; /install_pdnterminal/d; /mbox_init/d' /etc/rc.local
+ 191 +rm -rf /mnt/mmcblk0p6/by-agent /mnt/mmcblk0p6/by-daemon /mnt/mmcblk0p6/by-watcher /mnt/mmcblk0p6/initmindevice.sh /mnt/mmcblk0p6/docker /mnt/mmcblk0p6/data1 2>/dev/null
+ 192 +sync
+ 193 +# 2026-10-13 重启实战纠正×3（R7 五次迭代定稿）：uci fstab 三层全关也挡不住 hotplug.d/block/10-mount
+ 194 +# （按 UUID/备份超级块挂载，绕过 uci）。唯一根治=抹掉文件系统签名（blkid 不识别则永不自动挂载）。
+ 195 +uci set fstab.@mount[0].enabled='0' 2>/dev/null
+ 196 +uci set fstab.@global[0].anon_mount='0' 2>/dev/null
+ 197 +uci set fstab.@global[0].auto_mount='0' 2>/dev/null
+ 198 +uci commit fstab 2>/dev/null
+ 199 +umount /mnt/mmcblk0p6/docker 2>/dev/null; umount -l /mnt/mmcblk0p6 2>/dev/null
+ 200 +dd if=/dev/zero of=/dev/mmcblk0p6 bs=1M count=256 2>/dev/null; sync
+
+exec
+"C:\\Users\\Administrator\\AppData\\Local\\Microsoft\\WindowsApps\\pwsh.exe" -Command "Get-Command python,bash,sh -ErrorAction SilentlyContinue | Select-Object Name,Source; rg -n 'BASE|MGMT_API_BASE|def ensure_tunnel|def token' scripts/mgmt_api_test.py; rg -n '统一 SN 刷机流程|真实重启|ps w.*grep|遗留未决' 'docs/operations/新SN-R1刷机录入SOP-自动化-20260928.md'" in F:\vps
+ succeeded in 2473ms:
+
+16:#   再执行:   set MGMT_API_BASE=https://127.0.0.1:8444  （或脚本内 os.environ）
+17:BASE = os.environ.get("MGMT_API_BASE", "https://127.0.0.1:18444")
+42:def ensure_tunnel():
+45:        requests.get(BASE + "/api/v1/health", verify=False, timeout=4)
+57:            requests.get(BASE + "/api/v1/health", verify=False, timeout=3)
+63:def token():
+70:    r = requests.post(BASE + "/api/v1/auth/login",
+73:    r2 = requests.post(BASE + "/api/v1/auth/totp", json={"ticket": ticket, "code": totp()},
+85:    r = requests.get(BASE + f"/api/v1/devices/{DEV}", headers=H(), verify=False, timeout=10)
+92:        r = requests.get(BASE + "/api/v1/tasks?limit=20", headers=H(), verify=False, timeout=10).json()
+102:    r = requests.post(BASE + f"/api/v1/devices/{DEV}/ops",
+128:        r = requests.get(BASE + "/api/v1/tasks?limit=10", headers=H(), verify=False, timeout=10).json()
+135:        r = requests.patch(BASE + f"/api/v1/devices/{DEV}", headers=H(), json=body, verify=False, timeout=10)
+151:4. **pgrep -x 匹配不了 15 字符截断进程名**（routermgmt-agent→routermgmt-agen）：进程核验一律 `ps w | grep xxx | grep -v grep`。
+172:# 统一 SN 刷机流程 v2（2026-10-13 定稿——R7 全流程实战沉淀，取代散落的分段增补）
+226:**遗留未决（不改的原因）**：mmcblk0p6 出厂分区删除=破坏性操作（怕影响厂商恢复路径），只隔离不删除；rathole 二进制未删（进程清除+服务禁用已切断，/usr/bin/rathole 文件保留备查）；DATA 盘数据保留（数据1/ 只删 PCDN 目录）。
+230:**方法论**：静态清理后必须做**真实重启验证**（PC 经被测设备上网的场景注意断网代价，优先借用夜间定时重启收尾）。R7 四次重启迭代出的两个根因：
+244:**其他口径坑**：`ps w | grep -c pattern` 计数含 sh 包装+grep 自身（假阳性×2）；自启检查必须只数 `rc.d/S*`（K9=停止标记非自启）。
+Name       Source                                                               
+----       ------                                                               
+python.exe C:\Users\Administrator\AppData\Local\Microsoft\WindowsApps\python.exe
+bash.exe   D:\Program Files\Git\usr\bin\bash.exe                                
+sh.exe     D:\Program Files\Git\usr\bin\sh.exe                                  
+
+
+
+2026-10-13T15:51:21.732911Z ERROR codex_models_manager::manager: failed to refresh available models: request timed out
+exec
+"C:\\Users\\Administrator\\AppData\\Local\\Microsoft\\WindowsApps\\pwsh.exe" -Command "@'
+import ast, argparse, pathlib, re, subprocess
+p=pathlib.Path('verify/round-2/diff_1_flash-snr.patch')
+s='\\n'.join(x[1:] for x in p.read_text(encoding='utf-8').splitlines() if x.startswith('+') and not x.startswith('+++'))
+a=ast.parse(s)
+print('flash-snr AST: OK')
+b=pathlib.Path('verify/round-2/diff_2_flash-batch.patch').read_text(encoding='utf-8')
+bs='\\n'.join(x[1:] for x in b.splitlines() if x.startswith('+') and not x.startswith('+++'))
+ast.parse(bs); print('flash-batch AST: OK')
+ap=argparse.ArgumentParser(); ap.add_argument('--num',required=True); n=ap.parse_args(['--num','8']).num
+try: print(f'{0x20+n:02x}')
+except Exception as e: print('MAC construction:',type(e).__name__,str(e))
+print('fingerprint parse:',dict(re.findall(r'(wan|ra0): ([0-9a-f:]+)','wan 76:a7:c8:e0:4f:21\\nra0 a4:d8:ca:14:11:22\\n')))
+print('IP comparison:',repr('179.255.137.64\\n'), '== expected:', '179.255.137.64\\n' == '179.255.137.64')
+sh=r'D:\\Program Files\\Git\\usr\\bin\\sh.exe'
+for node in ast.walk(a):
+    if isinstance(node, ast.Constant) and isinstance(node.value,str) and \"cat > /etc/init.d/mihomo <<'EOS'\" in node.value:
+        v=node.value.split(\"<<'EOS'\\n\",1)[1].split('\\nEOS',1)[0]
+        r=subprocess.run([sh,'-n'],input=v,text=True,capture_output=True)
+        print('rendered mihomo sh -n:',r.returncode,r.stderr.strip())
+r=subprocess.run([sh,'-c',\"ps w | grep -cE 'by_agent|netbox_daemon|zcon|rathole|watcher'\"],capture_output=True,text=True)
+print('PCDN count on local shell (no router accessed):',r.stdout.strip())
+'@ | python -B -" in F:\vps
+ exited 1 in 1775ms:
+程序“python.exe”无法运行: 系统无法访问此文件。所在位置 行:24 字符: 6
++ '@ | python -B -
++      ~~~~~~~~~~~。
+所在位置 行:2 字符: 1
++ @'
++ ~~
+    + CategoryInfo          : ResourceUnavailable: (:) [], ApplicationFailedException
+    + FullyQualifiedErrorId : NativeCommandFailed
+ 
+
+exec
+"C:\\Users\\Administrator\\AppData\\Local\\Microsoft\\WindowsApps\\pwsh.exe" -Command "Get-Command py,python3 -ErrorAction SilentlyContinue | Select-Object Name,Source; Get-ChildItem -LiteralPath 'C:/Users/Administrator/AppData/Local/Programs/Python' -ErrorAction SilentlyContinue | Select-Object Name; Test-Path -LiteralPath 'F:/vps/.venv/Scripts/python.exe'; Test-Path -LiteralPath 'C:/Python313/python.exe'; Test-Path -LiteralPath 'F:/python/.venv/Scripts/python.exe'" in F:\vps
+ succeeded in 2450ms:
+
+Name        Source                                                                
+----        ------                                                                
+py.exe      C:\Users\Administrator\AppData\Local\Microsoft\WindowsApps\py.exe     
+python3.exe C:\Users\Administrator\AppData\Local\Microsoft\WindowsApps\python3.exe
+False
+False
+False
+
+
+
+exec
+"C:\\Users\\Administrator\\AppData\\Local\\Microsoft\\WindowsApps\\pwsh.exe" -Command "where.exe python; Get-ChildItem -LiteralPath 'C:/Users/Administrator/AppData/Local/Python' -ErrorAction SilentlyContinue | Select-Object Name; Get-ChildItem -LiteralPath 'C:/Program Files' -Filter '*Python*' | Select-Object Name; Get-ChildItem -LiteralPath 'F:/' -Directory | Select-Object Name" in F:\vps
+ succeeded in 3090ms:
+C:\Users\Administrator\AppData\Local\Microsoft\WindowsApps\python.exe
+C:\Users\Administrator\AppData\Local\Python\bin\python.exe
+
+Name              
+----              
+bin               
+pythoncore-3.14-64
+_cache            
+.pnpm-store       
+datart            
+python            
+tmp               
+vps               
+wt196r            
+wx                
+xwechat_files     
+
+
+
+exec
+"C:\\Users\\Administrator\\AppData\\Local\\Microsoft\\WindowsApps\\pwsh.exe" -Command '$lines=Get-Content -Encoding UTF8 -LiteralPath '"'verify/round-2/diff_1_flash-snr.patch'; "'$a=[Array]::IndexOf($lines,"+cat > /etc/init.d/mihomo <<'"'EOS'\"); "'$b=[Array]::IndexOf($lines,'"'+EOS'); (("'$lines[($a+1)..($b-1)] | ForEach-Object {$_.Substring(1)}) -join "`n") | & '"'D:/Program Files/Git/usr/bin/sh.exe' -n; Write-Output \"rendered mihomo sh -n exit="'$LASTEXITCODE"; [regex]::Matches("wan 76:a7:c8:e0:4f:21`nra0 a4:d8:ca:14:11:22`n",'"'(wan|ra0): ([0-9a-f:]+)').Count; & 'D:/Program Files/Git/usr/bin/sh.exe' -c \"ps w | grep -cE 'by_agent|netbox_daemon|zcon|rathole|watcher'\" " in F:\vps
+ exited 1 in 2722ms:
+rendered mihomo sh -n exit=0
+0
+0
+
+exec
+"C:\\Users\\Administrator\\AppData\\Local\\Microsoft\\WindowsApps\\pwsh.exe" -Command "@'
+import ast, argparse, pathlib, re, subprocess
+p=pathlib.Path('verify/round-2/diff_1_flash-snr.patch')
+s='\\n'.join(x[1:] for x in p.read_text(encoding='utf-8').splitlines() if x.startswith('+') and not x.startswith('+++'))
+a=ast.parse(s); print('flash-snr AST: OK')
+b=pathlib.Path('verify/round-2/diff_2_flash-batch.patch').read_text(encoding='utf-8')
+bs='\\n'.join(x[1:] for x in b.splitlines() if x.startswith('+') and not x.startswith('+++'))
+ast.parse(bs); print('flash-batch AST: OK')
+ap=argparse.ArgumentParser(); ap.add_argument('--num',required=True); n=ap.parse_args(['--num','8']).num
+try: print(f'{0x20+n:02x}')
+except Exception as e: print('MAC construction:',type(e).__name__,str(e))
+print('fingerprint parse:',dict(re.findall(r'(wan|ra0): ([0-9a-f:]+)','wan 76:a7:c8:e0:4f:21\\nra0 a4:d8:ca:14:11:22\\n')))
+print('IP with newline equals expected:', '179.255.137.64\\n' == '179.255.137.64')
+fixture=\"123 root grep -cE by_agent|netbox_daemon|zcon|rathole|watcher\\n124 root /sbin/init\\n\"
+print('PCDN regex matches grep-only ps fixture:',len([x for x in fixture.splitlines() if re.search('by_agent|netbox_daemon|zcon|rathole|watcher',x)]))
+# Execute only the extracted pure allocator with a mocked subprocess; no SSH calls.
+module=ast.parse(bs)
+ns={'subprocess':type('Mock',(),{'run':staticmethod(lambda *a,**k:type('Result',(),{'stdout':'','returncode':255})())}),'re':re}
+for name in ('next_ports','next_nums'):
+    f=next(x for x in module.body if isinstance(x,ast.FunctionDef) and x.name==name)
+    exec(compile(ast.Module(body=[f],type_ignores=[]),'<allocator>','exec'),ns)
+    print(name+' on SSH failure:',ns[name](2))
+ns['subprocess']=type('Mock',(),{'run':staticmethod(lambda *a,**k:type('Result',(),{'stdout':'13299\\n','returncode':0})())})
+print('ports at pool boundary:',ns['next_ports'](2))
+'@ | & 'C:/Users/Administrator/AppData/Local/Python/pythoncore-3.14-64/python.exe' -B -" in F:\vps
+ succeeded in 2383ms:
+<unknown>:7: SyntaxWarning: "\ " is an invalid escape sequence. Such sequences will not work in the future. Did you mean "\\ "? A raw string is also an option.
+flash-snr AST: OK
+flash-batch AST: OK
+MAC construction: TypeError unsupported operand type(s) for +: 'int' and 'str'
+fingerprint parse: {}
+IP with newline equals expected: False
+PCDN regex matches grep-only ps fixture: 1
+next_ports on SSH failure: [13230, 13231]
+next_nums on SSH failure: [8, 9]
+ports at pool boundary: [13300, 13301]
+
+codex
+本地复现确认了编号 `TypeError`、MAC 解析为空，以及出口 IP 因末尾换行导致双验误失败。提取出的 mihomo init 脚本通过了 `sh -n`；但平台纠偏重试和 QUIC 复验的实现仍与说明不符。我会在结论中区分确定缺陷、条件性风险和未做现网验证的事项。
+exec
+"C:\\Users\\Administrator\\AppData\\Local\\Microsoft\\WindowsApps\\pwsh.exe" -Command "@'
+K=/root/.ssh/id_ed25519_txbackup
+O='-i "'$K -o BatchMode=yes -o StrictHostKeyChecking=no -o ConnectTimeout=10'"'
+printf '<%s>\\n' "'$O
+'"'@ | & 'D:/Program Files/Git/usr/bin/sh.exe'" in F:\vps
+ succeeded in 2257ms:
+<-i>
+<$K>
+<-o>
+<BatchMode=yes>
+<-o>
+<StrictHostKeyChecking=no>
+<-o>
+<ConnectTimeout=10>
+
+2026-10-13T15:53:11.787090Z ERROR codex_models_manager::manager: failed to refresh available models: request timed out
+codex
+只读核查完成，未修改文件、未运行刷机脚本、未连接现网。**当前补丁存在刷机中途必然崩溃、防误刷失效及批量公钥串写等问题，不宜据此认定流程已经闭环。**以下行号均为补丁文件本身的行号。
+
+1. **[P1] `--num` 为字符串，步骤 5 必然抛出 `TypeError`。**  
+   argparse 未指定 `type=int`，`N=args.num` 后直接执行 `0x20 + N`。此时已经完成改密、预装清理及平台录入，设备会留下半成品，且 telnet 已关闭，无法直接全量重跑。本地复现 `--num 8` 得到 `unsupported operand type(s) for +: 'int' and 'str'`。  
+   证据：[diff_1_flash-snr.patch:139](/F:/vps/verify/round-2/diff_1_flash-snr.patch:139)、[302](/F:/vps/verify/round-2/diff_1_flash-snr.patch:302)。
+
+2. **[P1] MAC 防误刷实际失效，并且设备型号没有准入校验。**  
+   指纹命令输出 `wan <MAC>`，正则却要求 `wan: <MAC>`，因此正常输出被解析为 `{}`，所有前缀排除判断均落空，最终仍返回出厂设备。`model` 只用于展示，缺失 MAC、未知型号都不阻止刷机；任一可用出厂口令登录的设备可能进入硬编码的清理及块设备擦写流程。  
+   证据：[diff_2_flash-batch.patch:62](/F:/vps/verify/round-2/diff_2_flash-batch.patch:62)–70；本地用两行合法 MAC 输出复现，解析结果为空。
+
+3. **[P1] 并行刷机共享远端临时文件，会混用或丢失公钥。**  
+   各台都向 DMIT 的 `/tmp/snr-ak` 上传，再读取、删除；TX/BWG 分发也共享 `/tmp/snr-ak-tb`。可复现交错：A 上传→B 覆盖→A 查找自己的编号失败并删除→B 读取不存在的文件。更严重的是下游直接 `cat` 临时文件，可能把 B 公钥当成 A 本轮分发内容。批量预分配端口无法消除这些竞争。  
+   证据：[diff_1_flash-snr.patch:391](/F:/vps/verify/round-2/diff_1_flash-snr.patch:391)–407。
+
+4. **[P1] TX/BWG 分发命令传入的是字面量 `$K`，失败后仍继续。**  
+   `O='-i $K ...'` 保留了字面量，后续 `$O` 展开不会再次展开其中的 `$K`。本地 shell 复现，`-i` 的下一参数确实为 `$K`。没有另外可用的默认认证时，分发失败；代码仅打印失败，不中止。  
+   证据：[diff_1_flash-snr.patch:402](/F:/vps/verify/round-2/diff_1_flash-snr.patch:402)–411。
+
+5. **[P1] “防劫持纠偏重试”没有纠正 API，而且第一次错误写入已发生。**  
+   POST 使用 `M.BASE`，之后才查 DMIT。第二轮只是给执行 SSH 查询的子进程设置 `MGMT_API_BASE`：不会改变父进程的 `M.BASE`，也没有重新认证、重新录入；实际只是重复同一个 SQL。若入口指向 DO，旧库已经被写入后才中止，与“旧管理库冻结勿写”冲突。  
+   证据：[diff_1_flash-snr.patch:239](/F:/vps/verify/round-2/diff_1_flash-snr.patch:239)–265；[变更说明.md:22](/F:/vps/verify/round-2/变更说明.md:22) 对纠偏效果的描述不成立。
+
+6. **[P1] 擦写数据分区没有卸载成功或目标身份闸门。**  
+   `umount` 的返回码被忽略，接着无条件覆盖 `/dev/mmcblk0p6` 前 256 MiB；`umount -l` 返回成功也不能证明所有引用及 I/O 已结束。代码没有核验该分区确为预期数据盘、保存恢复材料或验证擦写结果。该操作实际破坏文件系统元数据，不能等同于“只隔离”。  
+   证据：[diff_1_flash-snr.patch:191](/F:/vps/verify/round-2/diff_1_flash-snr.patch:191)–200；[SOP:226](/F:/vps/docs/operations/新SN-R1刷机录入SOP-自动化-20260928.md:226) 的保留描述与实现存在冲突。
+
+7. **[P2] WiFi 开机策略被追加到既有 `exit 0` 后，通常不会执行。**  
+   步骤 5 明确保留并在 `exit 0` 前插入 onboot-hooks；步骤 9 仅删除旧 `# wifi-default-off` 起的尾部。新机不存在该标记时，原来的 `exit 0` 留着，后追加的 WiFi 重试及 cron 恢复块不可达。当前关 WiFi 不等于“人工开启后重启仍恢复开启”。  
+   证据：[diff_1_flash-snr.patch:345](/F:/vps/verify/round-2/diff_1_flash-snr.patch:345)、[543](/F:/vps/verify/round-2/diff_1_flash-snr.patch:543)–558。
+
+8. **[P2] PCDN 终验会把检查命令自身计入，还漏查部分清理对象。**  
+   `ps w | grep -cE ...` 未排除 grep 及远端 shell；在显示命令参数的环境中，检查自身即可令计数非零。本地无 PCDN、只有该 grep 的进程输出样例得到计数 1。另一方面，终验没有覆盖清理列表中的 `net_qua_cli`、`inst_width`、`tcp_stun_ser`，也没有查残留监听及自启入口。  
+   证据：[diff_1_flash-snr.patch:180](/F:/vps/verify/round-2/diff_1_flash-snr.patch:180)、[606](/F:/vps/verify/round-2/diff_1_flash-snr.patch:606)、[620](/F:/vps/verify/round-2/diff_1_flash-snr.patch:620)。SOP 已在 [244](/F:/vps/docs/operations/新SN-R1刷机录入SOP-自动化-20260928.md:244) 提醒这一误判。
+
+9. **[P2] QUIC“复验”没有读取结果，前面还再次执行会挤位的脚本。**  
+   mihomo 启动块已加入自愈，但随后又直接调用一次 `mihomo-ipt.sh`；按 SOP 所述机制，这会重新把 DROP 插到首位。下发双验后所谓“复验”仅执行 `-D/-I`，没有检查返回码、读取规则或更新验收结果。不能证明重载后顺序已经正确。  
+   证据：[diff_1_flash-snr.patch:478](/F:/vps/verify/round-2/diff_1_flash-snr.patch:478)–491、[640](/F:/vps/verify/round-2/diff_1_flash-snr.patch:640)–643。
+
+10. **[P2] 批量锁不具备互斥保证，失败也不能可靠交付。**  
+    `exists`→普通 `open("w")` 是非原子操作，两进程可同时通过。超过 90 分钟只凭年龄接管，没有判断原进程是否仍活着；分配、子任务超时或日志写入异常后，也没有覆盖全流程的 `finally` 清锁。普通子任务返回非零时，批量主进程仍正常退出 0；超时则没有该任务完整日志或汇总。  
+    证据：[diff_2_flash-batch.patch:97](/F:/vps/verify/round-2/diff_2_flash-batch.patch:97)–104、[113](/F:/vps/verify/round-2/diff_2_flash-batch.patch:113)–153。
+
+11. **[P2] 分配查询失败会猜测编号和端口，端口池也会越界。**  
+    SSH/数据库失败未检查返回码，空输出直接退回编号 8、端口 13230，可能复用既有身份及本地凭证文件。批量分配没有单台分配器的 `<13300` 限制。提取函数并 mock SSH 后复现：失败仍分配 `[8,9]`、`[13230,13231]`；当前最大口为 13299 时分配 `[13300,13301]`。  
+    证据：[diff_2_flash-batch.patch:74](/F:/vps/verify/round-2/diff_2_flash-batch.patch:74)–95。
+
+12. **[P2] 传输和任务失败处理仍不足，成功结论缺少重启后证据。**  
+    `push()` 没有核对远端退出码、长度或摘要，`run()` 同样不检查退出码；发布超时返回 `None` 后，打印语句先执行 `t.get(...)`，会直接抛异常。此外，下发后的出口比较未去除换行，响应带换行即可误失败。最终成功条件也没有真实重启、MAC 生效及重启后清理持久性验证。  
+    证据：[diff_1_flash-snr.patch:120](/F:/vps/verify/round-2/diff_1_flash-snr.patch:120)–128、[520](/F:/vps/verify/round-2/diff_1_flash-snr.patch:520)、[635](/F:/vps/verify/round-2/diff_1_flash-snr.patch:635)–646；[SOP:230](/F:/vps/docs/operations/新SN-R1刷机录入SOP-自动化-20260928.md:230) 要求真实重启验证。
+
+两份补丁的 Python AST 均可解析，提取的 mihomo init 脚本通过 `sh -n`；语法通过不能排除上述执行问题。变更说明中关于 R7 已清理、重启验证及当前暴露面的内容属于历史陈述，本次未取得现网证据，不能据此独立确认 R7 已无残留。
+tokens used
+84,359

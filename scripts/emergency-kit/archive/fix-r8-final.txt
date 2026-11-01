@@ -1,0 +1,21 @@
+echo DEVICE: $(grep DEVICE_ID /etc/routermgmt/agent.conf | cut -d= -f2)
+echo === 1. 移除 DO 死端点 ===
+sed -i 's/^VPS4_HOST=.*/#VPS4_HOST disabled (no key on DO)/' /etc/routermgmt/tunnel.conf
+sed -i 's/^VPS4_PORT=.*/#VPS4_PORT disabled/' /etc/routermgmt/tunnel.conf
+echo === 2. 杀掉所有旧隧道进程 ===
+killall ssh 2>/dev/null
+sleep 2
+echo === 3. 重启隧道服务（干净启动）===
+/etc/init.d/mgmt-tunnel restart
+sleep 12
+echo === 4. 验证 ===
+echo 进程数: $(ps w | grep -c [/]usr/bin/ssh)
+echo p43: $(curl -sk -m 6 -o /dev/null -w '%{http_code}' https://127.0.0.1:18443/api/v1/health)
+echo p47: $(curl -sk -m 6 -o /dev/null -w '%{http_code}' https://127.0.0.1:18447/api/v1/health)
+echo agent: $(ps w | grep -c [r]outermgmt-agent)
+echo 出口: $(curl -s -m 10 -x http://127.0.0.1:7890 https://api.ipify.org 2>/dev/null || echo FAIL)
+echo === 5. agent 重启（确保心跳走 18443）===
+/etc/init.d/routermgmt restart
+sleep 5
+echo agent_final: $(ps w | grep -c [r]outermgmt-agent)
+echo ALL_DONE

@@ -1,0 +1,1 @@
+This folder contains the built output assets for the worker "vless-test" generated at 2026-10-31T08:49:09.205Z.

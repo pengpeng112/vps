@@ -6,23 +6,25 @@
   python scripts/webprobe_report.py --out 报告.md  # 同时写出 Markdown
 输出：轮次概览 / 站点波动排名 / 按小时时段波动 / 异常事件清单
 """
-import csv, os, sys, datetime, argparse
+import csv, os, sys, datetime, argparse, glob
 from collections import defaultdict
 
-CSV = r"F:\vps\webprobe\webprobe.csv"
+DIR = r"F:\vps\webprobe"
 
 def load(days):
     rows = []
-    with open(CSV, encoding="utf-8") as f:
-        for r in csv.DictReader(f):
-            try:
-                r["dt"] = datetime.datetime.strptime(r["ts"], "%Y-%m-%d %H:%M:%S")
-            except Exception:
-                continue
-            rows.append(r)
+    for path in sorted(glob.glob(os.path.join(DIR, "webprobe*.csv"))):
+        with open(path, encoding="utf-8") as f:
+            for r in csv.DictReader(f):
+                try:
+                    r["dt"] = datetime.datetime.strptime(r["ts"], "%Y-%m-%d %H:%M:%S")
+                except Exception:
+                    continue
+                rows.append(r)
     if days:
         cutoff = datetime.datetime.now() - datetime.timedelta(days=days)
         rows = [r for r in rows if r["dt"] >= cutoff]
+    rows.sort(key=lambda r: r["dt"])
     return rows
 
 def group_rounds(rows):

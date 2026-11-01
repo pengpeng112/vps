@@ -1,0 +1,15 @@
+echo DEVICE: $(grep DEVICE_ID /etc/routermgmt/agent.conf | cut -d= -f2)
+if grep -q '^VPS_HOST=154.36.137.54' /etc/routermgmt/tunnel.conf; then
+  echo TUNNEL: already on GIA
+else
+  cp /etc/routermgmt/tunnel.conf /etc/routermgmt/tunnel.conf.bak
+  sed -i 's/^VPS_HOST=.*/VPS_HOST=154.36.137.54/; s/^VPS_PORT=.*/VPS_PORT=28722/' /etc/routermgmt/tunnel.conf
+  /etc/init.d/mgmt-tunnel restart
+  echo TUNNEL: retargeted to GIA and restarted
+fi
+sleep 10
+echo HEALTH: $(curl -sk -m 6 -o /dev/null -w '%{http_code}' https://127.0.0.1:18443/api/v1/health)
+curl -s -m 5 -X PUT http://127.0.0.1:9090/proxies/PROXY -H 'Content-Type: application/json' -d '{"name":"US666-CN2GIA-01"}' -o /dev/null
+sleep 3
+echo EGRESS: $(curl -s -m 12 -x http://127.0.0.1:7890 https://api.ipify.org 2>/dev/null || echo FAIL)
+echo DONE

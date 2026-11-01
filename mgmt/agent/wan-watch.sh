@@ -10,7 +10,7 @@
 LOGDIR=/etc/routermgmt/logs
 LOG=$LOGDIR/wan-watch.log
 LAST=$LOGDIR/wan-watch.last
-VPS=159.223.36.119
+VPS=179.255.137.64
 WG_HUB=10.10.0.1
 MIHOMO=http://127.0.0.1:9090/version
 

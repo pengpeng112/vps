@@ -1,0 +1,25 @@
+echo === DEVICE ===
+grep DEVICE_ID /etc/routermgmt/agent.conf
+uptime
+free | head -2
+echo === TUNNEL_PROCESSES ===
+ps w | grep [/]usr/bin/ssh
+echo === TUNNEL_CONF ===
+head -12 /etc/routermgmt/tunnel.conf
+echo === LOCAL_PORTS ===
+netstat -tln | grep 1844
+echo === GUANGZHOU_REACHABLE ===
+ping -c 2 -W 3 134.175.151.213 2>&1 | tail -1
+echo === SSH_TO_GZ ===
+timeout 5 /usr/bin/ssh -i /etc/routermgmt/id_dropbear_mgmt -p 28722 -o ConnectTimeout=3 -o StrictHostChecking=no -T root@134.175.151.213 echo GZ_OK 2>&1 | tail -1
+echo === AGENT_PROC ===
+ps w | grep [r]outermgmt
+echo === MIHOMO_PROC ===
+ps w | grep [m]ihomo
+echo === CRONTAB ===
+crontab -l 2>/dev/null | head -8
+echo === INIT_RESPAWN ===
+grep respawn /etc/init.d/routermgmt /etc/init.d/mgmt-tunnel 2>/dev/null
+echo === LOGREAD_TAIL ===
+logread 2>/dev/null | tail -15
+echo === DIAG_DONE ===

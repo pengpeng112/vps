@@ -1,0 +1,359 @@
+# 路由器管理台订阅黄金模板
+# 提取自 scripts/clash-config-router.yaml（2026-09-13 版），已删除全部节点凭据
+# 与静态节点引用。策略基线见任务书 §3：rules/dns/proxy-groups 顺序不得改乱。
+# 渲染器只允许替换 #{{...}} 标记行：节点列表、节点组成员、节点/管理面直连规则。
+mixed-port: 7890
+redir-port: 7892
+allow-lan: true
+bind-address: "*"
+mode: rule
+log-level: info
+ipv6: false
+unified-delay: true
+tcp-concurrent: true
+keep-alive-interval: 15
+find-process-mode: off
+external-controller: 127.0.0.1:9090
+
+profile:
+  store-selected: true
+  store-fake-ip: true
+
+sniffer:
+  enable: true
+  parse-pure-ip: true
+  override-destination: false
+  sniff:
+    HTTP:
+      ports: [80, 8080-8880]
+    TLS:
+      ports: [443, 8443]
+
+dns:
+  enable: true
+  listen: 0.0.0.0:1053
+  ipv6: false
+  enhanced-mode: fake-ip
+  fake-ip-range: 198.18.0.1/16
+  fake-ip-filter:
+    - "*.lan"
+    - "*.local"
+    - localhost
+    - "+.msftconnecttest.com"
+    - "+.msftncsi.com"
+    - "time.*.com"
+    - "ntp.*.com"
+    - "stun.*.*"
+  default-nameserver:
+    - 223.5.5.5
+    - 119.29.29.29
+  nameserver:
+    - https://doh.pub/dns-query
+    - https://dns.alidns.com/dns-query
+  fallback:
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+  fallback-filter:
+    geoip: true
+    geoip-code: CN
+    ipcidr:
+      - 240.0.0.0/4
+    domain:
+      - "+.google.com"
+      - "+.googleapis.com"
+      - "+.gstatic.com"
+      - "+.youtube.com"
+      - "+.github.com"
+      - "+.telegram.org"
+  proxy-server-nameserver:
+    - 223.5.5.5
+    - 8.8.8.8
+  nameserver-policy:
+    "geosite:cn,private":
+      - https://doh.pub/dns-query
+      - https://dns.alidns.com/dns-query
+
+proxies:
+  - name: "US666-CN2GIA-01"
+    type: vless
+    server: 154.36.139.155
+    port: 443
+    uuid: 4b619fdd-274a-4b4f-8d65-2a6a18104a85
+    network: tcp
+    udp: true
+    tls: true
+    flow: xtls-rprx-vision
+    servername: www.microsoft.com
+    client-fingerprint: chrome
+    reality-opts:
+      public-key: jft6wNeY5MFaP5-Va8xbPJ9kzcXX6bFKJ767IFcFwhU
+      short-id: 9beffc76f5566161
+  - name: "EDGE-TUNNEL-V2"
+    type: vless
+    server: 104.18.32.7
+    port: 443
+    uuid: d8f2a9c1-5e73-4b68-9c02-f1a4d8e6b739
+    network: ws
+    udp: false
+    tls: true
+    servername: vl.k3x9m2.top
+    client-fingerprint: chrome
+    ws-opts:
+      path: /k3x9
+      headers:
+        Host: vl.k3x9m2.top
+  - name: "GIA-HY2-US-01"
+    type: hysteria2
+    server: 154.36.139.155
+    port: 34568
+    password: 9e82c9cd0bf9001a49ac8f697298186c
+    udp: true
+    skip-cert-verify: true
+  - name: "BWG-VLESS-JPTY-01"
+    type: vless
+    server: 74.82.193.113
+    port: 443
+    uuid: 97ff051d-878b-4b86-a862-8ab4e4287212
+    network: tcp
+    udp: true
+    tls: true
+    flow: xtls-rprx-vision
+    servername: www.microsoft.com
+    client-fingerprint: chrome
+    reality-opts:
+      public-key: 3LERrU-fx3dsrtuA2suzuRu-3vLeXxdPf2ngXH-pam4
+      short-id: 7f5f01569c5fbb91
+  - name: "CF-CDN-GIA-01"
+    type: vless
+    server: 104.18.32.7
+    port: 2053
+    uuid: 38ca542a-eb36-4c45-adb4-d8493b0ea011
+    network: ws
+    udp: false
+    tls: true
+    servername: cf.k3x9m2.top
+    client-fingerprint: chrome
+    ws-opts:
+      path: /k3x9
+      headers:
+        Host: cf.k3x9m2.top
+  - name: "CF2-CDN-GIA-01"
+    type: vless
+    server: 162.159.135.42
+    port: 2053
+    uuid: 38ca542a-eb36-4c45-adb4-d8493b0ea011
+    network: ws
+    udp: false
+    tls: true
+    servername: cf.k3x9m2.top
+    client-fingerprint: chrome
+    ws-opts:
+      path: /k3x9
+      headers:
+        Host: cf.k3x9m2.top
+
+proxy-providers:
+  airport-sub:
+    type: http
+    url: "https://sub.subpremium.cc/api/v1/client/subscribe?token=ab61be77e45a2ce82d3277735461d99e"
+    path: ./proxy_providers/airport-g02.yaml
+    interval: 21600
+    proxy: NODE-PICK
+    health-check:
+      enable: true
+      url: https://www.gstatic.com/generate_204
+      interval: 300
+      timeout: 5000
+      lazy: false
+      expected-status: 204
+    exclude-filter: '(剩余流量|套餐到期|到期时间|官网|公告|重置时间|节点超时.*更新订阅)'
+    override:
+      additional-prefix: "AP | "
+
+proxy-groups:
+  - name: "PROXY"
+    type: select
+    proxies:
+      - AUTO
+      - US666-CN2GIA-01
+      - EDGE-TUNNEL-V2
+      - GIA-HY2-US-01
+      - BWG-VLESS-JPTY-01
+      - CF-CDN-GIA-01
+      - CF2-CDN-GIA-01
+      - DIRECT
+  # AIRPORT = 机场订阅兜底（2026-10-31 第4层）：url-test 自动择优；仅 AIRPORT_SUB_URL
+  # 配置时渲染。empty-fallback REJECT 防空组直连（Codex 评审）。
+  - name: "AIRPORT"
+    type: url-test
+    use:
+      - airport-sub
+    url: https://www.gstatic.com/generate_204
+    interval: 300
+    timeout: 5000
+    expected-status: 204
+    tolerance: 100
+    lazy: false
+    empty-fallback: REJECT
+
+  # AUTO and nested NODE-PICK use the same overseas HTTPS health target.
+  # Domestic Apple reachability cannot prove overseas service availability.
+  - name: "AUTO"
+    type: fallback
+    url: https://www.gstatic.com/generate_204
+    interval: 120
+    timeout: 4000
+    expected-status: 204
+    lazy: false
+    proxies:
+      - NODE-PICK
+      - AIRPORT
+      - DIRECT
+  # NODE-PICK = 节点主备（2026-09-27 M03：url-test 改为有序 fallback）：
+  # fallback 按成员顺序取第一个健康节点。成员顺序由绑定渲染（primary 在前），
+  # 不在模板里硬编码——现网实况（2026-10-02）：R2/R3/R4 交互主用东京
+  # BWG-VLESS，视频与大文件走 US-MEDIA（LAX）。旧注释「主用腾讯、备用 DO」已过时。
+  # 简单 fallback 无外部质量控制器的防抖/评分能力，边界与限制见 docs/plans
+  # 网络计划 §6.1。
+  # 2026-10-26 lazy:false + interval 120（BWG 被墙事故复盘）：mihomo fallback 组默认
+  # lazy=true——组无流量即暂停探测，节点存活状态停在旧标记，被墙后 17 小时不切换
+  # （R4 实证）。lazy:false 强制常测，节点失效 ≤2 分钟内自动落到下一健康成员。
+  - name: "NODE-PICK"
+    type: fallback
+    url: https://www.gstatic.com/generate_204
+    interval: 120
+    lazy: false
+    proxies:
+      - US666-CN2GIA-01
+      - EDGE-TUNNEL-V2
+      - GIA-HY2-US-01
+      - BWG-VLESS-JPTY-01
+      - CF-CDN-GIA-01
+      - CF2-CDN-GIA-01
+  - name: "CN-MEDIA"
+    type: select
+    proxies:
+      - DIRECT
+  - name: "DOWNLOAD"
+    type: select
+    proxies:
+      - DIRECT
+      - PROXY
+  # Explicit members: available LAX nodes first, then NODE-PICK.
+  # include-all excludes groups and previously produced COMPATIBLE without LAX.
+  - name: "US-MEDIA"
+    type: fallback
+    url: https://www.gstatic.com/generate_204
+    interval: 300
+    lazy: false
+    timeout: 4000
+    expected-status: 204
+    proxies:
+      - NODE-PICK
+      - AIRPORT
+
+rules:
+  - IP-CIDR,154.36.139.155/32,DIRECT,no-resolve
+  - IP-CIDR,104.18.32.7/32,DIRECT,no-resolve
+  - IP-CIDR,154.36.139.155/32,DIRECT,no-resolve
+  - IP-CIDR,74.82.193.113/32,DIRECT,no-resolve
+  - IP-CIDR,104.18.32.7/32,DIRECT,no-resolve
+  - IP-CIDR,162.159.135.42/32,DIRECT,no-resolve
+  # 2026-10-29 政企业务系统强制直连（昌乐实测：阿里云高防域名 GeoIP 误判海外→走代理→站点拒访）
+  - DOMAIN-SUFFIX,istarshine.com,DIRECT
+  - GEOIP,private,DIRECT,no-resolve
+  - IP-CIDR,192.168.0.0/16,DIRECT,no-resolve
+  - IP-CIDR,10.0.0.0/8,DIRECT,no-resolve
+  - IP-CIDR,172.16.0.0/12,DIRECT,no-resolve
+  - IP-CIDR,100.64.0.0/10,DIRECT,no-resolve
+  - IP-CIDR,169.254.0.0/16,DIRECT,no-resolve
+  - IP-CIDR6,fc00::/7,DIRECT,no-resolve
+  - IP-CIDR6,fe80::/10,DIRECT,no-resolve
+  - GEOSITE,private,DIRECT
+
+  # 国内视频/短视频/直播 —— 禁止走节点
+  - GEOSITE,bilibili,CN-MEDIA
+  - GEOSITE,iqiyi,CN-MEDIA
+  - GEOSITE,youku,CN-MEDIA
+  - GEOSITE,bytedance,CN-MEDIA
+  - DOMAIN-SUFFIX,bilivideo.com,CN-MEDIA
+  - DOMAIN-SUFFIX,hdslb.com,CN-MEDIA
+  - DOMAIN-SUFFIX,iqiyi.com,CN-MEDIA
+  - DOMAIN-SUFFIX,iqiyipic.com,CN-MEDIA
+  - DOMAIN-SUFFIX,youku.com,CN-MEDIA
+  - DOMAIN-SUFFIX,ykimg.com,CN-MEDIA
+  - DOMAIN-SUFFIX,v.qq.com,CN-MEDIA
+  - DOMAIN-SUFFIX,video.qq.com,CN-MEDIA
+  - DOMAIN-SUFFIX,mgtv.com,CN-MEDIA
+  - DOMAIN-SUFFIX,hitv.com,CN-MEDIA
+  - DOMAIN-SUFFIX,douyin.com,CN-MEDIA
+  - DOMAIN-SUFFIX,douyinvod.com,CN-MEDIA
+  - DOMAIN-SUFFIX,amemv.com,CN-MEDIA
+  - DOMAIN-SUFFIX,byteimg.com,CN-MEDIA
+  - DOMAIN-SUFFIX,ixigua.com,CN-MEDIA
+  - DOMAIN-SUFFIX,kuaishou.com,CN-MEDIA
+  - DOMAIN-SUFFIX,yximgs.com,CN-MEDIA
+  - DOMAIN-SUFFIX,xiaohongshu.com,CN-MEDIA
+  - DOMAIN-SUFFIX,xhscdn.com,CN-MEDIA
+
+  # 国内互联网
+  - GEOSITE,tencent,DIRECT
+  - GEOSITE,alibaba,DIRECT
+  - GEOSITE,baidu,DIRECT
+  - GEOSITE,netease,DIRECT
+  - GEOSITE,xiaomi,DIRECT
+  - GEOSITE,apple-cn,DIRECT
+  # gstatic 资源域：google-cn 名单把它判 DIRECT，但办公网下 mihomo DNS fallback
+  # 可能给出境外不可达答案（09-27 实测 SN-R1 得 142.251.12.94 直连超时），
+  # 强制走 PROXY 且必须先于 GEOSITE,google-cn 命中（统一优化 M02）
+  - DOMAIN-SUFFIX,gstatic.com,PROXY
+  - DOMAIN-SUFFIX,dl.google.com,PROXY
+  - GEOSITE,google-cn,DIRECT
+  - GEOSITE,category-games@cn,DIRECT
+  - GEOSITE,cn,DIRECT
+  - GEOIP,CN,DIRECT,no-resolve
+  # 专线/内网业务域名：公网 geosite 清单不收录，GEOIP,no-resolve 对域名不生效，
+  # 不显式直连会落入 MATCH,PROXY 出国回访内网端口被拒（2026-09-26 ydbi.sdent.com.cn:29080 案例）
+  - DOMAIN-SUFFIX,sdent.com.cn,DIRECT
+
+  # 大流量下载默认直连（省钱）；商店打不开再把 DOWNLOAD 切到 PROXY
+  - DOMAIN-SUFFIX,steamcontent.com,DOWNLOAD
+  - DOMAIN-SUFFIX,steamserver.net,DOWNLOAD
+  - DOMAIN-KEYWORD,steampipe,DOWNLOAD
+  - DOMAIN-SUFFIX,windowsupdate.com,DOWNLOAD
+  - DOMAIN-SUFFIX,update.microsoft.com,DOWNLOAD
+  - DOMAIN-SUFFIX,dl.delivery.mp.microsoft.com,DOWNLOAD
+  - DOMAIN-SUFFIX,swcdn.apple.com,DOWNLOAD
+
+  # 海外视频/流媒体/大文件 → 美西分流（2026-10-02 阶段1）：
+  # GEOSITE 类别仅用设备 dat 中已确证存在的 youtube/netflix，其余手工域名（零启动风险）。
+  # 顺序在国内直连段之后，不影响国内判定。
+  - GEOSITE,youtube,US-MEDIA
+  - GEOSITE,netflix,US-MEDIA
+  - DOMAIN-SUFFIX,youtube.com,US-MEDIA
+  - DOMAIN-SUFFIX,youtu.be,US-MEDIA
+  - DOMAIN-SUFFIX,ytimg.com,US-MEDIA
+  - DOMAIN-SUFFIX,googlevideo.com,US-MEDIA
+  - DOMAIN-SUFFIX,ggpht.com,US-MEDIA
+  - DOMAIN-SUFFIX,netflix.com,US-MEDIA
+  - DOMAIN-SUFFIX,nflximg.net,US-MEDIA
+  - DOMAIN-SUFFIX,nflxvideo.net,US-MEDIA
+  - DOMAIN-SUFFIX,nflxext.com,US-MEDIA
+  - DOMAIN-SUFFIX,nflxso.net,US-MEDIA
+  - DOMAIN-SUFFIX,disneyplus.com,US-MEDIA
+  - DOMAIN-SUFFIX,bamgrid.com,US-MEDIA
+  - DOMAIN-SUFFIX,dssott.com,US-MEDIA
+  - DOMAIN-SUFFIX,primevideo.com,US-MEDIA
+  - DOMAIN-SUFFIX,amazonvideo.com,US-MEDIA
+  - DOMAIN-SUFFIX,tiktok.com,US-MEDIA
+  - DOMAIN-SUFFIX,tiktokcdn.com,US-MEDIA
+  - DOMAIN-SUFFIX,tiktokv.com,US-MEDIA
+  - DOMAIN-SUFFIX,byteoversea.com,US-MEDIA
+  - DOMAIN-SUFFIX,spotify.com,US-MEDIA
+  - DOMAIN-SUFFIX,scdn.co,US-MEDIA
+  - DOMAIN-SUFFIX,spotifycdn.com,US-MEDIA
+  - DOMAIN-SUFFIX,githubusercontent.com,US-MEDIA
+  - DOMAIN-SUFFIX,githubassets.com,US-MEDIA
+
+  - AND,((NETWORK,UDP),(DST-PORT,443)),REJECT
+  - MATCH,PROXY

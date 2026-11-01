@@ -1,0 +1,2 @@
+error: failed to run prompt: provider.rate_limit: 429 You've reached your weekly (7-day) usage limit. Your quota will reset when the current 7-day window ends. To continue now, purchase extra usage or upgrade your plan: https://www.kimi.com/membership/subscription?tab=quota
+See log: C:/Users/Administrator/.kimi-code/logs/kimi-code.log

@@ -10,6 +10,7 @@ const router = createRouter({
     { path: '/nodes', component: () => import('./views/Nodes.vue') },
     { path: '/tasks', component: () => import('./views/Tasks.vue') },
     { path: '/alerts', component: () => import('./views/Alerts.vue') },
+    { path: '/traffic', component: () => import('./views/Traffic.vue') },
     { path: '/audit', component: () => import('./views/Audit.vue') },
     { path: '/settings', component: () => import('./views/Settings.vue') },
   ],

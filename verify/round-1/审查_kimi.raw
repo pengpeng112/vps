@@ -1,0 +1,60 @@
+• 我先读取指定的三份文件。
+
+• 核查完成。说明边界：我是只读审查，无法重连现网复测，故对"现网实测"类论断的核查方式为——证据链自洽性、结论是否被所列证据支撑、是否存在未排除的替代解释；源码类论断则直接比对文件原文。以下逐条结论。
+
+  ---
+
+  ## 问题清单逐条核查
+
+  ### P1 BWG root 密码登录 + 爆破 — 【确认有问题，高】
+  - 证据自洽：sshd 主文件 `PasswordAuthentication yes` + `PermitRootLogin yes`，lastb 1023 条且 10-10 01:16 仍在打（77.239.124.74 字典试 pi/root），fail2ban 累计仅 ban 44 —— 爆破面真实存在且持续。公网 22 口 + root 密码登录是教科书级高危。
+  - 两点保留：
+    1. 报告称配置来自"sshd_config 主文件"，未提及核查 `sshd_config.d/*.conf` 包含文件（Debian/Ubuntu 默认 `Include /etc/ssh/sshd_config.d/*.conf`，drop-in 可能已覆盖主文件，也可能没有）。**验证命令**：`sshd -T | grep -Ei 'passwordauthentication|permitrootlogin'`（sshd -T 输出才是生效值）。若 drop-in 已关密码登录，则 P1 降级为配置卫生问题。
+    2. fail2ban 在兜底，实际风险被部分缓解，但"治标"判断正确——单点失效（fail2ban 挂掉/规则漏配 IPv6）即裸奔。
+  - 修复建议（报告未写）：BWG 上 `PasswordAuthentication no`，风险立即归零，密钥链路已验证可用（证据 C 第 5 行），无锁出风险。
+
+  ### P2 R4 隧道冗余降级 — 【确认有问题，中】
+  - 证据链完整且互相印证：tunnel.conf 三端点（无 VPS4/DO 兜底）+ dbclient 实例 4 对 5 + TX/BWG 侧 auth 日志近 2 小时为零 + 公钥两侧俱在（排除密钥缺失）+ crontab 无 discovery 条目。"TX/BWG 隧道半开僵尸"是多重旁证下的合理结论，非单一探测假阳性（避开了 AGENTS.md 高危坑清单里的"测量假阴性"）。
+  - 影响评估准确：DMIT 主台健康时无功能影响，DMIT 故障时 R4 管理面失联——定为"中"合理（是冗余失效而非现役故障）。
+  - 补充一点报告未点透的：半开僵尸的根因大概率是 dbclient 缺 `ServerAliveInterval`/keepalive，光补第四端点不解决 TCP 死链感知问题，R2/R3 同样配置下只是暂未踩到。**验证命令**（R4 排障口）：`ps | grep dbclient` 看是否有 `-K`/`-I` keepalive 参数。
+
+  ### P3 证书 SAN 致浏览器不存密码 — 【疑问，中】（根因方向对，但不完整）
+  - 已核实部分：
+    - Login.vue:61-70 的 DOM 要素与报告描述逐字相符：`n-form @submit.prevent`、username/password 的 autocomplete 与 name、`attr-type="submit"`。✔
+    - 证书 SAN 仅 `IP:10.10.0.1` 的 openssl 实测双端一致，访问主机 127.0.0.1 不匹配 → 证书错误页 → Chromium 在绕过证书错误的页面禁用密码保存，此因果链为浏览器既定行为，成立。
+  - 报告漏掉的第二个独立瓶颈：登录是 **fetch/XHR 提交**（Login.vue:22 `api.post`，且 `@submit.prevent` 阻止了原生表单提交、无页面跳转）。Chromium 的密码保存气泡对"无导航的 XHR 登录"触发本就不可靠——即便证书修好、绿锁出现，保存提示仍可能不弹。报告断言"DOM 修复是对的，它不是瓶颈"（bug报告第 18 行）证据不足：10-02 修复后"未生效"这一事实同时兼容"证书是唯一瓶颈"和"XHR 提交也是瓶颈"两种解释。
+  - 另注意：登录是两段式（密码 → TOTP ticket），`code` 输入框无 `autocomplete="one-time-code"`（Login.vue:81/91），属小 UX 遗漏，不影响密码保存。
+  - 验收建议：重签证书+导入 CA 后若不弹保存提示，备选是把提交改回原生 form submit（或提交后触发一次隐藏导航）。修复方案本身（SAN 加 127.0.0.1/localhost + 导入根证书）正确且最小，照做无妨，但"修复即终验"的预期要放宽。
+  - **验证方式**：证书修复后 Chrome 实测；若仍不弹，F12 确认提交是否产生 document navigation。
+
+  ### P4 R3/R4 WAN MAC 未固定 — 【确认有问题，低】
+  - 证据：R3 重启后 MAC 从 `02:e7:5d:...` 漂移为 `E2:3B:70:...`、`uci wan.macaddr` 为空，实测充分。
+  - 严重度同意"低"：上级无 IP-MAC 绑定，漂移后业务实测正常。属于卫生项+未来隐患（哪天上级开了绑定就断网），不紧急。
+
+  ### P5–P8 低危项（对应 H2/H3/H6/G1）
+  - **H2 DMIT standby 残留 10-01 旧 latest-backup.tar.gz** — 【确认，低】。11M 旧恢复点与现行备份链无关，"误恢复风险"判断成立。处置建议：重命名加 `.stale` 后缀或直接删除（删除属写操作，需授权）。
+  - **H3 sing-box 版本未查** — 【疑问，低/待定】。报告诚实标注"未验证"，合规。BWG/DMIT sing-box 监听公网 443，版本核查命令：`sing-box version` + 对照 GitHub release 安全公告。REALITY/hy2 协议面历史上出过实现层 CVE，值得补查。
+  - **H6 r4-watch.sh 监控失效** — 【确认，低】。ping 旧 WAN IP 119.190.40.236（10-08 已换 120.221.100.7），监控静默失效比没有监控更糟（给人"在盯着"的错觉）。更新 IP 或退役均可。
+  - **G1 TX `PermitRootLogin yes`** — 【确认无实际风险，低】。密码认证已关，语义上等价 prohibit-password，纯语义卫生项，报告定性准确。
+
+  ### N1–N3 非问题判定
+  - **N1 DO 22 端口 ufw DENY 是刻意配置** — 【确认无问题】。与"本机 22 连接超时非故障"的观察吻合，28722 仍通，判定有据。
+  - **N2 雅典娜已迁 DMIT（DO 18222 口释放、13228=rtr-5e1a8d 实证）** — 【确认无问题】。有端口释放+设备 ID 双重实证，DO 退役清单可勾销一项。
+  - **N3 R5 WAN/电源级中断为现场问题、非本轮可修** — 【确认判定合理】。13225 无监听与断电结论一致，范围切分清楚。
+
+  ---
+
+  ## 两份文档未覆盖的遗漏风险
+
+  1. **JWT 存 localStorage（api.ts:2,6）—— XSS 即全凭证沦陷**。管理台是单用户自用、暴露面小，实际风险低，但报告完全未触及前端会话存储面；且 Token 无过期/刷新机制的迹象（api.ts 无 refresh 逻辑），长期有效 token 落 localStorage，建议至少确认后端 JWT 有效期。**证据**：`mgmt/frontend/src/api.ts:2-7`。
+  2. **DMIT authorized_keys 有 3 行无 permitlisten 限制**（证据 B 第 7 行"10 行、7 行含 permitlisten"）。报告列了数字但未追问那 3 行是谁、是否该收紧——无限制的 key 若泄漏可任意远程转发，把 DMIT 变成开放跳板。**验证命令**：`grep -v permitlisten /root/.ssh/authorized_keys`。
+  3. **备份链路密钥权限未审**。DMIT→TX/BWG 用 txbackup 密钥推送备份，该密钥在对端是否限制了 `ForceCommand`/目录未见核查；备份包本身含管理库全量数据，落在 TX/BWG 的加密/权限状态未提及。
+  4. **8443 绑 `10.10.0.1`（WG 接口）的横向暴露**（证据 B 第 4 行）。报告视其为"未暴露公网"即过关，但 WG 网段内任一对等体（含经 DO 的历史 WG hub 依赖）均可直达管理台登录页，未评估 WG peer 间隔离需求。
+  5. **Login.vue 回车双触发小 bug**：`@keyup.enter="login"` 与 `@submit.prevent="login"` 并存（Login.vue:62），密码框回车可能两次调用 `login()`，`loading` 标志未做重入拦截。低危，偶发重复请求。
+  6. **备份保留策略只见"至少 3 日"**（证据 A 末行），未见 rotation 上限——`backup.sh` 若无清理逻辑，磁盘慢性填满。验证：`ls /opt/mgmt/backups | wc -l`。
+  7. **心跳新鲜度未直核**已被报告自标"部分未验证"（G 节），合规，但建议 round-2 补上 `SELECT device_id, last_heartbeat_at FROM devices` 实测值而非仅以排障口监听旁证。
+
+  ---
+
+  **总评**：两份文档的证据纪律较好（标注未验证项、区分实测与推断、命令只读），P1/P2/P4 结论可信；P3 的根因分析方向正确但把 XHR 提交这一并行瓶颈排除得过于干脆，是本轮唯一需要下修的论断。无证据表明两份文档存在编造。
+

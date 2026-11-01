@@ -8,10 +8,10 @@
 import csv, os, subprocess, time, datetime, socket
 
 OUT_DIR = r"F:\vps\webprobe"
-OUT = os.path.join(OUT_DIR, "webprobe.csv")
+OUT = os.path.join(OUT_DIR, "webprobe-v2.csv")   # v2：含 verdict 判定列；旧 webprobe.csv 为历史保留
 
 SITES = [
-    # (名称, URL)  ——均为 HTTPS，走系统默认路径（= 经 SN-R1 透明代理按分流规则出去）
+    # (名称, URL)  ——均为 HTTPS，走系统默认路径（= 经当前网关路由器透明代理按分流规则出去）
     # 2026-09-27 M04：补 gstatic（M02 修复验证）与 baidu（F3 公司上联 POP 黑洞对照）
     ("gstatic",      "https://www.gstatic.com/generate_204"),
     ("google_search", "https://www.google.com/generate_204"),
@@ -26,6 +26,12 @@ SITES = [
     ("wikipedia",     "https://www.wikipedia.org/robots.txt"),
     ("twitch",        "https://www.twitch.tv/robots.txt"),
     ("github",        "https://github.com/robots.txt"),
+    # 2026-09-29：全类别扩充（视频/消息/新闻），本机已改挂雅典娜路径
+    ("netflix",       "https://www.netflix.com/robots.txt"),
+    ("telegram",      "https://telegram.org/robots.txt"),
+    ("whatsapp",      "https://www.whatsapp.com/robots.txt"),
+    ("discord",       "https://discord.com/robots.txt"),
+    ("cnn",           "https://www.cnn.com/robots.txt"),
 ]
 
 def curl_once(url):
@@ -41,6 +47,17 @@ def curl_once(url):
     except Exception:
         return "000", 999.0, 999.0, 999.0, 999.0
 
+def fail_kind(r):
+    """对 000 结果做失败类型归因：dns/tcp/tls/http"""
+    code, total, conn, tls, ttfb = r
+    if total < 1.0:
+        return "dns"      # 秒败：域名解析/本地错误
+    if conn == 0.0 and tls == 0.0:
+        return "tcp"      # TCP 都建不起来：线路丢包或被阻断
+    if tls == 0.0:
+        return "tls"      # TCP 通但 TLS 握手失败：中间盒/代理协议层问题
+    return "http"
+
 def probe_site(name, url):
     results = [curl_once(url) for _ in range(3)]
     codes = [r[0] for r in results]
@@ -49,10 +66,24 @@ def probe_site(name, url):
     def avg(i):
         vals = [r[i] for r in results if r[0] != "000"]
         return round(sum(vals) / len(vals), 3) if vals else ""
-    tls13 = ""
-    # tls>=0.001 且非 000 即视为完成 TLS 协商（TLS1.3 与否区分成本高，这里记录协商耗时）
-    if ok_codes:
-        tls13 = "yes" if all(r[3] > 0 for r in results if r[0] != "000") else "partial"
+    # 综合判定：超时(含类型)/慢/不稳定(抖动)/正常
+    if ok < 3:
+        kinds = {}
+        for r in results:
+            if r[0] == "000":
+                k = fail_kind(r)
+                kinds[k] = kinds.get(k, 0) + 1
+        verdict = "timeout:" + "+".join(f"{k}x{n}" for k, n in sorted(kinds.items()))
+    else:
+        totals = [r[1] for r in results]
+        a = sum(totals) / 3
+        jitter = max(totals) - min(totals)
+        if a > 3:
+            verdict = "slow"
+        elif jitter > 1.5:
+            verdict = "jitter"
+        else:
+            verdict = "ok"
     return {
         "ts": datetime.datetime.now().strftime("%F %T"),
         "site": name,
@@ -61,6 +92,7 @@ def probe_site(name, url):
         "max_total_s": max((r[1] for r in results if r[0] != "000"), default=""),
         "avg_connect_s": avg(2), "avg_tls_s": avg(3), "avg_ttfb_s": avg(4),
         "codes": "|".join(codes),
+        "verdict": verdict,
     }
 
 def main():
@@ -76,8 +108,9 @@ def main():
     okn = sum(1 for r in rows if r["ok_rate"] == "3/3")
     scored = [r for r in rows if r["avg_total_s"] != ""]
     worst = max(scored, key=lambda r: float(r["avg_total_s"])) if scored else None
-    fails = [f'{r["site"]}({r["codes"]})' for r in rows if r["ok_rate"] != "3/3"]
+    fails = [f'{r["site"]}({r["verdict"]})' for r in rows if r["verdict"] not in ("ok", "slow")]
     slow = [f'{r["site"]}={r["avg_total_s"]}s' for r in scored if float(r["avg_total_s"]) > 3]
+    jit = [f'{r["site"]}({r["verdict"]})' for r in rows if r["verdict"] == "jitter"]
     line = f'{rows[0]["ts"]} | ok {okn}/{len(rows)}'
     if worst:
         line += f' | worst {worst["site"]} {worst["avg_total_s"]}s'
@@ -85,6 +118,8 @@ def main():
         line += " | FAIL " + ",".join(fails)
     if slow:
         line += " | SLOW " + ",".join(slow)
+    if jit:
+        line += " | JITTER " + ",".join(jit)
     with open(os.path.join(OUT_DIR, "webprobe_runs.log"), "a", encoding="utf-8") as f:
         f.write(line + "\n")
     # rotation

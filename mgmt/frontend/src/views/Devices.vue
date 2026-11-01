@@ -71,7 +71,7 @@ onMounted(load)
       <n-table size="small" :bordered="false">
         <thead>
           <tr>
-            <th>名称</th><th>ID</th><th>地点</th><th>状态</th><th>排障SSH</th><th>出口 IP</th>
+            <th>名称</th><th>ID</th><th>MAC</th><th>地点</th><th>状态</th><th>排障SSH</th><th>出口 IP</th>
             <th>上线时间</th><th>期限</th><th>最后心跳</th><th>操作</th>
           </tr>
         </thead>
@@ -79,6 +79,7 @@ onMounted(load)
           <tr v-for="d in items" :key="d.id" style="cursor: pointer" @click="router.push(`/devices/${d.id}`)">
             <td>{{ d.name }}</td>
             <td style="font-family: monospace">{{ d.id }}</td>
+            <td style="font-family: monospace; white-space: nowrap">{{ d.mac_addr || '—' }}</td>
             <td>{{ d.location_note || '—' }}</td>
             <td>
               <n-tag :type="d.lifecycle_status === 'revoked' ? 'error' : d.service_active === false ? 'error' : d.online ? 'success' : 'warning'" size="small">

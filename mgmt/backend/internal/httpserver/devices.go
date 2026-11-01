@@ -5,6 +5,7 @@ package httpserver
 // 密钥口径：明文凭据只在创建/enroll/rotate 响应中出现一次（§7.2）。
 
 import (
+	"regexp"
 	"errors"
 	"fmt"
 	"net"
@@ -51,6 +52,7 @@ func (s *Server) handleDeviceCreate(c *gin.Context) {
 	var req struct {
 		Name         string `json:"name" binding:"required"`
 		LocationNote string `json:"location_note"`
+		MacAddr      string `json:"mac_addr"`
 		GroupID      *int64 `json:"group_id"`
 	}
 	if err := c.ShouldBindJSON(&req); err != nil {
@@ -84,6 +86,7 @@ func (s *Server) handleDeviceCreate(c *gin.Context) {
 		}
 		dev.Name = req.Name
 		dev.LocationNote = req.LocationNote
+		dev.MacAddr = req.MacAddr
 		dev.GroupID = req.GroupID
 		dev.WGIp = ip
 		dev.LifecycleStatus = models.LifecyclePending
@@ -273,6 +276,7 @@ type deviceDTO struct {
 	WGIp                  string     `json:"wg_ip"`
 	HWModel               string     `json:"hw_model"`
 	FirmwareVer           string     `json:"firmware_ver"`
+	MacAddr               string     `json:"mac_addr"`
 	LocationNote          string     `json:"location_note"`
 	LifecycleStatus       string     `json:"lifecycle_status"`
 	Online                bool       `json:"online"`
@@ -304,7 +308,7 @@ func (s *Server) deviceToDTO(dev *models.Device, nodeName, groupName string) dev
 	return deviceDTO{
 		ID: dev.ID, Name: dev.Name, GroupID: dev.GroupID, GroupName: groupName,
 		WGIp: dev.WGIp, HWModel: dev.HWModel, FirmwareVer: dev.FirmwareVer,
-		LocationNote: dev.LocationNote, LifecycleStatus: dev.LifecycleStatus,
+		MacAddr: dev.MacAddr, LocationNote: dev.LocationNote, LifecycleStatus: dev.LifecycleStatus,
 		Online: s.isOnline(dev), LastHeartbeatAt: dev.LastHeartbeatAt,
 		CurrentNodeID: dev.CurrentNodeID, CurrentNodeName: nodeName,
 		CurrentExitIP: dev.CurrentExitIP,
@@ -450,10 +454,12 @@ func (s *Server) handleDevicePatch(c *gin.Context) {
 	}
 	var req struct {
 		Name             *string `json:"name"`
+		MacAddr          *string `json:"mac_addr"`
 		LocationNote     *string `json:"location_note"`
 		GroupID          *int64  `json:"group_id"`
 		VpsLimitKbps     *int    `json:"vps_limit_kbps"`
 		RebootCron       *string `json:"reboot_cron"`
+		TrafficAlertHourlyMB *int `json:"traffic_alert_hourly_mb"`
 		LicenseEnabled   *bool   `json:"license_enabled"`
 		LicenseExpiresAt *string `json:"license_expires_at"` // RFC3339；空字符串=永不过期
 		LicenseDays      *int    `json:"license_days"`       // 从现在起 N 天（与 expires_at 二选一）
@@ -470,6 +476,13 @@ func (s *Server) handleDevicePatch(c *gin.Context) {
 	updates := map[string]any{"updated_at": time.Now().UTC()}
 	if req.Name != nil {
 		updates["name"] = *req.Name
+	}
+	if req.MacAddr != nil {
+		if !validMacAddr(*req.MacAddr) {
+			fail422(c, "mac_addr 只允许十六进制与 : - 分隔（≤32 字符，空=清除）")
+			return
+		}
+		updates["mac_addr"] = *req.MacAddr
 	}
 	if req.LocationNote != nil {
 		updates["location_note"] = *req.LocationNote
@@ -490,6 +503,13 @@ func (s *Server) handleDevicePatch(c *gin.Context) {
 			return
 		}
 		updates["reboot_cron"] = *req.RebootCron
+	}
+	if req.TrafficAlertHourlyMB != nil {
+		if *req.TrafficAlertHourlyMB < 0 || *req.TrafficAlertHourlyMB > 10000000 {
+			fail422(c, "traffic_alert_hourly_mb 范围 0..10000000（0=关闭）")
+			return
+		}
+		updates["traffic_alert_hourly_mb"] = *req.TrafficAlertHourlyMB
 	}
 	if req.LicenseEnabled != nil {
 		updates["license_enabled"] = *req.LicenseEnabled
@@ -785,3 +805,13 @@ func isIPv4Literal(s string) bool {
 
 var _ = uuid.NewString
 var _ = clash.ValidateNodeName
+
+// validMacAddr 人工维护的设备标签 MAC：空=清除；其余允许十六进制与 : - 分隔（≤32）
+var reMacAddr = regexp.MustCompile(`^[0-9A-Fa-f][0-9A-Fa-f:\-]{0,31}$`)
+
+func validMacAddr(s string) bool {
+	if s == "" {
+		return true
+	}
+	return reMacAddr.MatchString(s)
+}

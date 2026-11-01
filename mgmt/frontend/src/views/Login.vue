@@ -17,6 +17,7 @@ const otpauthUrl = ref('')
 const loading = ref(false)
 
 async function login() {
+  if (loading.value) return
   loading.value = true
   try {
     const r = await api.post('/api/v1/auth/login', { username: username.value, password: password.value })
@@ -38,6 +39,7 @@ async function login() {
 }
 
 async function submitCode() {
+  if (loading.value) return
   loading.value = true
   try {
     const path = stage.value === 'setup' ? '/api/v1/auth/totp/confirm' : '/api/v1/auth/totp'
@@ -58,14 +60,16 @@ async function submitCode() {
     <n-card title="路由器管理台 · 登录" style="width: 400px" embedded>
       <n-space vertical size="large">
         <template v-if="stage === 'pwd'">
-          <n-form @keyup.enter="login">
+          <!-- 2026-10-02：autocomplete + form submit（浏览器保存密码提示；与 R3 LuCI 同方案） -->
+          <!-- 2026-10-10：去掉 @keyup.enter（与 form submit 双触发 login()）；submit 按钮在 form 内回车原生提交 -->
+          <n-form @submit.prevent="login">
             <n-form-item label="用户名">
-              <n-input v-model:value="username" placeholder="管理员用户名" />
+              <n-input v-model:value="username" :input-props="{ autocomplete: 'username', name: 'username' }" placeholder="管理员用户名" />
             </n-form-item>
             <n-form-item label="密码">
-              <n-input v-model:value="password" type="password" show-password-on="click" placeholder="密码" />
+              <n-input v-model:value="password" type="password" show-password-on="click" :input-props="{ autocomplete: 'current-password', name: 'password' }" placeholder="密码" />
             </n-form-item>
-            <n-button type="primary" block :loading="loading" @click="login">登录</n-button>
+            <n-button attr-type="submit" type="primary" block :loading="loading">登录</n-button>
           </n-form>
         </template>
 
@@ -77,7 +81,7 @@ async function submitCode() {
           </n-alert>
           <n-form @keyup.enter="submitCode">
             <n-form-item label="6 位验证码">
-              <n-input v-model:value="code" placeholder="输入验证器当前验证码" />
+              <n-input v-model:value="code" :input-props="{ autocomplete: 'one-time-code', name: 'code' }" placeholder="输入验证器当前验证码" />
             </n-form-item>
             <n-button type="primary" block :loading="loading" @click="submitCode">绑定并登录</n-button>
           </n-form>
@@ -87,7 +91,7 @@ async function submitCode() {
           <n-alert type="info">输入 TOTP 验证码完成登录</n-alert>
           <n-form @keyup.enter="submitCode">
             <n-form-item label="6 位验证码">
-              <n-input v-model:value="code" placeholder="TOTP 验证码" />
+              <n-input v-model:value="code" :input-props="{ autocomplete: 'one-time-code', name: 'code' }" placeholder="TOTP 验证码" />
             </n-form-item>
             <n-button type="primary" block :loading="loading" @click="submitCode">登录</n-button>
           </n-form>

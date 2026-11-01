@@ -1,0 +1,177 @@
+#!/bin/sh /etc/rc.common
+# mgmt-tunnel v3 — 四端点并行管理隧道（2026-10-02 管理面迁 DMIT 主台改造）
+# v3 变化：新增 VPS4 第四端点（本地口 = MGMT_LOCAL_PORT+3）；主端点语义不变
+#
+# 改造目标：路由器同时与 DO/TX/BWG 三台 VPS 建立 SSH 隧道（并行，非主备切换）。
+#   - 主端点（DO）：-L 管理 API + -R 反向排障口（原有功能不变）
+#   - 备用端点 2-4（TX/BWG/DO 或其他）：仅 -L 管理 API
+#   - 任一路径可达即可管理路由器；agent 按 18443→18444→18445→18446 顺序自动选路
+#
+# tunnel.conf 格式（v2 向后兼容 v1）：
+#   # 主端点（必须，有 -R）
+#   VPS_HOST=159.223.36.119
+#   VPS_PORT=28722
+#   MGMT_LOCAL_PORT=18443
+#   MGMT_TARGET=10.10.0.1:8443
+#   RSSH_REMOTE_PORT=13224
+#   RSSH_TARGET=192.168.132.1:22
+#   # 备用端点（可选，仅 -L，端口自动分配 18444/18445）
+#   VPS2_HOST=43.134.46.44
+#   VPS2_PORT=28722
+#   VPS3_HOST=74.82.203.175
+#   VPS3_PORT=28722
+#   VPS4_HOST=<第四端点>
+#   VPS4_PORT=28722
+#
+# 安全设计：
+#   - 所有端点最终都连到 DO 的 sshd（socat 只是 TCP 直通管，不解密不落地）
+#   - SSH 加密端到端（路由器↔DO sshd），中继站只能看到加密流量
+#   - 密钥/认证/PermitOpen 均在 DO 侧，与单路完全相同
+#   - 备用端点首次连接用 -y 接受 DO 的主机密钥（socat 直通所以密钥相同）
+#
+# shellcheck disable=SC2034
+USE_PROCD=1
+START=98
+STOP=12
+
+CONF=/etc/routermgmt/tunnel.conf
+KEY=/etc/routermgmt/id_dropbear_mgmt
+KH=/root/.ssh/known_hosts
+
+# 降级默认（无 tunnel.conf 时仅保心跳通道）
+DEF_VPS=159.223.36.119
+DEF_PORT=28722
+DEF_LOCAL=18443
+DEF_HUB=10.10.0.1:8443
+
+_valid_host() { case "$1" in ''|*[!A-Za-z0-9.\-]*) return 1 ;; esac; return 0; }
+_valid_port() {
+    case "$1" in ''|*[!0-9]*) return 1 ;; esac
+    [ "$1" -ge 1 ] && [ "$1" -le 65535 ]
+}
+_valid_target() {
+    case "$1" in *:*) ;; *) return 1 ;; esac
+    _h=${1%:*}; _p=${1##*:}
+    _valid_host "$_h" && _valid_port "$_p"
+}
+
+load_tunnel_conf() {
+    [ -f "$CONF" ] || return 1
+    # 清空所有变量（含 v2 扩展）
+    unset TC_VPS_HOST TC_VPS_PORT TC_MGMT_LOCAL_PORT TC_MGMT_TARGET \
+          TC_RSSH_REMOTE_PORT TC_RSSH_TARGET \
+          TC_VPS2_HOST TC_VPS2_PORT TC_VPS3_HOST TC_VPS3_PORT \
+          TC_VPS4_HOST TC_VPS4_PORT TC_VPS5_HOST TC_VPS5_PORT
+    while IFS='=' read -r _k _v; do
+        case "$_k" in
+            ''|\#*) continue ;;
+            VPS_HOST)         _valid_host "$_v"   && TC_VPS_HOST="$_v" ;;
+            VPS_PORT)         _valid_port "$_v"   && TC_VPS_PORT="$_v" ;;
+            MGMT_LOCAL_PORT)  _valid_port "$_v"   && TC_MGMT_LOCAL_PORT="$_v" ;;
+            MGMT_TARGET)      _valid_target "$_v" && TC_MGMT_TARGET="$_v" ;;
+            RSSH_REMOTE_PORT) _valid_port "$_v"   && TC_RSSH_REMOTE_PORT="$_v" ;;
+            RSSH_TARGET)      _valid_target "$_v" && TC_RSSH_TARGET="$_v" ;;
+            # v2: 备用端点
+            VPS2_HOST)        _valid_host "$_v"   && TC_VPS2_HOST="$_v" ;;
+            VPS2_PORT)        _valid_port "$_v"   && TC_VPS2_PORT="$_v" || TC_VPS2_PORT=28722 ;;
+            VPS3_HOST)        _valid_host "$_v"   && TC_VPS3_HOST="$_v" ;;
+            VPS3_PORT)        _valid_port "$_v"   && TC_VPS3_PORT="$_v" || TC_VPS3_PORT=28722 ;;
+            # v3: 第四端点
+            VPS4_HOST)        _valid_host "$_v"   && TC_VPS4_HOST="$_v" ;;
+            VPS4_PORT)        _valid_port "$_v"   && TC_VPS4_PORT="$_v" || TC_VPS4_PORT=28722 ;;
+            VPS5_HOST)        _valid_host "$_v"   && TC_VPS5_HOST="$_v" ;;
+            VPS5_PORT)        _valid_port "$_v"   && TC_VPS5_PORT="$_v" ;;
+        esac
+    done < "$CONF"
+    [ -n "$TC_VPS_HOST" ] && [ -n "$TC_VPS_PORT" ] && \
+    [ -n "$TC_MGMT_LOCAL_PORT" ] && [ -n "$TC_MGMT_TARGET" ]
+}
+
+_open_instance() {
+    _inst="$1"; _vps="$2"; _port="$3"; _fwd="$4"
+    _y="-y"
+    if [ -f "$KH" ] && grep -q "^$_vps " "$KH" 2>/dev/null; then
+        _y=""
+    else
+        logger -t mgmt-tunnel "WARN: $KH 无 ${_vps} 条目，使用 -y 接受（备用端点直通 DO，密钥相同）"
+    fi
+    procd_open_instance "$_inst"
+    # ExitOnForwardFailure: -R 端口被占时 ssh 必须退出（10-01 R3 实锤：静默苟活进程
+    # 让 procd 以为健康、端口释放后无人再申请转发=永久半开），配合 retry=0 无限重生必自愈
+    procd_set_param command /usr/bin/ssh -i "$KEY" -p "$_port" -N -K 30 -T -o ExitOnForwardFailure=yes $_y $_fwd "root@$_vps"
+    # retry=0 无限重试：2026-10-01 实锤 5 次上限会在服务端故障期耗尽后永不自愈
+    # （R3 TX/BWG 路径服务端修复后仍死）；退避仍防风暴，慢失败最终必回
+    procd_set_param respawn 3600 0 0
+    procd_set_param stdout 1
+    procd_set_param stderr 1
+    procd_close_instance
+}
+
+start_service() {
+    if ! load_tunnel_conf; then
+        logger -t mgmt-tunnel "WARN: $CONF 缺失或核心字段无效，降级为仅管理通道(-L)默认配置"
+        _open_instance mgmt "$DEF_VPS" "$DEF_PORT" \
+            "-L 127.0.0.1:$DEF_LOCAL:$DEF_HUB"
+        return
+    fi
+
+    # === 主端点（DO 直连，-L + -R）===
+    _open_instance mgmt "$TC_VPS_HOST" "$TC_VPS_PORT" \
+        "-L 127.0.0.1:$TC_MGMT_LOCAL_PORT:$TC_MGMT_TARGET"
+    if [ -n "$TC_RSSH_REMOTE_PORT" ] && [ -n "$TC_RSSH_TARGET" ]; then
+        _open_instance rssh "$TC_VPS_HOST" "$TC_VPS_PORT" \
+            "-R 127.0.0.1:$TC_RSSH_REMOTE_PORT:$TC_RSSH_TARGET"
+    else
+        logger -t mgmt-tunnel "WARN: RSSH 未配置，排障通道未启动"
+    fi
+
+    # === 备用端点 2（TX socat 中继，仅 -L，本地端口 18444）===
+    if [ -n "$TC_VPS2_HOST" ]; then
+        _p2=$((TC_MGMT_LOCAL_PORT + 1))
+        _open_instance mgmt2 "$TC_VPS2_HOST" "$TC_VPS2_PORT" \
+            "-L 127.0.0.1:$_p2:$TC_MGMT_TARGET"
+        logger -t mgmt-tunnel "INFO: 备用隧道2 已启动 → $TC_VPS2_HOST:$TC_VPS2_PORT (本地 :$_p2)"
+    fi
+
+    # === 备用端点 3（BWG socat 中继，仅 -L，本地端口 18445）===
+    if [ -n "$TC_VPS3_HOST" ]; then
+        _p3=$((TC_MGMT_LOCAL_PORT + 2))
+        _open_instance mgmt3 "$TC_VPS3_HOST" "$TC_VPS3_PORT" \
+            "-L 127.0.0.1:$_p3:$TC_MGMT_TARGET"
+        logger -t mgmt-tunnel "INFO: 备用隧道3 已启动 → $TC_VPS3_HOST:$TC_VPS3_PORT (本地 :$_p3)"
+    fi
+
+    # === 备用端点 4（v3，仅 -L，本地端口 MGMT_LOCAL_PORT+3）===
+    if [ -n "$TC_VPS4_HOST" ]; then
+        _p4=$((TC_MGMT_LOCAL_PORT + 3))
+        _open_instance mgmt4 "$TC_VPS4_HOST" "$TC_VPS4_PORT"             "-L 127.0.0.1:$_p4:$TC_MGMT_TARGET"
+        logger -t mgmt-tunnel "INFO: 备用隧道4 已启动 → $TC_VPS4_HOST:$TC_VPS4_PORT (本地 :$_p4)"
+    fi
+
+    # === 备用端点 5（2026-10-26：66clouds CN2 GIA，-L + 备用-R）===
+    if [ -n "$TC_VPS5_HOST" ]; then
+        _p5=$((TC_MGMT_LOCAL_PORT + 4))
+        _open_instance mgmt5 "$TC_VPS5_HOST" "$TC_VPS5_PORT" \
+            "-L 127.0.0.1:$_p5:$TC_MGMT_TARGET"
+        logger -t mgmt-tunnel "INFO: 备用隧道5 已启动 → $TC_VPS5_HOST:$TC_VPS5_PORT (本地 :$_p5)"
+    fi
+
+    # === 备用排灾口（2026-10-29：GIA 第二 -R，消除主端点单点）===
+    # 同一 RSSH_REMOTE_PORT 绑在 GIA 的 localhost——与主端点（广州/DMIT）互不冲突。
+    # 广州故障时 GIA 排灾口仍在，远程控制不断。ExitOnForwardFailure 保证端口冲突即退出重试。
+    if [ -n "$TC_VPS5_HOST" ] && [ -n "$TC_RSSH_REMOTE_PORT" ] && [ -n "$TC_RSSH_TARGET" ]; then
+        _open_instance rssh2 "$TC_VPS5_HOST" "$TC_VPS5_PORT" \
+            "-R 127.0.0.1:$TC_RSSH_REMOTE_PORT:$TC_RSSH_TARGET"
+        logger -t mgmt-tunnel "INFO: 备用排灾口已启动 → $TC_VPS5_HOST (端口 :$TC_RSSH_REMOTE_PORT)"
+    fi
+
+    # 日志：活动实例数
+    _cnt=1
+    [ -n "$TC_RSSH_REMOTE_PORT" ] && _cnt=$((_cnt + 1))
+    [ -n "$TC_VPS2_HOST" ] && _cnt=$((_cnt + 1))
+    [ -n "$TC_VPS3_HOST" ] && _cnt=$((_cnt + 1))
+    [ -n "$TC_VPS4_HOST" ] && _cnt=$((_cnt + 1))
+    [ -n "$TC_VPS5_HOST" ] && _cnt=$((_cnt + 1))
+    [ -n "$TC_VPS5_HOST" ] && [ -n "$TC_RSSH_REMOTE_PORT" ] && _cnt=$((_cnt + 1))
+    logger -t mgmt-tunnel "INFO: mgmt-tunnel v3.1 已启动，共 $_cnt 个实例（含备用排灾口）"
+}

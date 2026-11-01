@@ -1,0 +1,12 @@
+echo === agent.conf 心跳地址 ===
+grep -E MGMT_URL|SUB_URL /etc/routermgmt/agent.conf
+echo === 修改为正确地址 ===
+sed -i 's|^MGMT_URL=.*|MGMT_URL=https://127.0.0.1:18443|' /etc/routermgmt/agent.conf
+sed -i 's|:18447|:18443|g' /etc/routermgmt/agent.conf
+grep MGMT_URL /etc/routermgmt/agent.conf
+echo === 重启 agent ===
+/etc/init.d/routermgmt restart
+sleep 5
+echo agent: $(ps w | grep -c [r]outermgmt-agent)
+echo p43: $(curl -sk -m 4 -o /dev/null -w '%{http_code}' https://127.0.0.1:18443/api/v1/health)
+echo URL_DONE

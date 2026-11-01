@@ -1,0 +1,320 @@
+先读变更说明和两份 patch，再按 SOP 末章核对刷机脚本改动。全程只读，不改任何文件。SOP 末章和两份补丁还没读完，接下来定位「统一 SN 刷机流程 v2」并核对 patch 全文。补丁很长，继续读 flash-snr 后半、flash-batch 全文，以及 SOP 末章。补丁已读完。接下来对照源文件行号，并核对 MAC 提取、API 调用、heredoc 和锁这几处关键路径。MAC 前缀、编号类型和 awk 去重这几处还要对源码与台账交叉核对。核对完 `flash-snr.py`、`flash-batch.py` 与 SOP 末章。以下为独立走查结论（只读，未改任何文件）。
+
+---
+
+## 焦点八项
+
+### 1. `push()` 无 md5 校验
+
+**【确认有问题 | 高】**  
+`push()` 只做 `cat >` + `sendall`，不比对长度、不 md5。SOP 末章已写明：远端落地要用整文件推送并 md5 对拍；大文件走 paramiko 仍可能被 dropbear 截断。`mihomo-linux-arm64`（约 57MB）走同一路径，超时 180s；截断后步骤 7 仍打印「完成」并继续。
+
+```114:118:scripts/flash-snr.py
+def push(c, local, remote, mode=None):
+    data = open(local, "rb").read()
+    _, o, e = c.exec_command(f"cat > '{remote}'", timeout=180)
+    o.channel.sendall(data); o.channel.shutdown_write(); o.read()
+    if mode: c.exec_command(f"chmod {mode} '{remote}'")[1].read()
+```
+
+```434:439:scripts/flash-snr.py
+    print("  推 mihomo 57MB...", end=" ", flush=True)
+    push(c, MIHOMO_REPO + r"\mihomo-linux-arm64", "/usr/bin/mihomo", 755)
+    ...
+    print("完成")
+```
+
+对照：`flash-r7-finish2.py` 已改 base64 内嵌，专门规避该通道。openssl / agent 小文件同样无校验。
+
+---
+
+### 2. init.d heredoc 语法
+
+**【无问题 | 低（缺 `sh -n`）】**  
+`<<'EOS'` 单引号 heredoc，Python 侧是 `r'''...'''`，`$i` / `$((i+1))` 不会被外层展开。后台子 shell 的 `(` … `) &` 与 REJECT 两行是合法 POSIX。中文注释用全角括号，不拆语句。
+
+```459:478:scripts/flash-snr.py
+cat > /etc/init.d/mihomo <<'EOS'
+...
+    ( i=0; while [ $i -lt 60 ]; do wget ...; done; /etc/mihomo-ipt.sh
+      # REJECT-SELFHEAL ...
+      iptables -D FORWARD ...
+      iptables -I FORWARD 1 ... ) &
+}
+reload_service() { stop; start; }
+EOS
+```
+
+落地后没有 `sh -n /etc/init.d/mihomo`（SOP 要求渲染验证）。语法本身可过。
+
+---
+
+### 3. dd / umount 顺序
+
+**【确认有问题 | 高】**  
+`umount` 失败被丢掉；随后无条件 `umount -l`（懒卸载，内核仍可能持有 FS）立刻 `dd` 写块设备。这是往可能仍挂载的 `/dev/mmcblk0p6` 上打零。分区约 107GB（`docs/operations/SN-R1-AX3000-记录与刷机准备-20260923.md`），`count=256` 只覆盖主超级块和约 128MB 处第一份备份；sparse_super 下一份约在 384MB，SOP 自己写过「抹头部后还能按备份超级块挂回」。
+
+```185:194:scripts/flash-snr.py
+rm -rf /mnt/mmcblk0p6/by-agent ... /mnt/mmcblk0p6/docker /mnt/mmcblk0p6/data1 2>/dev/null
+...
+umount /mnt/mmcblk0p6/docker 2>/dev/null; umount -l /mnt/mmcblk0p6 2>/dev/null
+dd if=/dev/zero of=/dev/mmcblk0p6 bs=1M count=256 2>/dev/null; sync
+```
+
+---
+
+### 4. API 错误处理
+
+**【确认有问题 | 高】** 多处叠加。
+
+**4a. 默认仍打 DO 18444，闸门「重试」改不到 API**  
+`mgmt_api_test.BASE` 默认 `https://127.0.0.1:18444`，`ensure_tunnel()` 还会拉 DO 隧道。`flash-r7-finish2.py` 会先 `os.environ["MGMT_API_BASE"]="https://127.0.0.1:8444"`，`flash-snr.py` / `flash-batch.py` 都没有。重试只把环境变量塞进**本机 ssh 子进程**，远程 `docker exec` 不读这个变量，也**不会重新 POST /devices**。
+
+```232:254:scripts/flash-snr.py
+    M.ensure_tunnel()
+    ...
+    r = requests.post(M.BASE + "/api/v1/devices", ...)
+    dev = r.json()
+    ...
+        if _attempt == 1:
+            _env["MGMT_API_BASE"] = "https://127.0.0.1:8444"
+        _chk = subprocess.run(VPS_SSH + ["docker exec routermgmt-db-1 psql ..."], ..., env=_env)
+```
+
+DMIT `SELECT count(*)` 能拦住写到旧库的录入（会 `sys.exit(3)`），无人值守批次会反复失败。
+
+**4b. 一律 `r.json()`，不看 HTTP 状态**  
+录入、enroll、assignments/batch、tasks、ops、PATCH 均如此。4xx/5xx 或 HTML 会直接异常或取空字段。  
+`wait_final` 请求 `?size=30`，后端只认 `page_size`（默认 20）：
+
+```28:31:mgmt/backend/internal/httpserver/errors.go
+	page, _ = strconv.Atoi(c.DefaultQuery("page", "1"))
+	size, _ = strconv.Atoi(c.DefaultQuery("page_size", "20"))
+```
+
+```491:504:scripts/flash-snr.py
+            rr = requests.get(M.BASE + "/api/v1/tasks?size=30", ...).json()
+    ...
+        r = requests.post(M.BASE + "/api/v1/assignments/batch", ...)
+    tid = r.json()["items"][0]["task_id"]
+```
+
+前三次 `apply=False` 的绑定失败会被最后一次覆盖掉的 `r` 吞掉。步骤 8 发布超时仍继续走 WiFi/终验。
+
+**4c. 「复刷幂等」与 API 不符**  
+`POST /devices` 每次新建 `rtr-xxxxxx`，设备名无唯一约束（`models.Device.Name` 无 uniqueIndex）。`dev.get("troubleshoot_port")` 创建响应里不存在，备案分支不会走。复刷会再造一条 SN-R{N}。
+
+---
+
+### 5. 端口 / 编号预分配竞态
+
+**【确认有问题 | 高】**（并行场景）
+
+Batch 预分配端口/序号，单进程内互相错开，这部分成立。漏洞在写入侧：
+
+- 两台并行 `flash-snr` 都 scp 到 DMIT **同一文件** `/tmp/snr-ak`、`/tmp/snr-ak-tb`，后写覆盖先写；`grep snR{N} /tmp/snr-ak` 可能对着别人的内容，公钥丢失。
+
+```385:388:scripts/flash-snr.py
+        subprocess.run(['scp',..., '/tmp/snr-ak'], ...)
+        subprocess.run([..., f'grep -q "snR{N}" ... || grep "snR{N}" /tmp/snr-ak | grep permitlisten >> ...'])
+```
+
+- `alloc_rssh` 读 max+1 与写 authorized_keys 之间无锁；单独并行跑 `flash-snr.py --rssh auto` 会抢同一端口（变更说明已承认）。
+- `next_nums` / `next_ports` 不落库、不占坑；锁失效时两个 `flash-batch` 会分出相同 SN-R 号与 132xx。
+- `next_ports` 无 13300 上界（`alloc_rssh` 有）。
+
+---
+
+### 6. MAC 前缀白名单误判
+
+**【确认有问题 | 高】** 两层，方向相反。
+
+**6a. 提取正则与 echo 格式不一致，白名单等于没跑**  
+命令输出是 `wan aa:bb:...`（无冒号），正则要 `(wan|ra0): `。`m` 恒为空，前缀循环永不命中，出厂口令能登的设备一律当新机刷。
+
+```56:63:scripts/flash-batch.py
+        macs = cmd("... echo $I $(cat /sys/class/net/$I/address); ...")
+        m = dict(re.findall(r"(wan|ra0): ([0-9a-f:]+)", macs))
+        for pfx in KNOWN_MAC_PREFIXES:
+            if m.get("wan", "").startswith(pfx) or m.get("ra0", "").startswith(pfx):
+                return False, ...
+```
+
+对照 `flash-snr.py:554` 用的是 `"$I: $(cat ...)"`。
+
+**6b. 即便修好 echo，OUI 前缀会误杀同批次新机**  
+台账：R2–R6 的 ra0 均为 `a4:d8:ca:14:*`（出厂 WiFi OUI）；R7 为 `a4:d8:ca:12:fb:32`。`KNOWN_MAC_PREFIXES = ["a4:d8:ca:14:", "76:a7:c8:e0:4f:"]` 会把所有 `a4:d8:ca:14:` 新机判成现役而跳过。现役真正该精确匹配的是台账/平台里的完整 MAC。`76:a7:c8:e0:4f:` 是刷机后 pin 的有线前缀，用前缀拦截过宽。
+
+另外：只验 telnet+出厂口令，`model` 只进日志，非 JCG 设备也会进刷机。
+
+---
+
+### 7. rc.local 尾部删除
+
+**【确认有问题 | 高】**
+
+删除锚点是 `# wifi-default-off`，写入锚点是 `# wifi-boot-policy`，对不上。首次刷机厂商文件里通常没有旧锚点，`sed` 什么也不删，随后 `printf ... >>` 把 WiFi 开机策略和 cron-restore **追加在已有 `exit 0` 之后**，开机永远执行不到。
+
+```537:552:scripts/flash-snr.py
+sed -i '/# wifi-default-off/,$d' /etc/rc.local
+printf '%s\n' \
+'# wifi-boot-policy (2026-10-01 v3: ...' \
+...
+'exit 0' >> /etc/rc.local
+```
+
+历史：`docs/plans/R2上线升级执行记录-20261001.md` 已有一次同一 sed 误删 netprobe 钩子。复刷时旧锚点一旦出现，会删到文件尾（含其后所有内容）。  
+现场 WiFi 靠 dat/`uci disabled` 能关；用户经管理台打开 WiFi 后重启，缺少这段 rc.local 拉起，会停在 RadioOff=1。onboot-hooks 在步骤 5 插在 `exit 0` 前，cron 恢复仍有效。
+
+---
+
+### 8. 批量扫描与锁
+
+**【确认有问题 | 中】**
+
+```107:126:scripts/flash-batch.py
+    if os.path.exists(LOCK):
+        age = time.time() - os.path.getmtime(LOCK)
+        if age < 5400:
+            ... return
+        print("⚠️ ...自动解锁续扫...")
+    open(LOCK, "w").write(str(time.time()))
+    ...
+    finally:
+        if not found or args.detect:
+            os.remove(LOCK)
+```
+
+- 锁是 `exists` + 再 `open("w")`，非原子 `O_EXCL`；10 分钟 cron 与人工可双开。
+- 超 90 分钟当死锁清掉再扫；上一轮若仍卡在 57MB `sendall`，会双刷同一台。
+- 无 PID，无法区分活进程与残骸。
+- `sweep` 里 64 线程 `hits.append` 依赖 CPython GIL，逻辑上无锁。
+- 扫整个 `192.168.2.2–254` 的 tcp/23，误伤面靠已经失效的 MAC 白名单（见上）。
+- 刷机过程中异常未进 `finally` 清锁时，要等 90 分钟。
+
+---
+
+## 其余改动
+
+### `--host` / `_try_connect`
+
+**【无问题 | —】**  
+`Tel`/`ssh`/`push` 都用全局 `HOST`，批量 `--host` 能打到 192.168.2.x。探测失败变 False，不再裸异常。
+
+### 步骤 5 MAC 固定：`N` 类型
+
+**【确认有问题 | 高】**  
+`--num` 无 `type=int`，`N = args.num` 是 str。`0x20 + N` 在 Python 3 为 `TypeError`，**单台/批量都会在步骤 5 崩掉**。R7 能 pin 成功是因为 `flash-r7-resume.py` 写死 `N = 7`（int）。
+
+```133:138:scripts/flash-snr.py
+    ap.add_argument("--num", required=True, ...)
+    ...
+    N = args.num; NAME = f"SN-R{N}-AX3000"
+```
+
+```296:297:scripts/flash-snr.py
+    wan_mac = f"76:a7:c8:e0:4f:{0x20 + N:02x}"
+    brlan_mac = f"76:a7:c8:e0:4f:{0x30 + N:02x}"
+```
+
+公式本身（N=7 → `:27`/`:37`）与台账一致，缺的是 `int(N)`。
+
+### 步骤 2 PCDN 清理
+
+**【确认有问题 | 中】**  
+停用九件套 + 花括号安装器目录 + `mbox_init` + 四份 init.d 本体，方向对。未删的 init.d 仍有：`start_client_manage`、`start_get_versionInfo`、`timeRestart`、`hole`、`start_jcgqos`（只 disable）。`rathole`/`zcon-*` 二进制按「留档」策略保留，终验只看进程。
+
+`done` 去重 awk 在 sed 之前；sed 对任何含 `telnet` 的行再包一层 `# disabled-pcdn-telnet:`，已注释行会越套越深。awk 的 `seen[...]` 把所有此类行收成同一 key，复刷只留第一行。功能上 telnet 仍是死的，属于膨胀/误删注释行。
+
+```196:197:scripts/flash-snr.py
+awk '!/^# disabled-pcdn-telnet:/ || !seen[/^# disabled-pcdn-telnet: / $2]++' /etc/init.d/done > /tmp/done.new && mv ...
+sed -i 's|^\(.*telnet.*\)$|# disabled-pcdn-telnet: \1|' /etc/init.d/done
+```
+
+### REJECT-SELFHEAL 与步骤 7 末尾再跑 `mihomo-ipt.sh`
+
+**【确认有问题 | 高】**  
+init.d 后台：`mihomo-ipt.sh`（`-I FORWARD 1` 插 DROP）再插 REJECT。同一次 `run` 末尾又同步调用 `/etc/mihomo-ipt.sh`，把 DROP 重新插回第 1。步骤 10 的 Q 关在步骤 11 的补救之前执行。
+
+```481:485:scripts/flash-snr.py
+/etc/init.d/mihomo start
+...
+/etc/mihomo-ipt.sh 2>&1 | tail -1
+```
+
+```599:621:scripts/flash-snr.py
+echo "Q=$(iptables -S FORWARD | grep 443 | head -1 | grep -c REJECT)"
+...
+        ("QUIC顺序REJECT第一", kv.get('Q') == '1'),
+```
+
+步骤 11 末尾才 `-D`/`-I 1` REJECT，救不了第 10 关。
+
+`snr1-mihomo-ipt.sh` 的 `NODE_IPS` 仍是 `159.223.36.119 43.134.46.44`，缺东京 `74.82.203.175` 与 LAX `179.255.137.64`（刷机原样下发）。
+
+### 终验 11 关：PCDN 计数
+
+**【确认有问题 | 高】**  
+SOP 已写：`ps w | grep -c pattern` 会算上 grep 自身。此处：
+
+```600:614:scripts/flash-snr.py
+echo "P=$(ps w | grep -cE 'by_agent|netbox_daemon|zcon|rathole|watcher' )"
+...
+        ("PCDN残留=0", kv.get('P') == '0'),
+```
+
+管道竞态下 P 常为 1/2，第 9 关易假 FAIL，整次刷机 `sys.exit(2)`。应 `grep -v grep` 或数 `rc.d/S*`。
+
+心跳字符串 `heartbeat ok` 与 agent 的 `logger` 一致，步骤 5–9 间隔通常够；偏紧时第 11 关会假 FAIL。【疑问 | 中】
+
+### 步骤 11 下发双验
+
+**【疑问 | 中】**  
+节点 5=LAX `179.255.137.64`、节点 4=东京 `74.82.203.175` 与现网一致。`run()` 返回 stdout+stderr，`_eg == expect_ip` 未 `strip()`；`sleep 6` 对 mihomo 重载偏短。JSON 无状态检查同 API 项。
+
+```628:633:scripts/flash-snr.py
+        _eg = run(c, "curl -s -m 10 -x http://127.0.0.1:7890 https://api.ipify.org 2>/dev/null")
+        ok = (_t and _t["status"] == "ok" and _eg == expect_ip)
+    d1 = _switch_verify(5, "179.255.137.64", "切LAX")
+    d2 = _switch_verify(4, "74.82.203.175", "回东京")
+```
+
+### 指纹台账 / `dev2`
+
+**【无问题 | 低】**  
+PATCH `mac_addr` + 总览追加方向对；失败静默。`dev2 = dev` 从未再读，所谓变量隔离是空操作。
+
+### TX/BWG 公钥分发失败继续
+
+**【确认有问题 | 中】**  
+`TB-AK-DONE` 缺失只打印，隧道仍往下走。温备 18444/18445 会缺公钥。`tb_sh` 带 `set -e`，TX 失败会连 BWG 一起停。
+
+### `RSSH_TARGET=192.168.132.1:22`
+
+**【无问题 | —】**  
+与舰队约定一致（设备自身 LAN），和 `--host` 为 192.168.2.x 不冲突。
+
+---
+
+## 严重度汇总（会挡住出厂或误刷）
+
+| # | 结论 | 严重度 | 位置 |
+|---|---|---|---|
+| MAC pin `N` 为 str → TypeError | 确认有问题 | 高 | `flash-snr.py:138,296-297` |
+| 并行 `/tmp/snr-ak` 竞态丢公钥 | 确认有问题 | 高 | `flash-snr.py:385-407` |
+| 默认 API 18444 + 重试无效 | 确认有问题 | 高 | `flash-snr.py:232-254` + `mgmt_api_test.py:17` |
+| MAC 正则死、OUI 前缀误杀/失效 | 确认有问题 | 高 | `flash-batch.py:19,56-63` |
+| rc.local 锚点错、钩子在 `exit 0` 后 | 确认有问题 | 高 | `flash-snr.py:537-552` |
+| 步骤7 再跑 mihomo-ipt，Q 关必乱 | 确认有问题 | 高 | `flash-snr.py:485,599-621` |
+| PCDN 关 `grep -c` 假阳性 | 确认有问题 | 高 | `flash-snr.py:600,614` |
+| umount 未确认就 dd | 确认有问题 | 高 | `flash-snr.py:193-194` |
+| push 无 md5，57MB 截断静默 | 确认有问题 | 高 | `flash-snr.py:114-118,436` |
+| API 无状态码 / 复刷新建设备 | 确认有问题 | 高 | `flash-snr.py:235-268,500-518` |
+| 锁非原子、90 分钟误开锁 | 确认有问题 | 中 | `flash-batch.py:107-126` |
+| alloc_rssh / next_nums 占坑窗口 | 确认有问题 | 中 | `flash-snr.py:67-88` `flash-batch.py:68-89` |
+| init.d 九件套删不全、done 注释膨胀 | 确认有问题 | 中 | `flash-snr.py:171-197` |
+| heredoc 语法 | 无问题 | 低 | `flash-snr.py:459-478` |
+
+**当前脚本按现状跑完全程出厂：步骤 5 就会因 `TypeError` 停下。** 若有人把 `N` 改成 int 绕过，仍会撞上 API 默认口、并行公钥文件、终验 Q/P 关和 rc.local 钩子。
+
+未做：未连真机、未跑 `sh -n`、未对 57MB 通道做截断复现。B 模式 R7 现场残留不在本轮补丁范围内（二进制留档是文档决策）。

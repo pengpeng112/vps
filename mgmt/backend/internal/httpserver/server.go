@@ -130,6 +130,7 @@ func (s *Server) registerRoutes(r *gin.Engine) {
 		api.POST("/devices/:id/enroll-reset", s.handleEnrollReset)
 		api.POST("/devices/:id/ops", s.handleDeviceOps)
 		api.GET("/devices/:id/metrics", s.handleDeviceMetrics)
+		api.GET("/devices/:id/traffic/hourly", s.handleDeviceTrafficHourly)
 		api.GET("/devices/:id/config", s.handleDeviceConfigMasked)
 		api.POST("/devices/:id/configs/preview", s.handleConfigPreview)
 		api.POST("/devices/:id/configs/apply", s.handleConfigApply)

@@ -7,7 +7,7 @@ import {
 } from 'naive-ui'
 import {
   SpeedometerOutline, HardwareChipOutline, ServerOutline, ListOutline,
-  AlertCircleOutline, DocumentTextOutline, SettingsOutline,
+  AlertCircleOutline, DocumentTextOutline, SettingsOutline, StatsChartOutline,
 } from '@vicons/ionicons5'
 import { RouterLink } from 'vue-router'
 
@@ -23,6 +23,7 @@ const menuOptions = [
   { label: () => h(RouterLink, { to: { path: '/' } }, { default: () => '仪表盘' }), key: '/', icon: icon(SpeedometerOutline) },
   { label: () => h(RouterLink, { to: { path: '/devices' } }, { default: () => '设备' }), key: '/devices', icon: icon(HardwareChipOutline) },
   { label: () => h(RouterLink, { to: { path: '/nodes' } }, { default: () => '节点' }), key: '/nodes', icon: icon(ServerOutline) },
+  { label: () => h(RouterLink, { to: { path: '/traffic' } }, { default: () => '流量分析' }), key: '/traffic', icon: icon(StatsChartOutline) },
   { label: () => h(RouterLink, { to: { path: '/tasks' } }, { default: () => '任务' }), key: '/tasks', icon: icon(ListOutline) },
   { label: () => h(RouterLink, { to: { path: '/alerts' } }, { default: () => '告警' }), key: '/alerts', icon: icon(AlertCircleOutline) },
   { label: () => h(RouterLink, { to: { path: '/audit' } }, { default: () => '审计' }), key: '/audit', icon: icon(DocumentTextOutline) },
