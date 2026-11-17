@@ -1,0 +1,17 @@
+2026-11-16T12:03:05+08:00
+rtr-101be0|4|4|2
+FINAL_TIME 2026-11-16 12:03:06 +0800
+DHCPSHA
+d55cf90ce9c99cc78aa2216d03f84ade111248abb27365882d41d1e83c3d90d5  /etc/config/dhcp
+UCI_PENDING
+GENERATED_TEST
+HEALTH
+200
+DIAG_CAPTURE_PROCESSES
+PROTECTED_HASHES
+8bc2de0100532998671f56d1e259ba6d83adf425c76412203dbe6ab3b19bae09  /etc/config/wireless
+4f4ae886ec9a6081ffc0b9121dfe955fbdfed501bfd97327023aa0481ea4540c  /etc/mihomo/config.yaml
+4911dbbe7962b4c8425526a23b45896732ec53fbc1539bd0f17355f5b36fad98  /etc/routermgmt/tunnel.conf
+c65d51a7066eb05a141ead4692361472c6e89a6e16327ca4dc7da356c12bfd6e  /etc/routermgmt/self-heal.sh
+
+dnsmasq: syntax check OK.

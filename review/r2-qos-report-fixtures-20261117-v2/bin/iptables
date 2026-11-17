@@ -1,0 +1,8 @@
+#!/bin/sh
+v=$("$MOCK_PYTHON" -c "import json,os;d=json.load(open(os.environ['MOCK_COUNTER']));print(d['up' if os.environ['MOCK_DIRECTION']=='up' else 'down'])" 2>/dev/null)
+case "$2" in
+ PROXY_METER_OUT) v=$MOCK_UP; tag=ep_up ;;
+ PROXY_METER_IN) v=$MOCK_DOWN; tag=ep_down ;;
+ *) exit 1 ;;
+esac
+printf '1 %s /* %s */\n' "$v" "$tag"

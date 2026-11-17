@@ -104,10 +104,17 @@ func TestGoldenRules(t *testing.T) {
 		t.Error("缺少管理面直连规则")
 	}
 
-	// 4. MATCH,PROXY 是最后一条规则
+	// 4. MATCH,DIRECT 兜底（2026-11-17 反转：业务画像国内为主，未命中名单直连国内，防 GeoIP 库缺新国内站被错送出国）
+	//    国外站由 GEOSITE,geolocation-!cn,PROXY 接住（倒数第二条）
 	rules := doc["rules"].([]any)
-	if last, ok := rules[len(rules)-1].(string); !ok || last != "MATCH,PROXY" {
-		t.Errorf("最后一条规则必须是 MATCH,PROXY，实际 %v", rules[len(rules)-1])
+	if last, ok := rules[len(rules)-1].(string); !ok || last != "MATCH,DIRECT" {
+		t.Errorf("最后一条规则必须是 MATCH,DIRECT，实际 %v", rules[len(rules)-1])
+	}
+	if n := len(rules); n < 2 {
+		t.Fatalf("规则数量异常: %d", n)
+	}
+	if secondLast, ok := rules[len(rules)-2].(string); !ok || secondLast != "GEOSITE,geolocation-!cn,PROXY" {
+		t.Errorf("倒数第二条必须是 GEOSITE,geolocation-!cn,PROXY，实际 %v", rules[len(rules)-2])
 	}
 
 	// 5. fake-ip
@@ -219,7 +226,8 @@ func TestGoldenRuleOrderStaticTail(t *testing.T) {
 		"GEOIP,CN,DIRECT,no-resolve",
 		"DOMAIN-SUFFIX,swcdn.apple.com,DOWNLOAD",
 		"AND,((NETWORK,UDP),(DST-PORT,443)),REJECT",
-		"MATCH,PROXY",
+		"GEOSITE,geolocation-!cn,PROXY",
+		"MATCH,DIRECT",
 	}
 	got := strings.Join(rules, "\n")
 	for i := 0; i < len(wantTail)-1; i++ {

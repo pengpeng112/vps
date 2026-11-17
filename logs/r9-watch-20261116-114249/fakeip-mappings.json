@@ -1,0 +1,26 @@
+[
+  {
+    "ip": "198.18.2.74",
+    "domain": "gpp-tj100-1.lol.qq.com"
+  },
+  {
+    "ip": "198.18.2.8",
+    "domain": "tqos.gamesafe.qq.com"
+  },
+  {
+    "ip": "198.18.1.79",
+    "domain": "tqos.anticheatexpert.com"
+  },
+  {
+    "ip": "198.18.2.40",
+    "domain": "open-data-router-api.wyjsq.com"
+  },
+  {
+    "ip": "198.18.1.236",
+    "domain": "us.pool.ntp.org"
+  },
+  {
+    "ip": "198.18.1.237",
+    "domain": "uk.pool.ntp.org"
+  }
+]

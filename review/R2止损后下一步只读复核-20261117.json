@@ -1,0 +1,54 @@
+{
+  "time_local": "2026-11-17T09:13:09+08:00",
+  "configuration_writes": false,
+  "db": {
+    "rc": 0,
+    "stdout": "BEGIN\nrtr-a9bcba|34|34|34|40|0\n0\nCOMMIT",
+    "stderr": ""
+  },
+  "groups": {
+    "PROXY": {
+      "type": "Selector",
+      "now": "AUTO",
+      "all": [
+        "AUTO",
+        "BWG-HY2-JPTY-01",
+        "BULK-LAX-GIA-01",
+        "BWG-VLESS-JPTY-01",
+        "DIRECT"
+      ]
+    },
+    "NODE-PICK": {
+      "type": "Fallback",
+      "now": "BWG-HY2-JPTY-01",
+      "all": [
+        "BWG-HY2-JPTY-01",
+        "BULK-LAX-GIA-01",
+        "BWG-VLESS-JPTY-01"
+      ]
+    },
+    "US-MEDIA": {
+      "type": "Selector",
+      "now": "NODE-PICK",
+      "all": [
+        "BULK-LAX-GIA-01",
+        "NODE-PICK",
+        "AIRPORT"
+      ]
+    },
+    "DOWNLOAD": {
+      "type": "Selector",
+      "now": "DIRECT",
+      "all": [
+        "DIRECT",
+        "PROXY"
+      ]
+    }
+  },
+  "meter_qos_tools": {
+    "rc": 0,
+    "stdout": "2026-11-17 09:13:13 +0800\nfe09735fd3137e797e61042733088572d4df99fa52ac3dfa073947877b837263  /etc/routermgmt/proxy-meter.sh\nqdisc noqueue 0: root refcnt 2 \n/usr/bin/flock\n/usr/bin/jsonfilter\n/usr/bin/jq",
+    "stderr": ""
+  },
+  "finished_local": "2026-11-17T09:13:13+08:00"
+}

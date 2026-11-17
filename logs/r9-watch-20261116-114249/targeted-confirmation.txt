@@ -1,0 +1,21 @@
+TIME 2026-11-16 11:47:57 +0800
+GAME_REAL_DNS
+Server:		223.5.5.5
+Address:	223.5.5.5#53
+
+Name:      gpp-tj100-1.lol.qq.com
+Address 1: 42.81.179.215
+*** Can't find gpp-tj100-1.lol.qq.com: No answer
+FAKEIP_ROUTE
+198.18.2.74 via 192.168.3.1 dev wan  src 192.168.3.19 
+GAME_CONNTRACK
+ipv4     2 udp      17 59 src=192.168.132.182 dst=198.18.2.74 sport=56246 dport=13671 packets=1788 bytes=978036 [UNREPLIED] src=198.18.2.74 dst=192.168.3.19 sport=13671 dport=56246 packets=0 bytes=0 mark=0 zone=0 use=2
+LOWER_LEVEL_STATIONS
+ra0       stainfo:
+MAC                MODE  AID  BSS WMM MIMOPS RSSI0/1/2  PhMd  BW    MCS   SGI   STBC  Idle   Rate   TxPackets   RxPackets   TxBytes     RxBytes     TxFailCount 
+10:A5:1D:54:67:A3  20001 16   0   1   3      -17/-12/-109 HE    40M   27    1   1    480    90     985572      2105834     757248622   2239888303  0           0         
+
+UDP_TPROXY_CONFIG
+redir-port: 7892
+HEALTH
+200

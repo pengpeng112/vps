@@ -1,0 +1,64 @@
+table inet gia_usage_meter {
+  counter r1_up {}
+  counter r1_down {}
+  counter r2_up {}
+  counter r2_down {}
+  counter r3_up {}
+  counter r3_down {}
+  counter r4_up {}
+  counter r4_down {}
+  counter r5_up {}
+  counter r5_down {}
+  counter r6_up {}
+  counter r6_down {}
+  counter r8_up {}
+  counter r8_down {}
+  counter r9_up {}
+  counter r9_down {}
+  counter cf_up_shared {}
+  counter cf_down_shared {}
+  counter unknown_up {}
+  counter unknown_down {}
+  chain input {
+    type filter hook input priority -5; policy accept;
+    ip saddr 60.210.151.42 tcp dport 443 counter name r1_up
+    ip saddr 60.210.151.42 udp dport 34568 counter name r1_up
+    ip saddr 58.58.177.226 tcp dport 443 counter name r2_up
+    ip saddr 58.58.177.226 udp dport 34568 counter name r2_up
+    ip saddr 119.176.93.186 tcp dport 443 counter name r3_up
+    ip saddr 119.176.93.186 udp dport 34568 counter name r3_up
+    ip saddr 27.205.184.56 tcp dport 443 counter name r4_up
+    ip saddr 27.205.184.56 udp dport 34568 counter name r4_up
+    ip saddr 39.90.84.192 tcp dport 443 counter name r5_up
+    ip saddr 39.90.84.192 udp dport 34568 counter name r5_up
+    ip saddr 58.58.185.138 tcp dport 443 counter name r6_up
+    ip saddr 58.58.185.138 udp dport 34568 counter name r6_up
+    ip saddr 124.134.135.120 tcp dport 443 counter name r8_up
+    ip saddr 124.134.135.120 udp dport 34568 counter name r8_up
+    ip saddr 182.45.197.114 tcp dport 443 counter name r9_up
+    ip saddr 182.45.197.114 udp dport 34568 counter name r9_up
+    tcp dport 2053 counter name cf_up_shared
+    ip saddr != { 60.210.151.42, 58.58.177.226, 119.176.93.186, 27.205.184.56, 39.90.84.192, 58.58.185.138, 124.134.135.120, 182.45.197.114 } counter name unknown_up
+  }
+  chain output {
+    type filter hook output priority -5; policy accept;
+    ip daddr 60.210.151.42 tcp sport 443 counter name r1_down
+    ip daddr 60.210.151.42 udp sport 34568 counter name r1_down
+    ip daddr 58.58.177.226 tcp sport 443 counter name r2_down
+    ip daddr 58.58.177.226 udp sport 34568 counter name r2_down
+    ip daddr 119.176.93.186 tcp sport 443 counter name r3_down
+    ip daddr 119.176.93.186 udp sport 34568 counter name r3_down
+    ip daddr 27.205.184.56 tcp sport 443 counter name r4_down
+    ip daddr 27.205.184.56 udp sport 34568 counter name r4_down
+    ip daddr 39.90.84.192 tcp sport 443 counter name r5_down
+    ip daddr 39.90.84.192 udp sport 34568 counter name r5_down
+    ip daddr 58.58.185.138 tcp sport 443 counter name r6_down
+    ip daddr 58.58.185.138 udp sport 34568 counter name r6_down
+    ip daddr 124.134.135.120 tcp sport 443 counter name r8_down
+    ip daddr 124.134.135.120 udp sport 34568 counter name r8_down
+    ip daddr 182.45.197.114 tcp sport 443 counter name r9_down
+    ip daddr 182.45.197.114 udp sport 34568 counter name r9_down
+    tcp sport 2053 counter name cf_down_shared
+    ip daddr != { 60.210.151.42, 58.58.177.226, 119.176.93.186, 27.205.184.56, 39.90.84.192, 58.58.185.138, 124.134.135.120, 182.45.197.114 } counter name unknown_down
+  }
+}

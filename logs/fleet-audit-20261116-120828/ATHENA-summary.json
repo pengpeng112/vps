@@ -1,0 +1,167 @@
+{
+  "device": "ATHENA",
+  "port": 13228,
+  "sections": {
+    "TIME": [
+      "2026-11-16 12:17:17 +0800",
+      " 12:17:17 up 37 days, 20:38,  load average: 0.20, 0.15, 0.16"
+    ],
+    "HEALTH": [
+      "200"
+    ],
+    "DNS_GAME": [
+      "Server:\t\t127.0.0.1",
+      "Address:\t127.0.0.1:53",
+      "",
+      "",
+      "Name:\tgpp-tj100-1.lol.qq.com",
+      "Address: 198.18.2.82",
+      ""
+    ],
+    "DNS_SERVERS": [
+      "127.0.0.1#1053"
+    ],
+    "NAT": [
+      "\t\ttype nat hook prerouting priority dstnat; policy accept;",
+      "\t\tip saddr 192.168.2.244 counter packets 660782 bytes 40001827 return",
+      "\t\tiifname \"br-lan\" udp dport 53 ip daddr != 192.168.2.0/24 counter packets 11749 bytes 767141 redirect to :1053",
+      "\t\tiifname \"br-lan\" tcp dport 53 ip daddr != 192.168.2.0/24 counter packets 87 bytes 4524 redirect to :1053",
+      "\t\tiifname \"br-lan\" tcp dport 1-65535 ip daddr != { 10.0.0.0/8, 100.64.0.0/10, 127.0.0.0/8, 169.254.0.0/16, 172.16.0.0/12, 192.168.0.0/16, 224.0.0.0/4, 255.255.255.255 } counter packets 308892 bytes 16119826 redirect to :7892"
+    ],
+    "MANGLE": [],
+    "WIFI": [
+      "wireless.radio0.channel='149'",
+      "wireless.radio0.htmode='HE80'",
+      "wireless.radio0.disabled='0'",
+      "wireless.radio1.channel='1'",
+      "wireless.radio1.htmode='HE20'",
+      "wireless.radio1.disabled='0'",
+      "wireless.radio2.channel='44'",
+      "wireless.radio2.htmode='HE160'",
+      "wireless.radio2.disabled='0'",
+      "\tInterface phy2-ap0",
+      "\t\ttype AP",
+      "\t\tchannel 44 (5220 MHz), width: 160 MHz, center1: 5250 MHz",
+      "\tInterface phy1-ap0",
+      "\t\ttype AP",
+      "\t\tchannel 1 (2412 MHz), width: 20 MHz, center1: 2412 MHz",
+      "\tInterface phy0-ap0",
+      "\t\ttype AP",
+      "\t\tchannel 149 (5745 MHz), width: 80 MHz, center1: 5775 MHz"
+    ],
+    "HTTP_PROXY": [
+      "204/0.238756"
+    ],
+    "RUNTIME_QOS_IMPLEMENTATION": [
+      "474:apply_vps_qos_ipt() { # 无 nft 的设备（SN-R1）：只限制本机访问 VPS:443",
+      "475-    _act=\"$1\"; _kbps=\"$2\"; _host=\"$3\"",
+      "476-    iptables -D OUTPUT -j VPS_QOS 2>/dev/null",
+      "477-    iptables -D INPUT -j VPS_QOS_IN 2>/dev/null",
+      "478-    iptables -F VPS_QOS 2>/dev/null",
+      "479-    iptables -X VPS_QOS 2>/dev/null",
+      "480-    iptables -F VPS_QOS_IN 2>/dev/null",
+      "481-    iptables -X VPS_QOS_IN 2>/dev/null",
+      "482-    _valid_v4 \"$_host\" || return 0",
+      "483-    iptables -N VPS_QOS",
+      "484-    iptables -N VPS_QOS_IN",
+      "485-    iptables -I OUTPUT 1 -j VPS_QOS",
+      "486-    iptables -I INPUT 1 -j VPS_QOS_IN",
+      "487-    if [ \"$_act\" = \"false\" ]; then",
+      "488-        iptables -A VPS_QOS -d \"$_host\" -p tcp --dport 443 -j DROP",
+      "489-        iptables -A VPS_QOS_IN -s \"$_host\" -p tcp --sport 443 -j DROP",
+      "490-        return 0",
+      "491-    fi",
+      "492-    case \"$_kbps\" in ''|0|*[!0-9]*) return 0 ;; esac",
+      "493-    _kbytes=$(( _kbps / 8 ))",
+      "494-    [ \"$_kbytes\" -lt 1 ] && _kbytes=1",
+      "495-    iptables -A VPS_QOS -d \"$_host\" -p tcp --dport 443 -m hashlimit \\",
+      "496-        --hashlimit-name vpsup --hashlimit-mode dstip \\",
+      "497-        --hashlimit-above ${_kbytes}kb/s --hashlimit-burst ${_kbytes}kb -j DROP",
+      "498-    iptables -A VPS_QOS_IN -s \"$_host\" -p tcp --sport 443 -m hashlimit \\",
+      "499-        --hashlimit-name vpsdown --hashlimit-mode srcip \\",
+      "500-        --hashlimit-above ${_kbytes}kb/s --hashlimit-burst ${_kbytes}kb -j DROP",
+      "501-}",
+      "--",
+      "503:apply_vps_qos() { # $1=service_active(true/false) $2=kbps $3=vps_host",
+      "504-    _act=\"$1\"; _kbps=\"$2\"; _host=\"$3\"",
+      "505-    if ! command -v nft >/dev/null 2>&1; then",
+      "506-        apply_vps_qos_ipt \"$_act\" \"$_kbps\" \"$_host\"",
+      "507-        return $?",
+      "508-    fi",
+      "509-    nft delete table inet vps_qos 2>/dev/null || true",
+      "510-    _valid_v4 \"$_host\" || return 0",
+      "511-    if [ \"$_act\" = \"false\" ]; then",
+      "512-        nft -f - <<EOF",
+      "513-table inet vps_qos {",
+      "514-  chain output {",
+      "515-    type filter hook output priority 0; policy accept;",
+      "516-    ip daddr $_host tcp dport 443 counter drop",
+      "517-  }",
+      "518-  chain input {",
+      "519-    type filter hook input priority 0; policy accept;",
+      "520-    ip saddr $_host tcp sport 443 counter drop",
+      "521-  }",
+      "522-}",
+      "523-EOF",
+      "524-        return 0",
+      "525-    fi",
+      "526-    case \"$_kbps\" in ''|0|*[!0-9]*) return 0 ;; esac",
+      "527-    [ \"$_kbps\" -gt 0 ] 2>/dev/null || return 0",
+      "528-    _kbytes=$(( _kbps / 8 ))",
+      "529-    [ \"$_kbytes\" -lt 1 ] && _kbytes=1",
+      "530-    nft -f - <<EOF"
+    ],
+    "QOS": []
+  },
+  "groups": {
+    "PROXY": {
+      "type": "Selector",
+      "now": "BWG-HY2-JPTY-01",
+      "all": [
+        "AUTO",
+        "US666-CN2GIA-01",
+        "BWG-HY2-JPTY-01",
+        "GIA-HY2-US-01",
+        "BWG-VLESS-JPTY-01",
+        "CF-CDN-GIA-01",
+        "CF2-CDN-GIA-01",
+        "VPS-TX-SG-02",
+        "VPS-SG-01",
+        "DIRECT"
+      ],
+      "alive": true
+    },
+    "AUTO": {
+      "type": "Fallback",
+      "now": "NODE-PICK",
+      "all": [
+        "NODE-PICK",
+        "DIRECT"
+      ],
+      "alive": true
+    },
+    "NODE-PICK": {
+      "type": "Fallback",
+      "now": "US666-CN2GIA-01",
+      "all": [
+        "US666-CN2GIA-01",
+        "BWG-HY2-JPTY-01",
+        "GIA-HY2-US-01",
+        "BWG-VLESS-JPTY-01",
+        "CF-CDN-GIA-01",
+        "CF2-CDN-GIA-01",
+        "VPS-TX-SG-02",
+        "VPS-SG-01"
+      ],
+      "alive": true
+    }
+  },
+  "proxy_route": [
+    "PROXY",
+    "BWG-HY2-JPTY-01"
+  ],
+  "media_route": [
+    "US-MEDIA"
+  ],
+  "stderr": ""
+}

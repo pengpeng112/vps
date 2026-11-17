@@ -1,0 +1,12 @@
+STAMP 20261116-115550
+PROTECTED_HASHES
+8bc2de0100532998671f56d1e259ba6d83adf425c76412203dbe6ab3b19bae09  /etc/config/wireless
+4f4ae886ec9a6081ffc0b9121dfe955fbdfed501bfd97327023aa0481ea4540c  /etc/mihomo/config.yaml
+4911dbbe7962b4c8425526a23b45896732ec53fbc1539bd0f17355f5b36fad98  /etc/routermgmt/tunnel.conf
+c65d51a7066eb05a141ead4692361472c6e89a6e16327ca4dc7da356c12bfd6e  /etc/routermgmt/self-heal.sh
+e34a4de09f577b55576f9ffc81b5ac71df410790d58d5be1842ce49cfa1bd07f  /etc/config/dhcp
+DNSMASQ_CONFIG_TEST
+DNS_MIHOMO_UP
+{"meta":true,"version":"v1.19.31"}
+
+dnsmasq: syntax check OK.

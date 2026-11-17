@@ -1,0 +1,7 @@
+2026-11-16T12:20:51+08:00
+/usr/sbin/tc
+/usr/sbin/nft
+qdisc fq 0: root refcnt 2 limit 10000p flow_limit 100p buckets 1024 orphan_mask 1023 quantum 3028b initial_quantum 15140b low_rate_threshold 550Kbit refill_delay 40ms timer_slack 10us horizon 10s horizon_drop 
+nftables v1.0.9 (Old Doc Yak #3)
+default via 154.36.139.254 dev eth0 proto static onlink 
+6.8.0-138-generic

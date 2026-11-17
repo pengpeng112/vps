@@ -1,0 +1,71 @@
+{
+  "local_only": true,
+  "production_commands": false,
+  "started_local": "2026-11-17T13:06:01+08:00",
+  "meter": {
+    "runs": [
+      {
+        "rc": 0,
+        "stdout": "OK seq=1 cont=cont-unknown-init delta=0 day_total=0 fails=[]\n",
+        "stderr": ""
+      },
+      {
+        "rc": 0,
+        "stdout": "OK seq=2 cont=cont-unknown-cont delta=0 day_total=0 fails=[]\n",
+        "stderr": ""
+      },
+      {
+        "rc": 0,
+        "stdout": "OK seq=3 cont=cont-unknown-cont delta=0 day_total=0 fails=[]\n",
+        "stderr": ""
+      }
+    ],
+    "expected_deltas_after_baseline": [
+      130,
+      100
+    ],
+    "daily": {
+      "day_key": "2026-11-17",
+      "total": 0,
+      "delta_last": 0,
+      "sampled_at": "2026-11-17 13:06:06+0800"
+    },
+    "expected_prev_exists": false,
+    "wrong_curly_file_exists": true
+  },
+  "observe_apply": {
+    "result": {
+      "rc": 1,
+      "stdout": "policy_validation=valid\n",
+      "stderr": "curl: (7) Failed to connect to 127.0.0.1:9090 after 2043 ms: Could not connect to server\nF:/vps/review/r2-qos-report-fixtures-20261117/controller-copy.sh: line 181: RATE: unbound variable\n"
+    },
+    "version_after": "1",
+    "mock_calls": "tc qdisc del dev wan root\n"
+  },
+  "emergency_then_limited": {
+    "emergency": {
+      "rc": 0,
+      "stdout": "EMERGENCY_STOP done (generation=1, all local shaping removed)\n",
+      "stderr": "curl: (7) Failed to connect to 127.0.0.1:9090 after 2030 ms: Could not connect to server\n"
+    },
+    "latch": {
+      "enforcement": "observe",
+      "release_generation": 1,
+      "mode": "emergency",
+      "released_at": "2026-11-17 13:06:14"
+    },
+    "apply_result": {
+      "rc": 0,
+      "stdout": "policy_validation=valid\nAPPLIED version=2 enforcement=limited enforced=1\n",
+      "stderr": "curl: (7) Failed to connect to 127.0.0.1:9090 after 2025 ms: Could not connect to server\n"
+    },
+    "daily_total": 0,
+    "version_after": "2",
+    "mock_calls": "tc qdisc del dev wan root\ntc qdisc del dev wan root\ntc qdisc add dev wan root handle 1: htb default 30\ntc class add dev wan parent 1: classid 1:10 htb rate 60kbit ceil 60kbit\ntc filter add dev wan parent 1: protocol ip u32 match ip dst 154.36.139.155/32 flowid 1:10\ntc filter add dev wan parent 1: protocol ip u32 match ip dst 74.82.193.113/32 flowid 1:10\n"
+  },
+  "source_sha256": {
+    "logs/proxy-meter-v2.sh": "40b79770aab4d127baf6bf91f6d5a3e38709d4e05a53bddf04737e3d85b05a6a",
+    "logs/ratelimit-ctl.sh": "bf9f00d44d82631a5d96459518793fce8cdd8f4d6128cf744b385de9ecf7b289"
+  },
+  "finished_local": "2026-11-17T13:06:17+08:00"
+}

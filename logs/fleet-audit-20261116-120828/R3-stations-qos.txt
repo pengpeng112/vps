@@ -1,0 +1,43 @@
+@@TIME
+2026-11-16 12:17:58 +0800
+@@STATION_ra0
+ra0       stainfo:
+MAC                MODE  AID  BSS WMM MIMOPS RSSI0/1/2  PhMd  BW    MCS   SGI   STBC  Idle   Rate   TxPackets   RxPackets   TxBytes     RxBytes     TxFailCount 
+
+@@STATION_rax0
+rax0      stainfo:
+MAC                MODE  AID  BSS WMM MIMOPS RSSI0/1/2  PhMd  BW    MCS   SGI   STBC  Idle   Rate   TxPackets   RxPackets   TxBytes     RxBytes     TxFailCount 
+F6:FE:E6:B8:5C:B6  20001 16   6   1   3      -75/-77/-77 HE    80M   27    1   0    480    195    10760       59561       4526109     3999987     0           0         
+
+@@DAT_CHANNEL
+Channel=0;0
+@@RADAR_EVENTS
+@@DEPLOYED_LIMITER
+485:apply_vps_qos_ipt() { # 无 nft 的设备（SN-R1）：只限制本机访问 VPS:443
+486-    _act="$1"; _kbps="$2"; _host="$3"
+487-    iptables -D OUTPUT -j VPS_QOS 2>/dev/null
+488-    iptables -D INPUT -j VPS_QOS_IN 2>/dev/null
+489-    iptables -F VPS_QOS 2>/dev/null
+490-    iptables -X VPS_QOS 2>/dev/null
+491-    iptables -F VPS_QOS_IN 2>/dev/null
+492-    iptables -X VPS_QOS_IN 2>/dev/null
+493-    _valid_v4 "$_host" || return 0
+494-    iptables -N VPS_QOS
+495-    iptables -N VPS_QOS_IN
+496-    iptables -I OUTPUT 1 -j VPS_QOS
+497-    iptables -I INPUT 1 -j VPS_QOS_IN
+498-    if [ "$_act" = "false" ]; then
+499-        iptables -A VPS_QOS -d "$_host" -p tcp --dport 443 -j DROP
+500-        iptables -A VPS_QOS_IN -s "$_host" -p tcp --sport 443 -j DROP
+501-        return 0
+502-    fi
+503-    case "$_kbps" in ''|0|*[!0-9]*) return 0 ;; esac
+504-    _kbytes=$(( _kbps / 8 ))
+505-    [ "$_kbytes" -lt 1 ] && _kbytes=1
+506-    iptables -A VPS_QOS -d "$_host" -p tcp --dport 443 -m hashlimit \
+507-        --hashlimit-name vpsup --hashlimit-mode dstip \
+508-        --hashlimit-above ${_kbytes}kb/s --hashlimit-burst ${_kbytes}kb -j DROP
+509-    iptables -A VPS_QOS_IN -s "$_host" -p tcp --sport 443 -m hashlimit \
+510-        --hashlimit-name vpsdown --hashlimit-mode srcip \
+511-        --hashlimit-above ${_kbytes}kb/s --hashlimit-burst ${_kbytes}kb -j DROP
+

@@ -1,0 +1,49 @@
+BEGIN
+rtr-e9ccdd|GL-MT3600BE-Beryl7|approved|21|1|1|0|0|rule|
+rtr-bf0292|GL-MT3600BE-Beryl7|revoked||0|0|0|0|rule|
+rtr-354647|SN-R10-AX3000|approved|2843530|3|3|0|2048|rule|0 0 * * *
+rtr-25730c|SN-R11-AX3000|approved|2838510|3|3|0|2048|rule|0 0 * * *
+rtr-d3847d|SN-R1-AX3000 临朐网警|approved|5|27|27|0|2048|rule|0 0 * * *
+rtr-a9bcba|SN-R2-AX3000日照国保1已付|approved|46|32|32|0|2048|rule|0 0 * * *
+rtr-38aa54|SN-R3-AX3000安丘网警01|approved|41|30|30|0|2048|rule|0 0 * * *
+rtr-cd473f|SN-R4-AX3000 坊子网警|approved|32|29|29|0|2048|rule|0 0 * * *
+rtr-c46a25|SN-R5-AX3000 昌乐网警|approved|51|20|20|0|0|rule|
+rtr-673568|SN-R6-AX3000日照国保2已付|approved|11|22|22|0|2048|rule|0 0 * * *
+rtr-37cf72|SN-R7-AX3000|approved|1273429|8|8|0|2048|rule|0 0 * * *
+rtr-1f6f0f|SN-R8-AX3000 安丘2|approved|4|8|8|0|2048|rule|0 0 * * *
+rtr-101be0|SN-R9-AX3000东营经开区网安|approved|9|4|4|0|2048|rule|0 0 * * *
+rtr-5e1a8d|雅典娜-AX6600|approved|10|0|0|0|2048|rule|
+rtr-1eff66|雅典娜-AX6600-客厅|approved|3899349|8|8|0|0|rule|
+metrics|id|bigint
+metrics|device_id|character varying
+metrics|ts|timestamp with time zone
+metrics|cpu|double precision
+metrics|mem_used_mb|bigint
+metrics|mem_total_mb|bigint
+metrics|temp_c|double precision
+metrics|disk_free_mb|bigint
+metrics|uptime_s|bigint
+metrics|wan_ip|character varying
+metrics|exit_ip|character varying
+metrics|exit_node|character varying
+metrics|exit_latency_ms|bigint
+metrics|clash_alive|boolean
+metrics|wg_alive|boolean
+metrics|wan_rx_bytes|bigint
+metrics|wan_tx_bytes|bigint
+metrics|proxy_rx_bytes|bigint
+metrics|proxy_tx_bytes|bigint
+metrics|config_version|bigint
+metrics|sample_id|character varying
+metrics|boot_id|character varying
+metrics|proxy_counter_epoch|character varying
+metrics|proxy_measurement_status|character varying
+monthly_traffic|id|bigint
+monthly_traffic|device_id|character varying
+monthly_traffic|year_month|character varying
+monthly_traffic|wan_rx_bytes|bigint
+monthly_traffic|wan_tx_bytes|bigint
+monthly_traffic|proxy_rx_bytes|bigint
+monthly_traffic|proxy_tx_bytes|bigint
+monthly_traffic|updated_at|timestamp with time zone
+COMMIT

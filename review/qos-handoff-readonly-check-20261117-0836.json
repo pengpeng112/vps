@@ -1,0 +1,129 @@
+{
+  "time_local": "2026-11-17T08:36:21+08:00",
+  "configuration_writes": false,
+  "hosts": {
+    "GZ": {
+      "db": {
+        "rc": 0,
+        "stdout": "BEGIN\nrtr-a9bcba|34|34|34|19|0\n4|BWG-VLESS-JPTY-01|74.82.193.113|443|vless-reality|f|1\n8|BWG-HY2-JPTY-01|74.82.193.113|34567|hysteria2|t|0\n14|BULK-LAX-GIA-01|154.36.139.155|2054|vless-reality|f|0\nt-fee5e5699783|rtr-a9bcba|repair_mgmt_tunnel|ok\nt-fee1adb15c3a|rtr-a9bcba|apply_policy|ok\nt-f4a470ed2b77|rtr-a9bcba|switch_node|failed\nt-edbe5f103101|rtr-a9bcba|repair_mgmt_tunnel|expired\nt-ebc087d4564b|rtr-a9bcba|set_wifi|ok\nt-ea58487a2cc2|rtr-a9bcba|ping_test|ok\nt-e7118784a2a4|rtr-a9bcba|reboot|expired\nt-e4999274debf|rtr-a9bcba|set_wifi|ok\nCOMMIT",
+        "stderr": ""
+      },
+      "binary": {
+        "rc": 0,
+        "stdout": "2026-11-17T08:36:23+08:00\nc5b380f45586c1dede4c7212f82dcee0917c698056bd58085932f931b6b5ca02  /opt/mgmt/server\nactive",
+        "stderr": ""
+      }
+    },
+    "R2": {
+      "qos": {
+        "rc": 0,
+        "stdout": "2026-11-17 08:36:24 +0800\nqdisc noqueue 0: root refcnt 2 \n Sent 0 bytes 0 pkt (dropped 0, overlimits 0 requeues 0) \n backlog 0b 0p requeues 0",
+        "stderr": ""
+      },
+      "meter": {
+        "rc": 0,
+        "stdout": "fe09735fd3137e797e61042733088572d4df99fa52ac3dfa073947877b837263  /etc/routermgmt/proxy-meter.sh\nChain PROXY_METER_OUT (1 references)\n    pkts      bytes target     prot opt in     out     source               destination         \n    1261   310747            tcp  --  *      *       0.0.0.0/0            74.82.193.113        tcp dpt:443 /* pm_bwg_vless_up */\n    6470  2462981            udp  --  *      *       0.0.0.0/0            74.82.193.113        udp dpt:34567 /* pm_bwg_hy2_up */\n      74    18548            tcp  --  *      *       0.0.0.0/0            154.36.139.155       tcp dpt:443 /* pm_gia_vless_up */\n      48     7277            udp  --  *      *       0.0.0.0/0            154.36.139.155       udp dpt:34568 /* pm_gia_hy2_up */\n      50    11118            tcp  --  *      *       0.0.0.0/0            104.18.32.7          tcp dpt:2053 /* pm_cf1_up */\n      51    11042            tcp  --  *      *       0.0.0.0/0            162.159.135.42       tcp dpt:2053 /* pm_cf2_up */\nChain PROXY_METER_IN (1 references)\n    pkts      bytes target     prot opt in     out     source               destination         \n    1035   797272            tcp  --  *      *       74.82.193.113        0.0.0.0/0            tcp spt:443 /* pm_bwg_vless_down */\n    6947  3026150            udp  --  *      *       74.82.193.113        0.0.0.0/0            udp spt:34567 /* pm_bwg_hy2_down */\n      65    46708            tcp  --  *      *       154.36.139.155       0.0.0.0/0            tcp spt:443 /* pm_gia_vless_down */\n      52    13082            udp  --  *      *       154.36.139.155       0.0.0.0/0            udp spt:34568 /* pm_gia_hy2_down */\n      37    21196            tcp  --  *      *       104.18.32.7          0.0.0.0/0            tcp spt:2053 /* pm_cf1_down */\n      37    21185            tcp  --  *      *       162.159.135.42       0.0.0.0/0            tcp spt:2053 /* pm_cf2_down */",
+        "stderr": ""
+      },
+      "health": {
+        "rc": 0,
+        "stdout": "health=200",
+        "stderr": ""
+      },
+      "groups": {
+        "PROXY": {
+          "type": "Selector",
+          "now": "AUTO",
+          "all": [
+            "AUTO",
+            "BWG-HY2-JPTY-01",
+            "BULK-LAX-GIA-01",
+            "BWG-VLESS-JPTY-01",
+            "DIRECT"
+          ]
+        },
+        "AUTO": {
+          "type": "Fallback",
+          "now": "NODE-PICK",
+          "all": [
+            "NODE-PICK",
+            "AIRPORT",
+            "DIRECT"
+          ]
+        },
+        "NODE-PICK": {
+          "type": "Fallback",
+          "now": "BWG-HY2-JPTY-01",
+          "all": [
+            "BWG-HY2-JPTY-01",
+            "BULK-LAX-GIA-01",
+            "BWG-VLESS-JPTY-01"
+          ]
+        },
+        "US-MEDIA": {
+          "type": "Selector",
+          "now": "BULK-LAX-GIA-01",
+          "all": [
+            "BULK-LAX-GIA-01",
+            "NODE-PICK",
+            "AIRPORT"
+          ]
+        },
+        "DOWNLOAD": {
+          "type": "Selector",
+          "now": "DIRECT",
+          "all": [
+            "DIRECT",
+            "PROXY"
+          ]
+        }
+      },
+      "config_metadata": {
+        "proxies": [
+          {
+            "name": "BWG-HY2-JPTY-01",
+            "type": "hysteria2",
+            "server": "74.82.193.113",
+            "port": 34567
+          },
+          {
+            "name": "BULK-LAX-GIA-01",
+            "type": "vless",
+            "server": "154.36.139.155",
+            "port": 2054
+          },
+          {
+            "name": "BWG-VLESS-JPTY-01",
+            "type": "vless",
+            "server": "74.82.193.113",
+            "port": 443
+          }
+        ],
+        "bulk_rule_count": 0
+      }
+    },
+    "GIA": {
+      "qos": {
+        "rc": 0,
+        "stdout": "2026-11-17T08:36:33+08:00\nqdisc fq 8001: root refcnt 2 limit 10000p flow_limit 100p buckets 1024 orphan_mask 1023 quantum 3028b initial_quantum 15140b low_rate_threshold 550Kbit refill_delay 40ms timer_slack 10us horizon 10s horizon_drop \n Sent 92290214 bytes 225689 pkt (dropped 0, overlimits 0 requeues 0) \n backlog 3028b 2p requeues 0\n  flows 113 (inactive 112 throttled 1) next_packet_delay 1.65ms\n  gc 2 highprio 0 throttled 4428 latency 50us",
+        "stderr": ""
+      },
+      "services": {
+        "rc": 0,
+        "stdout": "udp 127.0.0.1:323\nudp 127.0.0.54:53\nudp 127.0.0.53%lo:53\nudp *:34568\nudp [::1]:323\ntcp 0.0.0.0:28722\ntcp 0.0.0.0:22\ntcp 127.0.0.54:53\ntcp 127.0.0.1:8443\ntcp 127.0.0.53%lo:53\ntcp [::]:28722\ntcp *:2053\ntcp *:2054\ntcp [::]:22\ntcp *:443\nLoadState=loaded\nActiveState=active\nFragmentPath=/etc/systemd/system/s-box-bulk.service",
+        "stderr": ""
+      },
+      "bulk_meter": {
+        "rc": 0,
+        "stdout": "{\"nftables\": [{\"metainfo\": {\"version\": \"1.0.9\", \"release_name\": \"Old Doc Yak #3\", \"json_schema_version\": 1}}, {\"table\": {\"family\": \"inet\", \"name\": \"gia_bulk_meter\", \"handle\": 7}}, {\"counter\": {\"family\": \"inet\", \"name\": \"r2_bulk_up\", \"table\": \"gia_bulk_meter\", \"handle\": 3, \"packets\": 100, \"bytes\": 24310}}, {\"counter\": {\"family\": \"inet\", \"name\": \"r2_bulk_down\", \"table\": \"gia_bulk_meter\", \"handle\": 4, \"packets\": 72, \"bytes\": 61089}}, {\"chain\": {\"family\": \"inet\", \"table\": \"gia_bulk_meter\", \"name\": \"input\", \"handle\": 1, \"type\": \"filter\", \"hook\": \"input\", \"prio\": -4, \"policy\": \"accept\"}}, {\"chain\": {\"family\": \"inet\", \"table\": \"gia_bulk_meter\", \"name\": \"output\", \"handle\": 2, \"type\": \"filter\", \"hook\": \"output\", \"prio\": -4, \"policy\": \"accept\"}}, {\"rule\": {\"family\": \"inet\", \"table\": \"gia_bulk_meter\", \"chain\": \"input\", \"handle\": 5, \"expr\": [{\"match\": {\"op\": \"==\", \"left\": {\"payload\": {\"protocol\": \"ip\", \"field\": \"saddr\"}}, \"right\": \"58.58.177.226\"}}, {\"match\": {\"op\": \"==\", \"left\": {\"payload\": {\"protocol\": \"tcp\", \"field\": \"dport\"}}, \"right\": 2054}}, {\"counter\": \"r2_bulk_up\"}]}}, {\"rule\": {\"family\": \"inet\", \"table\": \"gia_bulk_meter\", \"chain\": \"output\", \"handle\": 6, \"expr\": [{\"match\": {\"op\": \"==\", \"left\": {\"payload\": {\"protocol\": \"ip\", \"field\": \"daddr\"}}, \"right\": \"58.58.177.226\"}}, {\"match\": {\"op\": \"==\", \"left\": {\"payload\": {\"protocol\": \"tcp\", \"field\": \"sport\"}}, \"right\": 2054}}, {\"counter\": \"r2_bulk_down\"}]}}]}",
+        "stderr": ""
+      },
+      "meter_hash": {
+        "rc": 0,
+        "stdout": "05dd215e908516dda0598af3c44c6df173f434d2ba851fad0916b4d958435118  /usr/local/bin/gia-meter-sample.sh",
+        "stderr": ""
+      }
+    }
+  },
+  "finished_local": "2026-11-17T08:36:43+08:00"
+}

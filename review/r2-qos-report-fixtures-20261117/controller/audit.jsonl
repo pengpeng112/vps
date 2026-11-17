@@ -1,0 +1,2 @@
+{"ts":"2026-11-17 13:06:14","action":"emergency_stop","detail":{"generation":1}}
+{"ts":"2026-11-17 13:06:17","action":"apply","detail":{"version":2,"enforcement":"limited","enforced":1,"rate_kbit":"60"}}

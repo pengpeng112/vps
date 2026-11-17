@@ -1,0 +1,45 @@
+ Write reg=94, value=ff0035
+ Write reg=98, value=c0e02
+ Write reg=90, value=80005062
+ Write reg=94, value=0
+ Write reg=98, value=0
+ Write reg=e0, value=0
+ Write reg=e4, value=4
+ Write reg=90, value=80009021
+ Write reg=94, value=18004080
+ Write reg=98, value=0
+ Write reg=90, value=8000b021
+VERIFY gpp-tj100-1.lol.qq.com
+Server:		192.168.132.1
+Address:	192.168.132.1#53
+
+Name:      gpp-tj100-1.lol.qq.com
+Address 1: 42.81.179.215
+*** Can't find gpp-tj100-1.lol.qq.com: No answer
+VERIFY ied-tqos-tgp.qq.com
+Server:		192.168.132.1
+Address:	192.168.132.1#53
+
+Name:      ied-tqos-tgp.qq.com
+Address 1: 101.226.144.94
+Address 2: 101.89.42.40
+*** Can't find ied-tqos-tgp.qq.com: No answer
+VERIFY ied-tqos.qq.com
+Server:		192.168.132.1
+Address:	192.168.132.1#53
+
+Name:      ied-tqos.qq.com
+Address 1: 101.226.144.44
+*** Can't find ied-tqos.qq.com: No answer
+SERVER_RULES
+127.0.0.1#1053 /lol.qq.com/223.5.5.5 /lol.qq.com/119.29.29.29 /gamesafe.qq.com/223.5.5.5 /gamesafe.qq.com/119.29.29.29 /anticheatexpert.com/223.5.5.5 /anticheatexpert.com/119.29.29.29 /ied-tqos-tgp.qq.com/223.5.5.5 /ied-tqos-tgp.qq.com/119.29.29.29 /ied-tqos.qq.com/223.5.5.5 /ied-tqos.qq.com/119.29.29.29
+PROTECTED_HASHES
+d55cf90ce9c99cc78aa2216d03f84ade111248abb27365882d41d1e83c3d90d5  /etc/config/dhcp
+8bc2de0100532998671f56d1e259ba6d83adf425c76412203dbe6ab3b19bae09  /etc/config/wireless
+4f4ae886ec9a6081ffc0b9121dfe955fbdfed501bfd97327023aa0481ea4540c  /etc/mihomo/config.yaml
+4911dbbe7962b4c8425526a23b45896732ec53fbc1539bd0f17355f5b36fad98  /etc/routermgmt/tunnel.conf
+c65d51a7066eb05a141ead4692361472c6e89a6e16327ca4dc7da356c12bfd6e  /etc/routermgmt/self-heal.sh
+EXTRA_SUCCESS 2026-11-16 12:01:49 +0800
+
+dnsmasq: syntax check OK.
+dnsmasq: syntax check OK.

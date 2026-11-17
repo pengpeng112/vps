@@ -27,11 +27,12 @@ import (
 // primary 在前；必须有且仅有一个 primary（§19.3）。
 func (s *Server) resolveRenderNodes(tx *gorm.DB, dev *models.Device) ([]clash.NodeRender, *models.Node, error) {
 	type row struct {
-		ID        int64 `gorm:"column:id"`
-		IsPrimary bool  `gorm:"column:is_primary"`
+		ID        int64  `gorm:"column:id"`
+		IsPrimary bool   `gorm:"column:is_primary"`
+		Purpose   string `gorm:"column:purpose"`
 	}
 	var ids []row
-	if err := tx.Raw(`SELECT n.id, a.is_primary FROM node_assignments a
+	if err := tx.Raw(`SELECT n.id, a.is_primary, n.purpose FROM node_assignments a
 		JOIN nodes n ON n.id=a.node_id
 		WHERE a.device_id=? AND n.enabled=true
 		ORDER BY a.is_primary DESC, a.failover_priority, n.priority DESC, n.id`, dev.ID).Scan(&ids).Error; err != nil {
@@ -57,8 +58,13 @@ func (s *Server) resolveRenderNodes(tx *gorm.DB, dev *models.Device) ([]clash.No
 			return nil, nil, err
 		}
 		p := s.decryptNodeParams(&n)
+		purpose := r.Purpose
+		if purpose == "" {
+			purpose = "ordinary"
+		}
 		out = append(out, clash.NodeRender{
 			ID: n.ID, Name: n.Name, Proto: n.Proto, Host: n.Host, Port: n.Port,
+			Purpose: purpose,
 			UUID: p.UUID, PBK: p.PBK, SNI: p.SNI, SID: p.SID, Flow: p.Flow, FP: p.FP,
 			Password: p.Password, WSPath: p.WSPath, WSHost: p.WSHost,
 		})

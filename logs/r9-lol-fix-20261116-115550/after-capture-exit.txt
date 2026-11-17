@@ -1,0 +1,5 @@
+tcpdump: verbose output suppressed, use -v or -vv for full protocol decode
+listening on br-lan, link-type EN10MB (Ethernet), capture size 96 bytes
+143576 packets captured
+144508 packets received by filter
+0 packets dropped by kernel

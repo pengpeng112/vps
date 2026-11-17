@@ -81,6 +81,7 @@ type Node struct {
 	Host           string `gorm:"size:255"`
 	Port           int
 	Proto          string `gorm:"size:32;default:vless-reality"`
+	Purpose        string `gorm:"column:purpose;size:16;default:ordinary"` // ordinary|video：video 仅入 US-MEDIA，渲染隔离
 	ProtoParamsEnc string `gorm:"column:proto_params_enc"`
 	Priority       int    `gorm:"default:0"`
 	Enabled        bool   `gorm:"default:true"`

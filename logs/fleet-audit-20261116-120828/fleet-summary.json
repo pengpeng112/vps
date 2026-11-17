@@ -1,0 +1,2776 @@
+[
+  {
+    "device": "R1",
+    "port": 13222,
+    "groups": {
+      "PROXY": {
+        "type": "Selector",
+        "now": "BWG-HY2-JPTY-01",
+        "all": [
+          "AUTO",
+          "US666-CN2GIA-01",
+          "BWG-HY2-JPTY-01",
+          "GIA-HY2-US-01",
+          "BWG-VLESS-JPTY-01",
+          "CF-CDN-GIA-01",
+          "CF2-CDN-GIA-01",
+          "DIRECT"
+        ],
+        "alive": true
+      },
+      "AUTO": {
+        "type": "Fallback",
+        "now": "NODE-PICK",
+        "all": [
+          "NODE-PICK",
+          "AIRPORT",
+          "DIRECT"
+        ],
+        "alive": true
+      },
+      "NODE-PICK": {
+        "type": "Fallback",
+        "now": "US666-CN2GIA-01",
+        "all": [
+          "US666-CN2GIA-01",
+          "BWG-HY2-JPTY-01",
+          "GIA-HY2-US-01",
+          "BWG-VLESS-JPTY-01",
+          "CF-CDN-GIA-01",
+          "CF2-CDN-GIA-01"
+        ],
+        "alive": true
+      },
+      "US-MEDIA": {
+        "type": "Fallback",
+        "now": "NODE-PICK",
+        "all": [
+          "NODE-PICK",
+          "AIRPORT"
+        ],
+        "alive": true
+      },
+      "AIRPORT": {
+        "type": "URLTest",
+        "now": "AP | 🇸🇬新加坡NET",
+        "all": [
+          "AP | 🇭🇰REALITY香港",
+          "AP | 🇯🇵REALITY日本",
+          "AP | 🇭🇰香港NET",
+          "AP | 🇸🇬新加坡NET",
+          "AP | 🇯🇵日本NET",
+          "AP | 🇺🇸美国NET",
+          "AP | 🇭🇰三网优化香港",
+          "AP | 🇸🇬三网优化新加坡",
+          "AP | 🇯🇵三网优化日本",
+          "AP | 🇺🇸三网优化美国",
+          "AP | 🇭🇰香港电信优化",
+          "AP | 🇸🇬新加坡电信优化",
+          "AP | 🇯🇵日本电信优化",
+          "AP | 🇺🇸美国电信优化",
+          "AP | 🇭🇰AWS香港",
+          "AP | 🇯🇵AWS日本",
+          "AP | 🇭🇰香港中转01",
+          "AP | 🇭🇰香港中转02",
+          "AP | 🇭🇰香港中转03",
+          "AP | 🇸🇬新加坡中转01",
+          "AP | 🇸🇬新加坡中转02",
+          "AP | 🇸🇬新加坡中转03",
+          "AP | 🇯🇵AZ日本中转01",
+          "AP | 🇯🇵AZ日本中转02",
+          "AP | 🇯🇵AZ日本中转03",
+          "AP | 🇯🇵日本中转01",
+          "AP | 🇯🇵日本中转02",
+          "AP | 🇯🇵日本中转03",
+          "AP | 🇰🇷韩国中转01",
+          "AP | 🇰🇷韩国中转02",
+          "AP | 🇰🇷韩国中转03",
+          "AP | 🇺🇸美国中转01",
+          "AP | 🇺🇸美国中转02",
+          "AP | 🇺🇸美国中转03",
+          "AP | 🇪🇭迪拜中转01",
+          "AP | 🇪🇭迪拜中转02",
+          "AP | 🇪🇭迪拜中转03"
+        ],
+        "alive": true
+      }
+    },
+    "proxy_route": [
+      "PROXY",
+      "BWG-HY2-JPTY-01"
+    ],
+    "media_route": [
+      "US-MEDIA",
+      "NODE-PICK",
+      "US666-CN2GIA-01"
+    ],
+    "nodes": [
+      {
+        "name": "US666-CN2GIA-01",
+        "type": "Vless",
+        "alive": true,
+        "history": [
+          {
+            "time": "2026-11-16T04:08:50.419224861Z",
+            "delay": 160
+          }
+        ]
+      },
+      {
+        "name": "BWG-HY2-JPTY-01",
+        "type": "Hysteria2",
+        "alive": true,
+        "history": [
+          {
+            "time": "2026-11-16T04:08:48.910096194Z",
+            "delay": 77
+          }
+        ]
+      },
+      {
+        "name": "BWG-VLESS-JPTY-01",
+        "type": "Vless",
+        "alive": true,
+        "history": [
+          {
+            "time": "2026-11-16T04:08:49.076798204Z",
+            "delay": 81
+          }
+        ]
+      }
+    ],
+    "sections": {
+      "TIME": [
+        "2026-11-16 12:09:41 +0800",
+        " 12:09:41 up 12:09,  load average: 1.39, 1.13, 1.05"
+      ],
+      "HEALTH": [
+        "200"
+      ],
+      "PROC": [
+        "5032",
+        "6997"
+      ],
+      "DNS_GAME": [
+        "Server:\t\t127.0.0.1",
+        "Address:\t127.0.0.1#53",
+        "",
+        "Name:      gpp-tj100-1.lol.qq.com",
+        "Address 1: 198.18.147.164",
+        "*** Can't find gpp-tj100-1.lol.qq.com: No answer"
+      ],
+      "DNS_SERVERS": [
+        "127.0.0.1#1053"
+      ],
+      "DNS_NORMAL": [
+        "Server:\t\t127.0.0.1",
+        "Address:\t127.0.0.1#53",
+        "",
+        "Name:      www.baidu.com",
+        "Address 1: 198.18.0.8",
+        "*** Can't find www.baidu.com: No answer"
+      ],
+      "WAN": [
+        "default via 192.168.1.1 dev wan  src 192.168.1.73 "
+      ],
+      "TOOLS": [
+        "/sbin/tc",
+        "/usr/sbin/iptables"
+      ],
+      "NAT": [
+        "-A PREROUTING -i br-lan -j MIHOMO",
+        "-A PREROUTING -i br-lan -j MIHOMO_DNS",
+        "-A MIHOMO -d 224.0.0.0/4 -j RETURN",
+        "-A MIHOMO -d 159.223.36.119/32 -j RETURN",
+        "-A MIHOMO -d 43.134.46.44/32 -j RETURN",
+        "-A MIHOMO -p tcp -j REDIRECT --to-ports 7892"
+      ],
+      "UDP_TPROXY": [],
+      "DNS_LISTENERS": [
+        "tcp        0      0 127.0.0.1:53            0.0.0.0:*               LISTEN      ",
+        "tcp        0      0 192.168.1.73:53         0.0.0.0:*               LISTEN      ",
+        "tcp        0      0 192.168.132.1:53        0.0.0.0:*               LISTEN      ",
+        "tcp        0      0 :::7892                 :::*                    LISTEN      ",
+        "tcp        0      0 ::1:53                  :::*                    LISTEN      ",
+        "tcp        0      0 fe80::a803:91ff:fe2f:c41a:53 :::*                    LISTEN      ",
+        "tcp        0      0 2408:8215:3d10:93b0:74a7:c8ff:fee0:4f21:53 :::*                    LISTEN      ",
+        "tcp        0      0 2408:8215:3d10:93b0:76a7:c8ff:fee0:4f21:53 :::*                    LISTEN      ",
+        "tcp        0      0 fe80::74a7:c8ff:fee0:4f21:53 :::*                    LISTEN      ",
+        "tcp        0      0 fe80::74a7:c8ff:fee0:4f31:53 :::*                    LISTEN      ",
+        "tcp        0      0 :::1053                 :::*                    LISTEN      ",
+        "udp        0      0 127.0.0.1:53            0.0.0.0:*                           ",
+        "udp        0      0 192.168.1.73:53         0.0.0.0:*                           ",
+        "udp        0      0 192.168.132.1:53        0.0.0.0:*                           ",
+        "udp        0      0 :::7892                 :::*                                ",
+        "udp        0      0 :::1053                 :::*                                ",
+        "udp        0      0 ::1:53                  :::*                                ",
+        "udp        0      0 fe80::a803:91ff:fe2f:c41a:53 :::*                                ",
+        "udp        0      0 2408:8215:3d10:93b0:74a7:c8ff:fee0:4f21:53 :::*                                ",
+        "udp        0      0 2408:8215:3d10:93b0:76a7:c8ff:fee0:4f21:53 :::*                                ",
+        "udp        0      0 fe80::74a7:c8ff:fee0:4f21:53 :::*                                ",
+        "udp        0      0 fe80::74a7:c8ff:fee0:4f31:53 :::*                                "
+      ],
+      "WIFI_UCI": [
+        "wireless.ra0.disabled='0'",
+        "wireless.rax0.disabled='0'",
+        "wireless.mesh_2G.disabled='0'",
+        "wireless.mesh_5G.disabled='0'",
+        "wireless.guest_2G.disabled='1'",
+        "wireless.guest_5G.disabled='1'",
+        "wireless.RADIO2G.channel='0'",
+        "wireless.RADIO2G.disabled='0'",
+        "wireless.RADIO5G.channel='0'",
+        "wireless.RADIO5G.disabled='0'",
+        "wireless.ssid3.disabled='1'",
+        "wireless.ssid4.disabled='1'",
+        "wireless.ssid5.disabled='1'",
+        "wireless.ssid6.disabled='1'",
+        "wireless.ssid7.disabled='1'",
+        "wireless.ssid8.disabled='1'"
+      ],
+      "WIFI_LINKS": [
+        "ra0       Link encap:Ethernet  HWaddr A4:D8:CA:14:85:22  ",
+        "          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1",
+        "          RX packets:0 errors:0 dropped:0 overruns:0 frame:0",
+        "rax0      Link encap:Ethernet  HWaddr A6:D8:CA:64:85:22  ",
+        "          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1",
+        "          RX packets:0 errors:0 dropped:0 overruns:0 frame:0"
+      ],
+      "WIFI_RUNTIME": [
+        "          Mode:Master  Channel:9  Access Point: A4:D8:CA:14:85:22   ",
+        "          Bit Rate:573 Mb/s   ",
+        "          Mode:Master  Channel:64  Access Point: A6:D8:CA:64:85:22   ",
+        "          Bit Rate:2.401 Gb/s   "
+      ],
+      "RADIO_FIRST": [
+        "Tx success                      = 0",
+        "Tx fail count                   = 0, PER=0.0%",
+        "Rx success                      = 419346",
+        "Rx with CRC                     = 821801, PER=66.2%",
+        "Rssi: 0 0 0 0 ",
+        "Tx success                      = 0",
+        "Tx fail count                   = 0, PER=0.0%",
+        "Rx success                      = 545",
+        "Rx with CRC                     = 836, PER=60.5%",
+        "Rssi: 0 0 0 0 "
+      ],
+      "RADIO_SECOND": [
+        "Tx success                      = 0",
+        "Tx fail count                   = 0, PER=0.0%",
+        "Rx success                      = 419394",
+        "Rx with CRC                     = 821850, PER=66.2%",
+        "Rssi: 0 0 0 0 ",
+        "Tx success                      = 0",
+        "Tx fail count                   = 0, PER=0.0%",
+        "Rx success                      = 545",
+        "Rx with CRC                     = 836, PER=60.5%",
+        "Rssi: 0 0 0 0 "
+      ],
+      "WIFI_EVENTS": [],
+      "QOS": [],
+      "QDISC": [
+        "qdisc noqueue 0: dev lo root refcnt 2 ",
+        "qdisc fq_codel 0: dev eth0 root refcnt 2 limit 10240p flows 1024 quantum 1514 target 5ms interval 100ms memory_limit 4Mb ecn drop_batch 64 ",
+        "qdisc fq_codel 0: dev eth1 root refcnt 2 limit 10240p flows 1024 quantum 1514 target 5ms interval 100ms memory_limit 4Mb ecn drop_batch 64 ",
+        "qdisc noqueue 0: dev wan root refcnt 2 ",
+        "qdisc noqueue 0: dev lan1 root refcnt 2 ",
+        "qdisc noqueue 0: dev lan3 root refcnt 2 ",
+        "qdisc noqueue 0: dev lan4 root refcnt 2 ",
+        "qdisc noqueue 0: dev lan2 root refcnt 2 ",
+        "qdisc fq_codel 0: dev ra0 root refcnt 2 limit 10240p flows 1024 quantum 1514 target 5ms interval 100ms memory_limit 512Kb ecn drop_batch 64 ",
+        "qdisc noqueue 0: dev br-lan root refcnt 2 ",
+        "qdisc fq_codel 0: dev ra1 root refcnt 2 limit 10240p flows 1024 quantum 1514 target 5ms interval 100ms memory_limit 512Kb ecn drop_batch 64 ",
+        "qdisc fq_codel 0: dev rax0 root refcnt 2 limit 10240p flows 1024 quantum 1514 target 5ms interval 100ms memory_limit 512Kb ecn drop_batch 64 ",
+        "qdisc fq_codel 0: dev rax1 root refcnt 2 limit 10240p flows 1024 quantum 1514 target 5ms interval 100ms memory_limit 512Kb ecn drop_batch 64 "
+      ],
+      "HTTP_PROXY": [
+        "204/0.440814"
+      ],
+      "LOAD": [
+        "1.37 1.13 1.05 3/118 1277",
+        "              total        used        free      shared  buff/cache   available",
+        "Mem:        1014720      249632      671652         136       93436      749660",
+        "Swap:             0           0           0"
+      ],
+      "GUARD": [
+        "#!/bin/sh",
+        "# self-heal.sh v3.1 - safe version (2026-10-30 v3.1 fleet patch)"
+      ],
+      "IPT_SCRIPT_BEHAVIOR": [
+        "27:    uci -q del_list dhcp.@dnsmasq[0].server='127.0.0.1#1053'",
+        "29:    /etc/init.d/dnsmasq restart",
+        "55:iptables -t nat -A MIHOMO -p tcp -j REDIRECT --to-ports 7892",
+        "63:iptables -t nat -A MIHOMO_DNS -p udp --dport 53 -j REDIRECT --to-ports 1053",
+        "64:iptables -t nat -A MIHOMO_DNS -p tcp --dport 53 -j REDIRECT --to-ports 1053",
+        "68:uci -q del_list dhcp.@dnsmasq[0].server='127.0.0.1#1053'",
+        "69:uci add_list dhcp.@dnsmasq[0].server='127.0.0.1#1053'",
+        "71:/etc/init.d/dnsmasq restart"
+      ]
+    },
+    "stderr": ""
+  },
+  {
+    "device": "R2",
+    "port": 13223,
+    "groups": {
+      "PROXY": {
+        "type": "Selector",
+        "now": "BWG-HY2-JPTY-01",
+        "all": [
+          "AUTO",
+          "US666-CN2GIA-01",
+          "BWG-HY2-JPTY-01",
+          "GIA-HY2-US-01",
+          "BWG-VLESS-JPTY-01",
+          "CF-CDN-GIA-01",
+          "CF2-CDN-GIA-01",
+          "DIRECT"
+        ],
+        "alive": true
+      },
+      "AUTO": {
+        "type": "Fallback",
+        "now": "NODE-PICK",
+        "all": [
+          "NODE-PICK",
+          "AIRPORT",
+          "DIRECT"
+        ],
+        "alive": true
+      },
+      "NODE-PICK": {
+        "type": "Fallback",
+        "now": "US666-CN2GIA-01",
+        "all": [
+          "US666-CN2GIA-01",
+          "BWG-HY2-JPTY-01",
+          "GIA-HY2-US-01",
+          "BWG-VLESS-JPTY-01",
+          "CF-CDN-GIA-01",
+          "CF2-CDN-GIA-01"
+        ],
+        "alive": true
+      },
+      "US-MEDIA": {
+        "type": "Fallback",
+        "now": "NODE-PICK",
+        "all": [
+          "NODE-PICK",
+          "AIRPORT"
+        ],
+        "alive": true
+      },
+      "AIRPORT": {
+        "type": "URLTest",
+        "now": "AP | 🇯🇵日本NET",
+        "all": [
+          "AP | 🇭🇰REALITY香港",
+          "AP | 🇯🇵REALITY日本",
+          "AP | 🇭🇰香港NET",
+          "AP | 🇸🇬新加坡NET",
+          "AP | 🇯🇵日本NET",
+          "AP | 🇺🇸美国NET",
+          "AP | 🇭🇰三网优化香港",
+          "AP | 🇸🇬三网优化新加坡",
+          "AP | 🇯🇵三网优化日本",
+          "AP | 🇺🇸三网优化美国",
+          "AP | 🇭🇰香港电信优化",
+          "AP | 🇸🇬新加坡电信优化",
+          "AP | 🇯🇵日本电信优化",
+          "AP | 🇺🇸美国电信优化",
+          "AP | 🇭🇰AWS香港",
+          "AP | 🇯🇵AWS日本",
+          "AP | 🇭🇰香港中转01",
+          "AP | 🇭🇰香港中转02",
+          "AP | 🇭🇰香港中转03",
+          "AP | 🇸🇬新加坡中转01",
+          "AP | 🇸🇬新加坡中转02",
+          "AP | 🇸🇬新加坡中转03",
+          "AP | 🇯🇵AZ日本中转01",
+          "AP | 🇯🇵AZ日本中转02",
+          "AP | 🇯🇵AZ日本中转03",
+          "AP | 🇯🇵日本中转01",
+          "AP | 🇯🇵日本中转02",
+          "AP | 🇯🇵日本中转03",
+          "AP | 🇰🇷韩国中转01",
+          "AP | 🇰🇷韩国中转02",
+          "AP | 🇰🇷韩国中转03",
+          "AP | 🇺🇸美国中转01",
+          "AP | 🇺🇸美国中转02",
+          "AP | 🇺🇸美国中转03",
+          "AP | 🇪🇭迪拜中转01",
+          "AP | 🇪🇭迪拜中转02",
+          "AP | 🇪🇭迪拜中转03"
+        ],
+        "alive": false
+      }
+    },
+    "proxy_route": [
+      "PROXY",
+      "BWG-HY2-JPTY-01"
+    ],
+    "media_route": [
+      "US-MEDIA",
+      "NODE-PICK",
+      "US666-CN2GIA-01"
+    ],
+    "nodes": [
+      {
+        "name": "US666-CN2GIA-01",
+        "type": "Vless",
+        "alive": true,
+        "history": [
+          {
+            "time": "2026-11-16T04:08:45.911561602Z",
+            "delay": 201
+          }
+        ]
+      },
+      {
+        "name": "BWG-HY2-JPTY-01",
+        "type": "Hysteria2",
+        "alive": true,
+        "history": [
+          {
+            "time": "2026-11-16T04:08:44.765093063Z",
+            "delay": 131
+          }
+        ]
+      },
+      {
+        "name": "BWG-VLESS-JPTY-01",
+        "type": "Vless",
+        "alive": true,
+        "history": [
+          {
+            "time": "2026-11-16T04:08:45.757414418Z",
+            "delay": 499
+          }
+        ]
+      }
+    ],
+    "sections": {
+      "TIME": [
+        "2026-11-16 12:09:50 +0800",
+        " 12:09:50 up 12:09,  load average: 1.10, 1.03, 1.00"
+      ],
+      "HEALTH": [
+        "200"
+      ],
+      "PROC": [
+        "4813",
+        "6349"
+      ],
+      "DNS_GAME": [
+        "Server:\t\t127.0.0.1",
+        "Address:\t127.0.0.1#53",
+        "",
+        "Name:      gpp-tj100-1.lol.qq.com",
+        "Address 1: 198.18.17.172",
+        "*** Can't find gpp-tj100-1.lol.qq.com: No answer"
+      ],
+      "DNS_SERVERS": [
+        "127.0.0.1#1053"
+      ],
+      "DNS_NORMAL": [
+        "Server:\t\t127.0.0.1",
+        "Address:\t127.0.0.1#53",
+        "",
+        "Name:      www.baidu.com",
+        "Address 1: 198.18.0.5",
+        "*** Can't find www.baidu.com: No answer"
+      ],
+      "WAN": [
+        "default via 58.58.176.1 dev wan "
+      ],
+      "TOOLS": [
+        "/sbin/tc",
+        "/usr/sbin/iptables"
+      ],
+      "NAT": [
+        "-A PREROUTING -i br-lan -j MIHOMO",
+        "-A PREROUTING -i br-lan -j MIHOMO_DNS",
+        "-A MIHOMO -d 224.0.0.0/4 -j RETURN",
+        "-A MIHOMO -d 159.223.36.119/32 -j RETURN",
+        "-A MIHOMO -d 43.134.46.44/32 -j RETURN",
+        "-A MIHOMO -p tcp -j REDIRECT --to-ports 7892"
+      ],
+      "UDP_TPROXY": [],
+      "DNS_LISTENERS": [
+        "tcp        0      0 127.0.0.1:53            0.0.0.0:*               LISTEN      ",
+        "tcp        0      0 58.58.177.226:53        0.0.0.0:*               LISTEN      ",
+        "tcp        0      0 192.168.132.1:53        0.0.0.0:*               LISTEN      ",
+        "tcp        0      0 :::7892                 :::*                    LISTEN      ",
+        "tcp        0      0 ::1:53                  :::*                    LISTEN      ",
+        "tcp        0      0 fe80::f8cc:e4ff:fe0f:9b4:53 :::*                    LISTEN      ",
+        "tcp        0      0 fe80::74a7:c8ff:fee0:4f19:53 :::*                    LISTEN      ",
+        "tcp        0      0 fe80::74a7:c8ff:fee0:4f1a:53 :::*                    LISTEN      ",
+        "tcp        0      0 :::1053                 :::*                    LISTEN      ",
+        "udp        0      0 127.0.0.1:53            0.0.0.0:*                           ",
+        "udp        0      0 58.58.177.226:53        0.0.0.0:*                           ",
+        "udp        0      0 192.168.132.1:53        0.0.0.0:*                           ",
+        "udp        0      0 :::1053                 :::*                                ",
+        "udp        0      0 ::1:53                  :::*                                ",
+        "udp        0      0 fe80::f8cc:e4ff:fe0f:9b4:53 :::*                                ",
+        "udp        0      0 fe80::74a7:c8ff:fee0:4f19:53 :::*                                ",
+        "udp        0      0 fe80::74a7:c8ff:fee0:4f1a:53 :::*                                ",
+        "udp        0      0 :::7892                 :::*                                "
+      ],
+      "WIFI_UCI": [
+        "wireless.ra0.disabled='1'",
+        "wireless.rax0.disabled='1'"
+      ],
+      "WIFI_LINKS": [
+        "ra0       Link encap:Ethernet  HWaddr A4:D8:CA:14:89:12  ",
+        "          BROADCAST MULTICAST  MTU:1500  Metric:1",
+        "          RX packets:0 errors:0 dropped:0 overruns:0 frame:0",
+        "rax0      Link encap:Ethernet  HWaddr A6:D8:CA:64:89:12  ",
+        "          BROADCAST MULTICAST  MTU:1500  Metric:1",
+        "          RX packets:0 errors:0 dropped:0 overruns:0 frame:0"
+      ],
+      "WIFI_RUNTIME": [
+        "          Mode:Master  Channel:9  Access Point: A4:D8:CA:14:89:12   ",
+        "          Bit Rate:0 kb/s   ",
+        "          Mode:Master  Channel:40  Access Point: A6:D8:CA:64:89:12   ",
+        "          Bit Rate:0 kb/s   "
+      ],
+      "RADIO_FIRST": [
+        "Tx success                      = 0",
+        "Tx fail count                   = 0, PER=0.0%",
+        "Rx success                      = 162355",
+        "Rx with CRC                     = 1772928, PER=91.6%",
+        "Rssi: 0 0 0 0 ",
+        "Tx success                      = 0",
+        "Tx fail count                   = 0, PER=0.0%",
+        "Rx success                      = 26428",
+        "Rx with CRC                     = 5981, PER=18.4%",
+        "Rssi: 0 0 0 0 "
+      ],
+      "RADIO_SECOND": [
+        "Tx success                      = 0",
+        "Tx fail count                   = 0, PER=0.0%",
+        "Rx success                      = 162387",
+        "Rx with CRC                     = 1773032, PER=91.6%",
+        "Rssi: 0 0 0 0 ",
+        "Tx success                      = 0",
+        "Tx fail count                   = 0, PER=0.0%",
+        "Rx success                      = 26431",
+        "Rx with CRC                     = 5981, PER=18.4%",
+        "Rssi: 0 0 0 0 "
+      ],
+      "WIFI_EVENTS": [],
+      "QOS": [],
+      "QDISC": [
+        "qdisc noqueue 0: dev lo root refcnt 2 ",
+        "qdisc fq_codel 0: dev eth0 root refcnt 2 limit 10240p flows 1024 quantum 1514 target 5ms interval 100ms memory_limit 4Mb ecn drop_batch 64 ",
+        "qdisc fq_codel 0: dev eth1 root refcnt 2 limit 10240p flows 1024 quantum 1514 target 5ms interval 100ms memory_limit 4Mb ecn drop_batch 64 ",
+        "qdisc noqueue 0: dev wan root refcnt 2 ",
+        "qdisc noqueue 0: dev lan1 root refcnt 2 ",
+        "qdisc noqueue 0: dev lan3 root refcnt 2 ",
+        "qdisc noqueue 0: dev lan4 root refcnt 2 ",
+        "qdisc noqueue 0: dev lan2 root refcnt 2 ",
+        "qdisc fq_codel 0: dev ra0 root refcnt 2 limit 10240p flows 1024 quantum 1514 target 5ms interval 100ms memory_limit 512Kb ecn drop_batch 64 ",
+        "qdisc noqueue 0: dev br-lan root refcnt 2 ",
+        "qdisc fq_codel 0: dev ra1 root refcnt 2 limit 10240p flows 1024 quantum 1514 target 5ms interval 100ms memory_limit 512Kb ecn drop_batch 64 ",
+        "qdisc fq_codel 0: dev ra2 root refcnt 2 limit 10240p flows 1024 quantum 1514 target 5ms interval 100ms memory_limit 512Kb ecn drop_batch 64 ",
+        "qdisc fq_codel 0: dev ra3 root refcnt 2 limit 10240p flows 1024 quantum 1514 target 5ms interval 100ms memory_limit 512Kb ecn drop_batch 64 ",
+        "qdisc fq_codel 0: dev ra4 root refcnt 2 limit 10240p flows 1024 quantum 1514 target 5ms interval 100ms memory_limit 512Kb ecn drop_batch 64 ",
+        "qdisc fq_codel 0: dev ra5 root refcnt 2 limit 10240p flows 1024 quantum 1514 target 5ms interval 100ms memory_limit 512Kb ecn drop_batch 64 ",
+        "qdisc fq_codel 0: dev rax0 root refcnt 2 limit 10240p flows 1024 quantum 1514 target 5ms interval 100ms memory_limit 512Kb ecn drop_batch 64 ",
+        "qdisc fq_codel 0: dev rax1 root refcnt 2 limit 10240p flows 1024 quantum 1514 target 5ms interval 100ms memory_limit 512Kb ecn drop_batch 64 ",
+        "qdisc fq_codel 0: dev rax2 root refcnt 2 limit 10240p flows 1024 quantum 1514 target 5ms interval 100ms memory_limit 512Kb ecn drop_batch 64 ",
+        "qdisc fq_codel 0: dev rax3 root refcnt 2 limit 10240p flows 1024 quantum 1514 target 5ms interval 100ms memory_limit 512Kb ecn drop_batch 64 ",
+        "qdisc fq_codel 0: dev rax4 root refcnt 2 limit 10240p flows 1024 quantum 1514 target 5ms interval 100ms memory_limit 512Kb ecn drop_batch 64 ",
+        "qdisc fq_codel 0: dev rax5 root refcnt 2 limit 10240p flows 1024 quantum 1514 target 5ms interval 100ms memory_limit 512Kb ecn drop_batch 64 "
+      ],
+      "HTTP_PROXY": [
+        "204/0.604193"
+      ],
+      "LOAD": [
+        "1.26 1.07 1.02 1/116 1324",
+        "              total        used        free      shared  buff/cache   available",
+        "Mem:        1014720      206080      700404         120      108236      793212",
+        "Swap:             0           0           0"
+      ],
+      "GUARD": [
+        "#!/bin/sh",
+        "# self-heal.sh v3.1 - safe version (2026-10-30 v3.1 fleet patch)"
+      ],
+      "IPT_SCRIPT_BEHAVIOR": [
+        "27:    uci -q del_list dhcp.@dnsmasq[0].server='127.0.0.1#1053'",
+        "29:    /etc/init.d/dnsmasq restart",
+        "55:iptables -t nat -A MIHOMO -p tcp -j REDIRECT --to-ports 7892",
+        "63:iptables -t nat -A MIHOMO_DNS -p udp --dport 53 -j REDIRECT --to-ports 1053",
+        "64:iptables -t nat -A MIHOMO_DNS -p tcp --dport 53 -j REDIRECT --to-ports 1053",
+        "68:uci -q del_list dhcp.@dnsmasq[0].server='127.0.0.1#1053'",
+        "69:uci add_list dhcp.@dnsmasq[0].server='127.0.0.1#1053'",
+        "71:/etc/init.d/dnsmasq restart"
+      ]
+    },
+    "stderr": ""
+  },
+  {
+    "device": "R3",
+    "port": 13227,
+    "groups": {
+      "PROXY": {
+        "type": "Selector",
+        "now": "BWG-HY2-JPTY-01",
+        "all": [
+          "AUTO",
+          "US666-CN2GIA-01",
+          "BWG-HY2-JPTY-01",
+          "GIA-HY2-US-01",
+          "BWG-VLESS-JPTY-01",
+          "CF-CDN-GIA-01",
+          "CF2-CDN-GIA-01",
+          "DIRECT"
+        ],
+        "alive": true
+      },
+      "AUTO": {
+        "type": "Fallback",
+        "now": "NODE-PICK",
+        "all": [
+          "NODE-PICK",
+          "AIRPORT",
+          "DIRECT"
+        ],
+        "alive": true
+      },
+      "NODE-PICK": {
+        "type": "Fallback",
+        "now": "US666-CN2GIA-01",
+        "all": [
+          "US666-CN2GIA-01",
+          "BWG-HY2-JPTY-01",
+          "GIA-HY2-US-01",
+          "BWG-VLESS-JPTY-01",
+          "CF-CDN-GIA-01",
+          "CF2-CDN-GIA-01"
+        ],
+        "alive": true
+      },
+      "US-MEDIA": {
+        "type": "Fallback",
+        "now": "NODE-PICK",
+        "all": [
+          "NODE-PICK",
+          "AIRPORT"
+        ],
+        "alive": true
+      },
+      "AIRPORT": {
+        "type": "URLTest",
+        "now": "AP | 🇯🇵日本NET",
+        "all": [
+          "AP | 🇭🇰REALITY香港",
+          "AP | 🇯🇵REALITY日本",
+          "AP | 🇭🇰香港NET",
+          "AP | 🇸🇬新加坡NET",
+          "AP | 🇯🇵日本NET",
+          "AP | 🇺🇸美国NET",
+          "AP | 🇭🇰三网优化香港",
+          "AP | 🇸🇬三网优化新加坡",
+          "AP | 🇯🇵三网优化日本",
+          "AP | 🇺🇸三网优化美国",
+          "AP | 🇭🇰香港电信优化",
+          "AP | 🇸🇬新加坡电信优化",
+          "AP | 🇯🇵日本电信优化",
+          "AP | 🇺🇸美国电信优化",
+          "AP | 🇭🇰AWS香港",
+          "AP | 🇯🇵AWS日本",
+          "AP | 🇭🇰香港中转01",
+          "AP | 🇭🇰香港中转02",
+          "AP | 🇭🇰香港中转03",
+          "AP | 🇸🇬新加坡中转01",
+          "AP | 🇸🇬新加坡中转02",
+          "AP | 🇸🇬新加坡中转03",
+          "AP | 🇯🇵AZ日本中转01",
+          "AP | 🇯🇵AZ日本中转02",
+          "AP | 🇯🇵AZ日本中转03",
+          "AP | 🇯🇵日本中转01",
+          "AP | 🇯🇵日本中转02",
+          "AP | 🇯🇵日本中转03",
+          "AP | 🇰🇷韩国中转01",
+          "AP | 🇰🇷韩国中转02",
+          "AP | 🇰🇷韩国中转03",
+          "AP | 🇺🇸美国中转01",
+          "AP | 🇺🇸美国中转02",
+          "AP | 🇺🇸美国中转03",
+          "AP | 🇪🇭迪拜中转01",
+          "AP | 🇪🇭迪拜中转02",
+          "AP | 🇪🇭迪拜中转03"
+        ],
+        "alive": false
+      }
+    },
+    "proxy_route": [
+      "PROXY",
+      "BWG-HY2-JPTY-01"
+    ],
+    "media_route": [
+      "US-MEDIA",
+      "NODE-PICK",
+      "US666-CN2GIA-01"
+    ],
+    "nodes": [
+      {
+        "name": "US666-CN2GIA-01",
+        "type": "Vless",
+        "alive": true,
+        "history": [
+          {
+            "time": "2026-11-16T04:08:46.269744417Z",
+            "delay": 155
+          }
+        ]
+      },
+      {
+        "name": "BWG-HY2-JPTY-01",
+        "type": "Hysteria2",
+        "alive": true,
+        "history": [
+          {
+            "time": "2026-11-16T04:08:44.962469521Z",
+            "delay": 57
+          }
+        ]
+      },
+      {
+        "name": "BWG-VLESS-JPTY-01",
+        "type": "Vless",
+        "alive": true,
+        "history": [
+          {
+            "time": "2026-11-16T04:08:45.063548448Z",
+            "delay": 50
+          }
+        ]
+      }
+    ],
+    "sections": {
+      "TIME": [
+        "2026-11-16 12:09:58 +0800",
+        " 12:09:58 up 12:09,  load average: 1.06, 1.06, 1.06"
+      ],
+      "HEALTH": [
+        "200"
+      ],
+      "PROC": [
+        "4944",
+        "1199"
+      ],
+      "DNS_GAME": [
+        "Server:\t\t127.0.0.1",
+        "Address:\t127.0.0.1#53",
+        "",
+        "Name:      gpp-tj100-1.lol.qq.com",
+        "Address 1: 198.18.13.55",
+        "*** Can't find gpp-tj100-1.lol.qq.com: No answer"
+      ],
+      "DNS_SERVERS": [
+        "127.0.0.1#1053"
+      ],
+      "DNS_NORMAL": [
+        "Server:\t\t127.0.0.1",
+        "Address:\t127.0.0.1#53",
+        "",
+        "Name:      www.baidu.com",
+        "Address 1: 198.18.1.43",
+        "*** Can't find www.baidu.com: No answer"
+      ],
+      "WAN": [
+        "default via 192.168.110.1 dev wan  src 192.168.110.70 "
+      ],
+      "TOOLS": [
+        "/sbin/tc",
+        "/usr/sbin/iptables"
+      ],
+      "NAT": [
+        "-A PREROUTING -i br-lan -j MIHOMO",
+        "-A PREROUTING -i br-lan -j MIHOMO_DNS",
+        "-A MIHOMO -d 224.0.0.0/4 -j RETURN",
+        "-A MIHOMO -d 159.223.36.119/32 -j RETURN",
+        "-A MIHOMO -d 43.134.46.44/32 -j RETURN",
+        "-A MIHOMO -p tcp -j REDIRECT --to-ports 7892"
+      ],
+      "UDP_TPROXY": [],
+      "DNS_LISTENERS": [
+        "tcp        0      0 127.0.0.1:53            0.0.0.0:*               LISTEN      ",
+        "tcp        0      0 192.168.110.70:53       0.0.0.0:*               LISTEN      ",
+        "tcp        0      0 192.168.132.1:53        0.0.0.0:*               LISTEN      ",
+        "tcp        0      0 :::1053                 :::*                    LISTEN      ",
+        "tcp        0      0 :::7892                 :::*                    LISTEN      ",
+        "tcp        0      0 ::1:53                  :::*                    LISTEN      ",
+        "tcp        0      0 fe80::9c2a:37ff:fee7:9f0a:53 :::*                    LISTEN      ",
+        "tcp        0      0 fe80::74a7:c8ff:fee0:4f23:53 :::*                    LISTEN      ",
+        "tcp        0      0 fe80::74a7:c8ff:fee0:4f24:53 :::*                    LISTEN      ",
+        "udp        0      0 127.0.0.1:53            0.0.0.0:*                           ",
+        "udp        0      0 192.168.110.70:53       0.0.0.0:*                           ",
+        "udp        0      0 192.168.132.1:53        0.0.0.0:*                           ",
+        "udp        0      0 :::1053                 :::*                                ",
+        "udp        0      0 ::1:53                  :::*                                ",
+        "udp        0      0 fe80::9c2a:37ff:fee7:9f0a:53 :::*                                ",
+        "udp        0      0 fe80::74a7:c8ff:fee0:4f23:53 :::*                                ",
+        "udp        0      0 fe80::74a7:c8ff:fee0:4f24:53 :::*                                ",
+        "udp        0      0 :::7892                 :::*                                "
+      ],
+      "WIFI_UCI": [
+        "wireless.ra0.disabled='0'",
+        "wireless.rax0.disabled='0'",
+        "wireless.mesh_2G.disabled='1'",
+        "wireless.mesh_5G.disabled='1'",
+        "wireless.guest_2G.disabled='1'",
+        "wireless.guest_5G.disabled='1'",
+        "wireless.RADIO2G.channel='0'",
+        "wireless.RADIO2G.disabled='0'",
+        "wireless.RADIO5G.channel='0'",
+        "wireless.RADIO5G.disabled='0'",
+        "wireless.ssid3.disabled='1'",
+        "wireless.ssid4.disabled='1'",
+        "wireless.ssid5.disabled='1'",
+        "wireless.ssid6.disabled='1'",
+        "wireless.ssid7.disabled='1'",
+        "wireless.ssid8.disabled='1'"
+      ],
+      "WIFI_LINKS": [
+        "ra0       Link encap:Ethernet  HWaddr A4:D8:CA:14:78:82  ",
+        "          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1",
+        "          RX packets:0 errors:33197 dropped:0 overruns:0 frame:0",
+        "rax0      Link encap:Ethernet  HWaddr A6:D8:CA:64:78:82  ",
+        "          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1",
+        "          RX packets:117830 errors:0 dropped:0 overruns:0 frame:0"
+      ],
+      "WIFI_RUNTIME": [
+        "          Mode:Master  Channel:9  Access Point: A4:D8:CA:14:78:82   ",
+        "          Bit Rate:573 Mb/s   ",
+        "          Mode:Master  Channel:56  Access Point: A6:D8:CA:64:78:82   ",
+        "          Bit Rate:2.401 Gb/s   "
+      ],
+      "RADIO_FIRST": [
+        "Tx success                      = 0",
+        "Tx fail count                   = 0, PER=0.0%",
+        "Rx success                      = 377423",
+        "Rx with CRC                     = 1958003, PER=83.8%",
+        "Rssi: 0 0 0 0 ",
+        "Tx success                      = 9174",
+        "Tx fail count                   = 1154, PER=11.1%",
+        "Rx success                      = 935912",
+        "Rx with CRC                     = 7052396, PER=34.5%",
+        "Rssi: -77 -77 -78 -109 ",
+        "Last TX Rate\t\t\t\t\t= NSS2_MCS5, BW80, 0.8us GI, HE_SU, LDPC",
+        "Last RX Rate\t\t\t\t\t= NSS1_MCS4, BW20, 0.8us GI, HE_SU, LDPC"
+      ],
+      "RADIO_SECOND": [
+        "Tx success                      = 0",
+        "Tx fail count                   = 0, PER=0.0%",
+        "Rx success                      = 377436",
+        "Rx with CRC                     = 1958253, PER=83.8%",
+        "Rssi: 0 0 0 0 ",
+        "Tx success                      = 9174",
+        "Tx fail count                   = 1154, PER=11.1%",
+        "Rx success                      = 935937",
+        "Rx with CRC                     = 7053578, PER=34.5%",
+        "Rssi: -77 -77 -78 -109 ",
+        "Last TX Rate\t\t\t\t\t= NSS2_MCS5, BW80, 0.8us GI, HE_SU, LDPC",
+        "Last RX Rate\t\t\t\t\t= NSS1_MCS4, BW20, 0.8us GI, HE_SU, LDPC"
+      ],
+      "WIFI_EVENTS": [],
+      "QOS": [],
+      "QDISC": [
+        "qdisc noqueue 0: dev lo root refcnt 2 ",
+        "qdisc fq_codel 0: dev eth0 root refcnt 2 limit 10240p flows 1024 quantum 1514 target 5ms interval 100ms memory_limit 4Mb ecn drop_batch 64 ",
+        "qdisc fq_codel 0: dev eth1 root refcnt 2 limit 10240p flows 1024 quantum 1514 target 5ms interval 100ms memory_limit 4Mb ecn drop_batch 64 ",
+        "qdisc noqueue 0: dev wan root refcnt 2 ",
+        "qdisc noqueue 0: dev lan1 root refcnt 2 ",
+        "qdisc noqueue 0: dev lan3 root refcnt 2 ",
+        "qdisc noqueue 0: dev lan4 root refcnt 2 ",
+        "qdisc noqueue 0: dev lan2 root refcnt 2 ",
+        "qdisc fq_codel 0: dev ra0 root refcnt 2 limit 10240p flows 1024 quantum 1514 target 5ms interval 100ms memory_limit 512Kb ecn drop_batch 64 ",
+        "qdisc noqueue 0: dev br-lan root refcnt 2 ",
+        "qdisc fq_codel 0: dev rax0 root refcnt 2 limit 10240p flows 1024 quantum 1514 target 5ms interval 100ms memory_limit 512Kb ecn drop_batch 64 "
+      ],
+      "HTTP_PROXY": [
+        "204/0.377388"
+      ],
+      "LOAD": [
+        "1.06 1.06 1.06 1/121 6743",
+        "              total        used        free      shared  buff/cache   available",
+        "Mem:        1014720      191560      715892         140      107268      807808",
+        "Swap:             0           0           0"
+      ],
+      "GUARD": [
+        "#!/bin/sh",
+        "# self-heal.sh v3.1 - safe version (2026-10-30 v3.1 fleet patch)"
+      ],
+      "IPT_SCRIPT_BEHAVIOR": [
+        "27:    uci -q del_list dhcp.@dnsmasq[0].server='127.0.0.1#1053'",
+        "29:    /etc/init.d/dnsmasq restart",
+        "55:iptables -t nat -A MIHOMO -p tcp -j REDIRECT --to-ports 7892",
+        "63:iptables -t nat -A MIHOMO_DNS -p udp --dport 53 -j REDIRECT --to-ports 1053",
+        "64:iptables -t nat -A MIHOMO_DNS -p tcp --dport 53 -j REDIRECT --to-ports 1053",
+        "68:uci -q del_list dhcp.@dnsmasq[0].server='127.0.0.1#1053'",
+        "69:uci add_list dhcp.@dnsmasq[0].server='127.0.0.1#1053'",
+        "71:/etc/init.d/dnsmasq restart"
+      ]
+    },
+    "stderr": ""
+  },
+  {
+    "device": "R4",
+    "port": 13224,
+    "groups": {
+      "PROXY": {
+        "type": "Selector",
+        "now": "BWG-HY2-JPTY-01",
+        "all": [
+          "AUTO",
+          "US666-CN2GIA-01",
+          "BWG-HY2-JPTY-01",
+          "GIA-HY2-US-01",
+          "BWG-VLESS-JPTY-01",
+          "CF-CDN-GIA-01",
+          "CF2-CDN-GIA-01",
+          "DIRECT"
+        ],
+        "alive": true
+      },
+      "AUTO": {
+        "type": "Fallback",
+        "now": "NODE-PICK",
+        "all": [
+          "NODE-PICK",
+          "AIRPORT",
+          "DIRECT"
+        ],
+        "alive": true
+      },
+      "NODE-PICK": {
+        "type": "Fallback",
+        "now": "US666-CN2GIA-01",
+        "all": [
+          "US666-CN2GIA-01",
+          "BWG-HY2-JPTY-01",
+          "GIA-HY2-US-01",
+          "BWG-VLESS-JPTY-01",
+          "CF-CDN-GIA-01",
+          "CF2-CDN-GIA-01"
+        ],
+        "alive": true
+      },
+      "US-MEDIA": {
+        "type": "Fallback",
+        "now": "NODE-PICK",
+        "all": [
+          "NODE-PICK",
+          "AIRPORT"
+        ],
+        "alive": true
+      },
+      "AIRPORT": {
+        "type": "URLTest",
+        "now": "AP | 🇯🇵日本NET",
+        "all": [
+          "AP | 🇭🇰REALITY香港",
+          "AP | 🇯🇵REALITY日本",
+          "AP | 🇭🇰香港NET",
+          "AP | 🇸🇬新加坡NET",
+          "AP | 🇯🇵日本NET",
+          "AP | 🇺🇸美国NET",
+          "AP | 🇭🇰三网优化香港",
+          "AP | 🇸🇬三网优化新加坡",
+          "AP | 🇯🇵三网优化日本",
+          "AP | 🇺🇸三网优化美国",
+          "AP | 🇭🇰香港电信优化",
+          "AP | 🇸🇬新加坡电信优化",
+          "AP | 🇯🇵日本电信优化",
+          "AP | 🇺🇸美国电信优化",
+          "AP | 🇭🇰AWS香港",
+          "AP | 🇯🇵AWS日本",
+          "AP | 🇭🇰香港中转01",
+          "AP | 🇭🇰香港中转02",
+          "AP | 🇭🇰香港中转03",
+          "AP | 🇸🇬新加坡中转01",
+          "AP | 🇸🇬新加坡中转02",
+          "AP | 🇸🇬新加坡中转03",
+          "AP | 🇯🇵AZ日本中转01",
+          "AP | 🇯🇵AZ日本中转02",
+          "AP | 🇯🇵AZ日本中转03",
+          "AP | 🇯🇵日本中转01",
+          "AP | 🇯🇵日本中转02",
+          "AP | 🇯🇵日本中转03",
+          "AP | 🇰🇷韩国中转01",
+          "AP | 🇰🇷韩国中转02",
+          "AP | 🇰🇷韩国中转03",
+          "AP | 🇺🇸美国中转01",
+          "AP | 🇺🇸美国中转02",
+          "AP | 🇺🇸美国中转03",
+          "AP | 🇪🇭迪拜中转01",
+          "AP | 🇪🇭迪拜中转02",
+          "AP | 🇪🇭迪拜中转03"
+        ],
+        "alive": false
+      }
+    },
+    "proxy_route": [
+      "PROXY",
+      "BWG-HY2-JPTY-01"
+    ],
+    "media_route": [
+      "US-MEDIA",
+      "NODE-PICK",
+      "US666-CN2GIA-01"
+    ],
+    "nodes": [
+      {
+        "name": "US666-CN2GIA-01",
+        "type": "Vless",
+        "alive": true,
+        "history": [
+          {
+            "time": "2026-11-16T04:08:44.505720352Z",
+            "delay": 154
+          }
+        ]
+      },
+      {
+        "name": "BWG-HY2-JPTY-01",
+        "type": "Hysteria2",
+        "alive": true,
+        "history": [
+          {
+            "time": "2026-11-16T04:08:43.481297725Z",
+            "delay": 91
+          }
+        ]
+      },
+      {
+        "name": "BWG-VLESS-JPTY-01",
+        "type": "Vless",
+        "alive": true,
+        "history": [
+          {
+            "time": "2026-11-16T04:08:43.669931479Z",
+            "delay": 90
+          }
+        ]
+      }
+    ],
+    "sections": {
+      "TIME": [
+        "2026-11-16 12:10:06 +0800",
+        " 12:10:06 up 12:09,  load average: 1.30, 1.15, 1.10"
+      ],
+      "HEALTH": [
+        "200"
+      ],
+      "PROC": [
+        "4979",
+        "6450"
+      ],
+      "DNS_GAME": [
+        "Server:\t\t127.0.0.1",
+        "Address:\t127.0.0.1#53",
+        "",
+        "Name:      gpp-tj100-1.lol.qq.com",
+        "Address 1: 198.18.71.62",
+        "*** Can't find gpp-tj100-1.lol.qq.com: No answer"
+      ],
+      "DNS_SERVERS": [
+        "127.0.0.1#1053"
+      ],
+      "DNS_NORMAL": [
+        "Server:\t\t127.0.0.1",
+        "Address:\t127.0.0.1#53",
+        "",
+        "Name:      www.baidu.com",
+        "Address 1: 198.18.1.27",
+        "*** Can't find www.baidu.com: No answer"
+      ],
+      "WAN": [
+        "default via 192.168.1.1 dev wan  src 192.168.1.100 "
+      ],
+      "TOOLS": [
+        "/sbin/tc",
+        "/usr/sbin/iptables"
+      ],
+      "NAT": [
+        "-A PREROUTING -i br-lan -j MIHOMO",
+        "-A PREROUTING -i br-lan -j MIHOMO_DNS",
+        "-A MIHOMO -d 224.0.0.0/4 -j RETURN",
+        "-A MIHOMO -d 159.223.36.119/32 -j RETURN",
+        "-A MIHOMO -d 43.134.46.44/32 -j RETURN",
+        "-A MIHOMO -p tcp -j REDIRECT --to-ports 7892"
+      ],
+      "UDP_TPROXY": [],
+      "DNS_LISTENERS": [
+        "tcp        0      0 127.0.0.1:53            0.0.0.0:*               LISTEN      ",
+        "tcp        0      0 192.168.1.100:53        0.0.0.0:*               LISTEN      ",
+        "tcp        0      0 192.168.132.1:53        0.0.0.0:*               LISTEN      ",
+        "tcp        0      0 :::1053                 :::*                    LISTEN      ",
+        "tcp        0      0 :::7892                 :::*                    LISTEN      ",
+        "tcp        0      0 ::1:53                  :::*                    LISTEN      ",
+        "tcp        0      0 fe80::c05:77ff:fe31:4f32:53 :::*                    LISTEN      ",
+        "tcp        0      0 fe80::74a7:c8ff:fee0:4f24:53 :::*                    LISTEN      ",
+        "tcp        0      0 fe80::74a7:c8ff:fee0:4f34:53 :::*                    LISTEN      ",
+        "udp        0      0 127.0.0.1:53            0.0.0.0:*                           ",
+        "udp        0      0 192.168.1.100:53        0.0.0.0:*                           ",
+        "udp        0      0 192.168.132.1:53        0.0.0.0:*                           ",
+        "udp        0      0 :::1053                 :::*                                ",
+        "udp        0      0 ::1:53                  :::*                                ",
+        "udp        0      0 fe80::c05:77ff:fe31:4f32:53 :::*                                ",
+        "udp        0      0 fe80::74a7:c8ff:fee0:4f24:53 :::*                                ",
+        "udp        0      0 fe80::74a7:c8ff:fee0:4f34:53 :::*                                ",
+        "udp        0      0 :::7892                 :::*                                "
+      ],
+      "WIFI_UCI": [
+        "wireless.ra0.disabled='0'",
+        "wireless.rax0.disabled='0'",
+        "wireless.mesh_2G.disabled='1'",
+        "wireless.mesh_5G.disabled='1'",
+        "wireless.guest_2G.disabled='1'",
+        "wireless.guest_5G.disabled='1'",
+        "wireless.RADIO2G.channel='0'",
+        "wireless.RADIO2G.disabled='0'",
+        "wireless.RADIO5G.channel='0'",
+        "wireless.RADIO5G.disabled='0'",
+        "wireless.ssid3.disabled='1'",
+        "wireless.ssid4.disabled='1'",
+        "wireless.ssid5.disabled='1'",
+        "wireless.ssid6.disabled='1'",
+        "wireless.ssid7.disabled='1'",
+        "wireless.ssid8.disabled='1'"
+      ],
+      "WIFI_LINKS": [
+        "ra0       Link encap:Ethernet  HWaddr A4:D8:CA:14:8B:82  ",
+        "          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1",
+        "          RX packets:243266 errors:83692 dropped:0 overruns:0 frame:0",
+        "rax0      Link encap:Ethernet  HWaddr A6:D8:CA:64:8B:82  ",
+        "          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1",
+        "          RX packets:386378 errors:0 dropped:0 overruns:0 frame:0"
+      ],
+      "WIFI_RUNTIME": [
+        "          Mode:Master  Channel:4  Access Point: A4:D8:CA:14:8B:82   ",
+        "          Bit Rate:573 Mb/s   ",
+        "          Mode:Master  Channel:56  Access Point: A6:D8:CA:64:8B:82   ",
+        "          Bit Rate:2.401 Gb/s   "
+      ],
+      "RADIO_FIRST": [
+        "Tx success                      = 215514",
+        "Tx fail count                   = 115540, PER=34.9%",
+        "Rx success                      = 1255750",
+        "Rx with CRC                     = 6115391, PER=24.6%",
+        "Rssi: 0 0 0 0 ",
+        "Tx success                      = 146196",
+        "Tx fail count                   = 23096, PER=13.6%",
+        "Rx success                      = 248604",
+        "Rx with CRC                     = 761205, PER=75.3%",
+        "Rssi: -63 -61 -62 -109 ",
+        "Last TX Rate\t\t\t\t\t= NSS2_MCS7, BW160/8080, 0.8us GI, HE_SU, LDPC",
+        "Last RX Rate\t\t\t\t\t= NSS2_MCS5, BW160/8080, 0.8us GI, HE_SU, LDPC"
+      ],
+      "RADIO_SECOND": [
+        "Tx success                      = 215514",
+        "Tx fail count                   = 115540, PER=34.9%",
+        "Rx success                      = 1255816",
+        "Rx with CRC                     = 6116433, PER=24.7%",
+        "Rssi: 0 0 0 0 ",
+        "Tx success                      = 146210",
+        "Tx fail count                   = 23096, PER=13.6%",
+        "Rx success                      = 248615",
+        "Rx with CRC                     = 761402, PER=75.3%",
+        "Rssi: -63 -61 -62 -109 ",
+        "Last TX Rate\t\t\t\t\t= NSS2_MCS7, BW160/8080, 0.8us GI, HE_SU, LDPC",
+        "Last RX Rate\t\t\t\t\t= NSS2_MCS6, BW160/8080, 0.8us GI, HE_SU, LDPC"
+      ],
+      "WIFI_EVENTS": [],
+      "QOS": [],
+      "QDISC": [
+        "qdisc noqueue 0: dev lo root refcnt 2 ",
+        "qdisc fq_codel 0: dev eth0 root refcnt 2 limit 10240p flows 1024 quantum 1514 target 5ms interval 100ms memory_limit 4Mb ecn drop_batch 64 ",
+        "qdisc fq_codel 0: dev eth1 root refcnt 2 limit 10240p flows 1024 quantum 1514 target 5ms interval 100ms memory_limit 4Mb ecn drop_batch 64 ",
+        "qdisc noqueue 0: dev wan root refcnt 2 ",
+        "qdisc noqueue 0: dev lan1 root refcnt 2 ",
+        "qdisc noqueue 0: dev lan3 root refcnt 2 ",
+        "qdisc noqueue 0: dev lan4 root refcnt 2 ",
+        "qdisc noqueue 0: dev lan2 root refcnt 2 ",
+        "qdisc fq_codel 0: dev ra0 root refcnt 2 limit 10240p flows 1024 quantum 1514 target 5ms interval 100ms memory_limit 512Kb ecn drop_batch 64 ",
+        "qdisc noqueue 0: dev br-lan root refcnt 2 ",
+        "qdisc fq_codel 0: dev rax0 root refcnt 2 limit 10240p flows 1024 quantum 1514 target 5ms interval 100ms memory_limit 512Kb ecn drop_batch 64 "
+      ],
+      "HTTP_PROXY": [
+        "204/0.372524"
+      ],
+      "LOAD": [
+        "1.28 1.15 1.10 1/118 2066",
+        "              total        used        free      shared  buff/cache   available",
+        "Mem:        1014720      221784      648724        1388      144212      775168",
+        "Swap:             0           0           0"
+      ],
+      "GUARD": [
+        "#!/bin/sh",
+        "# self-heal.sh v3.1 - safe version (2026-10-30 v3.1 fleet patch)"
+      ],
+      "IPT_SCRIPT_BEHAVIOR": [
+        "27:    uci -q del_list dhcp.@dnsmasq[0].server='127.0.0.1#1053'",
+        "29:    /etc/init.d/dnsmasq restart",
+        "55:iptables -t nat -A MIHOMO -p tcp -j REDIRECT --to-ports 7892",
+        "63:iptables -t nat -A MIHOMO_DNS -p udp --dport 53 -j REDIRECT --to-ports 1053",
+        "64:iptables -t nat -A MIHOMO_DNS -p tcp --dport 53 -j REDIRECT --to-ports 1053",
+        "68:uci -q del_list dhcp.@dnsmasq[0].server='127.0.0.1#1053'",
+        "69:uci add_list dhcp.@dnsmasq[0].server='127.0.0.1#1053'",
+        "71:/etc/init.d/dnsmasq restart"
+      ]
+    },
+    "stderr": ""
+  },
+  {
+    "device": "R5",
+    "port": 13225,
+    "groups": {
+      "PROXY": {
+        "type": "Selector",
+        "now": "BWG-HY2-JPTY-01",
+        "all": [
+          "AUTO",
+          "US666-CN2GIA-01",
+          "BWG-HY2-JPTY-01",
+          "GIA-HY2-US-01",
+          "BWG-VLESS-JPTY-01",
+          "CF-CDN-GIA-01",
+          "CF2-CDN-GIA-01",
+          "DIRECT"
+        ],
+        "alive": true
+      },
+      "AUTO": {
+        "type": "Fallback",
+        "now": "NODE-PICK",
+        "all": [
+          "NODE-PICK",
+          "AIRPORT",
+          "DIRECT"
+        ],
+        "alive": true
+      },
+      "NODE-PICK": {
+        "type": "Fallback",
+        "now": "US666-CN2GIA-01",
+        "all": [
+          "US666-CN2GIA-01",
+          "BWG-HY2-JPTY-01",
+          "GIA-HY2-US-01",
+          "BWG-VLESS-JPTY-01",
+          "CF-CDN-GIA-01",
+          "CF2-CDN-GIA-01"
+        ],
+        "alive": true
+      },
+      "US-MEDIA": {
+        "type": "Fallback",
+        "now": "NODE-PICK",
+        "all": [
+          "NODE-PICK",
+          "AIRPORT"
+        ],
+        "alive": true
+      },
+      "AIRPORT": {
+        "type": "URLTest",
+        "now": "AP | 🇯🇵日本NET",
+        "all": [
+          "AP | 🇭🇰REALITY香港",
+          "AP | 🇯🇵REALITY日本",
+          "AP | 🇭🇰香港NET",
+          "AP | 🇸🇬新加坡NET",
+          "AP | 🇯🇵日本NET",
+          "AP | 🇺🇸美国NET",
+          "AP | 🇭🇰三网优化香港",
+          "AP | 🇸🇬三网优化新加坡",
+          "AP | 🇯🇵三网优化日本",
+          "AP | 🇺🇸三网优化美国",
+          "AP | 🇭🇰香港电信优化",
+          "AP | 🇸🇬新加坡电信优化",
+          "AP | 🇯🇵日本电信优化",
+          "AP | 🇺🇸美国电信优化",
+          "AP | 🇭🇰AWS香港",
+          "AP | 🇯🇵AWS日本",
+          "AP | 🇭🇰香港中转01",
+          "AP | 🇭🇰香港中转02",
+          "AP | 🇭🇰香港中转03",
+          "AP | 🇸🇬新加坡中转01",
+          "AP | 🇸🇬新加坡中转02",
+          "AP | 🇸🇬新加坡中转03",
+          "AP | 🇯🇵AZ日本中转01",
+          "AP | 🇯🇵AZ日本中转02",
+          "AP | 🇯🇵AZ日本中转03",
+          "AP | 🇯🇵日本中转01",
+          "AP | 🇯🇵日本中转02",
+          "AP | 🇯🇵日本中转03",
+          "AP | 🇰🇷韩国中转01",
+          "AP | 🇰🇷韩国中转02",
+          "AP | 🇰🇷韩国中转03",
+          "AP | 🇺🇸美国中转01",
+          "AP | 🇺🇸美国中转02",
+          "AP | 🇺🇸美国中转03",
+          "AP | 🇪🇭迪拜中转01",
+          "AP | 🇪🇭迪拜中转02",
+          "AP | 🇪🇭迪拜中转03"
+        ],
+        "alive": true
+      }
+    },
+    "proxy_route": [
+      "PROXY",
+      "BWG-HY2-JPTY-01"
+    ],
+    "media_route": [
+      "US-MEDIA",
+      "NODE-PICK",
+      "US666-CN2GIA-01"
+    ],
+    "nodes": [
+      {
+        "name": "US666-CN2GIA-01",
+        "type": "Vless",
+        "alive": true,
+        "history": [
+          {
+            "time": "2026-11-16T04:08:55.987394101Z",
+            "delay": 160
+          }
+        ]
+      },
+      {
+        "name": "BWG-HY2-JPTY-01",
+        "type": "Hysteria2",
+        "alive": true,
+        "history": [
+          {
+            "time": "2026-11-16T04:08:55.296908603Z",
+            "delay": 82
+          }
+        ]
+      },
+      {
+        "name": "BWG-VLESS-JPTY-01",
+        "type": "Vless",
+        "alive": true,
+        "history": [
+          {
+            "time": "2026-11-16T04:08:55.47321226Z",
+            "delay": 80
+          }
+        ]
+      }
+    ],
+    "sections": {
+      "TIME": [
+        "2026-11-16 12:10:13 +0800",
+        " 12:10:13 up 12:09,  load average: 0.30, 0.38, 0.34"
+      ],
+      "HEALTH": [
+        "200"
+      ],
+      "PROC": [
+        "5077",
+        "22249"
+      ],
+      "DNS_GAME": [
+        "Server:\t\t127.0.0.1",
+        "Address:\t127.0.0.1#53",
+        "",
+        "Name:      gpp-tj100-1.lol.qq.com",
+        "Address 1: 198.18.21.240",
+        "*** Can't find gpp-tj100-1.lol.qq.com: No answer"
+      ],
+      "DNS_SERVERS": [
+        "127.0.0.1#1053"
+      ],
+      "DNS_NORMAL": [
+        "Server:\t\t127.0.0.1",
+        "Address:\t127.0.0.1#53",
+        "",
+        "Name:      www.baidu.com",
+        "Address 1: 198.18.1.173",
+        "*** Can't find www.baidu.com: No answer"
+      ],
+      "WAN": [
+        "default via 192.168.1.1 dev wan  src 192.168.0.11 "
+      ],
+      "TOOLS": [
+        "/sbin/tc",
+        "/usr/sbin/iptables"
+      ],
+      "NAT": [
+        "-A PREROUTING -i br-lan -j MIHOMO",
+        "-A PREROUTING -i br-lan -j MIHOMO_DNS",
+        "-A MIHOMO -d 224.0.0.0/4 -j RETURN",
+        "-A MIHOMO -d 159.223.36.119/32 -j RETURN",
+        "-A MIHOMO -d 43.134.46.44/32 -j RETURN",
+        "-A MIHOMO -p tcp -j REDIRECT --to-ports 7892"
+      ],
+      "UDP_TPROXY": [],
+      "DNS_LISTENERS": [
+        "tcp        0      0 127.0.0.1:53            0.0.0.0:*               LISTEN      ",
+        "tcp        0      0 192.168.0.11:53         0.0.0.0:*               LISTEN      ",
+        "tcp        0      0 192.168.132.1:53        0.0.0.0:*               LISTEN      ",
+        "tcp        0      0 :::7892                 :::*                    LISTEN      ",
+        "tcp        0      0 ::1:53                  :::*                    LISTEN      ",
+        "tcp        0      0 fe80::e418:19ff:fe1f:faf2:53 :::*                    LISTEN      ",
+        "tcp        0      0 2408:8214:3e14:1c60:74a7:c8ff:fee0:4f25:53 :::*                    LISTEN      ",
+        "tcp        0      0 2408:8214:3e14:1c60::1:53 :::*                    LISTEN      ",
+        "tcp        0      0 fe80::74a7:c8ff:fee0:4f25:53 :::*                    LISTEN      ",
+        "tcp        0      0 fe80::74a7:c8ff:fee0:4f35:53 :::*                    LISTEN      ",
+        "tcp        0      0 :::1053                 :::*                    LISTEN      ",
+        "udp        0      0 127.0.0.1:53            0.0.0.0:*                           ",
+        "udp        0      0 192.168.0.11:53         0.0.0.0:*                           ",
+        "udp        0      0 192.168.132.1:53        0.0.0.0:*                           ",
+        "udp        0      0 :::7892                 :::*                                ",
+        "udp        0      0 :::1053                 :::*                                ",
+        "udp        0      0 ::1:53                  :::*                                ",
+        "udp        0      0 fe80::e418:19ff:fe1f:faf2:53 :::*                                ",
+        "udp        0      0 2408:8214:3e14:1c60:74a7:c8ff:fee0:4f25:53 :::*                                ",
+        "udp        0      0 2408:8214:3e14:1c60::1:53 :::*                                ",
+        "udp        0      0 fe80::74a7:c8ff:fee0:4f25:53 :::*                                ",
+        "udp        0      0 fe80::74a7:c8ff:fee0:4f35:53 :::*                                "
+      ],
+      "WIFI_UCI": [
+        "wireless.ra0.disabled='1'",
+        "wireless.rax0.disabled='1'",
+        "wireless.mesh_2G.disabled='1'",
+        "wireless.mesh_5G.disabled='1'",
+        "wireless.guest_2G.disabled='1'",
+        "wireless.guest_5G.disabled='1'",
+        "wireless.RADIO2G.channel='0'",
+        "wireless.RADIO2G.disabled='1'",
+        "wireless.RADIO5G.channel='0'",
+        "wireless.RADIO5G.disabled='1'",
+        "wireless.ssid3.disabled='1'",
+        "wireless.ssid4.disabled='1'",
+        "wireless.ssid5.disabled='1'",
+        "wireless.ssid6.disabled='1'",
+        "wireless.ssid7.disabled='1'",
+        "wireless.ssid8.disabled='1'"
+      ],
+      "WIFI_LINKS": [
+        "ra0       Link encap:Ethernet  HWaddr A4:D8:CA:14:B8:62  ",
+        "          BROADCAST MULTICAST  MTU:1500  Metric:1",
+        "          RX packets:0 errors:0 dropped:0 overruns:0 frame:0",
+        "rax0      Link encap:Ethernet  HWaddr A6:D8:CA:64:B8:62  ",
+        "          BROADCAST MULTICAST  MTU:1500  Metric:1",
+        "          RX packets:0 errors:0 dropped:0 overruns:0 frame:0"
+      ],
+      "WIFI_RUNTIME": [
+        "          Mode:Master  Access Point: A4:D8:CA:14:B8:62   Bit Rate:0 kb/s   ",
+        "          Mode:Master  Channel=0  Access Point: A6:D8:CA:64:B8:62   ",
+        "          Bit Rate:0 kb/s   "
+      ],
+      "RADIO_FIRST": [
+        "Tx success                      = 0",
+        "Tx fail count                   = 0, PER=0.0%",
+        "Rx success                      = 142",
+        "Rx with CRC                     = 592, PER=80.6%",
+        "Rssi: 0 0 0 0 "
+      ],
+      "RADIO_SECOND": [
+        "Tx success                      = 0",
+        "Tx fail count                   = 0, PER=0.0%",
+        "Rx success                      = 142",
+        "Rx with CRC                     = 592, PER=80.6%",
+        "Rssi: 0 0 0 0 "
+      ],
+      "WIFI_EVENTS": [],
+      "QOS": [],
+      "QDISC": [
+        "qdisc noqueue 0: dev lo root refcnt 2 ",
+        "qdisc fq_codel 0: dev eth0 root refcnt 2 limit 10240p flows 1024 quantum 1514 target 5ms interval 100ms memory_limit 4Mb ecn drop_batch 64 ",
+        "qdisc fq_codel 0: dev eth1 root refcnt 2 limit 10240p flows 1024 quantum 1514 target 5ms interval 100ms memory_limit 4Mb ecn drop_batch 64 ",
+        "qdisc noqueue 0: dev wan root refcnt 2 ",
+        "qdisc noqueue 0: dev lan1 root refcnt 2 ",
+        "qdisc noqueue 0: dev lan3 root refcnt 2 ",
+        "qdisc noqueue 0: dev lan4 root refcnt 2 ",
+        "qdisc noqueue 0: dev lan2 root refcnt 2 ",
+        "qdisc fq_codel 0: dev ra0 root refcnt 2 limit 10240p flows 1024 quantum 1514 target 5ms interval 100ms memory_limit 512Kb ecn drop_batch 64 ",
+        "qdisc noqueue 0: dev br-lan root refcnt 2 ",
+        "qdisc fq_codel 0: dev rax0 root refcnt 2 limit 10240p flows 1024 quantum 1514 target 5ms interval 100ms memory_limit 512Kb ecn drop_batch 64 "
+      ],
+      "HTTP_PROXY": [
+        "204/0.385064"
+      ],
+      "LOAD": [
+        "2.13 0.81 0.49 2/228 26658",
+        "              total        used        free      shared  buff/cache   available",
+        "Mem:        1014720      680896       41144         260      292680      317164",
+        "Swap:             0           0           0"
+      ],
+      "GUARD": [
+        "#!/bin/sh",
+        "# self-heal.sh v3.1 - safe version (2026-10-30 v3.1 fleet patch)"
+      ],
+      "IPT_SCRIPT_BEHAVIOR": [
+        "27:    uci -q del_list dhcp.@dnsmasq[0].server='127.0.0.1#1053'",
+        "29:    /etc/init.d/dnsmasq restart",
+        "55:iptables -t nat -A MIHOMO -p tcp -j REDIRECT --to-ports 7892",
+        "63:iptables -t nat -A MIHOMO_DNS -p udp --dport 53 -j REDIRECT --to-ports 1053",
+        "64:iptables -t nat -A MIHOMO_DNS -p tcp --dport 53 -j REDIRECT --to-ports 1053",
+        "68:uci -q del_list dhcp.@dnsmasq[0].server='127.0.0.1#1053'",
+        "69:uci add_list dhcp.@dnsmasq[0].server='127.0.0.1#1053'",
+        "71:/etc/init.d/dnsmasq restart"
+      ]
+    },
+    "stderr": ""
+  },
+  {
+    "device": "R6",
+    "port": 13226,
+    "groups": {
+      "PROXY": {
+        "type": "Selector",
+        "now": "BWG-HY2-JPTY-01",
+        "all": [
+          "AUTO",
+          "US666-CN2GIA-01",
+          "BWG-HY2-JPTY-01",
+          "GIA-HY2-US-01",
+          "BWG-VLESS-JPTY-01",
+          "CF-CDN-GIA-01",
+          "CF2-CDN-GIA-01",
+          "DIRECT"
+        ],
+        "alive": true
+      },
+      "AUTO": {
+        "type": "Fallback",
+        "now": "NODE-PICK",
+        "all": [
+          "NODE-PICK",
+          "AIRPORT",
+          "DIRECT"
+        ],
+        "alive": true
+      },
+      "NODE-PICK": {
+        "type": "Fallback",
+        "now": "US666-CN2GIA-01",
+        "all": [
+          "US666-CN2GIA-01",
+          "BWG-HY2-JPTY-01",
+          "GIA-HY2-US-01",
+          "BWG-VLESS-JPTY-01",
+          "CF-CDN-GIA-01",
+          "CF2-CDN-GIA-01"
+        ],
+        "alive": true
+      },
+      "US-MEDIA": {
+        "type": "Fallback",
+        "now": "NODE-PICK",
+        "all": [
+          "NODE-PICK",
+          "AIRPORT"
+        ],
+        "alive": true
+      },
+      "AIRPORT": {
+        "type": "URLTest",
+        "now": "AP | 🇯🇵日本NET",
+        "all": [
+          "AP | 🇭🇰REALITY香港",
+          "AP | 🇯🇵REALITY日本",
+          "AP | 🇭🇰香港NET",
+          "AP | 🇸🇬新加坡NET",
+          "AP | 🇯🇵日本NET",
+          "AP | 🇺🇸美国NET",
+          "AP | 🇭🇰三网优化香港",
+          "AP | 🇸🇬三网优化新加坡",
+          "AP | 🇯🇵三网优化日本",
+          "AP | 🇺🇸三网优化美国",
+          "AP | 🇭🇰香港电信优化",
+          "AP | 🇸🇬新加坡电信优化",
+          "AP | 🇯🇵日本电信优化",
+          "AP | 🇺🇸美国电信优化",
+          "AP | 🇭🇰AWS香港",
+          "AP | 🇯🇵AWS日本",
+          "AP | 🇭🇰香港中转01",
+          "AP | 🇭🇰香港中转02",
+          "AP | 🇭🇰香港中转03",
+          "AP | 🇸🇬新加坡中转01",
+          "AP | 🇸🇬新加坡中转02",
+          "AP | 🇸🇬新加坡中转03",
+          "AP | 🇯🇵AZ日本中转01",
+          "AP | 🇯🇵AZ日本中转02",
+          "AP | 🇯🇵AZ日本中转03",
+          "AP | 🇯🇵日本中转01",
+          "AP | 🇯🇵日本中转02",
+          "AP | 🇯🇵日本中转03",
+          "AP | 🇰🇷韩国中转01",
+          "AP | 🇰🇷韩国中转02",
+          "AP | 🇰🇷韩国中转03",
+          "AP | 🇺🇸美国中转01",
+          "AP | 🇺🇸美国中转02",
+          "AP | 🇺🇸美国中转03",
+          "AP | 🇪🇭迪拜中转01",
+          "AP | 🇪🇭迪拜中转02",
+          "AP | 🇪🇭迪拜中转03"
+        ],
+        "alive": true
+      }
+    },
+    "proxy_route": [
+      "PROXY",
+      "BWG-HY2-JPTY-01"
+    ],
+    "media_route": [
+      "US-MEDIA",
+      "NODE-PICK",
+      "US666-CN2GIA-01"
+    ],
+    "nodes": [
+      {
+        "name": "US666-CN2GIA-01",
+        "type": "Vless",
+        "alive": true,
+        "history": [
+          {
+            "time": "2026-11-16T04:10:52.604422904Z",
+            "delay": 163
+          }
+        ]
+      },
+      {
+        "name": "BWG-HY2-JPTY-01",
+        "type": "Hysteria2",
+        "alive": true,
+        "history": [
+          {
+            "time": "2026-11-16T04:10:52.11745755Z",
+            "delay": 137
+          }
+        ]
+      },
+      {
+        "name": "BWG-VLESS-JPTY-01",
+        "type": "Vless",
+        "alive": true,
+        "history": [
+          {
+            "time": "2026-11-16T04:10:53.522921527Z",
+            "delay": 118
+          }
+        ]
+      }
+    ],
+    "sections": {
+      "TIME": [
+        "2026-11-16 12:10:46 +0800",
+        " 12:10:46 up 12:10,  load average: 0.07, 0.08, 0.10"
+      ],
+      "HEALTH": [
+        "200"
+      ],
+      "PROC": [
+        "4676",
+        "4906"
+      ],
+      "DNS_GAME": [
+        "Server:\t\t127.0.0.1",
+        "Address:\t127.0.0.1#53",
+        "",
+        "Name:      gpp-tj100-1.lol.qq.com",
+        "Address 1: 198.18.64.229",
+        "*** Can't find gpp-tj100-1.lol.qq.com: No answer"
+      ],
+      "DNS_SERVERS": [
+        "127.0.0.1#1053"
+      ],
+      "DNS_NORMAL": [
+        "Server:\t\t127.0.0.1",
+        "Address:\t127.0.0.1#53",
+        "",
+        "Name:      www.baidu.com",
+        "Address 1: 198.18.0.19",
+        "*** Can't find www.baidu.com: No answer"
+      ],
+      "WAN": [
+        "default via 58.58.185.1 dev wan "
+      ],
+      "TOOLS": [
+        "/sbin/tc",
+        "/usr/sbin/iptables"
+      ],
+      "NAT": [
+        "-A PREROUTING -i br-lan -j MIHOMO",
+        "-A PREROUTING -i br-lan -j MIHOMO_DNS",
+        "-A MIHOMO -d 224.0.0.0/4 -j RETURN",
+        "-A MIHOMO -d 159.223.36.119/32 -j RETURN",
+        "-A MIHOMO -d 43.134.46.44/32 -j RETURN",
+        "-A MIHOMO -p tcp -j REDIRECT --to-ports 7892"
+      ],
+      "UDP_TPROXY": [],
+      "DNS_LISTENERS": [
+        "tcp        0      0 127.0.0.1:53            0.0.0.0:*               LISTEN      ",
+        "tcp        0      0 58.58.185.138:53        0.0.0.0:*               LISTEN      ",
+        "tcp        0      0 192.168.132.1:53        0.0.0.0:*               LISTEN      ",
+        "tcp        0      0 :::1053                 :::*                    LISTEN      ",
+        "tcp        0      0 :::7892                 :::*                    LISTEN      ",
+        "tcp        0      0 ::1:53                  :::*                    LISTEN      ",
+        "tcp        0      0 fe80::f444:e8ff:fe20:e403:53 :::*                    LISTEN      ",
+        "tcp        0      0 fe80::74a7:c8ff:fee0:4f26:53 :::*                    LISTEN      ",
+        "tcp        0      0 fe80::74a7:c8ff:fee0:4f36:53 :::*                    LISTEN      ",
+        "udp        0      0 127.0.0.1:53            0.0.0.0:*                           ",
+        "udp        0      0 58.58.185.138:53        0.0.0.0:*                           ",
+        "udp        0      0 192.168.132.1:53        0.0.0.0:*                           ",
+        "udp        0      0 :::1053                 :::*                                ",
+        "udp        0      0 ::1:53                  :::*                                ",
+        "udp        0      0 fe80::f444:e8ff:fe20:e403:53 :::*                                ",
+        "udp        0      0 fe80::74a7:c8ff:fee0:4f26:53 :::*                                ",
+        "udp        0      0 fe80::74a7:c8ff:fee0:4f36:53 :::*                                ",
+        "udp        0      0 :::7892                 :::*                                "
+      ],
+      "WIFI_UCI": [
+        "wireless.ra0.disabled='1'",
+        "wireless.rax0.disabled='1'",
+        "wireless.mesh_2G.disabled='1'",
+        "wireless.mesh_5G.disabled='1'",
+        "wireless.guest_2G.disabled='1'",
+        "wireless.guest_5G.disabled='1'",
+        "wireless.RADIO2G.channel='0'",
+        "wireless.RADIO2G.disabled='1'",
+        "wireless.RADIO5G.channel='0'",
+        "wireless.RADIO5G.disabled='1'",
+        "wireless.ssid3.disabled='1'",
+        "wireless.ssid4.disabled='1'",
+        "wireless.ssid5.disabled='1'",
+        "wireless.ssid6.disabled='1'",
+        "wireless.ssid7.disabled='1'",
+        "wireless.ssid8.disabled='1'"
+      ],
+      "WIFI_LINKS": [
+        "ra0       Link encap:Ethernet  HWaddr A4:D8:CA:14:B8:72  ",
+        "          BROADCAST MULTICAST  MTU:1500  Metric:1",
+        "          RX packets:0 errors:0 dropped:0 overruns:0 frame:0",
+        "rax0      Link encap:Ethernet  HWaddr A6:D8:CA:64:B8:72  ",
+        "          BROADCAST MULTICAST  MTU:1500  Metric:1",
+        "          RX packets:0 errors:0 dropped:0 overruns:0 frame:0"
+      ],
+      "WIFI_RUNTIME": [
+        "          Mode:Master  Access Point: A4:D8:CA:14:B8:72   Bit Rate:0 kb/s   ",
+        "          Mode:Master  Channel=0  Access Point: A6:D8:CA:64:B8:72   ",
+        "          Bit Rate:0 kb/s   "
+      ],
+      "RADIO_FIRST": [
+        "Tx success                      = 0",
+        "Tx fail count                   = 0, PER=0.0%",
+        "Rx success                      = 133",
+        "Rx with CRC                     = 818, PER=86.0%",
+        "Rssi: 0 0 0 0 "
+      ],
+      "RADIO_SECOND": [
+        "Tx success                      = 0",
+        "Tx fail count                   = 0, PER=0.0%",
+        "Rx success                      = 133",
+        "Rx with CRC                     = 818, PER=86.0%",
+        "Rssi: 0 0 0 0 "
+      ],
+      "WIFI_EVENTS": [],
+      "QOS": [],
+      "QDISC": [
+        "qdisc noqueue 0: dev lo root refcnt 2 ",
+        "qdisc fq_codel 0: dev eth0 root refcnt 2 limit 10240p flows 1024 quantum 1514 target 5ms interval 100ms memory_limit 4Mb ecn drop_batch 64 ",
+        "qdisc fq_codel 0: dev eth1 root refcnt 2 limit 10240p flows 1024 quantum 1514 target 5ms interval 100ms memory_limit 4Mb ecn drop_batch 64 ",
+        "qdisc noqueue 0: dev wan root refcnt 2 ",
+        "qdisc noqueue 0: dev lan1 root refcnt 2 ",
+        "qdisc noqueue 0: dev lan3 root refcnt 2 ",
+        "qdisc noqueue 0: dev lan4 root refcnt 2 ",
+        "qdisc noqueue 0: dev lan2 root refcnt 2 ",
+        "qdisc fq_codel 0: dev ra0 root refcnt 2 limit 10240p flows 1024 quantum 1514 target 5ms interval 100ms memory_limit 512Kb ecn drop_batch 64 ",
+        "qdisc noqueue 0: dev br-lan root refcnt 2 ",
+        "qdisc fq_codel 0: dev rax0 root refcnt 2 limit 10240p flows 1024 quantum 1514 target 5ms interval 100ms memory_limit 512Kb ecn drop_batch 64 "
+      ],
+      "HTTP_PROXY": [
+        "204/0.599701"
+      ],
+      "LOAD": [
+        "0.60 0.21 0.14 1/109 12336",
+        "              total        used        free      shared  buff/cache   available",
+        "Mem:        1014720      177228      727204         128      110288      821644",
+        "Swap:             0           0           0"
+      ],
+      "GUARD": [
+        "#!/bin/sh",
+        "# self-heal.sh v3.1 - safe version (2026-10-30 v3.1 fleet patch)"
+      ],
+      "IPT_SCRIPT_BEHAVIOR": [
+        "27:    uci -q del_list dhcp.@dnsmasq[0].server='127.0.0.1#1053'",
+        "29:    /etc/init.d/dnsmasq restart",
+        "55:iptables -t nat -A MIHOMO -p tcp -j REDIRECT --to-ports 7892",
+        "63:iptables -t nat -A MIHOMO_DNS -p udp --dport 53 -j REDIRECT --to-ports 1053",
+        "64:iptables -t nat -A MIHOMO_DNS -p tcp --dport 53 -j REDIRECT --to-ports 1053",
+        "68:uci -q del_list dhcp.@dnsmasq[0].server='127.0.0.1#1053'",
+        "69:uci add_list dhcp.@dnsmasq[0].server='127.0.0.1#1053'",
+        "71:/etc/init.d/dnsmasq restart"
+      ]
+    },
+    "stderr": ""
+  },
+  {
+    "device": "R8",
+    "port": 13230,
+    "groups": {
+      "PROXY": {
+        "type": "Selector",
+        "now": "BWG-HY2-JPTY-01",
+        "all": [
+          "AUTO",
+          "US666-CN2GIA-01",
+          "BWG-HY2-JPTY-01",
+          "GIA-HY2-US-01",
+          "BWG-VLESS-JPTY-01",
+          "CF-CDN-GIA-01",
+          "CF2-CDN-GIA-01",
+          "DIRECT"
+        ],
+        "alive": true
+      },
+      "AUTO": {
+        "type": "Fallback",
+        "now": "NODE-PICK",
+        "all": [
+          "NODE-PICK",
+          "AIRPORT",
+          "DIRECT"
+        ],
+        "alive": true
+      },
+      "NODE-PICK": {
+        "type": "Fallback",
+        "now": "US666-CN2GIA-01",
+        "all": [
+          "US666-CN2GIA-01",
+          "BWG-HY2-JPTY-01",
+          "GIA-HY2-US-01",
+          "BWG-VLESS-JPTY-01",
+          "CF-CDN-GIA-01",
+          "CF2-CDN-GIA-01"
+        ],
+        "alive": true
+      },
+      "US-MEDIA": {
+        "type": "Fallback",
+        "now": "NODE-PICK",
+        "all": [
+          "NODE-PICK",
+          "AIRPORT"
+        ],
+        "alive": true
+      },
+      "AIRPORT": {
+        "type": "URLTest",
+        "now": "AP | 🇯🇵日本NET",
+        "all": [
+          "AP | 🇭🇰REALITY香港",
+          "AP | 🇯🇵REALITY日本",
+          "AP | 🇭🇰香港NET",
+          "AP | 🇸🇬新加坡NET",
+          "AP | 🇯🇵日本NET",
+          "AP | 🇺🇸美国NET",
+          "AP | 🇭🇰三网优化香港",
+          "AP | 🇸🇬三网优化新加坡",
+          "AP | 🇯🇵三网优化日本",
+          "AP | 🇺🇸三网优化美国",
+          "AP | 🇭🇰香港电信优化",
+          "AP | 🇸🇬新加坡电信优化",
+          "AP | 🇯🇵日本电信优化",
+          "AP | 🇺🇸美国电信优化",
+          "AP | 🇭🇰AWS香港",
+          "AP | 🇯🇵AWS日本",
+          "AP | 🇭🇰香港中转01",
+          "AP | 🇭🇰香港中转02",
+          "AP | 🇭🇰香港中转03",
+          "AP | 🇸🇬新加坡中转01",
+          "AP | 🇸🇬新加坡中转02",
+          "AP | 🇸🇬新加坡中转03",
+          "AP | 🇯🇵AZ日本中转01",
+          "AP | 🇯🇵AZ日本中转02",
+          "AP | 🇯🇵AZ日本中转03",
+          "AP | 🇯🇵日本中转01",
+          "AP | 🇯🇵日本中转02",
+          "AP | 🇯🇵日本中转03",
+          "AP | 🇰🇷韩国中转01",
+          "AP | 🇰🇷韩国中转02",
+          "AP | 🇰🇷韩国中转03",
+          "AP | 🇺🇸美国中转01",
+          "AP | 🇺🇸美国中转02",
+          "AP | 🇺🇸美国中转03",
+          "AP | 🇪🇭迪拜中转01",
+          "AP | 🇪🇭迪拜中转02",
+          "AP | 🇪🇭迪拜中转03"
+        ],
+        "alive": true
+      }
+    },
+    "proxy_route": [
+      "PROXY",
+      "BWG-HY2-JPTY-01"
+    ],
+    "media_route": [
+      "US-MEDIA",
+      "NODE-PICK",
+      "US666-CN2GIA-01"
+    ],
+    "nodes": [
+      {
+        "name": "US666-CN2GIA-01",
+        "type": "Vless",
+        "alive": true,
+        "history": [
+          {
+            "time": "2026-11-16T04:10:41.773502365Z",
+            "delay": 178
+          }
+        ]
+      },
+      {
+        "name": "BWG-HY2-JPTY-01",
+        "type": "Hysteria2",
+        "alive": false,
+        "history": [
+          {
+            "time": "2026-11-16T04:10:45.689015597Z",
+            "delay": 0
+          }
+        ]
+      },
+      {
+        "name": "BWG-VLESS-JPTY-01",
+        "type": "Vless",
+        "alive": true,
+        "history": [
+          {
+            "time": "2026-11-16T04:10:41.62579838Z",
+            "delay": 104
+          }
+        ]
+      }
+    ],
+    "sections": {
+      "TIME": [
+        "2026-11-16 12:11:15 +0800",
+        " 12:11:15 up 12:11,  load average: 0.31, 0.17, 0.11"
+      ],
+      "HEALTH": [
+        "200"
+      ],
+      "PROC": [
+        "4351",
+        "6395"
+      ],
+      "DNS_GAME": [
+        "Server:\t\t127.0.0.1",
+        "Address:\t127.0.0.1#53",
+        "",
+        "Name:      gpp-tj100-1.lol.qq.com",
+        "Address 1: 198.18.52.173",
+        "*** Can't find gpp-tj100-1.lol.qq.com: No answer"
+      ],
+      "DNS_SERVERS": [
+        "127.0.0.1#1053"
+      ],
+      "DNS_NORMAL": [
+        "Server:\t\t127.0.0.1",
+        "Address:\t127.0.0.1#53",
+        "",
+        "Name:      www.baidu.com",
+        "Address 1: 198.18.0.5",
+        "*** Can't find www.baidu.com: No answer"
+      ],
+      "WAN": [
+        "default via 192.168.1.1 dev wan  src 192.168.1.78 "
+      ],
+      "TOOLS": [
+        "/sbin/tc",
+        "/usr/sbin/iptables"
+      ],
+      "NAT": [
+        "-A PREROUTING -i br-lan -j MIHOMO",
+        "-A PREROUTING -i br-lan -j MIHOMO_DNS",
+        "-A MIHOMO -d 224.0.0.0/4 -j RETURN",
+        "-A MIHOMO -d 159.223.36.119/32 -j RETURN",
+        "-A MIHOMO -d 43.134.46.44/32 -j RETURN",
+        "-A MIHOMO -p tcp -j REDIRECT --to-ports 7892"
+      ],
+      "UDP_TPROXY": [],
+      "DNS_LISTENERS": [
+        "tcp        0      0 127.0.0.1:53            0.0.0.0:*               LISTEN      ",
+        "tcp        0      0 192.168.1.78:53         0.0.0.0:*               LISTEN      ",
+        "tcp        0      0 192.168.132.1:53        0.0.0.0:*               LISTEN      ",
+        "tcp        0      0 :::1053                 :::*                    LISTEN      ",
+        "tcp        0      0 :::7892                 :::*                    LISTEN      ",
+        "tcp        0      0 ::1:53                  :::*                    LISTEN      ",
+        "tcp        0      0 fe80::a6d8:caff:fe13:40:53 :::*                    LISTEN      ",
+        "tcp        0      0 fe80::74a7:c8ff:fee0:4f28:53 :::*                    LISTEN      ",
+        "tcp        0      0 fe80::74a7:c8ff:fee0:4f38:53 :::*                    LISTEN      ",
+        "udp        0      0 127.0.0.1:53            0.0.0.0:*                           ",
+        "udp        0      0 192.168.1.78:53         0.0.0.0:*                           ",
+        "udp        0      0 192.168.132.1:53        0.0.0.0:*                           ",
+        "udp        0      0 :::7892                 :::*                                ",
+        "udp        0      0 :::1053                 :::*                                ",
+        "udp        0      0 ::1:53                  :::*                                ",
+        "udp        0      0 fe80::a6d8:caff:fe13:40:53 :::*                                ",
+        "udp        0      0 fe80::74a7:c8ff:fee0:4f28:53 :::*                                ",
+        "udp        0      0 fe80::74a7:c8ff:fee0:4f38:53 :::*                                "
+      ],
+      "WIFI_UCI": [
+        "wireless.ra0.disabled='1'",
+        "wireless.rax0.disabled='1'",
+        "wireless.mesh_2G.disabled='1'",
+        "wireless.mesh_5G.disabled='1'",
+        "wireless.guest_2G.disabled='1'",
+        "wireless.guest_5G.disabled='1'",
+        "wireless.RADIO2G.channel='0'",
+        "wireless.RADIO2G.disabled='1'",
+        "wireless.RADIO5G.channel='0'",
+        "wireless.RADIO5G.disabled='1'",
+        "wireless.ssid3.disabled='1'",
+        "wireless.ssid4.disabled='1'",
+        "wireless.ssid5.disabled='1'",
+        "wireless.ssid6.disabled='1'",
+        "wireless.ssid7.disabled='1'",
+        "wireless.ssid8.disabled='1'"
+      ],
+      "WIFI_LINKS": [
+        "ra0       Link encap:Ethernet  HWaddr A4:D8:CA:13:00:42  ",
+        "          BROADCAST MULTICAST  MTU:1500  Metric:1",
+        "          RX packets:0 errors:0 dropped:0 overruns:0 frame:0",
+        "rax0      Link encap:Ethernet  HWaddr A6:D8:CA:63:00:42  ",
+        "          BROADCAST MULTICAST  MTU:1500  Metric:1",
+        "          RX packets:0 errors:0 dropped:0 overruns:0 frame:0"
+      ],
+      "WIFI_RUNTIME": [
+        "          Mode:Master  Access Point: A4:D8:CA:13:00:42   Bit Rate:0 kb/s   ",
+        "          Mode:Master  Channel=0  Access Point: A6:D8:CA:63:00:42   ",
+        "          Bit Rate:0 kb/s   "
+      ],
+      "RADIO_FIRST": [
+        "Tx success                      = 0",
+        "Tx fail count                   = 0, PER=0.0%",
+        "Rx success                      = 242",
+        "Rx with CRC                     = 486, PER=66.7%",
+        "Rssi: 0 0 0 0 "
+      ],
+      "RADIO_SECOND": [
+        "Tx success                      = 0",
+        "Tx fail count                   = 0, PER=0.0%",
+        "Rx success                      = 242",
+        "Rx with CRC                     = 486, PER=66.7%",
+        "Rssi: 0 0 0 0 "
+      ],
+      "WIFI_EVENTS": [],
+      "QOS": [],
+      "QDISC": [
+        "qdisc noqueue 0: dev lo root refcnt 2 ",
+        "qdisc fq_codel 0: dev eth0 root refcnt 2 limit 10240p flows 1024 quantum 1514 target 5ms interval 100ms memory_limit 4Mb ecn drop_batch 64 ",
+        "qdisc fq_codel 0: dev eth1 root refcnt 2 limit 10240p flows 1024 quantum 1514 target 5ms interval 100ms memory_limit 4Mb ecn drop_batch 64 ",
+        "qdisc noqueue 0: dev wan root refcnt 2 ",
+        "qdisc noqueue 0: dev lan1 root refcnt 2 ",
+        "qdisc noqueue 0: dev lan3 root refcnt 2 ",
+        "qdisc noqueue 0: dev lan4 root refcnt 2 ",
+        "qdisc noqueue 0: dev lan2 root refcnt 2 ",
+        "qdisc fq_codel 0: dev ra0 root refcnt 2 limit 10240p flows 1024 quantum 1514 target 5ms interval 100ms memory_limit 512Kb ecn drop_batch 64 ",
+        "qdisc noqueue 0: dev br-lan root refcnt 2 ",
+        "qdisc fq_codel 0: dev rax0 root refcnt 2 limit 10240p flows 1024 quantum 1514 target 5ms interval 100ms memory_limit 512Kb ecn drop_batch 64 "
+      ],
+      "HTTP_PROXY": [
+        "000/6.506758"
+      ],
+      "LOAD": [
+        "0.70 0.29 0.15 3/107 12519",
+        "              total        used        free      shared  buff/cache   available",
+        "Mem:        1014720      174356      628348         128      212016      823852",
+        "Swap:             0           0           0"
+      ],
+      "GUARD": [
+        "#!/bin/sh",
+        "# self-heal.sh v3.1 - safe version (2026-10-30 v3.1 fleet patch)"
+      ],
+      "IPT_SCRIPT_BEHAVIOR": [
+        "27:    uci -q del_list dhcp.@dnsmasq[0].server='127.0.0.1#1053'",
+        "29:    /etc/init.d/dnsmasq restart",
+        "55:iptables -t nat -A MIHOMO -p tcp -j REDIRECT --to-ports 7892",
+        "63:iptables -t nat -A MIHOMO_DNS -p udp --dport 53 -j REDIRECT --to-ports 1053",
+        "64:iptables -t nat -A MIHOMO_DNS -p tcp --dport 53 -j REDIRECT --to-ports 1053",
+        "68:uci -q del_list dhcp.@dnsmasq[0].server='127.0.0.1#1053'",
+        "69:uci add_list dhcp.@dnsmasq[0].server='127.0.0.1#1053'",
+        "71:/etc/init.d/dnsmasq restart"
+      ]
+    },
+    "stderr": "curl: (35) SSL_connect failed with error -308: error state on socket\n"
+  },
+  {
+    "device": "R9",
+    "port": 13231,
+    "groups": {
+      "PROXY": {
+        "type": "Selector",
+        "now": "BWG-HY2-JPTY-01",
+        "all": [
+          "AUTO",
+          "US666-CN2GIA-01",
+          "BWG-HY2-JPTY-01",
+          "GIA-HY2-US-01",
+          "BWG-VLESS-JPTY-01",
+          "CF-CDN-GIA-01",
+          "CF2-CDN-GIA-01",
+          "DIRECT"
+        ],
+        "alive": true
+      },
+      "AUTO": {
+        "type": "Fallback",
+        "now": "NODE-PICK",
+        "all": [
+          "NODE-PICK",
+          "AIRPORT",
+          "DIRECT"
+        ],
+        "alive": true
+      },
+      "NODE-PICK": {
+        "type": "Fallback",
+        "now": "US666-CN2GIA-01",
+        "all": [
+          "US666-CN2GIA-01",
+          "BWG-HY2-JPTY-01",
+          "GIA-HY2-US-01",
+          "BWG-VLESS-JPTY-01",
+          "CF-CDN-GIA-01",
+          "CF2-CDN-GIA-01"
+        ],
+        "alive": true
+      },
+      "US-MEDIA": {
+        "type": "Fallback",
+        "now": "NODE-PICK",
+        "all": [
+          "NODE-PICK",
+          "AIRPORT"
+        ],
+        "alive": true
+      },
+      "AIRPORT": {
+        "type": "URLTest",
+        "now": "AP | 🇸🇬新加坡NET",
+        "all": [
+          "AP | 🇭🇰REALITY香港",
+          "AP | 🇯🇵REALITY日本",
+          "AP | 🇭🇰香港NET",
+          "AP | 🇸🇬新加坡NET",
+          "AP | 🇯🇵日本NET",
+          "AP | 🇺🇸美国NET",
+          "AP | 🇭🇰三网优化香港",
+          "AP | 🇸🇬三网优化新加坡",
+          "AP | 🇯🇵三网优化日本",
+          "AP | 🇺🇸三网优化美国",
+          "AP | 🇭🇰香港电信优化",
+          "AP | 🇸🇬新加坡电信优化",
+          "AP | 🇯🇵日本电信优化",
+          "AP | 🇺🇸美国电信优化",
+          "AP | 🇭🇰AWS香港",
+          "AP | 🇯🇵AWS日本",
+          "AP | 🇭🇰香港中转01",
+          "AP | 🇭🇰香港中转02",
+          "AP | 🇭🇰香港中转03",
+          "AP | 🇸🇬新加坡中转01",
+          "AP | 🇸🇬新加坡中转02",
+          "AP | 🇸🇬新加坡中转03",
+          "AP | 🇯🇵AZ日本中转01",
+          "AP | 🇯🇵AZ日本中转02",
+          "AP | 🇯🇵AZ日本中转03",
+          "AP | 🇯🇵日本中转01",
+          "AP | 🇯🇵日本中转02",
+          "AP | 🇯🇵日本中转03",
+          "AP | 🇰🇷韩国中转01",
+          "AP | 🇰🇷韩国中转02",
+          "AP | 🇰🇷韩国中转03",
+          "AP | 🇺🇸美国中转01",
+          "AP | 🇺🇸美国中转02",
+          "AP | 🇺🇸美国中转03",
+          "AP | 🇪🇭迪拜中转01",
+          "AP | 🇪🇭迪拜中转02",
+          "AP | 🇪🇭迪拜中转03"
+        ],
+        "alive": true
+      }
+    },
+    "proxy_route": [
+      "PROXY",
+      "BWG-HY2-JPTY-01"
+    ],
+    "media_route": [
+      "US-MEDIA",
+      "NODE-PICK",
+      "US666-CN2GIA-01"
+    ],
+    "nodes": [
+      {
+        "name": "US666-CN2GIA-01",
+        "type": "Vless",
+        "alive": true,
+        "history": [
+          {
+            "time": "2026-11-16T04:10:42.933674719Z",
+            "delay": 170
+          }
+        ]
+      },
+      {
+        "name": "BWG-HY2-JPTY-01",
+        "type": "Hysteria2",
+        "alive": true,
+        "history": [
+          {
+            "time": "2026-11-16T04:10:42.0486668Z",
+            "delay": 116
+          }
+        ]
+      },
+      {
+        "name": "BWG-VLESS-JPTY-01",
+        "type": "Vless",
+        "alive": true,
+        "history": [
+          {
+            "time": "2026-11-16T04:10:44.32896845Z",
+            "delay": 503
+          }
+        ]
+      }
+    ],
+    "sections": {
+      "TIME": [
+        "2026-11-16 12:11:50 +0800",
+        " 12:11:50 up 12:11,  load average: 1.43, 1.23, 1.15"
+      ],
+      "HEALTH": [
+        "200"
+      ],
+      "PROC": [
+        "4211",
+        "10804"
+      ],
+      "DNS_GAME": [
+        "Server:\t\t127.0.0.1",
+        "Address:\t127.0.0.1#53",
+        "",
+        "Name:      gpp-tj100-1.lol.qq.com",
+        "Address 1: 42.81.179.215",
+        "*** Can't find gpp-tj100-1.lol.qq.com: No answer"
+      ],
+      "DNS_SERVERS": [
+        "127.0.0.1#1053 /lol.qq.com/223.5.5.5 /lol.qq.com/119.29.29.29 /gamesafe.qq.com/223.5.5.5 /gamesafe.qq.com/119.29.29.29 /anticheatexpert.com/223.5.5.5 /anticheatexpert.com/119.29.29.29 /ied-tqos-tgp.qq.com/223.5.5.5 /ied-tqos-tgp.qq.com/119.29.29.29 /ied-tqos.qq.com/223.5.5.5 /ied-tqos.qq.com/119.29.29.29"
+      ],
+      "DNS_NORMAL": [
+        "Server:\t\t127.0.0.1",
+        "Address:\t127.0.0.1#53",
+        "",
+        "Name:      www.baidu.com",
+        "Address 1: 198.18.0.4",
+        "*** Can't find www.baidu.com: No answer"
+      ],
+      "WAN": [
+        "default via 192.168.3.1 dev wan  src 192.168.3.19 "
+      ],
+      "TOOLS": [
+        "/sbin/tc",
+        "/usr/sbin/iptables"
+      ],
+      "NAT": [
+        "-A PREROUTING -i br-lan -j MIHOMO",
+        "-A PREROUTING -i br-lan -j MIHOMO_DNS",
+        "-A MIHOMO -d 224.0.0.0/4 -j RETURN",
+        "-A MIHOMO -d 159.223.36.119/32 -j RETURN",
+        "-A MIHOMO -d 43.134.46.44/32 -j RETURN",
+        "-A MIHOMO -p tcp -j REDIRECT --to-ports 7892"
+      ],
+      "UDP_TPROXY": [],
+      "DNS_LISTENERS": [
+        "tcp        0      0 127.0.0.1:53            0.0.0.0:*               LISTEN      ",
+        "tcp        0      0 192.168.3.19:53         0.0.0.0:*               LISTEN      ",
+        "tcp        0      0 192.168.132.1:53        0.0.0.0:*               LISTEN      ",
+        "tcp        0      0 :::7892                 :::*                    LISTEN      ",
+        "tcp        0      0 ::1:53                  :::*                    LISTEN      ",
+        "tcp        0      0 fe80::a6d8:caff:fe12:f780:53 :::*                    LISTEN      ",
+        "tcp        0      0 fe80::74a7:c8ff:fee0:4f29:53 :::*                    LISTEN      ",
+        "tcp        0      0 fe80::74a7:c8ff:fee0:4f39:53 :::*                    LISTEN      ",
+        "tcp        0      0 :::1053                 :::*                    LISTEN      ",
+        "udp        0      0 127.0.0.1:53            0.0.0.0:*                           ",
+        "udp        0      0 192.168.3.19:53         0.0.0.0:*                           ",
+        "udp        0      0 192.168.132.1:53        0.0.0.0:*                           ",
+        "udp        0      0 :::7892                 :::*                                ",
+        "udp        0      0 :::1053                 :::*                                ",
+        "udp        0      0 ::1:53                  :::*                                ",
+        "udp        0      0 fe80::a6d8:caff:fe12:f780:53 :::*                                ",
+        "udp        0      0 fe80::74a7:c8ff:fee0:4f29:53 :::*                                ",
+        "udp        0      0 fe80::74a7:c8ff:fee0:4f39:53 :::*                                "
+      ],
+      "WIFI_UCI": [
+        "wireless.ra0.disabled='0'",
+        "wireless.rax0.disabled='1'",
+        "wireless.mesh_2G.disabled='1'",
+        "wireless.mesh_5G.disabled='1'",
+        "wireless.guest_2G.disabled='1'",
+        "wireless.guest_5G.disabled='1'",
+        "wireless.RADIO2G.disabled='0'",
+        "wireless.RADIO2G.channel='1'",
+        "wireless.RADIO5G.disabled='1'",
+        "wireless.RADIO5G.channel='149'",
+        "wireless.ssid3.disabled='1'",
+        "wireless.ssid4.disabled='1'",
+        "wireless.ssid5.disabled='1'",
+        "wireless.ssid6.disabled='1'",
+        "wireless.ssid7.disabled='1'",
+        "wireless.ssid8.disabled='1'"
+      ],
+      "WIFI_LINKS": [
+        "ra0       Link encap:Ethernet  HWaddr A4:D8:CA:12:F7:82  ",
+        "          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1",
+        "          RX packets:5060548 errors:6733 dropped:5 overruns:0 frame:0",
+        "rax0      Link encap:Ethernet  HWaddr A6:D8:CA:62:F7:82  ",
+        "          BROADCAST MULTICAST  MTU:1500  Metric:1",
+        "          RX packets:0 errors:0 dropped:0 overruns:0 frame:0"
+      ],
+      "WIFI_RUNTIME": [
+        "          Mode:Master  Channel:3  Access Point: A4:D8:CA:12:F7:82   ",
+        "          Bit Rate:573 Mb/s   ",
+        "          Mode:Master  Channel:44  Access Point: A6:D8:CA:62:F7:82   ",
+        "          Bit Rate:0 kb/s   "
+      ],
+      "RADIO_FIRST": [
+        "Tx success                      = 1031369",
+        "Tx fail count                   = 404181, PER=28.1%",
+        "Rx success                      = 3398125",
+        "Rx with CRC                     = 4411799, PER=1.4%",
+        "Rssi: -15 -15 -109 -109 ",
+        "Last TX Rate\t\t\t\t\t= NSS2_MCS7, BW40, 0.8us GI, HE_SU, LDPC",
+        "Last RX Rate\t\t\t\t\t= NSS2_MCS11, BW40, 0.8us GI, HE_SU, LDPC",
+        "Tx success                      = 0",
+        "Tx fail count                   = 0, PER=0.0%",
+        "Rx success                      = 11",
+        "Rx with CRC                     = 15, PER=57.6%",
+        "Rssi: 0 0 0 0 "
+      ],
+      "RADIO_SECOND": [
+        "Tx success                      = 1031408",
+        "Tx fail count                   = 404192, PER=28.1%",
+        "Rx success                      = 3398206",
+        "Rx with CRC                     = 4411897, PER=1.4%",
+        "Rssi: -15 -15 -109 -109 ",
+        "Last TX Rate\t\t\t\t\t= NSS2_MCS7, BW40, 0.8us GI, HE_SU, LDPC",
+        "Last RX Rate\t\t\t\t\t= MCS4, BW40, LGI, HT_MM, LDPC",
+        "Tx success                      = 0",
+        "Tx fail count                   = 0, PER=0.0%",
+        "Rx success                      = 11",
+        "Rx with CRC                     = 15, PER=57.6%",
+        "Rssi: 0 0 0 0 "
+      ],
+      "WIFI_EVENTS": [],
+      "QOS": [],
+      "QDISC": [
+        "qdisc noqueue 0: dev lo root refcnt 2 ",
+        "qdisc fq_codel 0: dev eth0 root refcnt 2 limit 10240p flows 1024 quantum 1514 target 5ms interval 100ms memory_limit 4Mb ecn drop_batch 64 ",
+        "qdisc fq_codel 0: dev eth1 root refcnt 2 limit 10240p flows 1024 quantum 1514 target 5ms interval 100ms memory_limit 4Mb ecn drop_batch 64 ",
+        "qdisc noqueue 0: dev wan root refcnt 2 ",
+        "qdisc noqueue 0: dev lan1 root refcnt 2 ",
+        "qdisc noqueue 0: dev lan3 root refcnt 2 ",
+        "qdisc noqueue 0: dev lan4 root refcnt 2 ",
+        "qdisc noqueue 0: dev lan2 root refcnt 2 ",
+        "qdisc fq_codel 0: dev ra0 root refcnt 2 limit 10240p flows 1024 quantum 1514 target 5ms interval 100ms memory_limit 512Kb ecn drop_batch 64 ",
+        "qdisc noqueue 0: dev br-lan root refcnt 2 ",
+        "qdisc fq_codel 0: dev rax0 root refcnt 2 limit 10240p flows 1024 quantum 1514 target 5ms interval 100ms memory_limit 512Kb ecn drop_batch 64 "
+      ],
+      "HTTP_PROXY": [
+        "204/0.474002"
+      ],
+      "LOAD": [
+        "1.40 1.23 1.16 1/109 23232",
+        "              total        used        free      shared  buff/cache   available",
+        "Mem:        1014720      204928      597144         636      212648      792772",
+        "Swap:             0           0           0"
+      ],
+      "GUARD": [
+        "#!/bin/sh",
+        "# self-heal.sh v3.1 - safe version (2026-10-30 v3.1 fleet patch)"
+      ],
+      "IPT_SCRIPT_BEHAVIOR": [
+        "27:    uci -q del_list dhcp.@dnsmasq[0].server='127.0.0.1#1053'",
+        "29:    /etc/init.d/dnsmasq restart",
+        "55:iptables -t nat -A MIHOMO -p tcp -j REDIRECT --to-ports 7892",
+        "63:iptables -t nat -A MIHOMO_DNS -p udp --dport 53 -j REDIRECT --to-ports 1053",
+        "64:iptables -t nat -A MIHOMO_DNS -p tcp --dport 53 -j REDIRECT --to-ports 1053",
+        "68:uci -q del_list dhcp.@dnsmasq[0].server='127.0.0.1#1053'",
+        "69:uci add_list dhcp.@dnsmasq[0].server='127.0.0.1#1053'",
+        "71:/etc/init.d/dnsmasq restart"
+      ]
+    },
+    "stderr": ""
+  },
+  {
+    "device": "GL",
+    "port": 13234,
+    "groups": {
+      "PROXY": {
+        "type": "Selector",
+        "now": "AUTO",
+        "all": [
+          "AUTO",
+          "US666-CN2GIA-01",
+          "GIA-HY2-US-01",
+          "BWG-VLESS-JPTY-01",
+          "CF-CDN-GIA-01",
+          "CF2-CDN-GIA-01",
+          "DIRECT"
+        ],
+        "alive": true
+      },
+      "AUTO": {
+        "type": "Fallback",
+        "now": "NODE-PICK",
+        "all": [
+          "NODE-PICK",
+          "AIRPORT",
+          "DIRECT"
+        ],
+        "alive": true
+      },
+      "NODE-PICK": {
+        "type": "Fallback",
+        "now": "US666-CN2GIA-01",
+        "all": [
+          "US666-CN2GIA-01",
+          "GIA-HY2-US-01",
+          "BWG-VLESS-JPTY-01",
+          "CF-CDN-GIA-01",
+          "CF2-CDN-GIA-01"
+        ],
+        "alive": true
+      },
+      "US-MEDIA": {
+        "type": "Fallback",
+        "now": "NODE-PICK",
+        "all": [
+          "NODE-PICK",
+          "AIRPORT"
+        ],
+        "alive": true
+      },
+      "AIRPORT": {
+        "type": "URLTest",
+        "now": "AP | 🇭🇰三网优化香港",
+        "all": [
+          "AP | 🇭🇰REALITY香港",
+          "AP | 🇯🇵REALITY日本",
+          "AP | 🇭🇰香港NET",
+          "AP | 🇸🇬新加坡NET",
+          "AP | 🇯🇵日本NET",
+          "AP | 🇺🇸美国NET",
+          "AP | 🇭🇰三网优化香港",
+          "AP | 🇸🇬三网优化新加坡",
+          "AP | 🇯🇵三网优化日本",
+          "AP | 🇺🇸三网优化美国",
+          "AP | 🇭🇰香港电信优化",
+          "AP | 🇸🇬新加坡电信优化",
+          "AP | 🇯🇵日本电信优化",
+          "AP | 🇺🇸美国电信优化",
+          "AP | 🇭🇰AWS香港",
+          "AP | 🇯🇵AWS日本",
+          "AP | 🇭🇰香港中转01",
+          "AP | 🇭🇰香港中转02",
+          "AP | 🇭🇰香港中转03",
+          "AP | 🇸🇬新加坡中转01",
+          "AP | 🇸🇬新加坡中转02",
+          "AP | 🇸🇬新加坡中转03",
+          "AP | 🇯🇵AZ日本中转01",
+          "AP | 🇯🇵AZ日本中转02",
+          "AP | 🇯🇵AZ日本中转03",
+          "AP | 🇯🇵日本中转01",
+          "AP | 🇯🇵日本中转02",
+          "AP | 🇯🇵日本中转03",
+          "AP | 🇰🇷韩国中转01",
+          "AP | 🇰🇷韩国中转02",
+          "AP | 🇰🇷韩国中转03",
+          "AP | 🇺🇸美国中转01",
+          "AP | 🇺🇸美国中转02",
+          "AP | 🇺🇸美国中转03",
+          "AP | 🇪🇭迪拜中转01",
+          "AP | 🇪🇭迪拜中转02",
+          "AP | 🇪🇭迪拜中转03"
+        ],
+        "alive": true
+      }
+    },
+    "proxy_route": [
+      "PROXY",
+      "AUTO",
+      "NODE-PICK",
+      "US666-CN2GIA-01"
+    ],
+    "media_route": [
+      "US-MEDIA",
+      "NODE-PICK",
+      "US666-CN2GIA-01"
+    ],
+    "nodes": [
+      {
+        "name": "US666-CN2GIA-01",
+        "type": "Vless",
+        "alive": true,
+        "history": [
+          {
+            "time": "2026-11-16T04:10:55.192419255Z",
+            "delay": 155
+          }
+        ]
+      },
+      {
+        "name": "BWG-VLESS-JPTY-01",
+        "type": "Vless",
+        "alive": true,
+        "history": [
+          {
+            "time": "2026-11-16T04:10:54.76031987Z",
+            "delay": 114
+          }
+        ]
+      }
+    ],
+    "sections": {
+      "TIME": [
+        "2026-11-16 12:11:50 +0800",
+        " 12:11:50 up 4 days, 14:35,  load average: 0.14, 0.16, 0.17"
+      ],
+      "HEALTH": [
+        "200"
+      ],
+      "PROC": [
+        "29894",
+        "11221 11217"
+      ],
+      "DNS_GAME": [
+        "Server:\t\t127.0.0.1",
+        "Address:\t127.0.0.1#53",
+        "",
+        "Name:      gpp-tj100-1.lol.qq.com",
+        "Address 1: 198.18.0.89",
+        "*** Can't find gpp-tj100-1.lol.qq.com: No answer"
+      ],
+      "DNS_SERVERS": [
+        "127.0.0.1#1053"
+      ],
+      "DNS_NORMAL": [
+        "Server:\t\t127.0.0.1",
+        "Address:\t127.0.0.1#53",
+        "",
+        "Name:      www.baidu.com",
+        "Address 1: 198.18.0.57",
+        "*** Can't find www.baidu.com: No answer"
+      ],
+      "WAN": [
+        "default via 192.168.2.1 dev eth0 proto static metric 10 "
+      ],
+      "TOOLS": [
+        "/sbin/tc",
+        "/usr/sbin/iptables"
+      ],
+      "NAT": [
+        "-A PREROUTING -i br-lan -j MIHOMO",
+        "-A PREROUTING -i br-lan -j MIHOMO_DNS",
+        "-A MIHOMO -d 104.18.32.7/32 -j RETURN",
+        "-A MIHOMO -d 162.159.135.42/32 -j RETURN",
+        "-A MIHOMO -d 134.175.151.213/32 -j RETURN",
+        "-A MIHOMO -p tcp -j REDIRECT --to-ports 7892"
+      ],
+      "UDP_TPROXY": [],
+      "DNS_LISTENERS": [
+        "tcp        0      0 127.0.0.1:53            0.0.0.0:*               LISTEN      ",
+        "tcp        0      0 192.168.2.244:53        0.0.0.0:*               LISTEN      ",
+        "tcp        0      0 192.168.8.1:53          0.0.0.0:*               LISTEN      ",
+        "tcp        0      0 :::1053                 :::*                    LISTEN      ",
+        "tcp        0      0 :::7892                 :::*                    LISTEN      ",
+        "tcp        0      0 ::1:53                  :::*                    LISTEN      ",
+        "tcp        0      0 fd33:8425:e078:0:9683:c4ff:fee4:6db4:53 :::*                    LISTEN      ",
+        "tcp        0      0 fe80::9683:c4ff:fee4:6db4:53 :::*                    LISTEN      ",
+        "tcp        0      0 fe80::68a8:c6ff:fe1c:7b47:53 :::*                    LISTEN      ",
+        "tcp        0      0 fe80::bc28:b7ff:fe97:2fc6:53 :::*                    LISTEN      ",
+        "tcp        0      0 fe80::9683:c4ff:fee4:6db5:53 :::*                    LISTEN      ",
+        "tcp        0      0 fe80::68a8:c6ff:fe4c:7b47:53 :::*                    LISTEN      ",
+        "tcp        0      0 fe80::bc28:b7ff:fe47:2fc6:53 :::*                    LISTEN      ",
+        "udp        0      0 127.0.0.1:53            0.0.0.0:*                           ",
+        "udp        0      0 192.168.2.244:53        0.0.0.0:*                           ",
+        "udp        0      0 192.168.8.1:53          0.0.0.0:*                           ",
+        "udp        0      0 :::7892                 :::*                                ",
+        "udp        0      0 :::1053                 :::*                                ",
+        "udp        0      0 ::1:53                  :::*                                ",
+        "udp        0      0 fd33:8425:e078:0:9683:c4ff:fee4:6db4:53 :::*                                ",
+        "udp        0      0 fe80::9683:c4ff:fee4:6db4:53 :::*                                ",
+        "udp        0      0 fe80::68a8:c6ff:fe1c:7b47:53 :::*                                ",
+        "udp        0      0 fe80::bc28:b7ff:fe97:2fc6:53 :::*                                ",
+        "udp        0      0 fe80::9683:c4ff:fee4:6db5:53 :::*                                ",
+        "udp        0      0 fe80::68a8:c6ff:fe4c:7b47:53 :::*                                ",
+        "udp        0      0 fe80::bc28:b7ff:fe47:2fc6:53 :::*                                "
+      ],
+      "WIFI_UCI": [
+        "wireless.MT7993_1_1.htmode='EHT40'",
+        "wireless.MT7993_1_1.disabled='0'",
+        "wireless.MT7993_1_1.channel='auto'",
+        "wireless.ra0.disabled='0'",
+        "wireless.MT7993_1_2.disabled='0'",
+        "wireless.MT7993_1_2.channel='auto'",
+        "wireless.MT7993_1_2.htmode='EHT80'",
+        "wireless.rai0.disabled='0'",
+        "wireless.guest2g.disabled='1'",
+        "wireless.wlanmld2g.disabled='1'",
+        "wireless.wlanmldguest2g.disabled='1'",
+        "wireless.guest5g.disabled='1'",
+        "wireless.wlanmld5g.disabled='1'",
+        "wireless.wlanmldguest5g.disabled='1'",
+        "wireless.mld0.disabled='1'",
+        "wireless.mld1.disabled='1'"
+      ],
+      "WIFI_LINKS": [
+        "ra0       Link encap:Ethernet  HWaddr 6A:A8:C6:1C:7B:47  ",
+        "          inet6 addr: fe80::68a8:c6ff:fe1c:7b47/64 Scope:Link",
+        "          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1"
+      ],
+      "WIFI_RUNTIME": [
+        "          Mode:Master  Channel:7  Access Point: 6A:A8:C6:1C:7B:47   ",
+        "          Bit Rate:344 Mb/s   ",
+        "\tInterface rai15",
+        "\t\ttype AP",
+        "\t\tchannel 40 (5200 MHz), width: 80 MHz, center1: 5210 MHz",
+        "\tInterface rai3",
+        "\t\ttype AP",
+        "\t\tchannel 40 (5200 MHz), width: 80 MHz, center1: 5210 MHz",
+        "\tInterface rai2",
+        "\t\ttype AP",
+        "\t\tchannel 40 (5200 MHz), width: 80 MHz, center1: 5210 MHz",
+        "\tInterface rai1",
+        "\t\ttype AP",
+        "\t\tchannel 40 (5200 MHz), width: 80 MHz, center1: 5210 MHz",
+        "\tInterface apclii0",
+        "\t\ttype managed",
+        "\t\tchannel 40 (5200 MHz), width: 80 MHz, center1: 5210 MHz",
+        "\tInterface rai0",
+        "\t\ttype AP",
+        "\t\tchannel 40 (5200 MHz), width: 80 MHz, center1: 5210 MHz",
+        "\tInterface ra15",
+        "\t\ttype AP",
+        "\t\tchannel 7 (2442 MHz), width: 20 MHz, center1: 2442 MHz",
+        "\tInterface ra3",
+        "\t\ttype AP",
+        "\t\tchannel 7 (2442 MHz), width: 20 MHz, center1: 2442 MHz",
+        "\tInterface ra2",
+        "\t\ttype AP",
+        "\t\tchannel 7 (2442 MHz), width: 20 MHz, center1: 2442 MHz",
+        "\tInterface ra1",
+        "\t\ttype AP",
+        "\t\tchannel 7 (2442 MHz), width: 20 MHz, center1: 2442 MHz",
+        "\tInterface apcli0",
+        "\t\ttype managed",
+        "\t\tchannel 7 (2442 MHz), width: 20 MHz, center1: 2442 MHz",
+        "\tInterface ra0",
+        "\t\ttype AP",
+        "\t\tchannel 7 (2442 MHz), width: 20 MHz, center1: 2442 MHz"
+      ],
+      "RADIO_FIRST": [
+        "Tx success                             = 189136",
+        "Tx fail count                          = 63731, PER=25.2%",
+        "Rx success                             = 24140001",
+        "Rx with CRC                            = 29856242, PER=55.2%",
+        "Rssi: 0 0 0 0 0 "
+      ],
+      "RADIO_SECOND": [
+        "Tx success                             = 189136",
+        "Tx fail count                          = 63731, PER=25.2%",
+        "Rx success                             = 24140264",
+        "Rx with CRC                            = 29856659, PER=55.2%",
+        "Rssi: 0 0 0 0 0 "
+      ],
+      "WIFI_EVENTS": [],
+      "QOS": [],
+      "QDISC": [
+        "qdisc noqueue 0: dev lo root refcnt 2 ",
+        "qdisc mq 0: dev eth0 root ",
+        "qdisc fq_codel 0: dev eth0 parent :10 limit 10240p flows 1024 quantum 1514 target 5ms interval 100ms memory_limit 4Mb ecn drop_batch 64 ",
+        "qdisc fq_codel 0: dev eth0 parent :f limit 10240p flows 1024 quantum 1514 target 5ms interval 100ms memory_limit 4Mb ecn drop_batch 64 ",
+        "qdisc fq_codel 0: dev eth0 parent :e limit 10240p flows 1024 quantum 1514 target 5ms interval 100ms memory_limit 4Mb ecn drop_batch 64 ",
+        "qdisc fq_codel 0: dev eth0 parent :d limit 10240p flows 1024 quantum 1514 target 5ms interval 100ms memory_limit 4Mb ecn drop_batch 64 ",
+        "qdisc fq_codel 0: dev eth0 parent :c limit 10240p flows 1024 quantum 1514 target 5ms interval 100ms memory_limit 4Mb ecn drop_batch 64 ",
+        "qdisc fq_codel 0: dev eth0 parent :b limit 10240p flows 1024 quantum 1514 target 5ms interval 100ms memory_limit 4Mb ecn drop_batch 64 ",
+        "qdisc fq_codel 0: dev eth0 parent :a limit 10240p flows 1024 quantum 1514 target 5ms interval 100ms memory_limit 4Mb ecn drop_batch 64 ",
+        "qdisc fq_codel 0: dev eth0 parent :9 limit 10240p flows 1024 quantum 1514 target 5ms interval 100ms memory_limit 4Mb ecn drop_batch 64 ",
+        "qdisc fq_codel 0: dev eth0 parent :8 limit 10240p flows 1024 quantum 1514 target 5ms interval 100ms memory_limit 4Mb ecn drop_batch 64 ",
+        "qdisc fq_codel 0: dev eth0 parent :7 limit 10240p flows 1024 quantum 1514 target 5ms interval 100ms memory_limit 4Mb ecn drop_batch 64 ",
+        "qdisc fq_codel 0: dev eth0 parent :6 limit 10240p flows 1024 quantum 1514 target 5ms interval 100ms memory_limit 4Mb ecn drop_batch 64 ",
+        "qdisc fq_codel 0: dev eth0 parent :5 limit 10240p flows 1024 quantum 1514 target 5ms interval 100ms memory_limit 4Mb ecn drop_batch 64 ",
+        "qdisc fq_codel 0: dev eth0 parent :4 limit 10240p flows 1024 quantum 1514 target 5ms interval 100ms memory_limit 4Mb ecn drop_batch 64 ",
+        "qdisc fq_codel 0: dev eth0 parent :3 limit 10240p flows 1024 quantum 1514 target 5ms interval 100ms memory_limit 4Mb ecn drop_batch 64 ",
+        "qdisc fq_codel 0: dev eth0 parent :2 limit 10240p flows 1024 quantum 1514 target 5ms interval 100ms memory_limit 4Mb ecn drop_batch 64 ",
+        "qdisc fq_codel 0: dev eth0 parent :1 limit 10240p flows 1024 quantum 1514 target 5ms interval 100ms memory_limit 4Mb ecn drop_batch 64 ",
+        "qdisc mq 0: dev eth1 root ",
+        "qdisc fq_codel 0: dev eth1 parent :10 limit 10240p flows 1024 quantum 1514 target 5ms interval 100ms memory_limit 4Mb ecn drop_batch 64 ",
+        "qdisc fq_codel 0: dev eth1 parent :f limit 10240p flows 1024 quantum 1514 target 5ms interval 100ms memory_limit 4Mb ecn drop_batch 64 ",
+        "qdisc fq_codel 0: dev eth1 parent :e limit 10240p flows 1024 quantum 1514 target 5ms interval 100ms memory_limit 4Mb ecn drop_batch 64 ",
+        "qdisc fq_codel 0: dev eth1 parent :d limit 10240p flows 1024 quantum 1514 target 5ms interval 100ms memory_limit 4Mb ecn drop_batch 64 ",
+        "qdisc fq_codel 0: dev eth1 parent :c limit 10240p flows 1024 quantum 1514 target 5ms interval 100ms memory_limit 4Mb ecn drop_batch 64 ",
+        "qdisc fq_codel 0: dev eth1 parent :b limit 10240p flows 1024 quantum 1514 target 5ms interval 100ms memory_limit 4Mb ecn drop_batch 64 ",
+        "qdisc fq_codel 0: dev eth1 parent :a limit 10240p flows 1024 quantum 1514 target 5ms interval 100ms memory_limit 4Mb ecn drop_batch 64 ",
+        "qdisc fq_codel 0: dev eth1 parent :9 limit 10240p flows 1024 quantum 1514 target 5ms interval 100ms memory_limit 4Mb ecn drop_batch 64 ",
+        "qdisc fq_codel 0: dev eth1 parent :8 limit 10240p flows 1024 quantum 1514 target 5ms interval 100ms memory_limit 4Mb ecn drop_batch 64 ",
+        "qdisc fq_codel 0: dev eth1 parent :7 limit 10240p flows 1024 quantum 1514 target 5ms interval 100ms memory_limit 4Mb ecn drop_batch 64 ",
+        "qdisc fq_codel 0: dev eth1 parent :6 limit 10240p flows 1024 quantum 1514 target 5ms interval 100ms memory_limit 4Mb ecn drop_batch 64 ",
+        "qdisc fq_codel 0: dev eth1 parent :5 limit 10240p flows 1024 quantum 1514 target 5ms interval 100ms memory_limit 4Mb ecn drop_batch 64 ",
+        "qdisc fq_codel 0: dev eth1 parent :4 limit 10240p flows 1024 quantum 1514 target 5ms interval 100ms memory_limit 4Mb ecn drop_batch 64 ",
+        "qdisc fq_codel 0: dev eth1 parent :3 limit 10240p flows 1024 quantum 1514 target 5ms interval 100ms memory_limit 4Mb ecn drop_batch 64 ",
+        "qdisc fq_codel 0: dev eth1 parent :2 limit 10240p flows 1024 quantum 1514 target 5ms interval 100ms memory_limit 4Mb ecn drop_batch 64 ",
+        "qdisc fq_codel 0: dev eth1 parent :1 limit 10240p flows 1024 quantum 1514 target 5ms interval 100ms memory_limit 4Mb ecn drop_batch 64 ",
+        "qdisc fq_codel 0: dev ra0 root refcnt 2 limit 10240p flows 1024 quantum 1514 target 5ms interval 100ms memory_limit 4Mb ecn drop_batch 64 ",
+        "qdisc fq_codel 0: dev rai0 root refcnt 2 limit 10240p flows 1024 quantum 1514 target 5ms interval 100ms memory_limit 4Mb ecn drop_batch 64 ",
+        "qdisc noqueue 0: dev br-lan root refcnt 2 ",
+        "qdisc fq_codel 0: dev ra15 root refcnt 2 limit 10240p flows 1024 quantum 1514 target 5ms interval 100ms memory_limit 4Mb ecn drop_batch 64 ",
+        "qdisc fq_codel 0: dev rai15 root refcnt 2 limit 10240p flows 1024 quantum 1514 target 5ms interval 100ms memory_limit 4Mb ecn drop_batch 64 "
+      ],
+      "HTTP_PROXY": [
+        "204/0.788119"
+      ],
+      "LOAD": [
+        "0.13 0.16 0.17 1/151 12275",
+        "              total        used        free      shared  buff/cache   available",
+        "Mem:         492824      305572       55104        5588      132148      126632",
+        "Swap:             0           0           0"
+      ],
+      "GUARD": [
+        "#!/bin/sh",
+        "# self-heal.sh v3.1 - safe version (2026-10-30 v3.1 fleet patch)"
+      ],
+      "IPT_SCRIPT_BEHAVIOR": [
+        "29:    uci -q del_list dhcp.@dnsmasq[0].server='127.0.0.1#1053'",
+        "31:    /etc/init.d/dnsmasq restart 2>/dev/null",
+        "43:# 避免 cron 每分钟重跑引发 dnsmasq restart（DNS 每分钟抖动）",
+        "62:iptables -t nat -A MIHOMO -p tcp -j REDIRECT --to-ports 7892",
+        "71:iptables -t nat -A MIHOMO_DNS -p udp --dport 53 -j REDIRECT --to-ports 1053",
+        "72:iptables -t nat -A MIHOMO_DNS -p tcp --dport 53 -j REDIRECT --to-ports 1053",
+        "76:uci -q del_list dhcp.@dnsmasq[0].server='127.0.0.1#1053'",
+        "77:uci add_list dhcp.@dnsmasq[0].server='127.0.0.1#1053'",
+        "79:/etc/init.d/dnsmasq restart 2>/dev/null"
+      ]
+    },
+    "stderr": ""
+  },
+  {
+    "device": "ATHENA",
+    "error": "AuthenticationException",
+    "detail": "Authentication failed."
+  }
+]

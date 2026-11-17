@@ -1,0 +1,7 @@
+BEGIN
+SET
+
+STDERR
+ERROR:  syntax error at or near "day"
+LINE 14: ...device_id,(ts AT TIME ZONE 'Asia/Shanghai')::date day,SUM(dr...
+                                                              ^

@@ -1,0 +1,12 @@
+table inet gia_bulk_meter {
+  counter r2_bulk_up {}
+  counter r2_bulk_down {}
+  chain input {
+    type filter hook input priority -4; policy accept;
+    ip saddr 58.58.177.226 tcp dport 2054 counter name r2_bulk_up
+  }
+  chain output {
+    type filter hook output priority -4; policy accept;
+    ip daddr 58.58.177.226 tcp sport 2054 counter name r2_bulk_down
+  }
+}

@@ -1,0 +1,6 @@
+tc qdisc del dev wan root
+tc qdisc del dev wan root
+tc qdisc add dev wan root handle 1: htb default 30
+tc class add dev wan parent 1: classid 1:10 htb rate 60kbit ceil 60kbit
+tc filter add dev wan parent 1: protocol ip u32 match ip dst 154.36.139.155/32 flowid 1:10
+tc filter add dev wan parent 1: protocol ip u32 match ip dst 74.82.193.113/32 flowid 1:10

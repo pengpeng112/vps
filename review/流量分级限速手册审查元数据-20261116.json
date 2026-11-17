@@ -1,0 +1,29 @@
+{
+  "source": "docs\\plans\\全舰队国外流量分级限速与解封执行手册-v2-20261116.md",
+  "snapshot": "review\\流量分级限速手册v2.3审前快照-20261116.md",
+  "sha256": "5f1c1d817f832436dff46b0ef686b0323051e4cde73e0d6942be62e241318f6b",
+  "bytes": 38768,
+  "captured_local": "2026-11-16T20:25:21",
+  "revised_version": "2026-11-16 v2.4",
+  "revised_sha256": "3ed7e129f7aa22417e219d0df64592139c67aed57eecf6bad7413ef976d7e30c",
+  "revised_bytes": 63760,
+  "revised_lines": 825,
+  "validated_local": "2026-11-16T20:50:45+08:00",
+  "validation": {
+    "snapshot_sha256": true,
+    "json_valid": true,
+    "r2_quota_3gib": true,
+    "confirmed_class_rates": true,
+    "uploads_unchanged": true,
+    "observe_no_automatic_actions": true,
+    "hard_and_migration_off": true,
+    "fences_balanced": true,
+    "test_matrix_complete": true,
+    "all_numbered_sections": true,
+    "lf_only": true,
+    "local_references_exist": true,
+    "snapshot_untouched": true
+  },
+  "production_actions": false,
+  "review_record": "review/国外流量分级限速v2核查修订记录-20261116-Codex.md"
+}

@@ -1,0 +1,2598 @@
+{
+  "daily": [
+    {
+      "rx": 1132834430,
+      "tx": 171786340,
+      "name": "雅典娜-AX6600",
+      "epochs": 0,
+      "samples": 7874,
+      "decreases": 1733,
+      "device_id": "rtr-5e1a8d",
+      "bucket_day": "2026-10-16"
+    },
+    {
+      "rx": 1013664334,
+      "tx": 22566945,
+      "name": "SN-R1-AX3000 临朐网警",
+      "epochs": 0,
+      "samples": 1130,
+      "decreases": 416,
+      "device_id": "rtr-d3847d",
+      "bucket_day": "2026-10-16"
+    },
+    {
+      "rx": 517031843,
+      "tx": 89136097,
+      "name": "SN-R4-AX3000 坊子网警",
+      "epochs": 0,
+      "samples": 6498,
+      "decreases": 2189,
+      "device_id": "rtr-cd473f",
+      "bucket_day": "2026-10-16"
+    },
+    {
+      "rx": 24596677,
+      "tx": 3442888,
+      "name": "SN-R3-AX3000安丘网警01",
+      "epochs": 0,
+      "samples": 7940,
+      "decreases": 4055,
+      "device_id": "rtr-38aa54",
+      "bucket_day": "2026-10-16"
+    },
+    {
+      "rx": 355871,
+      "tx": 29244,
+      "name": "SN-R2-AX3000日照国保1已付",
+      "epochs": 0,
+      "samples": 6372,
+      "decreases": 3338,
+      "device_id": "rtr-a9bcba",
+      "bucket_day": "2026-10-16"
+    },
+    {
+      "rx": 724451622,
+      "tx": 136804463,
+      "name": "雅典娜-AX6600",
+      "epochs": 0,
+      "samples": 7867,
+      "decreases": 1594,
+      "device_id": "rtr-5e1a8d",
+      "bucket_day": "2026-10-17"
+    },
+    {
+      "rx": 152063373,
+      "tx": 6550572,
+      "name": "SN-R2-AX3000日照国保1已付",
+      "epochs": 4,
+      "samples": 143,
+      "decreases": 54,
+      "device_id": "rtr-a9bcba",
+      "bucket_day": "2026-10-17"
+    },
+    {
+      "rx": 58945541,
+      "tx": 1261597,
+      "name": "SN-R5-AX3000 昌乐网警",
+      "epochs": 1,
+      "samples": 594,
+      "decreases": 89,
+      "device_id": "rtr-c46a25",
+      "bucket_day": "2026-10-17"
+    },
+    {
+      "rx": 53814894,
+      "tx": 4890072,
+      "name": "SN-R4-AX3000 坊子网警",
+      "epochs": 1,
+      "samples": 8029,
+      "decreases": 3219,
+      "device_id": "rtr-cd473f",
+      "bucket_day": "2026-10-17"
+    },
+    {
+      "rx": 36891392,
+      "tx": 1534227,
+      "name": "SN-R1-AX3000 临朐网警",
+      "epochs": 1,
+      "samples": 1306,
+      "decreases": 682,
+      "device_id": "rtr-d3847d",
+      "bucket_day": "2026-10-17"
+    },
+    {
+      "rx": 5317839,
+      "tx": 1342665,
+      "name": "SN-R3-AX3000安丘网警01",
+      "epochs": 1,
+      "samples": 7940,
+      "decreases": 3863,
+      "device_id": "rtr-38aa54",
+      "bucket_day": "2026-10-17"
+    },
+    {
+      "rx": 1104028665,
+      "tx": 224393079,
+      "name": "雅典娜-AX6600",
+      "epochs": 0,
+      "samples": 7880,
+      "decreases": 1749,
+      "device_id": "rtr-5e1a8d",
+      "bucket_day": "2026-10-18"
+    },
+    {
+      "rx": 181647471,
+      "tx": 5768877,
+      "name": "SN-R1-AX3000 临朐网警",
+      "epochs": 1,
+      "samples": 1308,
+      "decreases": 599,
+      "device_id": "rtr-d3847d",
+      "bucket_day": "2026-10-18"
+    },
+    {
+      "rx": 30596922,
+      "tx": 1958600,
+      "name": "SN-R4-AX3000 坊子网警",
+      "epochs": 1,
+      "samples": 8047,
+      "decreases": 3209,
+      "device_id": "rtr-cd473f",
+      "bucket_day": "2026-10-18"
+    },
+    {
+      "rx": 9458585,
+      "tx": 1776196,
+      "name": "SN-R3-AX3000安丘网警01",
+      "epochs": 1,
+      "samples": 7967,
+      "decreases": 3988,
+      "device_id": "rtr-38aa54",
+      "bucket_day": "2026-10-18"
+    },
+    {
+      "rx": 3230198027,
+      "tx": 42337307,
+      "name": "SN-R1-AX3000 临朐网警",
+      "epochs": 1,
+      "samples": 947,
+      "decreases": 416,
+      "device_id": "rtr-d3847d",
+      "bucket_day": "2026-10-19"
+    },
+    {
+      "rx": 1026710549,
+      "tx": 1987770093,
+      "name": "雅典娜-AX6600",
+      "epochs": 0,
+      "samples": 7637,
+      "decreases": 1971,
+      "device_id": "rtr-5e1a8d",
+      "bucket_day": "2026-10-19"
+    },
+    {
+      "rx": 108336562,
+      "tx": 6726729,
+      "name": "SN-R4-AX3000 坊子网警",
+      "epochs": 1,
+      "samples": 4913,
+      "decreases": 2110,
+      "device_id": "rtr-cd473f",
+      "bucket_day": "2026-10-19"
+    },
+    {
+      "rx": 52551283,
+      "tx": 2201579,
+      "name": "SN-R5-AX3000 昌乐网警",
+      "epochs": 1,
+      "samples": 3239,
+      "decreases": 1269,
+      "device_id": "rtr-c46a25",
+      "bucket_day": "2026-10-19"
+    },
+    {
+      "rx": 22823675,
+      "tx": 3012690,
+      "name": "SN-R3-AX3000安丘网警01",
+      "epochs": 1,
+      "samples": 7985,
+      "decreases": 3683,
+      "device_id": "rtr-38aa54",
+      "bucket_day": "2026-10-19"
+    },
+    {
+      "rx": 1875913316,
+      "tx": 797203563,
+      "name": "雅典娜-AX6600",
+      "epochs": 0,
+      "samples": 7613,
+      "decreases": 2260,
+      "device_id": "rtr-5e1a8d",
+      "bucket_day": "2026-10-20"
+    },
+    {
+      "rx": 441642378,
+      "tx": 11372096,
+      "name": "SN-R5-AX3000 昌乐网警",
+      "epochs": 0,
+      "samples": 7375,
+      "decreases": 2401,
+      "device_id": "rtr-c46a25",
+      "bucket_day": "2026-10-20"
+    },
+    {
+      "rx": 162168688,
+      "tx": 11289213,
+      "name": "SN-R1-AX3000 临朐网警",
+      "epochs": 1,
+      "samples": 1030,
+      "decreases": 559,
+      "device_id": "rtr-d3847d",
+      "bucket_day": "2026-10-20"
+    },
+    {
+      "rx": 81822007,
+      "tx": 6366877,
+      "name": "SN-R4-AX3000 坊子网警",
+      "epochs": 1,
+      "samples": 5895,
+      "decreases": 2454,
+      "device_id": "rtr-cd473f",
+      "bucket_day": "2026-10-20"
+    },
+    {
+      "rx": 64013429,
+      "tx": 4128143,
+      "name": "SN-R3-AX3000安丘网警01",
+      "epochs": 1,
+      "samples": 7839,
+      "decreases": 3433,
+      "device_id": "rtr-38aa54",
+      "bucket_day": "2026-10-20"
+    },
+    {
+      "rx": 1126452693,
+      "tx": 315228850,
+      "name": "雅典娜-AX6600",
+      "epochs": 0,
+      "samples": 7531,
+      "decreases": 1476,
+      "device_id": "rtr-5e1a8d",
+      "bucket_day": "2026-10-21"
+    },
+    {
+      "rx": 390543519,
+      "tx": 24226236,
+      "name": "SN-R1-AX3000 临朐网警",
+      "epochs": 1,
+      "samples": 994,
+      "decreases": 497,
+      "device_id": "rtr-d3847d",
+      "bucket_day": "2026-10-21"
+    },
+    {
+      "rx": 71516324,
+      "tx": 48298215,
+      "name": "SN-R4-AX3000 坊子网警",
+      "epochs": 1,
+      "samples": 5995,
+      "decreases": 2138,
+      "device_id": "rtr-cd473f",
+      "bucket_day": "2026-10-21"
+    },
+    {
+      "rx": 88627933,
+      "tx": 9535153,
+      "name": "SN-R5-AX3000 昌乐网警",
+      "epochs": 0,
+      "samples": 7710,
+      "decreases": 2329,
+      "device_id": "rtr-c46a25",
+      "bucket_day": "2026-10-21"
+    },
+    {
+      "rx": 27025896,
+      "tx": 6521883,
+      "name": "SN-R3-AX3000安丘网警01",
+      "epochs": 1,
+      "samples": 7964,
+      "decreases": 3347,
+      "device_id": "rtr-38aa54",
+      "bucket_day": "2026-10-21"
+    },
+    {
+      "rx": 1472663960,
+      "tx": 232635651,
+      "name": "雅典娜-AX6600",
+      "epochs": 0,
+      "samples": 7029,
+      "decreases": 1377,
+      "device_id": "rtr-5e1a8d",
+      "bucket_day": "2026-10-22"
+    },
+    {
+      "rx": 636435645,
+      "tx": 48124411,
+      "name": "SN-R4-AX3000 坊子网警",
+      "epochs": 1,
+      "samples": 5324,
+      "decreases": 1331,
+      "device_id": "rtr-cd473f",
+      "bucket_day": "2026-10-22"
+    },
+    {
+      "rx": 211538126,
+      "tx": 16095224,
+      "name": "SN-R5-AX3000 昌乐网警",
+      "epochs": 0,
+      "samples": 7754,
+      "decreases": 1707,
+      "device_id": "rtr-c46a25",
+      "bucket_day": "2026-10-22"
+    },
+    {
+      "rx": 108447207,
+      "tx": 4293271,
+      "name": "SN-R3-AX3000安丘网警01",
+      "epochs": 1,
+      "samples": 7870,
+      "decreases": 3441,
+      "device_id": "rtr-38aa54",
+      "bucket_day": "2026-10-22"
+    },
+    {
+      "rx": 44170338,
+      "tx": 16587744,
+      "name": "SN-R1-AX3000 临朐网警",
+      "epochs": 1,
+      "samples": 969,
+      "decreases": 399,
+      "device_id": "rtr-d3847d",
+      "bucket_day": "2026-10-22"
+    },
+    {
+      "rx": 825032220,
+      "tx": 7809582,
+      "name": "SN-R3-AX3000安丘网警01",
+      "epochs": 1,
+      "samples": 7975,
+      "decreases": 3408,
+      "device_id": "rtr-38aa54",
+      "bucket_day": "2026-10-23"
+    },
+    {
+      "rx": 206461613,
+      "tx": 304019633,
+      "name": "雅典娜-AX6600",
+      "epochs": 0,
+      "samples": 4743,
+      "decreases": 1129,
+      "device_id": "rtr-5e1a8d",
+      "bucket_day": "2026-10-23"
+    },
+    {
+      "rx": 145141023,
+      "tx": 6139138,
+      "name": "SN-R5-AX3000 昌乐网警",
+      "epochs": 0,
+      "samples": 7773,
+      "decreases": 2977,
+      "device_id": "rtr-c46a25",
+      "bucket_day": "2026-10-23"
+    },
+    {
+      "rx": 47827814,
+      "tx": 5854632,
+      "name": "SN-R1-AX3000 临朐网警",
+      "epochs": 1,
+      "samples": 971,
+      "decreases": 568,
+      "device_id": "rtr-d3847d",
+      "bucket_day": "2026-10-23"
+    },
+    {
+      "rx": 28158346,
+      "tx": 7232205,
+      "name": "SN-R4-AX3000 坊子网警",
+      "epochs": 1,
+      "samples": 4880,
+      "decreases": 1610,
+      "device_id": "rtr-cd473f",
+      "bucket_day": "2026-10-23"
+    },
+    {
+      "rx": 18839,
+      "tx": 700,
+      "name": "SN-R6-AX3000日照国保2已付",
+      "epochs": 1,
+      "samples": 360,
+      "decreases": 180,
+      "device_id": "rtr-673568",
+      "bucket_day": "2026-10-23"
+    },
+    {
+      "rx": 15363,
+      "tx": 890,
+      "name": "SN-R2-AX3000日照国保1已付",
+      "epochs": 1,
+      "samples": 249,
+      "decreases": 127,
+      "device_id": "rtr-a9bcba",
+      "bucket_day": "2026-10-23"
+    },
+    {
+      "rx": 14325752353,
+      "tx": 601771723,
+      "name": "SN-R1-AX3000 临朐网警",
+      "epochs": 1,
+      "samples": 1156,
+      "decreases": 480,
+      "device_id": "rtr-d3847d",
+      "bucket_day": "2026-10-24"
+    },
+    {
+      "rx": 369646781,
+      "tx": 40573784,
+      "name": "雅典娜-AX6600",
+      "epochs": 0,
+      "samples": 2936,
+      "decreases": 527,
+      "device_id": "rtr-5e1a8d",
+      "bucket_day": "2026-10-24"
+    },
+    {
+      "rx": 42209829,
+      "tx": 10267593,
+      "name": "SN-R5-AX3000 昌乐网警",
+      "epochs": 1,
+      "samples": 8018,
+      "decreases": 3364,
+      "device_id": "rtr-c46a25",
+      "bucket_day": "2026-10-24"
+    },
+    {
+      "rx": 22571612,
+      "tx": 3625767,
+      "name": "SN-R4-AX3000 坊子网警",
+      "epochs": 1,
+      "samples": 8006,
+      "decreases": 3910,
+      "device_id": "rtr-cd473f",
+      "bucket_day": "2026-10-24"
+    },
+    {
+      "rx": 23002930,
+      "tx": 1541708,
+      "name": "SN-R3-AX3000安丘网警01",
+      "epochs": 1,
+      "samples": 7984,
+      "decreases": 3697,
+      "device_id": "rtr-38aa54",
+      "bucket_day": "2026-10-24"
+    },
+    {
+      "rx": 13498743122,
+      "tx": 26109015,
+      "name": "SN-R1-AX3000 临朐网警",
+      "epochs": 1,
+      "samples": 1302,
+      "decreases": 639,
+      "device_id": "rtr-d3847d",
+      "bucket_day": "2026-10-25"
+    },
+    {
+      "rx": 6281206787,
+      "tx": 10126227,
+      "name": "SN-R4-AX3000 坊子网警",
+      "epochs": 1,
+      "samples": 7985,
+      "decreases": 3809,
+      "device_id": "rtr-cd473f",
+      "bucket_day": "2026-10-25"
+    },
+    {
+      "rx": 131863704,
+      "tx": 1653537,
+      "name": "SN-R5-AX3000 昌乐网警",
+      "epochs": 0,
+      "samples": 7877,
+      "decreases": 3950,
+      "device_id": "rtr-c46a25",
+      "bucket_day": "2026-10-25"
+    },
+    {
+      "rx": 1772729,
+      "tx": 3823543,
+      "name": "雅典娜-AX6600",
+      "epochs": 0,
+      "samples": 80,
+      "decreases": 19,
+      "device_id": "rtr-5e1a8d",
+      "bucket_day": "2026-10-25"
+    },
+    {
+      "rx": 2390363,
+      "tx": 404096,
+      "name": "SN-R3-AX3000安丘网警01",
+      "epochs": 1,
+      "samples": 7717,
+      "decreases": 3980,
+      "device_id": "rtr-38aa54",
+      "bucket_day": "2026-10-25"
+    },
+    {
+      "rx": 1828022192,
+      "tx": 68907370,
+      "name": "SN-R6-AX3000日照国保2已付",
+      "epochs": 4,
+      "samples": 3345,
+      "decreases": 925,
+      "device_id": "rtr-673568",
+      "bucket_day": "2026-10-26"
+    },
+    {
+      "rx": 368593609,
+      "tx": 21134415,
+      "name": "SN-R2-AX3000日照国保1已付",
+      "epochs": 3,
+      "samples": 4510,
+      "decreases": 1828,
+      "device_id": "rtr-a9bcba",
+      "bucket_day": "2026-10-26"
+    },
+    {
+      "rx": 181519430,
+      "tx": 9315263,
+      "name": "SN-R1-AX3000 临朐网警",
+      "epochs": 1,
+      "samples": 1184,
+      "decreases": 575,
+      "device_id": "rtr-d3847d",
+      "bucket_day": "2026-10-26"
+    },
+    {
+      "rx": 74807068,
+      "tx": 3689817,
+      "name": "SN-R5-AX3000 昌乐网警",
+      "epochs": 2,
+      "samples": 5851,
+      "decreases": 2694,
+      "device_id": "rtr-c46a25",
+      "bucket_day": "2026-10-26"
+    },
+    {
+      "rx": 41548308,
+      "tx": 5324983,
+      "name": "SN-R3-AX3000安丘网警01",
+      "epochs": 3,
+      "samples": 7951,
+      "decreases": 3653,
+      "device_id": "rtr-38aa54",
+      "bucket_day": "2026-10-26"
+    },
+    {
+      "rx": 21940119,
+      "tx": 2696916,
+      "name": "SN-R4-AX3000 坊子网警",
+      "epochs": 1,
+      "samples": 3620,
+      "decreases": 1689,
+      "device_id": "rtr-cd473f",
+      "bucket_day": "2026-10-26"
+    },
+    {
+      "rx": 1224988,
+      "tx": 6195125,
+      "name": "雅典娜-AX6600",
+      "epochs": 0,
+      "samples": 45,
+      "decreases": 14,
+      "device_id": "rtr-5e1a8d",
+      "bucket_day": "2026-10-26"
+    },
+    {
+      "rx": 4853189524,
+      "tx": 75138628,
+      "name": "SN-R6-AX3000日照国保2已付",
+      "epochs": 1,
+      "samples": 5246,
+      "decreases": 1826,
+      "device_id": "rtr-673568",
+      "bucket_day": "2026-10-27"
+    },
+    {
+      "rx": 336603036,
+      "tx": 6290133,
+      "name": "SN-R1-AX3000 临朐网警",
+      "epochs": 1,
+      "samples": 992,
+      "decreases": 419,
+      "device_id": "rtr-d3847d",
+      "bucket_day": "2026-10-27"
+    },
+    {
+      "rx": 170081038,
+      "tx": 5481227,
+      "name": "SN-R2-AX3000日照国保1已付",
+      "epochs": 1,
+      "samples": 7787,
+      "decreases": 3979,
+      "device_id": "rtr-a9bcba",
+      "bucket_day": "2026-10-27"
+    },
+    {
+      "rx": 157181339,
+      "tx": 9981759,
+      "name": "SN-R5-AX3000 昌乐网警",
+      "epochs": 0,
+      "samples": 7997,
+      "decreases": 2424,
+      "device_id": "rtr-c46a25",
+      "bucket_day": "2026-10-27"
+    },
+    {
+      "rx": 125378201,
+      "tx": 39448842,
+      "name": "SN-R4-AX3000 坊子网警",
+      "epochs": 1,
+      "samples": 5786,
+      "decreases": 2507,
+      "device_id": "rtr-cd473f",
+      "bucket_day": "2026-10-27"
+    },
+    {
+      "rx": 111270741,
+      "tx": 9039591,
+      "name": "SN-R3-AX3000安丘网警01",
+      "epochs": 1,
+      "samples": 8008,
+      "decreases": 3615,
+      "device_id": "rtr-38aa54",
+      "bucket_day": "2026-10-27"
+    },
+    {
+      "rx": 2866541,
+      "tx": 17233761,
+      "name": "雅典娜-AX6600",
+      "epochs": 0,
+      "samples": 280,
+      "decreases": 41,
+      "device_id": "rtr-5e1a8d",
+      "bucket_day": "2026-10-27"
+    },
+    {
+      "rx": 80193,
+      "tx": 10885,
+      "name": "SN-R8-AX3000 安丘2",
+      "epochs": 0,
+      "samples": 465,
+      "decreases": 251,
+      "device_id": "rtr-1f6f0f",
+      "bucket_day": "2026-10-27"
+    },
+    {
+      "rx": 1428163446,
+      "tx": 2719136479,
+      "name": "雅典娜-AX6600",
+      "epochs": 0,
+      "samples": 2916,
+      "decreases": 735,
+      "device_id": "rtr-5e1a8d",
+      "bucket_day": "2026-10-28"
+    },
+    {
+      "rx": 3138365726,
+      "tx": 50651996,
+      "name": "SN-R6-AX3000日照国保2已付",
+      "epochs": 1,
+      "samples": 4886,
+      "decreases": 1363,
+      "device_id": "rtr-673568",
+      "bucket_day": "2026-10-28"
+    },
+    {
+      "rx": 371555427,
+      "tx": 21974391,
+      "name": "SN-R2-AX3000日照国保1已付",
+      "epochs": 1,
+      "samples": 7769,
+      "decreases": 3344,
+      "device_id": "rtr-a9bcba",
+      "bucket_day": "2026-10-28"
+    },
+    {
+      "rx": 355491060,
+      "tx": 21317644,
+      "name": "SN-R1-AX3000 临朐网警",
+      "epochs": 5,
+      "samples": 978,
+      "decreases": 465,
+      "device_id": "rtr-d3847d",
+      "bucket_day": "2026-10-28"
+    },
+    {
+      "rx": 198058242,
+      "tx": 80190236,
+      "name": "SN-R4-AX3000 坊子网警",
+      "epochs": 1,
+      "samples": 5331,
+      "decreases": 1566,
+      "device_id": "rtr-cd473f",
+      "bucket_day": "2026-10-28"
+    },
+    {
+      "rx": 182025901,
+      "tx": 16825124,
+      "name": "SN-R5-AX3000 昌乐网警",
+      "epochs": 1,
+      "samples": 7890,
+      "decreases": 2126,
+      "device_id": "rtr-c46a25",
+      "bucket_day": "2026-10-28"
+    },
+    {
+      "rx": 86347727,
+      "tx": 6851819,
+      "name": "SN-R3-AX3000安丘网警01",
+      "epochs": 1,
+      "samples": 8019,
+      "decreases": 3796,
+      "device_id": "rtr-38aa54",
+      "bucket_day": "2026-10-28"
+    },
+    {
+      "rx": 777286089,
+      "tx": 35687517,
+      "name": "SN-R6-AX3000日照国保2已付",
+      "epochs": 1,
+      "samples": 2149,
+      "decreases": 138,
+      "device_id": "rtr-673568",
+      "bucket_day": "2026-10-29"
+    },
+    {
+      "rx": 136301556,
+      "tx": 38207032,
+      "name": "SN-R4-AX3000 坊子网警",
+      "epochs": 4,
+      "samples": 3984,
+      "decreases": 614,
+      "device_id": "rtr-cd473f",
+      "bucket_day": "2026-10-29"
+    },
+    {
+      "rx": 168518678,
+      "tx": 4223601,
+      "name": "SN-R1-AX3000 临朐网警",
+      "epochs": 6,
+      "samples": 766,
+      "decreases": 399,
+      "device_id": "rtr-d3847d",
+      "bucket_day": "2026-10-29"
+    },
+    {
+      "rx": 108122066,
+      "tx": 8981844,
+      "name": "雅典娜-AX6600",
+      "epochs": 0,
+      "samples": 1159,
+      "decreases": 213,
+      "device_id": "rtr-5e1a8d",
+      "bucket_day": "2026-10-29"
+    },
+    {
+      "rx": 93442889,
+      "tx": 14670249,
+      "name": "SN-R2-AX3000日照国保1已付",
+      "epochs": 2,
+      "samples": 2906,
+      "decreases": 1358,
+      "device_id": "rtr-a9bcba",
+      "bucket_day": "2026-10-29"
+    },
+    {
+      "rx": 104572086,
+      "tx": 1694461,
+      "name": "SN-R5-AX3000 昌乐网警",
+      "epochs": 6,
+      "samples": 2496,
+      "decreases": 1088,
+      "device_id": "rtr-c46a25",
+      "bucket_day": "2026-10-29"
+    },
+    {
+      "rx": 17158889,
+      "tx": 2537106,
+      "name": "SN-R3-AX3000安丘网警01",
+      "epochs": 5,
+      "samples": 2387,
+      "decreases": 1136,
+      "device_id": "rtr-38aa54",
+      "bucket_day": "2026-10-29"
+    },
+    {
+      "rx": 136489030,
+      "tx": 4179771,
+      "name": "SN-R2-AX3000日照国保1已付",
+      "epochs": 2,
+      "samples": 131,
+      "decreases": 55,
+      "device_id": "rtr-a9bcba",
+      "bucket_day": "2026-10-30"
+    },
+    {
+      "rx": 115331185,
+      "tx": 4029883,
+      "name": "SN-R1-AX3000 临朐网警",
+      "epochs": 2,
+      "samples": 266,
+      "decreases": 135,
+      "device_id": "rtr-d3847d",
+      "bucket_day": "2026-10-30"
+    },
+    {
+      "rx": 4932186,
+      "tx": 444873,
+      "name": "SN-R5-AX3000 昌乐网警",
+      "epochs": 0,
+      "samples": 406,
+      "decreases": 197,
+      "device_id": "rtr-c46a25",
+      "bucket_day": "2026-10-30"
+    },
+    {
+      "rx": 4132307,
+      "tx": 900288,
+      "name": "SN-R4-AX3000 坊子网警",
+      "epochs": 6,
+      "samples": 90,
+      "decreases": 49,
+      "device_id": "rtr-cd473f",
+      "bucket_day": "2026-10-30"
+    },
+    {
+      "rx": 2658885,
+      "tx": 940000,
+      "name": "SN-R3-AX3000安丘网警01",
+      "epochs": 1,
+      "samples": 404,
+      "decreases": 109,
+      "device_id": "rtr-38aa54",
+      "bucket_day": "2026-10-30"
+    },
+    {
+      "rx": 0,
+      "tx": 0,
+      "name": "SN-R6-AX3000日照国保2已付",
+      "epochs": 2,
+      "samples": 2,
+      "decreases": 0,
+      "device_id": "rtr-673568",
+      "bucket_day": "2026-10-30"
+    },
+    {
+      "rx": 615676023,
+      "tx": 10845796,
+      "name": "SN-R8-AX3000 安丘2",
+      "epochs": 3,
+      "samples": 4430,
+      "decreases": 1359,
+      "device_id": "rtr-1f6f0f",
+      "bucket_day": "2026-10-31"
+    },
+    {
+      "rx": 124138659,
+      "tx": 428775,
+      "name": "SN-R7-AX3000",
+      "epochs": 5,
+      "samples": 1336,
+      "decreases": 592,
+      "device_id": "rtr-37cf72",
+      "bucket_day": "2026-10-31"
+    },
+    {
+      "rx": 26206689,
+      "tx": 4092657,
+      "name": "SN-R6-AX3000日照国保2已付",
+      "epochs": 1,
+      "samples": 726,
+      "decreases": 389,
+      "device_id": "rtr-673568",
+      "bucket_day": "2026-10-31"
+    },
+    {
+      "rx": 11533361,
+      "tx": 1617710,
+      "name": "SN-R3-AX3000安丘网警01",
+      "epochs": 1,
+      "samples": 732,
+      "decreases": 164,
+      "device_id": "rtr-38aa54",
+      "bucket_day": "2026-10-31"
+    },
+    {
+      "rx": 2236768,
+      "tx": 985048,
+      "name": "SN-R1-AX3000 临朐网警",
+      "epochs": 3,
+      "samples": 734,
+      "decreases": 256,
+      "device_id": "rtr-d3847d",
+      "bucket_day": "2026-10-31"
+    },
+    {
+      "rx": 1960958,
+      "tx": 274660,
+      "name": "SN-R4-AX3000 坊子网警",
+      "epochs": 4,
+      "samples": 728,
+      "decreases": 397,
+      "device_id": "rtr-cd473f",
+      "bucket_day": "2026-10-31"
+    },
+    {
+      "rx": 1234463,
+      "tx": 321796,
+      "name": "SN-R5-AX3000 昌乐网警",
+      "epochs": 0,
+      "samples": 733,
+      "decreases": 374,
+      "device_id": "rtr-c46a25",
+      "bucket_day": "2026-10-31"
+    },
+    {
+      "rx": 42051,
+      "tx": 3072,
+      "name": "SN-R2-AX3000日照国保1已付",
+      "epochs": 1,
+      "samples": 675,
+      "decreases": 350,
+      "device_id": "rtr-a9bcba",
+      "bucket_day": "2026-10-31"
+    },
+    {
+      "rx": 1870173201,
+      "tx": 5150290,
+      "name": "SN-R5-AX3000 昌乐网警",
+      "epochs": 0,
+      "samples": 1377,
+      "decreases": 557,
+      "device_id": "rtr-c46a25",
+      "bucket_day": "2026-11-01"
+    },
+    {
+      "rx": 1625644645,
+      "tx": 75767262,
+      "name": "SN-R8-AX3000 安丘2",
+      "epochs": 5,
+      "samples": 3432,
+      "decreases": 1103,
+      "device_id": "rtr-1f6f0f",
+      "bucket_day": "2026-11-01"
+    },
+    {
+      "rx": 152628556,
+      "tx": 8928023,
+      "name": "SN-R6-AX3000日照国保2已付",
+      "epochs": 6,
+      "samples": 1369,
+      "decreases": 765,
+      "device_id": "rtr-673568",
+      "bucket_day": "2026-11-01"
+    },
+    {
+      "rx": 130348463,
+      "tx": 1117412,
+      "name": "SN-R7-AX3000",
+      "epochs": 8,
+      "samples": 6059,
+      "decreases": 2925,
+      "device_id": "rtr-37cf72",
+      "bucket_day": "2026-11-01"
+    },
+    {
+      "rx": 44309996,
+      "tx": 488976,
+      "name": "SN-R4-AX3000 坊子网警",
+      "epochs": 3,
+      "samples": 1381,
+      "decreases": 715,
+      "device_id": "rtr-cd473f",
+      "bucket_day": "2026-11-01"
+    },
+    {
+      "rx": 14855938,
+      "tx": 1545341,
+      "name": "SN-R1-AX3000 临朐网警",
+      "epochs": 8,
+      "samples": 1370,
+      "decreases": 600,
+      "device_id": "rtr-d3847d",
+      "bucket_day": "2026-11-01"
+    },
+    {
+      "rx": 4066638,
+      "tx": 585246,
+      "name": "SN-R3-AX3000安丘网警01",
+      "epochs": 3,
+      "samples": 1378,
+      "decreases": 327,
+      "device_id": "rtr-38aa54",
+      "bucket_day": "2026-11-01"
+    },
+    {
+      "rx": 739474,
+      "tx": 74481,
+      "name": "SN-R9-AX3000东营经开区网安",
+      "epochs": 2,
+      "samples": 1784,
+      "decreases": 923,
+      "device_id": "rtr-101be0",
+      "bucket_day": "2026-11-01"
+    },
+    {
+      "rx": 84702,
+      "tx": 7552,
+      "name": "SN-R2-AX3000日照国保1已付",
+      "epochs": 7,
+      "samples": 1305,
+      "decreases": 667,
+      "device_id": "rtr-a9bcba",
+      "bucket_day": "2026-11-01"
+    },
+    {
+      "rx": 527873139,
+      "tx": 11428022,
+      "name": "SN-R5-AX3000 昌乐网警",
+      "epochs": 1,
+      "samples": 1337,
+      "decreases": 628,
+      "device_id": "rtr-c46a25",
+      "bucket_day": "2026-11-02"
+    },
+    {
+      "rx": 510939094,
+      "tx": 25011919,
+      "name": "SN-R2-AX3000日照国保1已付",
+      "epochs": 1,
+      "samples": 1246,
+      "decreases": 494,
+      "device_id": "rtr-a9bcba",
+      "bucket_day": "2026-11-02"
+    },
+    {
+      "rx": 259867799,
+      "tx": 16564371,
+      "name": "SN-R8-AX3000 安丘2",
+      "epochs": 1,
+      "samples": 4885,
+      "decreases": 1722,
+      "device_id": "rtr-1f6f0f",
+      "bucket_day": "2026-11-02"
+    },
+    {
+      "rx": 119444766,
+      "tx": 4540417,
+      "name": "SN-R1-AX3000 临朐网警",
+      "epochs": 1,
+      "samples": 956,
+      "decreases": 512,
+      "device_id": "rtr-d3847d",
+      "bucket_day": "2026-11-02"
+    },
+    {
+      "rx": 36941437,
+      "tx": 44891198,
+      "name": "SN-R6-AX3000日照国保2已付",
+      "epochs": 1,
+      "samples": 825,
+      "decreases": 325,
+      "device_id": "rtr-673568",
+      "bucket_day": "2026-11-02"
+    },
+    {
+      "rx": 17961818,
+      "tx": 5660131,
+      "name": "SN-R3-AX3000安丘网警01",
+      "epochs": 1,
+      "samples": 1380,
+      "decreases": 351,
+      "device_id": "rtr-38aa54",
+      "bucket_day": "2026-11-02"
+    },
+    {
+      "rx": 16988093,
+      "tx": 460181,
+      "name": "SN-R9-AX3000东营经开区网安",
+      "epochs": 1,
+      "samples": 6581,
+      "decreases": 3447,
+      "device_id": "rtr-101be0",
+      "bucket_day": "2026-11-02"
+    },
+    {
+      "rx": 11135439,
+      "tx": 6139107,
+      "name": "SN-R4-AX3000 坊子网警",
+      "epochs": 1,
+      "samples": 873,
+      "decreases": 411,
+      "device_id": "rtr-cd473f",
+      "bucket_day": "2026-11-02"
+    },
+    {
+      "rx": 3322380739,
+      "tx": 6931308,
+      "name": "SN-R1-AX3000 临朐网警",
+      "epochs": 1,
+      "samples": 1075,
+      "decreases": 533,
+      "device_id": "rtr-d3847d",
+      "bucket_day": "2026-11-03"
+    },
+    {
+      "rx": 1552741675,
+      "tx": 43182488,
+      "name": "SN-R6-AX3000日照国保2已付",
+      "epochs": 1,
+      "samples": 735,
+      "decreases": 262,
+      "device_id": "rtr-673568",
+      "bucket_day": "2026-11-03"
+    },
+    {
+      "rx": 1302134119,
+      "tx": 28978765,
+      "name": "SN-R5-AX3000 昌乐网警",
+      "epochs": 1,
+      "samples": 1248,
+      "decreases": 551,
+      "device_id": "rtr-c46a25",
+      "bucket_day": "2026-11-03"
+    },
+    {
+      "rx": 316382419,
+      "tx": 21747276,
+      "name": "SN-R4-AX3000 坊子网警",
+      "epochs": 1,
+      "samples": 1031,
+      "decreases": 396,
+      "device_id": "rtr-cd473f",
+      "bucket_day": "2026-11-03"
+    },
+    {
+      "rx": 246764238,
+      "tx": 4873843,
+      "name": "SN-R2-AX3000日照国保1已付",
+      "epochs": 1,
+      "samples": 1255,
+      "decreases": 657,
+      "device_id": "rtr-a9bcba",
+      "bucket_day": "2026-11-03"
+    },
+    {
+      "rx": 47946462,
+      "tx": 24474466,
+      "name": "SN-R8-AX3000 安丘2",
+      "epochs": 1,
+      "samples": 4278,
+      "decreases": 1581,
+      "device_id": "rtr-1f6f0f",
+      "bucket_day": "2026-11-03"
+    },
+    {
+      "rx": 43914333,
+      "tx": 7046565,
+      "name": "SN-R3-AX3000安丘网警01",
+      "epochs": 1,
+      "samples": 1380,
+      "decreases": 396,
+      "device_id": "rtr-38aa54",
+      "bucket_day": "2026-11-03"
+    },
+    {
+      "rx": 2447115541,
+      "tx": 5676466,
+      "name": "SN-R6-AX3000日照国保2已付",
+      "epochs": 1,
+      "samples": 820,
+      "decreases": 459,
+      "device_id": "rtr-673568",
+      "bucket_day": "2026-11-04"
+    },
+    {
+      "rx": 2336201225,
+      "tx": 60219253,
+      "name": "SN-R1-AX3000 临朐网警",
+      "epochs": 1,
+      "samples": 911,
+      "decreases": 419,
+      "device_id": "rtr-d3847d",
+      "bucket_day": "2026-11-04"
+    },
+    {
+      "rx": 711296759,
+      "tx": 11407442,
+      "name": "SN-R5-AX3000 昌乐网警",
+      "epochs": 1,
+      "samples": 1273,
+      "decreases": 480,
+      "device_id": "rtr-c46a25",
+      "bucket_day": "2026-11-04"
+    },
+    {
+      "rx": 238482437,
+      "tx": 15739089,
+      "name": "SN-R2-AX3000日照国保1已付",
+      "epochs": 1,
+      "samples": 1274,
+      "decreases": 664,
+      "device_id": "rtr-a9bcba",
+      "bucket_day": "2026-11-04"
+    },
+    {
+      "rx": 43539989,
+      "tx": 14579070,
+      "name": "SN-R8-AX3000 安丘2",
+      "epochs": 2,
+      "samples": 2390,
+      "decreases": 907,
+      "device_id": "rtr-1f6f0f",
+      "bucket_day": "2026-11-04"
+    },
+    {
+      "rx": 31191042,
+      "tx": 17666035,
+      "name": "SN-R4-AX3000 坊子网警",
+      "epochs": 1,
+      "samples": 837,
+      "decreases": 270,
+      "device_id": "rtr-cd473f",
+      "bucket_day": "2026-11-04"
+    },
+    {
+      "rx": 13223654,
+      "tx": 1084821,
+      "name": "SN-R3-AX3000安丘网警01",
+      "epochs": 1,
+      "samples": 1369,
+      "decreases": 378,
+      "device_id": "rtr-38aa54",
+      "bucket_day": "2026-11-04"
+    },
+    {
+      "rx": 8047892687,
+      "tx": 26718668,
+      "name": "SN-R6-AX3000日照国保2已付",
+      "epochs": 1,
+      "samples": 961,
+      "decreases": 469,
+      "device_id": "rtr-673568",
+      "bucket_day": "2026-11-05"
+    },
+    {
+      "rx": 761293806,
+      "tx": 3917116753,
+      "name": "雅典娜-AX6600",
+      "epochs": 0,
+      "samples": 4837,
+      "decreases": 882,
+      "device_id": "rtr-5e1a8d",
+      "bucket_day": "2026-11-05"
+    },
+    {
+      "rx": 1722726857,
+      "tx": 21258728,
+      "name": "SN-R1-AX3000 临朐网警",
+      "epochs": 1,
+      "samples": 1255,
+      "decreases": 656,
+      "device_id": "rtr-d3847d",
+      "bucket_day": "2026-11-05"
+    },
+    {
+      "rx": 272850488,
+      "tx": 1796541,
+      "name": "SN-R5-AX3000 昌乐网警",
+      "epochs": 2,
+      "samples": 1117,
+      "decreases": 500,
+      "device_id": "rtr-c46a25",
+      "bucket_day": "2026-11-05"
+    },
+    {
+      "rx": 29433584,
+      "tx": 52429746,
+      "name": "SN-R4-AX3000 坊子网警",
+      "epochs": 1,
+      "samples": 916,
+      "decreases": 219,
+      "device_id": "rtr-cd473f",
+      "bucket_day": "2026-11-05"
+    },
+    {
+      "rx": 66577180,
+      "tx": 10261711,
+      "name": "SN-R2-AX3000日照国保1已付",
+      "epochs": 1,
+      "samples": 1240,
+      "decreases": 586,
+      "device_id": "rtr-a9bcba",
+      "bucket_day": "2026-11-05"
+    },
+    {
+      "rx": 35974098,
+      "tx": 13055160,
+      "name": "SN-R8-AX3000 安丘2",
+      "epochs": 1,
+      "samples": 2444,
+      "decreases": 1052,
+      "device_id": "rtr-1f6f0f",
+      "bucket_day": "2026-11-05"
+    },
+    {
+      "rx": 14467289,
+      "tx": 2572199,
+      "name": "SN-R9-AX3000东营经开区网安",
+      "epochs": 2,
+      "samples": 5105,
+      "decreases": 2792,
+      "device_id": "rtr-101be0",
+      "bucket_day": "2026-11-05"
+    },
+    {
+      "rx": 8848070,
+      "tx": 2654155,
+      "name": "SN-R3-AX3000安丘网警01",
+      "epochs": 1,
+      "samples": 1364,
+      "decreases": 386,
+      "device_id": "rtr-38aa54",
+      "bucket_day": "2026-11-05"
+    },
+    {
+      "rx": 3134554160,
+      "tx": 15356840,
+      "name": "SN-R6-AX3000日照国保2已付",
+      "epochs": 1,
+      "samples": 1174,
+      "decreases": 586,
+      "device_id": "rtr-673568",
+      "bucket_day": "2026-11-06"
+    },
+    {
+      "rx": 573270998,
+      "tx": 1778987317,
+      "name": "雅典娜-AX6600",
+      "epochs": 0,
+      "samples": 3945,
+      "decreases": 871,
+      "device_id": "rtr-5e1a8d",
+      "bucket_day": "2026-11-06"
+    },
+    {
+      "rx": 332703067,
+      "tx": 12325656,
+      "name": "SN-R1-AX3000 临朐网警",
+      "epochs": 1,
+      "samples": 991,
+      "decreases": 493,
+      "device_id": "rtr-d3847d",
+      "bucket_day": "2026-11-06"
+    },
+    {
+      "rx": 147557773,
+      "tx": 14412678,
+      "name": "SN-R2-AX3000日照国保1已付",
+      "epochs": 1,
+      "samples": 1296,
+      "decreases": 588,
+      "device_id": "rtr-a9bcba",
+      "bucket_day": "2026-11-06"
+    },
+    {
+      "rx": 126213355,
+      "tx": 32611263,
+      "name": "SN-R4-AX3000 坊子网警",
+      "epochs": 1,
+      "samples": 989,
+      "decreases": 277,
+      "device_id": "rtr-cd473f",
+      "bucket_day": "2026-11-06"
+    },
+    {
+      "rx": 91950962,
+      "tx": 22783887,
+      "name": "SN-R8-AX3000 安丘2",
+      "epochs": 1,
+      "samples": 3672,
+      "decreases": 1437,
+      "device_id": "rtr-1f6f0f",
+      "bucket_day": "2026-11-06"
+    },
+    {
+      "rx": 107528036,
+      "tx": 4240098,
+      "name": "SN-R3-AX3000安丘网警01",
+      "epochs": 1,
+      "samples": 1381,
+      "decreases": 347,
+      "device_id": "rtr-38aa54",
+      "bucket_day": "2026-11-06"
+    },
+    {
+      "rx": 68555250,
+      "tx": 1654671,
+      "name": "SN-R5-AX3000 昌乐网警",
+      "epochs": 1,
+      "samples": 1206,
+      "decreases": 561,
+      "device_id": "rtr-c46a25",
+      "bucket_day": "2026-11-06"
+    },
+    {
+      "rx": 584946,
+      "tx": 60392,
+      "name": "SN-R9-AX3000东营经开区网安",
+      "epochs": 1,
+      "samples": 7925,
+      "decreases": 4314,
+      "device_id": "rtr-101be0",
+      "bucket_day": "2026-11-06"
+    },
+    {
+      "rx": 579728920,
+      "tx": 2725190,
+      "name": "SN-R1-AX3000 临朐网警",
+      "epochs": 1,
+      "samples": 1380,
+      "decreases": 740,
+      "device_id": "rtr-d3847d",
+      "bucket_day": "2026-11-07"
+    },
+    {
+      "rx": 364082698,
+      "tx": 36205187,
+      "name": "SN-R8-AX3000 安丘2",
+      "epochs": 1,
+      "samples": 5074,
+      "decreases": 1980,
+      "device_id": "rtr-1f6f0f",
+      "bucket_day": "2026-11-07"
+    },
+    {
+      "rx": 355167578,
+      "tx": 20290189,
+      "name": "雅典娜-AX6600",
+      "epochs": 0,
+      "samples": 2289,
+      "decreases": 657,
+      "device_id": "rtr-5e1a8d",
+      "bucket_day": "2026-11-07"
+    },
+    {
+      "rx": 230901244,
+      "tx": 11001419,
+      "name": "SN-R6-AX3000日照国保2已付",
+      "epochs": 1,
+      "samples": 1378,
+      "decreases": 710,
+      "device_id": "rtr-673568",
+      "bucket_day": "2026-11-07"
+    },
+    {
+      "rx": 58601090,
+      "tx": 1971730,
+      "name": "SN-R5-AX3000 昌乐网警",
+      "epochs": 1,
+      "samples": 1371,
+      "decreases": 524,
+      "device_id": "rtr-c46a25",
+      "bucket_day": "2026-11-07"
+    },
+    {
+      "rx": 17935647,
+      "tx": 349282,
+      "name": "SN-R4-AX3000 坊子网警",
+      "epochs": 1,
+      "samples": 1380,
+      "decreases": 715,
+      "device_id": "rtr-cd473f",
+      "bucket_day": "2026-11-07"
+    },
+    {
+      "rx": 5001056,
+      "tx": 626228,
+      "name": "SN-R3-AX3000安丘网警01",
+      "epochs": 1,
+      "samples": 1382,
+      "decreases": 321,
+      "device_id": "rtr-38aa54",
+      "bucket_day": "2026-11-07"
+    },
+    {
+      "rx": 354681,
+      "tx": 50093,
+      "name": "SN-R9-AX3000东营经开区网安",
+      "epochs": 1,
+      "samples": 1551,
+      "decreases": 842,
+      "device_id": "rtr-101be0",
+      "bucket_day": "2026-11-07"
+    },
+    {
+      "rx": 84346,
+      "tx": 8875,
+      "name": "SN-R2-AX3000日照国保1已付",
+      "epochs": 1,
+      "samples": 1284,
+      "decreases": 674,
+      "device_id": "rtr-a9bcba",
+      "bucket_day": "2026-11-07"
+    },
+    {
+      "rx": 367153854,
+      "tx": 40698234,
+      "name": "SN-R8-AX3000 安丘2",
+      "epochs": 1,
+      "samples": 5675,
+      "decreases": 1966,
+      "device_id": "rtr-1f6f0f",
+      "bucket_day": "2026-11-08"
+    },
+    {
+      "rx": 164351686,
+      "tx": 7662887,
+      "name": "SN-R6-AX3000日照国保2已付",
+      "epochs": 1,
+      "samples": 1301,
+      "decreases": 677,
+      "device_id": "rtr-673568",
+      "bucket_day": "2026-11-08"
+    },
+    {
+      "rx": 156261676,
+      "tx": 1954580,
+      "name": "SN-R2-AX3000日照国保1已付",
+      "epochs": 1,
+      "samples": 1316,
+      "decreases": 704,
+      "device_id": "rtr-a9bcba",
+      "bucket_day": "2026-11-08"
+    },
+    {
+      "rx": 121416807,
+      "tx": 346240,
+      "name": "SN-R4-AX3000 坊子网警",
+      "epochs": 1,
+      "samples": 1382,
+      "decreases": 715,
+      "device_id": "rtr-cd473f",
+      "bucket_day": "2026-11-08"
+    },
+    {
+      "rx": 87653811,
+      "tx": 776297,
+      "name": "SN-R5-AX3000 昌乐网警",
+      "epochs": 1,
+      "samples": 1332,
+      "decreases": 706,
+      "device_id": "rtr-c46a25",
+      "bucket_day": "2026-11-08"
+    },
+    {
+      "rx": 61569999,
+      "tx": 1289784,
+      "name": "SN-R1-AX3000 临朐网警",
+      "epochs": 1,
+      "samples": 1381,
+      "decreases": 723,
+      "device_id": "rtr-d3847d",
+      "bucket_day": "2026-11-08"
+    },
+    {
+      "rx": 5318601,
+      "tx": 29853961,
+      "name": "雅典娜-AX6600",
+      "epochs": 0,
+      "samples": 651,
+      "decreases": 222,
+      "device_id": "rtr-5e1a8d",
+      "bucket_day": "2026-11-08"
+    },
+    {
+      "rx": 2654971,
+      "tx": 463132,
+      "name": "SN-R3-AX3000安丘网警01",
+      "epochs": 1,
+      "samples": 1378,
+      "decreases": 294,
+      "device_id": "rtr-38aa54",
+      "bucket_day": "2026-11-08"
+    },
+    {
+      "rx": 563488,
+      "tx": 52720,
+      "name": "SN-R9-AX3000东营经开区网安",
+      "epochs": 1,
+      "samples": 8128,
+      "decreases": 4338,
+      "device_id": "rtr-101be0",
+      "bucket_day": "2026-11-08"
+    },
+    {
+      "rx": 627423300,
+      "tx": 1449468,
+      "name": "SN-R5-AX3000 昌乐网警",
+      "epochs": 1,
+      "samples": 1374,
+      "decreases": 713,
+      "device_id": "rtr-c46a25",
+      "bucket_day": "2026-11-09"
+    },
+    {
+      "rx": 390090599,
+      "tx": 6048835,
+      "name": "SN-R1-AX3000 临朐网警",
+      "epochs": 1,
+      "samples": 1323,
+      "decreases": 730,
+      "device_id": "rtr-d3847d",
+      "bucket_day": "2026-11-09"
+    },
+    {
+      "rx": 210817684,
+      "tx": 12606113,
+      "name": "SN-R2-AX3000日照国保1已付",
+      "epochs": 1,
+      "samples": 1312,
+      "decreases": 606,
+      "device_id": "rtr-a9bcba",
+      "bucket_day": "2026-11-09"
+    },
+    {
+      "rx": 176492614,
+      "tx": 33793107,
+      "name": "SN-R8-AX3000 安丘2",
+      "epochs": 1,
+      "samples": 5235,
+      "decreases": 1864,
+      "device_id": "rtr-1f6f0f",
+      "bucket_day": "2026-11-09"
+    },
+    {
+      "rx": 110948479,
+      "tx": 22439404,
+      "name": "SN-R9-AX3000东营经开区网安",
+      "epochs": 1,
+      "samples": 8227,
+      "decreases": 4164,
+      "device_id": "rtr-101be0",
+      "bucket_day": "2026-11-09"
+    },
+    {
+      "rx": 121437119,
+      "tx": 2695220,
+      "name": "SN-R4-AX3000 坊子网警",
+      "epochs": 1,
+      "samples": 844,
+      "decreases": 390,
+      "device_id": "rtr-cd473f",
+      "bucket_day": "2026-11-09"
+    },
+    {
+      "rx": 55987379,
+      "tx": 3080319,
+      "name": "SN-R3-AX3000安丘网警01",
+      "epochs": 1,
+      "samples": 1375,
+      "decreases": 347,
+      "device_id": "rtr-38aa54",
+      "bucket_day": "2026-11-09"
+    },
+    {
+      "rx": 52561066,
+      "tx": 5248950,
+      "name": "SN-R6-AX3000日照国保2已付",
+      "epochs": 1,
+      "samples": 771,
+      "decreases": 388,
+      "device_id": "rtr-673568",
+      "bucket_day": "2026-11-09"
+    },
+    {
+      "rx": 2143596442,
+      "tx": 25568279,
+      "name": "SN-R8-AX3000 安丘2",
+      "epochs": 1,
+      "samples": 3031,
+      "decreases": 1011,
+      "device_id": "rtr-1f6f0f",
+      "bucket_day": "2026-11-10"
+    },
+    {
+      "rx": 587423684,
+      "tx": 2271755,
+      "name": "SN-R5-AX3000 昌乐网警",
+      "epochs": 1,
+      "samples": 1360,
+      "decreases": 686,
+      "device_id": "rtr-c46a25",
+      "bucket_day": "2026-11-10"
+    },
+    {
+      "rx": 412635632,
+      "tx": 10046610,
+      "name": "SN-R6-AX3000日照国保2已付",
+      "epochs": 1,
+      "samples": 806,
+      "decreases": 429,
+      "device_id": "rtr-673568",
+      "bucket_day": "2026-11-10"
+    },
+    {
+      "rx": 226621898,
+      "tx": 7150049,
+      "name": "SN-R2-AX3000日照国保1已付",
+      "epochs": 1,
+      "samples": 1325,
+      "decreases": 691,
+      "device_id": "rtr-a9bcba",
+      "bucket_day": "2026-11-10"
+    },
+    {
+      "rx": 105881396,
+      "tx": 4517434,
+      "name": "SN-R1-AX3000 临朐网警",
+      "epochs": 1,
+      "samples": 892,
+      "decreases": 464,
+      "device_id": "rtr-d3847d",
+      "bucket_day": "2026-11-10"
+    },
+    {
+      "rx": 91687343,
+      "tx": 3165905,
+      "name": "SN-R3-AX3000安丘网警01",
+      "epochs": 1,
+      "samples": 1378,
+      "decreases": 368,
+      "device_id": "rtr-38aa54",
+      "bucket_day": "2026-11-10"
+    },
+    {
+      "rx": 48194419,
+      "tx": 10316293,
+      "name": "SN-R4-AX3000 坊子网警",
+      "epochs": 1,
+      "samples": 953,
+      "decreases": 476,
+      "device_id": "rtr-cd473f",
+      "bucket_day": "2026-11-10"
+    },
+    {
+      "rx": 35748083,
+      "tx": 2899022,
+      "name": "SN-R9-AX3000东营经开区网安",
+      "epochs": 1,
+      "samples": 7895,
+      "decreases": 4395,
+      "device_id": "rtr-101be0",
+      "bucket_day": "2026-11-10"
+    },
+    {
+      "rx": 2425781554,
+      "tx": 4890155,
+      "name": "SN-R6-AX3000日照国保2已付",
+      "epochs": 1,
+      "samples": 742,
+      "decreases": 397,
+      "device_id": "rtr-673568",
+      "bucket_day": "2026-11-11"
+    },
+    {
+      "rx": 178034270,
+      "tx": 1884732360,
+      "name": "雅典娜-AX6600",
+      "epochs": 0,
+      "samples": 692,
+      "decreases": 83,
+      "device_id": "rtr-5e1a8d",
+      "bucket_day": "2026-11-11"
+    },
+    {
+      "rx": 1601770693,
+      "tx": 7591941,
+      "name": "SN-R2-AX3000日照国保1已付",
+      "epochs": 1,
+      "samples": 1316,
+      "decreases": 568,
+      "device_id": "rtr-a9bcba",
+      "bucket_day": "2026-11-11"
+    },
+    {
+      "rx": 561564590,
+      "tx": 16112726,
+      "name": "SN-R8-AX3000 安丘2",
+      "epochs": 1,
+      "samples": 2159,
+      "decreases": 805,
+      "device_id": "rtr-1f6f0f",
+      "bucket_day": "2026-11-11"
+    },
+    {
+      "rx": 510932866,
+      "tx": 10500436,
+      "name": "SN-R9-AX3000东营经开区网安",
+      "epochs": 1,
+      "samples": 7843,
+      "decreases": 4380,
+      "device_id": "rtr-101be0",
+      "bucket_day": "2026-11-11"
+    },
+    {
+      "rx": 474356332,
+      "tx": 3820650,
+      "name": "SN-R1-AX3000 临朐网警",
+      "epochs": 1,
+      "samples": 1224,
+      "decreases": 642,
+      "device_id": "rtr-d3847d",
+      "bucket_day": "2026-11-11"
+    },
+    {
+      "rx": 262155348,
+      "tx": 2890873,
+      "name": "SN-R5-AX3000 昌乐网警",
+      "epochs": 1,
+      "samples": 1341,
+      "decreases": 586,
+      "device_id": "rtr-c46a25",
+      "bucket_day": "2026-11-11"
+    },
+    {
+      "rx": 37835903,
+      "tx": 5823910,
+      "name": "SN-R4-AX3000 坊子网警",
+      "epochs": 1,
+      "samples": 1030,
+      "decreases": 523,
+      "device_id": "rtr-cd473f",
+      "bucket_day": "2026-11-11"
+    },
+    {
+      "rx": 4973929,
+      "tx": 764217,
+      "name": "SN-R3-AX3000安丘网警01",
+      "epochs": 1,
+      "samples": 1363,
+      "decreases": 386,
+      "device_id": "rtr-38aa54",
+      "bucket_day": "2026-11-11"
+    },
+    {
+      "rx": 2168889127,
+      "tx": 7002848043,
+      "name": "雅典娜-AX6600",
+      "epochs": 0,
+      "samples": 7316,
+      "decreases": 1358,
+      "device_id": "rtr-5e1a8d",
+      "bucket_day": "2026-11-12"
+    },
+    {
+      "rx": 1838041574,
+      "tx": 20061360,
+      "name": "SN-R8-AX3000 安丘2",
+      "epochs": 3,
+      "samples": 2000,
+      "decreases": 715,
+      "device_id": "rtr-1f6f0f",
+      "bucket_day": "2026-11-12"
+    },
+    {
+      "rx": 842624186,
+      "tx": 2062771,
+      "name": "SN-R9-AX3000东营经开区网安",
+      "epochs": 1,
+      "samples": 8165,
+      "decreases": 4550,
+      "device_id": "rtr-101be0",
+      "bucket_day": "2026-11-12"
+    },
+    {
+      "rx": 622375094,
+      "tx": 5069707,
+      "name": "SN-R6-AX3000日照国保2已付",
+      "epochs": 1,
+      "samples": 926,
+      "decreases": 491,
+      "device_id": "rtr-673568",
+      "bucket_day": "2026-11-12"
+    },
+    {
+      "rx": 296361878,
+      "tx": 1914198,
+      "name": "SN-R5-AX3000 昌乐网警",
+      "epochs": 1,
+      "samples": 1272,
+      "decreases": 557,
+      "device_id": "rtr-c46a25",
+      "bucket_day": "2026-11-12"
+    },
+    {
+      "rx": 180940828,
+      "tx": 4604324,
+      "name": "SN-R1-AX3000 临朐网警",
+      "epochs": 1,
+      "samples": 1179,
+      "decreases": 518,
+      "device_id": "rtr-d3847d",
+      "bucket_day": "2026-11-12"
+    },
+    {
+      "rx": 98960596,
+      "tx": 7057502,
+      "name": "SN-R2-AX3000日照国保1已付",
+      "epochs": 1,
+      "samples": 1336,
+      "decreases": 733,
+      "device_id": "rtr-a9bcba",
+      "bucket_day": "2026-11-12"
+    },
+    {
+      "rx": 64938529,
+      "tx": 3017072,
+      "name": "SN-R3-AX3000安丘网警01",
+      "epochs": 1,
+      "samples": 1376,
+      "decreases": 343,
+      "device_id": "rtr-38aa54",
+      "bucket_day": "2026-11-12"
+    },
+    {
+      "rx": 31257926,
+      "tx": 2432981,
+      "name": "SN-R4-AX3000 坊子网警",
+      "epochs": 1,
+      "samples": 948,
+      "decreases": 510,
+      "device_id": "rtr-cd473f",
+      "bucket_day": "2026-11-12"
+    },
+    {
+      "rx": 11329592,
+      "tx": 240855,
+      "name": "GL-MT3600BE-Beryl7",
+      "epochs": 0,
+      "samples": 870,
+      "decreases": 399,
+      "device_id": "rtr-e9ccdd",
+      "bucket_day": "2026-11-12"
+    },
+    {
+      "rx": 952106778,
+      "tx": 6809083405,
+      "name": "雅典娜-AX6600",
+      "epochs": 0,
+      "samples": 8115,
+      "decreases": 1456,
+      "device_id": "rtr-5e1a8d",
+      "bucket_day": "2026-11-13"
+    },
+    {
+      "rx": 582944312,
+      "tx": 13963503,
+      "name": "SN-R8-AX3000 安丘2",
+      "epochs": 1,
+      "samples": 1588,
+      "decreases": 501,
+      "device_id": "rtr-1f6f0f",
+      "bucket_day": "2026-11-13"
+    },
+    {
+      "rx": 416952024,
+      "tx": 4492203,
+      "name": "SN-R6-AX3000日照国保2已付",
+      "epochs": 2,
+      "samples": 830,
+      "decreases": 473,
+      "device_id": "rtr-673568",
+      "bucket_day": "2026-11-13"
+    },
+    {
+      "rx": 166471344,
+      "tx": 4973330,
+      "name": "SN-R5-AX3000 昌乐网警",
+      "epochs": 1,
+      "samples": 1310,
+      "decreases": 604,
+      "device_id": "rtr-c46a25",
+      "bucket_day": "2026-11-13"
+    },
+    {
+      "rx": 117657944,
+      "tx": 3521865,
+      "name": "SN-R1-AX3000 临朐网警",
+      "epochs": 1,
+      "samples": 1371,
+      "decreases": 524,
+      "device_id": "rtr-d3847d",
+      "bucket_day": "2026-11-13"
+    },
+    {
+      "rx": 86364464,
+      "tx": 3286658,
+      "name": "SN-R4-AX3000 坊子网警",
+      "epochs": 1,
+      "samples": 991,
+      "decreases": 465,
+      "device_id": "rtr-cd473f",
+      "bucket_day": "2026-11-13"
+    },
+    {
+      "rx": 82089617,
+      "tx": 4299688,
+      "name": "SN-R2-AX3000日照国保1已付",
+      "epochs": 1,
+      "samples": 1244,
+      "decreases": 682,
+      "device_id": "rtr-a9bcba",
+      "bucket_day": "2026-11-13"
+    },
+    {
+      "rx": 16192983,
+      "tx": 2582453,
+      "name": "SN-R3-AX3000安丘网警01",
+      "epochs": 1,
+      "samples": 1365,
+      "decreases": 363,
+      "device_id": "rtr-38aa54",
+      "bucket_day": "2026-11-13"
+    },
+    {
+      "rx": 7838808,
+      "tx": 622874,
+      "name": "SN-R9-AX3000东营经开区网安",
+      "epochs": 1,
+      "samples": 7980,
+      "decreases": 4460,
+      "device_id": "rtr-101be0",
+      "bucket_day": "2026-11-13"
+    },
+    {
+      "rx": 123714,
+      "tx": 6875,
+      "name": "GL-MT3600BE-Beryl7",
+      "epochs": 0,
+      "samples": 1304,
+      "decreases": 623,
+      "device_id": "rtr-e9ccdd",
+      "bucket_day": "2026-11-13"
+    },
+    {
+      "rx": 770933554,
+      "tx": 24772255,
+      "name": "SN-R8-AX3000 安丘2",
+      "epochs": 1,
+      "samples": 4627,
+      "decreases": 1191,
+      "device_id": "rtr-1f6f0f",
+      "bucket_day": "2026-11-14"
+    },
+    {
+      "rx": 282491031,
+      "tx": 1864482,
+      "name": "SN-R4-AX3000 坊子网警",
+      "epochs": 1,
+      "samples": 1369,
+      "decreases": 479,
+      "device_id": "rtr-cd473f",
+      "bucket_day": "2026-11-14"
+    },
+    {
+      "rx": 106668292,
+      "tx": 1866175,
+      "name": "SN-R1-AX3000 临朐网警",
+      "epochs": 1,
+      "samples": 1368,
+      "decreases": 449,
+      "device_id": "rtr-d3847d",
+      "bucket_day": "2026-11-14"
+    },
+    {
+      "rx": 10365934,
+      "tx": 7307043,
+      "name": "雅典娜-AX6600",
+      "epochs": 0,
+      "samples": 6360,
+      "decreases": 1031,
+      "device_id": "rtr-5e1a8d",
+      "bucket_day": "2026-11-14"
+    },
+    {
+      "rx": 14459187,
+      "tx": 35041,
+      "name": "SN-R2-AX3000日照国保1已付",
+      "epochs": 1,
+      "samples": 1108,
+      "decreases": 660,
+      "device_id": "rtr-a9bcba",
+      "bucket_day": "2026-11-14"
+    },
+    {
+      "rx": 10943697,
+      "tx": 925681,
+      "name": "SN-R5-AX3000 昌乐网警",
+      "epochs": 1,
+      "samples": 1365,
+      "decreases": 768,
+      "device_id": "rtr-c46a25",
+      "bucket_day": "2026-11-14"
+    },
+    {
+      "rx": 3998843,
+      "tx": 503591,
+      "name": "SN-R3-AX3000安丘网警01",
+      "epochs": 1,
+      "samples": 1372,
+      "decreases": 310,
+      "device_id": "rtr-38aa54",
+      "bucket_day": "2026-11-14"
+    },
+    {
+      "rx": 654692,
+      "tx": 89235,
+      "name": "SN-R9-AX3000东营经开区网安",
+      "epochs": 1,
+      "samples": 7260,
+      "decreases": 4271,
+      "device_id": "rtr-101be0",
+      "bucket_day": "2026-11-14"
+    },
+    {
+      "rx": 539369,
+      "tx": 79645,
+      "name": "SN-R6-AX3000日照国保2已付",
+      "epochs": 1,
+      "samples": 1370,
+      "decreases": 650,
+      "device_id": "rtr-673568",
+      "bucket_day": "2026-11-14"
+    },
+    {
+      "rx": 108596,
+      "tx": 6853,
+      "name": "GL-MT3600BE-Beryl7",
+      "epochs": 0,
+      "samples": 1273,
+      "decreases": 590,
+      "device_id": "rtr-e9ccdd",
+      "bucket_day": "2026-11-14"
+    },
+    {
+      "rx": 289187254,
+      "tx": 9639990,
+      "name": "SN-R6-AX3000日照国保2已付",
+      "epochs": 1,
+      "samples": 1272,
+      "decreases": 709,
+      "device_id": "rtr-673568",
+      "bucket_day": "2026-11-15"
+    },
+    {
+      "rx": 212878377,
+      "tx": 4421023,
+      "name": "SN-R1-AX3000 临朐网警",
+      "epochs": 1,
+      "samples": 1375,
+      "decreases": 533,
+      "device_id": "rtr-d3847d",
+      "bucket_day": "2026-11-15"
+    },
+    {
+      "rx": 58308706,
+      "tx": 19738434,
+      "name": "SN-R8-AX3000 安丘2",
+      "epochs": 1,
+      "samples": 8417,
+      "decreases": 1704,
+      "device_id": "rtr-1f6f0f",
+      "bucket_day": "2026-11-15"
+    },
+    {
+      "rx": 33405388,
+      "tx": 1380312,
+      "name": "SN-R4-AX3000 坊子网警",
+      "epochs": 1,
+      "samples": 1361,
+      "decreases": 451,
+      "device_id": "rtr-cd473f",
+      "bucket_day": "2026-11-15"
+    },
+    {
+      "rx": 24825798,
+      "tx": 1890357,
+      "name": "SN-R5-AX3000 昌乐网警",
+      "epochs": 1,
+      "samples": 1369,
+      "decreases": 520,
+      "device_id": "rtr-c46a25",
+      "bucket_day": "2026-11-15"
+    },
+    {
+      "rx": 11224899,
+      "tx": 3631454,
+      "name": "雅典娜-AX6600",
+      "epochs": 0,
+      "samples": 4215,
+      "decreases": 571,
+      "device_id": "rtr-5e1a8d",
+      "bucket_day": "2026-11-15"
+    },
+    {
+      "rx": 5901664,
+      "tx": 658919,
+      "name": "SN-R3-AX3000安丘网警01",
+      "epochs": 1,
+      "samples": 1375,
+      "decreases": 452,
+      "device_id": "rtr-38aa54",
+      "bucket_day": "2026-11-15"
+    },
+    {
+      "rx": 562393,
+      "tx": 80049,
+      "name": "SN-R9-AX3000东营经开区网安",
+      "epochs": 1,
+      "samples": 8249,
+      "decreases": 4875,
+      "device_id": "rtr-101be0",
+      "bucket_day": "2026-11-15"
+    },
+    {
+      "rx": 112428,
+      "tx": 17134,
+      "name": "SN-R2-AX3000日照国保1已付",
+      "epochs": 1,
+      "samples": 1337,
+      "decreases": 801,
+      "device_id": "rtr-a9bcba",
+      "bucket_day": "2026-11-15"
+    },
+    {
+      "rx": 107019,
+      "tx": 1767,
+      "name": "GL-MT3600BE-Beryl7",
+      "epochs": 0,
+      "samples": 1375,
+      "decreases": 625,
+      "device_id": "rtr-e9ccdd",
+      "bucket_day": "2026-11-15"
+    },
+    {
+      "rx": 1284109219,
+      "tx": 2913912,
+      "name": "SN-R1-AX3000 临朐网警",
+      "epochs": 1,
+      "samples": 619,
+      "decreases": 244,
+      "device_id": "rtr-d3847d",
+      "bucket_day": "2026-11-16"
+    },
+    {
+      "rx": 203920656,
+      "tx": 10758063,
+      "name": "SN-R9-AX3000东营经开区网安",
+      "epochs": 1,
+      "samples": 4170,
+      "decreases": 2000,
+      "device_id": "rtr-101be0",
+      "bucket_day": "2026-11-16"
+    },
+    {
+      "rx": 83179859,
+      "tx": 7740813,
+      "name": "SN-R8-AX3000 安丘2",
+      "epochs": 1,
+      "samples": 2785,
+      "decreases": 719,
+      "device_id": "rtr-1f6f0f",
+      "bucket_day": "2026-11-16"
+    },
+    {
+      "rx": 77426317,
+      "tx": 1498061,
+      "name": "SN-R5-AX3000 昌乐网警",
+      "epochs": 1,
+      "samples": 669,
+      "decreases": 179,
+      "device_id": "rtr-c46a25",
+      "bucket_day": "2026-11-16"
+    },
+    {
+      "rx": 46550866,
+      "tx": 5494012,
+      "name": "SN-R2-AX3000日照国保1已付",
+      "epochs": 1,
+      "samples": 600,
+      "decreases": 348,
+      "device_id": "rtr-a9bcba",
+      "bucket_day": "2026-11-16"
+    },
+    {
+      "rx": 36223068,
+      "tx": 2267409,
+      "name": "SN-R6-AX3000日照国保2已付",
+      "epochs": 1,
+      "samples": 464,
+      "decreases": 235,
+      "device_id": "rtr-673568",
+      "bucket_day": "2026-11-16"
+    },
+    {
+      "rx": 14407690,
+      "tx": 2163047,
+      "name": "SN-R4-AX3000 坊子网警",
+      "epochs": 1,
+      "samples": 525,
+      "decreases": 275,
+      "device_id": "rtr-cd473f",
+      "bucket_day": "2026-11-16"
+    },
+    {
+      "rx": 5209894,
+      "tx": 2091960,
+      "name": "雅典娜-AX6600",
+      "epochs": 0,
+      "samples": 3630,
+      "decreases": 663,
+      "device_id": "rtr-5e1a8d",
+      "bucket_day": "2026-11-16"
+    },
+    {
+      "rx": 849995,
+      "tx": 127567,
+      "name": "SN-R3-AX3000安丘网警01",
+      "epochs": 1,
+      "samples": 699,
+      "decreases": 191,
+      "device_id": "rtr-38aa54",
+      "bucket_day": "2026-11-16"
+    },
+    {
+      "rx": 69787,
+      "tx": 4164,
+      "name": "GL-MT3600BE-Beryl7",
+      "epochs": 0,
+      "samples": 662,
+      "decreases": 315,
+      "device_id": "rtr-e9ccdd",
+      "bucket_day": "2026-11-16"
+    }
+  ],
+  "monthly": [
+    {
+      "id": "rtr-5e1a8d",
+      "name": "雅典娜-AX6600",
+      "year_month": "2026-11",
+      "wan_rx_bytes": 113209781913,
+      "wan_tx_bytes": 232904508783,
+      "proxy_rx_bytes": 5020881885,
+      "proxy_tx_bytes": 21455942485
+    },
+    {
+      "id": "rtr-673568",
+      "name": "SN-R6-AX3000日照国保2已付",
+      "year_month": "2026-11",
+      "wan_rx_bytes": 456132955133,
+      "wan_tx_bytes": 31295730577,
+      "proxy_rx_bytes": 20023382047,
+      "proxy_tx_bytes": 205152658
+    },
+    {
+      "id": "rtr-d3847d",
+      "name": "SN-R1-AX3000 临朐网警",
+      "year_month": "2026-11",
+      "wan_rx_bytes": 421322343759,
+      "wan_tx_bytes": 40730155708,
+      "proxy_rx_bytes": 11362194498,
+      "proxy_tx_bytes": 142549895
+    },
+    {
+      "id": "rtr-1f6f0f",
+      "name": "SN-R8-AX3000 安丘2",
+      "year_month": "2026-11",
+      "wan_rx_bytes": 438803665486,
+      "wan_tx_bytes": 83010325872,
+      "proxy_rx_bytes": 9051255409,
+      "proxy_tx_bytes": 405893997
+    },
+    {
+      "id": "rtr-c46a25",
+      "name": "SN-R5-AX3000 昌乐网警",
+      "year_month": "2026-11",
+      "wan_rx_bytes": 290766184317,
+      "wan_tx_bytes": 33685804395,
+      "proxy_rx_bytes": 6952169223,
+      "proxy_tx_bytes": 80977481
+    },
+    {
+      "id": "rtr-a9bcba",
+      "name": "SN-R2-AX3000日照国保1已付",
+      "year_month": "2026-11",
+      "wan_rx_bytes": 23836204140,
+      "wan_tx_bytes": 3746199004,
+      "proxy_rx_bytes": 3648134415,
+      "proxy_tx_bytes": 116521727
+    },
+    {
+      "id": "rtr-101be0",
+      "name": "SN-R9-AX3000东营经开区网安",
+      "year_month": "2026-11",
+      "wan_rx_bytes": 14270256677,
+      "wan_tx_bytes": 5503351156,
+      "proxy_rx_bytes": 1746928134,
+      "proxy_tx_bytes": 52721920
+    },
+    {
+      "id": "rtr-cd473f",
+      "name": "SN-R4-AX3000 坊子网警",
+      "year_month": "2026-11",
+      "wan_rx_bytes": 105316143065,
+      "wan_tx_bytes": 13934010445,
+      "proxy_rx_bytes": 1353412229,
+      "proxy_tx_bytes": 161740828
+    },
+    {
+      "id": "rtr-38aa54",
+      "name": "SN-R3-AX3000安丘网警01",
+      "year_month": "2026-11",
+      "wan_rx_bytes": 25138826598,
+      "wan_tx_bytes": 2937410316,
+      "proxy_rx_bytes": 447729241,
+      "proxy_tx_bytes": 36260419
+    },
+    {
+      "id": "rtr-37cf72",
+      "name": "SN-R7-AX3000",
+      "year_month": "2026-11",
+      "wan_rx_bytes": 686538780,
+      "wan_tx_bytes": 253328100,
+      "proxy_rx_bytes": 130348473,
+      "proxy_tx_bytes": 1117412
+    },
+    {
+      "id": "rtr-e9ccdd",
+      "name": "GL-MT3600BE-Beryl7",
+      "year_month": "2026-11",
+      "wan_rx_bytes": 1725128035,
+      "wan_tx_bytes": 1144714928,
+      "proxy_rx_bytes": 11738708,
+      "proxy_tx_bytes": 260514
+    }
+  ],
+  "ranking": [
+    {
+      "id": "rtr-d3847d",
+      "name": "SN-R1-AX3000 临朐网警",
+      "samples": 18670,
+      "decreases": 8780,
+      "november_gib": 10.715,
+      "thirtyday_gib": 42.249,
+      "november_rx_gib": 10.582,
+      "november_tx_gib": 0.133,
+      "max_nov_daily_gib": 3.101
+    },
+    {
+      "id": "rtr-5e1a8d",
+      "name": "雅典娜-AX6600",
+      "samples": 42050,
+      "decreases": 7794,
+      "november_gib": 24.658,
+      "thirtyday_gib": 39.785,
+      "november_rx_gib": 4.676,
+      "november_tx_gib": 19.982,
+      "max_nov_daily_gib": 8.542
+    },
+    {
+      "id": "rtr-673568",
+      "name": "SN-R6-AX3000日照国保2已付",
+      "samples": 15744,
+      "decreases": 8025,
+      "november_gib": 18.839,
+      "thirtyday_gib": 28.951,
+      "november_rx_gib": 18.648,
+      "november_tx_gib": 0.191,
+      "max_nov_daily_gib": 7.52
+    },
+    {
+      "id": "rtr-cd473f",
+      "name": "SN-R4-AX3000 坊子网警",
+      "samples": 16810,
+      "decreases": 7287,
+      "november_gib": 1.411,
+      "thirtyday_gib": 8.956,
+      "november_rx_gib": 1.26,
+      "november_tx_gib": 0.151,
+      "max_nov_daily_gib": 0.315
+    },
+    {
+      "id": "rtr-1f6f0f",
+      "name": "SN-R8-AX3000 安丘2",
+      "samples": 61692,
+      "decreases": 20258,
+      "november_gib": 8.808,
+      "thirtyday_gib": 9.391,
+      "november_rx_gib": 8.43,
+      "november_tx_gib": 0.378,
+      "max_nov_daily_gib": 2.02
+    },
+    {
+      "id": "rtr-c46a25",
+      "name": "SN-R5-AX3000 昌乐网警",
+      "samples": 20321,
+      "decreases": 9120,
+      "november_gib": 6.55,
+      "thirtyday_gib": 8.216,
+      "november_rx_gib": 6.475,
+      "november_tx_gib": 0.075,
+      "max_nov_daily_gib": 1.747
+    },
+    {
+      "id": "rtr-a9bcba",
+      "name": "SN-R2-AX3000日照国保1已付",
+      "samples": 19794,
+      "decreases": 10123,
+      "november_gib": 3.506,
+      "thirtyday_gib": 4.779,
+      "november_rx_gib": 3.398,
+      "november_tx_gib": 0.109,
+      "max_nov_daily_gib": 1.499
+    },
+    {
+      "id": "rtr-38aa54",
+      "name": "SN-R3-AX3000安丘网警01",
+      "samples": 21315,
+      "decreases": 5560,
+      "november_gib": 0.451,
+      "thirtyday_gib": 1.769,
+      "november_rx_gib": 0.417,
+      "november_tx_gib": 0.034,
+      "max_nov_daily_gib": 0.104
+    },
+    {
+      "id": "rtr-101be0",
+      "name": "SN-R9-AX3000东营经开区网安",
+      "samples": 90863,
+      "decreases": 49751,
+      "november_gib": 1.676,
+      "thirtyday_gib": 1.676,
+      "november_rx_gib": 1.627,
+      "november_tx_gib": 0.049,
+      "max_nov_daily_gib": 0.787
+    },
+    {
+      "id": "rtr-37cf72",
+      "name": "SN-R7-AX3000",
+      "samples": 6059,
+      "decreases": 2925,
+      "november_gib": 0.122,
+      "thirtyday_gib": 0.238,
+      "november_rx_gib": 0.121,
+      "november_tx_gib": 0.001,
+      "max_nov_daily_gib": 0.122
+    },
+    {
+      "id": "rtr-e9ccdd",
+      "name": "GL-MT3600BE-Beryl7",
+      "samples": 5484,
+      "decreases": 2552,
+      "november_gib": 0.011,
+      "thirtyday_gib": 0.011,
+      "november_rx_gib": 0.011,
+      "november_tx_gib": 0.0,
+      "max_nov_daily_gib": 0.011
+    }
+  ]
+}

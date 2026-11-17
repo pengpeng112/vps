@@ -1,0 +1,58 @@
+BEGIN 2026-11-16 11:56:31 +0800
+ Write reg=94, value=ff0035
+ Write reg=98, value=c0e02
+ Write reg=90, value=80005062
+ Write reg=94, value=0
+ Write reg=98, value=0
+ Write reg=e0, value=0
+ Write reg=e4, value=4
+ Write reg=90, value=80009021
+ Write reg=94, value=18004080
+ Write reg=98, value=0
+ Write reg=90, value=8000b021
+SERVER_RULES
+127.0.0.1#1053 /lol.qq.com/223.5.5.5 /lol.qq.com/119.29.29.29 /gamesafe.qq.com/223.5.5.5 /gamesafe.qq.com/119.29.29.29 /anticheatexpert.com/223.5.5.5 /anticheatexpert.com/119.29.29.29
+VERIFY gpp-tj100-1.lol.qq.com
+Server:		127.0.0.1
+Address:	127.0.0.1#53
+
+Name:      gpp-tj100-1.lol.qq.com
+Address 1: 42.81.179.215
+*** Can't find gpp-tj100-1.lol.qq.com: No answer
+VERIFY tqos.gamesafe.qq.com
+Server:		127.0.0.1
+Address:	127.0.0.1#53
+
+Name:      tqos.gamesafe.qq.com
+Address 1: 114.222.112.81
+Address 2: 58.212.179.76
+*** Can't find tqos.gamesafe.qq.com: No answer
+VERIFY tqos.anticheatexpert.com
+Server:		127.0.0.1
+Address:	127.0.0.1#53
+
+Name:      tqos.anticheatexpert.com
+Address 1: 58.212.179.76
+Address 2: 114.222.112.81
+*** Can't find tqos.anticheatexpert.com: No answer
+GENERATED_CONFIG_TEST
+GENERATED_SERVER_RULES
+server=127.0.0.1#1053
+server=/lol.qq.com/223.5.5.5
+server=/lol.qq.com/119.29.29.29
+server=/gamesafe.qq.com/223.5.5.5
+server=/gamesafe.qq.com/119.29.29.29
+server=/anticheatexpert.com/223.5.5.5
+server=/anticheatexpert.com/119.29.29.29
+HEALTH
+200
+PROTECTED_HASHES
+8bc2de0100532998671f56d1e259ba6d83adf425c76412203dbe6ab3b19bae09  /etc/config/wireless
+4f4ae886ec9a6081ffc0b9121dfe955fbdfed501bfd97327023aa0481ea4540c  /etc/mihomo/config.yaml
+4911dbbe7962b4c8425526a23b45896732ec53fbc1539bd0f17355f5b36fad98  /etc/routermgmt/tunnel.conf
+c65d51a7066eb05a141ead4692361472c6e89a6e16327ca4dc7da356c12bfd6e  /etc/routermgmt/self-heal.sh
+43b33c9f5016e28145f093eda76df5149e76cdf3ac9b2dce056d7e767c2fb1a0  /etc/config/dhcp
+SUCCESS 2026-11-16 11:56:35 +0800
+
+STDERR
+dnsmasq: syntax check OK.

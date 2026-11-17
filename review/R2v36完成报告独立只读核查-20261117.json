@@ -1,0 +1,162 @@
+{
+  "started_local": "2026-11-17T13:05:01+08:00",
+  "configuration_writes": false,
+  "db": {
+    "rc": 0,
+    "stdout": "BEGIN\nrtr-a9bcba|36|36|36|33|0\n4|BWG-VLESS-JPTY-01|ordinary|443|f\n8|BWG-HY2-JPTY-01|ordinary|34567|t\n14|BULK-LAX-GIA-01|video|2054|f\n1\n2\n3\n4\n5\n6\n7\n8\n9\n0\nCOMMIT",
+    "stderr": ""
+  },
+  "groups": {
+    "PROXY": {
+      "type": "Selector",
+      "now": "AUTO",
+      "all": [
+        "AUTO",
+        "BWG-HY2-JPTY-01",
+        "BULK-LAX-GIA-01",
+        "BWG-VLESS-JPTY-01",
+        "DIRECT"
+      ]
+    },
+    "AUTO": {
+      "type": "Fallback",
+      "now": "NODE-PICK",
+      "all": [
+        "NODE-PICK",
+        "AIRPORT",
+        "DIRECT"
+      ]
+    },
+    "NODE-PICK": {
+      "type": "Fallback",
+      "now": "BWG-HY2-JPTY-01",
+      "all": [
+        "BWG-HY2-JPTY-01",
+        "BWG-VLESS-JPTY-01"
+      ]
+    },
+    "US-MEDIA": {
+      "type": "Selector",
+      "now": "NODE-PICK",
+      "all": [
+        "BULK-LAX-GIA-01",
+        "NODE-PICK",
+        "AIRPORT"
+      ]
+    },
+    "DOWNLOAD": {
+      "type": "Selector",
+      "now": "DIRECT",
+      "all": [
+        "DIRECT",
+        "PROXY"
+      ]
+    }
+  },
+  "file_hashes": {
+    "rc": 0,
+    "stdout": "40b79770aab4d127baf6bf91f6d5a3e38709d4e05a53bddf04737e3d85b05a6a  /etc/routermgmt/proxy-meter-v2.sh\n7deed3e44b811b0f677b85e47b16672ab4a775a25db9cb2da0e6d5d56649a562  /etc/routermgmt/proxy-meter-rules.conf\nbf9f00d44d82631a5d96459518793fce8cdd8f4d6128cf744b385de9ecf7b289  /etc/routermgmt/ratelimit-ctl",
+    "stderr": ""
+  },
+  "meter_state": {
+    "schema": 2,
+    "seq": 28,
+    "boot_id": "b3883a56",
+    "continuity_id": "cont-b3883a56-cont",
+    "prev_continuity_id": "cont-b3883a56-cont",
+    "sampled_at": "2026-11-17 13:05:00+0800",
+    "read_fail_eps": "",
+    "endpoints": {
+      "pm_bwg_hy2_up": 40622461,
+      "pm_bwg_hy2_down": 176581845,
+      "pm_bwg_vless_up": 1607425,
+      "pm_bwg_vless_down": 4009030,
+      "pm_gia_vless_up": 18548,
+      "pm_gia_vless_down": 46708,
+      "pm_gia_hy2_up": 7277,
+      "pm_gia_hy2_down": 13082,
+      "pm_cf1_up": 11118,
+      "pm_cf1_down": 21196,
+      "pm_cf2_up": 11042,
+      "pm_cf2_down": 21185,
+      "BULK-GIA-up": 55532,
+      "BULK-GIA-down": 108432,
+      "BULK-BWG-up": 0,
+      "BULK-BWG-down": 0
+    }
+  },
+  "day_state": {
+    "day_key": "2026-11-17",
+    "total": 0,
+    "delta_last": 0,
+    "sampled_at": "2026-11-17 13:05:00+0800"
+  },
+  "state_files": {
+    "rc": 0,
+    "stdout": "2026-11-17 13:05:08 +0800\n-rw-r--r--    1 0        0               90 Nov 17 13:05 /etc/routermgmt/state/proxy-meter-daily.json\n-rw-r--r--    1 0        0              550 Nov 17 13:05 /etc/routermgmt/state/proxy-meter-v2.json\n2026-11-17 12:30:00 OK seq=21 cont=cont-b3883a56-cont delta=0 day_total=0\n2026-11-17 12:35:00 OK seq=22 cont=cont-b3883a56-cont delta=0 day_total=0\n2026-11-17 12:40:00 OK seq=23 cont=cont-b3883a56-cont delta=0 day_total=0\n2026-11-17 12:45:00 OK seq=24 cont=cont-b3883a56-cont delta=0 day_total=0\n2026-11-17 12:50:00 OK seq=25 cont=cont-b3883a56-cont delta=0 day_total=0\n2026-11-17 12:55:00 OK seq=26 cont=cont-b3883a56-cont delta=0 day_total=0\n2026-11-17 13:00:00 OK seq=27 cont=cont-b3883a56-cont delta=0 day_total=0\n2026-11-17 13:05:00 OK seq=28 cont=cont-b3883a56-cont delta=0 day_total=0\n*/5 * * * * /etc/routermgmt/proxy-meter-v2.sh #proxy-meter\nqdisc noqueue 0: root refcnt 2",
+    "stderr": ""
+  },
+  "policy.json": {
+    "schema": 2,
+    "policy_id": "pol-r2-001",
+    "device_id": "rtr-a9bcba",
+    "enforcement": "observe",
+    "scope": "download_video",
+    "quota": {
+      "period": "daily",
+      "timezone": "Asia/Shanghai",
+      "used_bytes_source": "router_meter",
+      "warn_gib": 1.0,
+      "action_gib": 3.0,
+      "hard_gib": 6.0
+    },
+    "actions": {
+      "video": {
+        "mode": "shape",
+        "down": {
+          "value": 60,
+          "unit": "kbps",
+          "bits_per_second": 60000
+        },
+        "up": {
+          "mode": "unchanged"
+        }
+      },
+      "download": {
+        "mode": "shape",
+        "down": {
+          "value": 60,
+          "unit": "kbps",
+          "bits_per_second": 60000
+        },
+        "up": {
+          "mode": "unchanged"
+        }
+      },
+      "web": {
+        "mode": "unchanged"
+      }
+    },
+    "exempt": false,
+    "temporary_release": null
+  },
+  "latch.json": {
+    "unavailable": true,
+    "rc": 1
+  },
+  "policy_version": {
+    "rc": 0,
+    "stdout": "1",
+    "stderr": ""
+  },
+  "config_meta": {
+    "node_names": [
+      "BWG-HY2-JPTY-01",
+      "BULK-LAX-GIA-01",
+      "BWG-VLESS-JPTY-01"
+    ],
+    "has_bulk_ip_direct": false,
+    "cr_count": 0
+  },
+  "finished_local": "2026-11-17T13:05:08+08:00"
+}

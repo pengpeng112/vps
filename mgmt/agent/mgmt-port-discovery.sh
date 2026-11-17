@@ -49,6 +49,8 @@ fi
 
 # 2026-10-28 透明代理入口自愈（R1 实证：开机 fw3 重载冲掉 PREROUTING 的 MIHOMO 跳转，
 # 链在入口丢，客户端国内通国外断）。mihomo 活着而入口缺失时重跑 mihomo-ipt 重建。
+# 2026-11-08 修正（R5 实证，黑洞 9h）：原 grep 无行尾锚点，"-j MIHOMO" 子串命中 MIHOMO_DNS
+# 造成假通过——"DNS 链在而重定向链缺失"的状态漏检。加 $ 锚点精确匹配，两条链缺一即重建。
 if curl -fsk -m 3 -o /dev/null http://127.0.0.1:9090/version 2>/dev/null; then
-    iptables -t nat -S PREROUTING 2>/dev/null | grep -q "\-i br-lan -j MIHOMO" ||         { logger -t mihomo-guard "PREROUTING MIHOMO jump missing, rebuilding"; sh /etc/mihomo-ipt.sh >/dev/null 2>&1; }
+    iptables -t nat -S PREROUTING 2>/dev/null | grep -q 'MIHOMO$' &&         iptables -t nat -S PREROUTING 2>/dev/null | grep -q 'MIHOMO_DNS$' ||         { logger -t mihomo-guard "PREROUTING MIHOMO/MIHOMO_DNS jump missing (exact match), rebuilding"; sh /etc/mihomo-ipt.sh >/dev/null 2>&1; }
 fi

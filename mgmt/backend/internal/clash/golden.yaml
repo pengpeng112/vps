@@ -126,7 +126,7 @@ proxy-groups:
   # Explicit members: available LAX nodes first, then NODE-PICK.
   # include-all excludes groups and previously produced COMPATIBLE without LAX.
   - name: "US-MEDIA"
-    type: fallback
+    type: select
     url: https://www.gstatic.com/generate_204
     interval: 300
     lazy: false
@@ -138,7 +138,13 @@ proxy-groups:
 rules:
 #{{NODE_DIRECT_RULES}}
   # 2026-10-29 政企业务系统强制直连（昌乐实测：阿里云高防域名 GeoIP 误判海外→走代理→站点拒访）
+  # 2026-11-17 昌乐/东营系业务站批量补录（GeoIP 新段未收录，兜底代理致站点拒访，同款机制）
   - DOMAIN-SUFFIX,istarshine.com,DIRECT
+  - DOMAIN-SUFFIX,antdu.net,DIRECT
+  - DOMAIN-SUFFIX,dlbrowser.com,DIRECT
+  - DOMAIN-SUFFIX,qhupdate.com,DIRECT
+  - DOMAIN-SUFFIX,hlquant.com,DIRECT
+  - DOMAIN-SUFFIX,xxcg.com,DIRECT
   - GEOIP,private,DIRECT,no-resolve
   - IP-CIDR,192.168.0.0/16,DIRECT,no-resolve
   - IP-CIDR,10.0.0.0/8,DIRECT,no-resolve
@@ -234,4 +240,8 @@ rules:
   - DOMAIN-SUFFIX,githubassets.com,US-MEDIA
 
   - AND,((NETWORK,UDP),(DST-PORT,443)),REJECT
-  - MATCH,PROXY
+  # 2026-11-17 兜底反转（用户拍板）：业务画像国内为主，未命中名单一律直连国内，
+  # 防止 GeoIP/GeoSite 库缺新国内站被错送出国（昌乐 antdu/xxcg/hlquant 系列）。
+  # 已知国外站由 geolocation-!cn 大名单（需 2026-11 版以上 GeoSite.dat）接住走代理。
+  - GEOSITE,geolocation-!cn,PROXY
+  - MATCH,DIRECT

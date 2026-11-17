@@ -1,0 +1,11 @@
+{
+  "experimental_clash_api_present": false,
+  "inbounds": [
+    {
+      "type": "vless",
+      "tag": "vless-in-443",
+      "listen": "::",
+      "listen_port": 443
+    }
+  ]
+}

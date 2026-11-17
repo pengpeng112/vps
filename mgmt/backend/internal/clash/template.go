@@ -45,6 +45,7 @@ func ValidHy2Password(pw string) bool { return reHy2Password.MatchString(pw) }
 type NodeRender struct {
 	ID       int64
 	Name     string
+	Purpose  string // ordinary|video：video 只入 US-MEDIA，不进 PROXY/AUTO/NODE-PICK
 	Proto    string // vless-reality | vless-ws | hysteria2（空串= vless-reality）
 	Host     string
 	Port     int
@@ -92,6 +93,10 @@ func Render(in RenderInput) ([]byte, error) {
 		if !ValidateNodeName(n.Name) {
 			return nil, fmt.Errorf("节点名 %q 不合法（仅允许字母数字与 - _，长度 2~32）", n.Name)
 		}
+		purpose := n.Purpose
+		if purpose == "" {
+			purpose = "ordinary"
+		}
 		if err := validateHost(n.Host); err != nil {
 			return nil, err
 		}
@@ -121,6 +126,13 @@ func Render(in RenderInput) ([]byte, error) {
     skip-cert-verify: true`, n.Name, n.Host, n.Port, n.Password))
 		default:
 			return nil, fmt.Errorf("节点 %s 协议 %q 不支持（当前仅 vless-reality / vless-ws / hysteria2）", n.Name, n.Proto)
+		}
+		// 用途隔离（2026-11-17）：video/bulk 类节点只进 US-MEDIA，不进普通
+		// PROXY/AUTO/NODE-PICK 候选，防止 fallback 误入受配额治理的通道。
+		if purpose == "video" {
+			mediaMembers = append(mediaMembers, fmt.Sprintf("      - %s", n.Name))
+			groupProxy = append(groupProxy, fmt.Sprintf("      - %s", n.Name)) // PROXY 保留手选能力（select）
+			continue // AUTO/NODE-PICK（fallback 自动组）不收 video 类
 		}
 		groupProxy = append(groupProxy, fmt.Sprintf("      - %s", n.Name))
 		groupAuto = append(groupAuto, fmt.Sprintf("      - %s", n.Name))

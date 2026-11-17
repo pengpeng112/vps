@@ -141,6 +141,7 @@ func (s *Server) handleNodeCreate(c *gin.Context) {
 		Host     string     `json:"host" binding:"required"`
 		Port     int        `json:"port" binding:"required"`
 		Proto    string     `json:"proto"`
+		Purpose  string     `json:"purpose"`
 		Params   nodeParams `json:"params" binding:"required"`
 		Priority int        `json:"priority"`
 		Enabled  *bool      `json:"enabled"`
@@ -168,8 +169,16 @@ func (s *Server) handleNodeCreate(c *gin.Context) {
 	if req.Enabled != nil {
 		enabled = *req.Enabled
 	}
+	purpose := req.Purpose
+	if purpose == "" {
+		purpose = "ordinary"
+	}
+	if purpose != "ordinary" && purpose != "video" {
+		fail422(c, "purpose 仅支持 ordinary / video")
+		return
+	}
 	n := models.Node{Name: req.Name, Host: req.Host, Port: req.Port, Proto: req.Proto,
-		Priority: req.Priority, Enabled: enabled, HealthStatus: "unknown"}
+		Purpose: purpose, Priority: req.Priority, Enabled: enabled, HealthStatus: "unknown"}
 	err := s.DB.Transaction(func(tx *gorm.DB) error {
 		if err := tx.Create(&n).Error; err != nil {
 			return err

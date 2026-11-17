@@ -1,0 +1,1943 @@
+{
+  "started_local": "2026-11-17T07:39:08+08:00",
+  "production_configuration_writes": false,
+  "api_login": false,
+  "scope": [
+    "GZ",
+    "R2",
+    "GIA",
+    "BWG"
+  ],
+  "hosts": {
+    "GZ": {
+      "connected": true,
+      "services": {
+        "rc": 0,
+        "stdout": "2026-11-17T07:39:09+08:00\nactive\nactive\nactive\n{\"db\":true,\"status\":\"ok\"}",
+        "stderr": ""
+      },
+      "database_readonly": {
+        "rc": 0,
+        "stdout": "BEGIN\nrtr-101be0|SN-R9-AX3000东营经开区网安|4|4|4|7|0\nrtr-1eff66|雅典娜-AX6600-客厅|8|8|8|3969589|0\nrtr-1f6f0f|SN-R8-AX3000 安丘2|8|8|8|8|0\nrtr-25730c|SN-R11-AX3000|3|3|3|2908749|0\nrtr-354647|SN-R10-AX3000|3|3|3|2913770|0\nrtr-37cf72|SN-R7-AX3000|8|8|8|1343669|0\nrtr-38aa54|SN-R3-AX3000安丘网警01|30|30|30|31|0\nrtr-5e1a8d|雅典娜-AX6600|0|0|0|9|0\nrtr-673568|SN-R6-AX3000日照国保2已付|22|22|22|40|0\nrtr-a9bcba|SN-R2-AX3000日照国保1已付|33|33|33|19|0\nrtr-bf0292|GL-MT3600BE-Beryl7|0|0|0||0\nrtr-c46a25|SN-R5-AX3000 昌乐网警|20|20|20|20|0\nrtr-cd473f|SN-R4-AX3000 坊子网警|29|29|29|22|0\nrtr-d3847d|SN-R1-AX3000 临朐网警|27|27|27|36|0\nrtr-e9ccdd|GL-MT3600BE-Beryl7|1|1|1|43603|0\nrtr-a9bcba|8|BWG-HY2-JPTY-01|74.82.193.113|34567|hysteria2|t|0\nrtr-a9bcba|4|BWG-VLESS-JPTY-01|74.82.193.113|443|vless-reality|f|1\nCOMMIT",
+        "stderr": ""
+      },
+      "api_binary": {
+        "rc": 0,
+        "stdout": "fbd3e1ef24cfc77e91054ad8f3ff6cf4dbd716ff7933f7e406d391437bcb27c1  /opt/mgmt/server",
+        "stderr": ""
+      }
+    },
+    "R2": {
+      "connected": true,
+      "system": {
+        "rc": 0,
+        "stdout": "2026-11-17 07:39:11 +0800\n5.4.225\n27533.77 52994.13\ndefault via 58.58.176.1 dev wan \n0:\tfrom all lookup local \n32766:\tfrom all lookup main \n32767:\tfrom all lookup default \ntc utility, iproute2-5.11.0\nqdisc noqueue 0: dev lo root refcnt 2 \nqdisc fq_codel 0: dev eth0 root refcnt 2 limit 10240p flows 1024 quantum 1514 target 5ms interval 100ms memory_limit 4Mb ecn drop_batch 64 \nqdisc fq_codel 0: dev eth1 root refcnt 2 limit 10240p flows 1024 quantum 1514 target 5ms interval 100ms memory_limit 4Mb ecn drop_batch 64 \nqdisc noqueue 0: dev wan root refcnt 2 \nqdisc noqueue 0: dev lan1 root refcnt 2 \nqdisc noqueue 0: dev lan3 root refcnt 2 \nqdisc noqueue 0: dev lan4 root refcnt 2 \nqdisc noqueue 0: dev lan2 root refcnt 2 \nqdisc fq_codel 0: dev ra0 root refcnt 2 limit 10240p flows 1024 quantum 1514 target 5ms interval 100ms memory_limit 512Kb ecn drop_batch 64 \nqdisc noqueue 0: dev br-lan root refcnt 2 \nqdisc fq_codel 0: dev ra1 root refcnt 2 limit 10240p flows 1024 quantum 1514 target 5ms interval 100ms memory_limit 512Kb ecn drop_batch 64 \nqdisc fq_codel 0: dev ra2 root refcnt 2 limit 10240p flows 1024 quantum 1514 target 5ms interval 100ms memory_limit 512Kb ecn drop_batch 64 \nqdisc fq_codel 0: dev ra3 root refcnt 2 limit 10240p flows 1024 quantum 1514 target 5ms interval 100ms memory_limit 512Kb ecn drop_batch 64 \nqdisc fq_codel 0: dev ra4 root refcnt 2 limit 10240p flows 1024 quantum 1514 target 5ms interval 100ms memory_limit 512Kb ecn drop_batch 64 \nqdisc fq_codel 0: dev ra5 root refcnt 2 limit 10240p flows 1024 quantum 1514 target 5ms interval 100ms memory_limit 512Kb ecn drop_batch 64 \nqdisc fq_codel 0: dev rax0 root refcnt 2 limit 10240p flows 1024 quantum 1514 target 5ms interval 100ms memory_limit 512Kb ecn drop_batch 64 \nqdisc fq_codel 0: dev rax1 root refcnt 2 limit 10240p flows 1024 quantum 1514 target 5ms interval 100ms memory_limit 512Kb ecn drop_batch 64 \nqdisc fq_codel 0: dev rax2 root refcnt 2 limit 10240p flows 1024 quantum 1514 target 5ms interval 100ms memory_limit 512Kb ecn drop_batch 64 \nqdisc fq_codel 0: dev rax3 root refcnt 2 limit 10240p flows 1024 quantum 1514 target 5ms interval 100ms memory_limit 512Kb ecn drop_batch 64 \nqdisc fq_codel 0: dev rax4 root refcnt 2 limit 10240p flows 1024 quantum 1514 target 5ms interval 100ms memory_limit 512Kb ecn drop_batch 64 \nqdisc fq_codel 0: dev rax5 root refcnt 2 limit 10240p flows 1024 quantum 1514 target 5ms interval 100ms memory_limit 512Kb ecn drop_batch 64 \nFilesystem                Size      Used Available Use% Mounted on\n/dev/loop0              940.0M    317.1M    622.9M  34% /overlay\ntmpfs                   495.5M    112.0K    495.4M   0% /tmp",
+        "stderr": ""
+      },
+      "module_files": {
+        "rc": 0,
+        "stdout": "/lib/modules/5.4.225/act_mirred.ko\n/lib/modules/5.4.225/sch_htb.ko\n/lib/modules/5.4.225/sch_ingress.ko\n/sys/module/act_mirred:\ncoresize\nholders\ninitsize\ninitstate\nnotes\nrefcnt\nsections\ntaint\nuevent\n\n/sys/module/sch_htb:\ncoresize\nholders\ninitsize\ninitstate\nnotes\nparameters\nrefcnt\nsections\ntaint\nuevent\n\n/sys/module/sch_ingress:\ncoresize\nholders\ninitsize\ninitstate\nnotes\nrefcnt\nsections\ntaint\nuevent\nkmod-sched-core - 5.4.225-1\ntc-mod-iptables - 5.11.0-3\ntc-tiny - 5.11.0-3\ntcpdump - 4.9.3-4",
+        "stderr": ""
+      },
+      "file_hashes": {
+        "rc": 0,
+        "stdout": "fe09735fd3137e797e61042733088572d4df99fa52ac3dfa073947877b837263  /etc/routermgmt/proxy-meter.sh\n6519a8b4e28e38f0a12932444626218d7f92bd95950a813421cca04cca11dd27  /etc/config/dhcp\n75898f131f72f03f8f89dfaa2310bfeb823ee97f9e04e44e8c1abd7b78d5da8e  /etc/config/wireless\n4b6ccbeb96f436f230a94699b30745c971ed7910e0893e5e1f807a4926e6c29b  /etc/mihomo/config.yaml\n7ed820da9a00b05438f107d52b63cfc5ad3a5f7c4170ad9b4f543503678fd61f  /etc/routermgmt/tunnel.conf\nc65d51a7066eb05a141ead4692361472c6e89a6e16327ca4dc7da356c12bfd6e  /etc/routermgmt/self-heal.sh",
+        "stderr": ""
+      },
+      "meter_cron_and_logs": {
+        "rc": 0,
+        "stdout": "*/5 * * * * /etc/routermgmt/proxy-meter.sh #proxy-meter\n58 /etc/routermgmt/logs/proxy-meter.log\n2026-11-17 07:04:13 baseline created\nrun ts=1794870256\n2026-11-17 07:10:00 pm_gia_hy2_down delta=7133B total=13082B\n2026-11-17 07:10:00 pm_gia_hy2_up delta=4354B total=7277B\n2026-11-17 07:10:00 pm_gia_vless_down delta=15529B total=46708B\n2026-11-17 07:10:00 pm_gia_vless_up delta=6165B total=18548B\nrun ts=1794870600\n2026-11-17 07:15:00 pm_bwg_hy2_down delta=101988B total=276044B\n2026-11-17 07:15:00 pm_bwg_hy2_up delta=112121B total=278119B\n2026-11-17 07:15:00 pm_bwg_vless_down delta=30687B total=107561B\n2026-11-17 07:15:00 pm_bwg_vless_up delta=11513B total=41374B\nrun ts=1794870900\n2026-11-17 07:20:00 pm_bwg_hy2_down delta=160257B total=436301B\n2026-11-17 07:20:00 pm_bwg_hy2_up delta=112993B total=391112B\n2026-11-17 07:20:00 pm_bwg_vless_down delta=46285B total=153846B\n2026-11-17 07:20:00 pm_bwg_vless_up delta=17381B total=58755B\nrun ts=1794871200\n2026-11-17 07:25:00 pm_bwg_hy2_down delta=102800B total=539101B\n2026-11-17 07:25:00 pm_bwg_hy2_up delta=114907B total=506019B\n2026-11-17 07:25:00 pm_bwg_vless_down delta=30489B total=184335B\n2026-11-17 07:25:00 pm_bwg_vless_up delta=12268B total=71023B\nrun ts=1794871500\n2026-11-17 07:30:00 pm_bwg_hy2_down delta=134908B total=674009B\n2026-11-17 07:30:00 pm_bwg_hy2_up delta=115060B total=621079B\n2026-11-17 07:30:00 pm_bwg_vless_down delta=45721B total=230056B\n2026-11-17 07:30:00 pm_bwg_vless_up delta=17936B total=88959B\nrun ts=1794871800\n2026-11-17 07:35:00 pm_bwg_hy2_down delta=146643B total=820652B\n2026-11-17 07:35:00 pm_bwg_hy2_up delta=133154B total=754233B\n2026-11-17 07:35:00 pm_bwg_vless_down delta=30426B total=260482B\n2026-11-17 07:35:00 pm_bwg_vless_up delta=12238B total=101197B\nrun ts=1794872100\npm_bwg_hy2_down 820652\npm_bwg_hy2_up 754233\npm_bwg_vless_down 260482\npm_bwg_vless_up 101197\npm_cf1_down 21196\npm_cf1_up 11118\npm_cf2_down 21185\npm_cf2_up 11042\npm_gia_hy2_down 13082\npm_gia_hy2_up 7277\npm_gia_vless_down 46708\npm_gia_vless_up 18548",
+        "stderr": ""
+      },
+      "meter_rules_before": {
+        "rc": 0,
+        "stdout": "Chain PROXY_METER_OUT (1 references)\n    pkts      bytes target     prot opt in     out     source               destination         \n     462   112970            tcp  --  *      *       0.0.0.0/0            74.82.193.113        tcp dpt:443 /* pm_bwg_vless_up */\n    2209   848328            udp  --  *      *       0.0.0.0/0            74.82.193.113        udp dpt:34567 /* pm_bwg_hy2_up */\n      74    18548            tcp  --  *      *       0.0.0.0/0            154.36.139.155       tcp dpt:443 /* pm_gia_vless_up */\n      48     7277            udp  --  *      *       0.0.0.0/0            154.36.139.155       udp dpt:34568 /* pm_gia_hy2_up */\n      50    11118            tcp  --  *      *       0.0.0.0/0            104.18.32.7          tcp dpt:2053 /* pm_cf1_up */\n      51    11042            tcp  --  *      *       0.0.0.0/0            162.159.135.42       tcp dpt:2053 /* pm_cf2_up */\nChain PROXY_METER_IN (1 references)\n    pkts      bytes target     prot opt in     out     source               destination         \n     379   291235            tcp  --  *      *       74.82.193.113        0.0.0.0/0            tcp spt:443 /* pm_bwg_vless_down */\n    2386   912995            udp  --  *      *       74.82.193.113        0.0.0.0/0            udp spt:34567 /* pm_bwg_hy2_down */\n      65    46708            tcp  --  *      *       154.36.139.155       0.0.0.0/0            tcp spt:443 /* pm_gia_vless_down */\n      52    13082            udp  --  *      *       154.36.139.155       0.0.0.0/0            udp spt:34568 /* pm_gia_hy2_down */\n      37    21196            tcp  --  *      *       104.18.32.7          0.0.0.0/0            tcp spt:2053 /* pm_cf1_down */\n      37    21185            tcp  --  *      *       162.159.135.42       0.0.0.0/0            tcp spt:2053 /* pm_cf2_down */",
+        "stderr": ""
+      },
+      "groups": {
+        "PROXY": {
+          "type": "Selector",
+          "now": "AUTO",
+          "all": [
+            "AUTO",
+            "BWG-HY2-JPTY-01",
+            "BWG-VLESS-JPTY-01",
+            "DIRECT"
+          ]
+        },
+        "AUTO": {
+          "type": "Fallback",
+          "now": "NODE-PICK",
+          "all": [
+            "NODE-PICK",
+            "AIRPORT",
+            "DIRECT"
+          ]
+        },
+        "NODE-PICK": {
+          "type": "Fallback",
+          "now": "BWG-HY2-JPTY-01",
+          "all": [
+            "BWG-HY2-JPTY-01",
+            "BWG-VLESS-JPTY-01"
+          ]
+        },
+        "US-MEDIA": {
+          "type": "Fallback",
+          "now": "NODE-PICK",
+          "all": [
+            "NODE-PICK",
+            "AIRPORT"
+          ]
+        },
+        "DOWNLOAD": {
+          "type": "Selector",
+          "now": "DIRECT",
+          "all": [
+            "DIRECT",
+            "PROXY"
+          ]
+        }
+      },
+      "config_metadata": {
+        "mode": "rule",
+        "ipv6": false,
+        "proxies": [
+          {
+            "name": "BWG-HY2-JPTY-01",
+            "type": "hysteria2",
+            "server": "74.82.193.113",
+            "port": 34567
+          },
+          {
+            "name": "BWG-VLESS-JPTY-01",
+            "type": "vless",
+            "server": "74.82.193.113",
+            "port": 443
+          }
+        ],
+        "groups": [
+          {
+            "name": "PROXY",
+            "type": "select",
+            "proxies": [
+              "AUTO",
+              "BWG-HY2-JPTY-01",
+              "BWG-VLESS-JPTY-01",
+              "DIRECT"
+            ]
+          },
+          {
+            "name": "AIRPORT",
+            "type": "url-test",
+            "proxies": null
+          },
+          {
+            "name": "AUTO",
+            "type": "fallback",
+            "proxies": [
+              "NODE-PICK",
+              "AIRPORT",
+              "DIRECT"
+            ]
+          },
+          {
+            "name": "NODE-PICK",
+            "type": "fallback",
+            "proxies": [
+              "BWG-HY2-JPTY-01",
+              "BWG-VLESS-JPTY-01"
+            ]
+          },
+          {
+            "name": "CN-MEDIA",
+            "type": "select",
+            "proxies": [
+              "DIRECT"
+            ]
+          },
+          {
+            "name": "DOWNLOAD",
+            "type": "select",
+            "proxies": [
+              "DIRECT",
+              "PROXY"
+            ]
+          },
+          {
+            "name": "US-MEDIA",
+            "type": "fallback",
+            "proxies": [
+              "NODE-PICK",
+              "AIRPORT"
+            ]
+          }
+        ],
+        "provider_count": 1,
+        "bulk_rules_count": 0
+      },
+      "transactions": {
+        "rc": 0,
+        "stdout": "SELFHEAL_PAUSE_ABSENT\nhealth=200",
+        "stderr": ""
+      },
+      "bounded_get": {
+        "rc": 0,
+        "stdout": "code=200 bytes=65536 seconds=0.601310",
+        "stderr": ""
+      },
+      "meter_rules_after": {
+        "rc": 0,
+        "stdout": "Chain PROXY_METER_OUT (1 references)\n    pkts      bytes target     prot opt in     out     source               destination         \n     462   112970            tcp  --  *      *       0.0.0.0/0            74.82.193.113        tcp dpt:443 /* pm_bwg_vless_up */\n    2241   851262            udp  --  *      *       0.0.0.0/0            74.82.193.113        udp dpt:34567 /* pm_bwg_hy2_up */\n      74    18548            tcp  --  *      *       0.0.0.0/0            154.36.139.155       tcp dpt:443 /* pm_gia_vless_up */\n      48     7277            udp  --  *      *       0.0.0.0/0            154.36.139.155       udp dpt:34568 /* pm_gia_hy2_up */\n      50    11118            tcp  --  *      *       0.0.0.0/0            104.18.32.7          tcp dpt:2053 /* pm_cf1_up */\n      51    11042            tcp  --  *      *       0.0.0.0/0            162.159.135.42       tcp dpt:2053 /* pm_cf2_up */\nChain PROXY_METER_IN (1 references)\n    pkts      bytes target     prot opt in     out     source               destination         \n     379   291235            tcp  --  *      *       74.82.193.113        0.0.0.0/0            tcp spt:443 /* pm_bwg_vless_down */\n    2444   987679            udp  --  *      *       74.82.193.113        0.0.0.0/0            udp spt:34567 /* pm_bwg_hy2_down */\n      65    46708            tcp  --  *      *       154.36.139.155       0.0.0.0/0            tcp spt:443 /* pm_gia_vless_down */\n      52    13082            udp  --  *      *       154.36.139.155       0.0.0.0/0            udp spt:34568 /* pm_gia_hy2_down */\n      37    21196            tcp  --  *      *       104.18.32.7          0.0.0.0/0            tcp spt:2053 /* pm_cf1_down */\n      37    21185            tcp  --  *      *       162.159.135.42       0.0.0.0/0            tcp spt:2053 /* pm_cf2_down */",
+        "stderr": ""
+      }
+    },
+    "GIA": {
+      "connected": true,
+      "attempts": [
+        {
+          "route": "direct",
+          "port": 22,
+          "error_type": "SSHException"
+        },
+        {
+          "route": "direct_alternate_port",
+          "port": 28722,
+          "success": true
+        }
+      ],
+      "system_qdisc": {
+        "rc": 0,
+        "stdout": "2026-11-17T07:39:23+08:00\n6.8.0-138-generic\ndefault via 154.36.139.254 dev eth0 proto static onlink \ntc utility, iproute2-6.1.0, libbpf 1.3.0\nqdisc noqueue 0: dev lo root refcnt 2 \n Sent 0 bytes 0 pkt (dropped 0, overlimits 0 requeues 0) \n backlog 0b 0p requeues 0\nqdisc fq 0: dev eth0 root refcnt 2 limit 10000p flow_limit 100p buckets 1024 orphan_mask 1023 quantum 3028b initial_quantum 15140b low_rate_threshold 550Kbit refill_delay 40ms timer_slack 10us horizon 10s horizon_drop \n Sent 460414462901 bytes 509332787 pkt (dropped 165, overlimits 0 requeues 53) \n backlog 0b 0p requeues 53\n  flows 1031 (inactive 1031 throttled 0)\n  gc 458158 highprio 0 throttled 68029879 latency 28.7us flows_plimit 99\n horizon_drops 66\nqdisc fq 0: dev eth1 root refcnt 2 limit 10000p flow_limit 100p buckets 1024 orphan_mask 1023 quantum 3028b initial_quantum 15140b low_rate_threshold 550Kbit refill_delay 40ms timer_slack 10us horizon 10s horizon_drop \n Sent 238852 bytes 5386 pkt (dropped 0, overlimits 0 requeues 0) \n backlog 0b 0p requeues 0\n  flows 0 (inactive 0 throttled 0)\n  gc 0 highprio 0 throttled 0\nlo               UNKNOWN        00:00:00:00:00:00 <LOOPBACK,UP,LOWER_UP> \neth0             UP             00:97:a8:ca:63:dc <BROADCAST,MULTICAST,UP,LOWER_UP> \neth1             UP             00:d7:41:e4:e5:b0 <BROADCAST,MULTICAST,UP,LOWER_UP> \nFilesystem               Size  Used Avail Use% Mounted on\n/dev/mapper/ubuntu-root   15G  6.6G  7.9G  46% /\n/dev/mapper/ubuntu-root   15G  6.6G  7.9G  46% /",
+        "stderr": ""
+      },
+      "listeners_services": {
+        "rc": 0,
+        "stdout": "udp 127.0.0.1:323\nudp 127.0.0.54:53\nudp 127.0.0.53%lo:53\nudp *:34568\nudp [::1]:323\ntcp 0.0.0.0:28722\ntcp 0.0.0.0:22\ntcp 127.0.0.54:53\ntcp 127.0.0.1:8443\ntcp 127.0.0.53%lo:53\ntcp [::]:28722\ntcp *:2053\ntcp [::]:22\ntcp *:443\ns-box-ws.service active running\ns-box.service active running\nLoadState=not-found\nActiveState=inactive\nFragmentPath=",
+        "stderr": ""
+      },
+      "meter_files": {
+        "rc": 0,
+        "stdout": "05dd215e908516dda0598af3c44c6df173f434d2ba851fad0916b4d958435118  /usr/local/bin/gia-meter-sample.sh\n* * * * * /usr/local/bin/gia-meter-sample.sh #gia-meter\n-rw-r--r-- 1 0 0 569233 Nov 17 07:39 /var/lib/gia-meter/samples.jsonl",
+        "stderr": ""
+      },
+      "gia_meter": {
+        "available": true,
+        "counters": [
+          {
+            "name": "r1_up",
+            "packets": 1504,
+            "bytes": 325636
+          },
+          {
+            "name": "r1_down",
+            "packets": 1202,
+            "bytes": 794901
+          },
+          {
+            "name": "r2_up",
+            "packets": 130,
+            "bytes": 26199
+          },
+          {
+            "name": "r2_down",
+            "packets": 109,
+            "bytes": 59434
+          },
+          {
+            "name": "r3_up",
+            "packets": 1590,
+            "bytes": 332124
+          },
+          {
+            "name": "r3_down",
+            "packets": 1136,
+            "bytes": 787933
+          },
+          {
+            "name": "r4_up",
+            "packets": 1491,
+            "bytes": 330705
+          },
+          {
+            "name": "r4_down",
+            "packets": 1126,
+            "bytes": 785193
+          },
+          {
+            "name": "r5_up",
+            "packets": 1492,
+            "bytes": 327164
+          },
+          {
+            "name": "r5_down",
+            "packets": 1124,
+            "bytes": 785429
+          },
+          {
+            "name": "r6_up",
+            "packets": 1499,
+            "bytes": 328260
+          },
+          {
+            "name": "r6_down",
+            "packets": 1145,
+            "bytes": 788680
+          },
+          {
+            "name": "r8_up",
+            "packets": 1396,
+            "bytes": 334739
+          },
+          {
+            "name": "r8_down",
+            "packets": 1093,
+            "bytes": 784790
+          },
+          {
+            "name": "r9_up",
+            "packets": 1472,
+            "bytes": 320787
+          },
+          {
+            "name": "r9_down",
+            "packets": 1110,
+            "bytes": 767331
+          },
+          {
+            "name": "cf_up_shared",
+            "packets": 7275,
+            "bytes": 1554125
+          },
+          {
+            "name": "cf_down_shared",
+            "packets": 5254,
+            "bytes": 2200643
+          },
+          {
+            "name": "unknown_up",
+            "packets": 20636,
+            "bytes": 8826702
+          },
+          {
+            "name": "unknown_down",
+            "packets": 21581,
+            "bytes": 4975038
+          }
+        ],
+        "rule_count": 36,
+        "chain_names": [
+          "input",
+          "output"
+        ],
+        "rules": [
+          {
+            "family": "inet",
+            "table": "gia_usage_meter",
+            "chain": "input",
+            "handle": 23,
+            "expr": [
+              {
+                "match": {
+                  "op": "==",
+                  "left": {
+                    "payload": {
+                      "protocol": "ip",
+                      "field": "saddr"
+                    }
+                  },
+                  "right": "60.210.151.42"
+                }
+              },
+              {
+                "match": {
+                  "op": "==",
+                  "left": {
+                    "payload": {
+                      "protocol": "tcp",
+                      "field": "dport"
+                    }
+                  },
+                  "right": 443
+                }
+              },
+              {
+                "counter": "r1_up"
+              }
+            ]
+          },
+          {
+            "family": "inet",
+            "table": "gia_usage_meter",
+            "chain": "input",
+            "handle": 24,
+            "expr": [
+              {
+                "match": {
+                  "op": "==",
+                  "left": {
+                    "payload": {
+                      "protocol": "ip",
+                      "field": "saddr"
+                    }
+                  },
+                  "right": "60.210.151.42"
+                }
+              },
+              {
+                "match": {
+                  "op": "==",
+                  "left": {
+                    "payload": {
+                      "protocol": "udp",
+                      "field": "dport"
+                    }
+                  },
+                  "right": 34568
+                }
+              },
+              {
+                "counter": "r1_up"
+              }
+            ]
+          },
+          {
+            "family": "inet",
+            "table": "gia_usage_meter",
+            "chain": "input",
+            "handle": 25,
+            "expr": [
+              {
+                "match": {
+                  "op": "==",
+                  "left": {
+                    "payload": {
+                      "protocol": "ip",
+                      "field": "saddr"
+                    }
+                  },
+                  "right": "58.58.177.226"
+                }
+              },
+              {
+                "match": {
+                  "op": "==",
+                  "left": {
+                    "payload": {
+                      "protocol": "tcp",
+                      "field": "dport"
+                    }
+                  },
+                  "right": 443
+                }
+              },
+              {
+                "counter": "r2_up"
+              }
+            ]
+          },
+          {
+            "family": "inet",
+            "table": "gia_usage_meter",
+            "chain": "input",
+            "handle": 26,
+            "expr": [
+              {
+                "match": {
+                  "op": "==",
+                  "left": {
+                    "payload": {
+                      "protocol": "ip",
+                      "field": "saddr"
+                    }
+                  },
+                  "right": "58.58.177.226"
+                }
+              },
+              {
+                "match": {
+                  "op": "==",
+                  "left": {
+                    "payload": {
+                      "protocol": "udp",
+                      "field": "dport"
+                    }
+                  },
+                  "right": 34568
+                }
+              },
+              {
+                "counter": "r2_up"
+              }
+            ]
+          },
+          {
+            "family": "inet",
+            "table": "gia_usage_meter",
+            "chain": "input",
+            "handle": 27,
+            "expr": [
+              {
+                "match": {
+                  "op": "==",
+                  "left": {
+                    "payload": {
+                      "protocol": "ip",
+                      "field": "saddr"
+                    }
+                  },
+                  "right": "119.176.93.186"
+                }
+              },
+              {
+                "match": {
+                  "op": "==",
+                  "left": {
+                    "payload": {
+                      "protocol": "tcp",
+                      "field": "dport"
+                    }
+                  },
+                  "right": 443
+                }
+              },
+              {
+                "counter": "r3_up"
+              }
+            ]
+          },
+          {
+            "family": "inet",
+            "table": "gia_usage_meter",
+            "chain": "input",
+            "handle": 28,
+            "expr": [
+              {
+                "match": {
+                  "op": "==",
+                  "left": {
+                    "payload": {
+                      "protocol": "ip",
+                      "field": "saddr"
+                    }
+                  },
+                  "right": "119.176.93.186"
+                }
+              },
+              {
+                "match": {
+                  "op": "==",
+                  "left": {
+                    "payload": {
+                      "protocol": "udp",
+                      "field": "dport"
+                    }
+                  },
+                  "right": 34568
+                }
+              },
+              {
+                "counter": "r3_up"
+              }
+            ]
+          },
+          {
+            "family": "inet",
+            "table": "gia_usage_meter",
+            "chain": "input",
+            "handle": 29,
+            "expr": [
+              {
+                "match": {
+                  "op": "==",
+                  "left": {
+                    "payload": {
+                      "protocol": "ip",
+                      "field": "saddr"
+                    }
+                  },
+                  "right": "27.205.184.56"
+                }
+              },
+              {
+                "match": {
+                  "op": "==",
+                  "left": {
+                    "payload": {
+                      "protocol": "tcp",
+                      "field": "dport"
+                    }
+                  },
+                  "right": 443
+                }
+              },
+              {
+                "counter": "r4_up"
+              }
+            ]
+          },
+          {
+            "family": "inet",
+            "table": "gia_usage_meter",
+            "chain": "input",
+            "handle": 30,
+            "expr": [
+              {
+                "match": {
+                  "op": "==",
+                  "left": {
+                    "payload": {
+                      "protocol": "ip",
+                      "field": "saddr"
+                    }
+                  },
+                  "right": "27.205.184.56"
+                }
+              },
+              {
+                "match": {
+                  "op": "==",
+                  "left": {
+                    "payload": {
+                      "protocol": "udp",
+                      "field": "dport"
+                    }
+                  },
+                  "right": 34568
+                }
+              },
+              {
+                "counter": "r4_up"
+              }
+            ]
+          },
+          {
+            "family": "inet",
+            "table": "gia_usage_meter",
+            "chain": "input",
+            "handle": 31,
+            "expr": [
+              {
+                "match": {
+                  "op": "==",
+                  "left": {
+                    "payload": {
+                      "protocol": "ip",
+                      "field": "saddr"
+                    }
+                  },
+                  "right": "39.90.84.192"
+                }
+              },
+              {
+                "match": {
+                  "op": "==",
+                  "left": {
+                    "payload": {
+                      "protocol": "tcp",
+                      "field": "dport"
+                    }
+                  },
+                  "right": 443
+                }
+              },
+              {
+                "counter": "r5_up"
+              }
+            ]
+          },
+          {
+            "family": "inet",
+            "table": "gia_usage_meter",
+            "chain": "input",
+            "handle": 32,
+            "expr": [
+              {
+                "match": {
+                  "op": "==",
+                  "left": {
+                    "payload": {
+                      "protocol": "ip",
+                      "field": "saddr"
+                    }
+                  },
+                  "right": "39.90.84.192"
+                }
+              },
+              {
+                "match": {
+                  "op": "==",
+                  "left": {
+                    "payload": {
+                      "protocol": "udp",
+                      "field": "dport"
+                    }
+                  },
+                  "right": 34568
+                }
+              },
+              {
+                "counter": "r5_up"
+              }
+            ]
+          },
+          {
+            "family": "inet",
+            "table": "gia_usage_meter",
+            "chain": "input",
+            "handle": 33,
+            "expr": [
+              {
+                "match": {
+                  "op": "==",
+                  "left": {
+                    "payload": {
+                      "protocol": "ip",
+                      "field": "saddr"
+                    }
+                  },
+                  "right": "58.58.185.138"
+                }
+              },
+              {
+                "match": {
+                  "op": "==",
+                  "left": {
+                    "payload": {
+                      "protocol": "tcp",
+                      "field": "dport"
+                    }
+                  },
+                  "right": 443
+                }
+              },
+              {
+                "counter": "r6_up"
+              }
+            ]
+          },
+          {
+            "family": "inet",
+            "table": "gia_usage_meter",
+            "chain": "input",
+            "handle": 34,
+            "expr": [
+              {
+                "match": {
+                  "op": "==",
+                  "left": {
+                    "payload": {
+                      "protocol": "ip",
+                      "field": "saddr"
+                    }
+                  },
+                  "right": "58.58.185.138"
+                }
+              },
+              {
+                "match": {
+                  "op": "==",
+                  "left": {
+                    "payload": {
+                      "protocol": "udp",
+                      "field": "dport"
+                    }
+                  },
+                  "right": 34568
+                }
+              },
+              {
+                "counter": "r6_up"
+              }
+            ]
+          },
+          {
+            "family": "inet",
+            "table": "gia_usage_meter",
+            "chain": "input",
+            "handle": 35,
+            "expr": [
+              {
+                "match": {
+                  "op": "==",
+                  "left": {
+                    "payload": {
+                      "protocol": "ip",
+                      "field": "saddr"
+                    }
+                  },
+                  "right": "124.134.135.120"
+                }
+              },
+              {
+                "match": {
+                  "op": "==",
+                  "left": {
+                    "payload": {
+                      "protocol": "tcp",
+                      "field": "dport"
+                    }
+                  },
+                  "right": 443
+                }
+              },
+              {
+                "counter": "r8_up"
+              }
+            ]
+          },
+          {
+            "family": "inet",
+            "table": "gia_usage_meter",
+            "chain": "input",
+            "handle": 36,
+            "expr": [
+              {
+                "match": {
+                  "op": "==",
+                  "left": {
+                    "payload": {
+                      "protocol": "ip",
+                      "field": "saddr"
+                    }
+                  },
+                  "right": "124.134.135.120"
+                }
+              },
+              {
+                "match": {
+                  "op": "==",
+                  "left": {
+                    "payload": {
+                      "protocol": "udp",
+                      "field": "dport"
+                    }
+                  },
+                  "right": 34568
+                }
+              },
+              {
+                "counter": "r8_up"
+              }
+            ]
+          },
+          {
+            "family": "inet",
+            "table": "gia_usage_meter",
+            "chain": "input",
+            "handle": 37,
+            "expr": [
+              {
+                "match": {
+                  "op": "==",
+                  "left": {
+                    "payload": {
+                      "protocol": "ip",
+                      "field": "saddr"
+                    }
+                  },
+                  "right": "182.45.197.114"
+                }
+              },
+              {
+                "match": {
+                  "op": "==",
+                  "left": {
+                    "payload": {
+                      "protocol": "tcp",
+                      "field": "dport"
+                    }
+                  },
+                  "right": 443
+                }
+              },
+              {
+                "counter": "r9_up"
+              }
+            ]
+          },
+          {
+            "family": "inet",
+            "table": "gia_usage_meter",
+            "chain": "input",
+            "handle": 38,
+            "expr": [
+              {
+                "match": {
+                  "op": "==",
+                  "left": {
+                    "payload": {
+                      "protocol": "ip",
+                      "field": "saddr"
+                    }
+                  },
+                  "right": "182.45.197.114"
+                }
+              },
+              {
+                "match": {
+                  "op": "==",
+                  "left": {
+                    "payload": {
+                      "protocol": "udp",
+                      "field": "dport"
+                    }
+                  },
+                  "right": 34568
+                }
+              },
+              {
+                "counter": "r9_up"
+              }
+            ]
+          },
+          {
+            "family": "inet",
+            "table": "gia_usage_meter",
+            "chain": "input",
+            "handle": 39,
+            "expr": [
+              {
+                "match": {
+                  "op": "==",
+                  "left": {
+                    "payload": {
+                      "protocol": "tcp",
+                      "field": "dport"
+                    }
+                  },
+                  "right": 2053
+                }
+              },
+              {
+                "counter": "cf_up_shared"
+              }
+            ]
+          },
+          {
+            "family": "inet",
+            "table": "gia_usage_meter",
+            "chain": "input",
+            "handle": 41,
+            "expr": [
+              {
+                "match": {
+                  "op": "!=",
+                  "left": {
+                    "payload": {
+                      "protocol": "ip",
+                      "field": "saddr"
+                    }
+                  },
+                  "right": {
+                    "set": [
+                      "27.205.184.56",
+                      "39.90.84.192",
+                      "58.58.177.226",
+                      "58.58.185.138",
+                      "60.210.151.42",
+                      "119.176.93.186",
+                      "124.134.135.120",
+                      "182.45.197.114"
+                    ]
+                  }
+                }
+              },
+              {
+                "counter": "unknown_up"
+              }
+            ]
+          },
+          {
+            "family": "inet",
+            "table": "gia_usage_meter",
+            "chain": "output",
+            "handle": 42,
+            "expr": [
+              {
+                "match": {
+                  "op": "==",
+                  "left": {
+                    "payload": {
+                      "protocol": "ip",
+                      "field": "daddr"
+                    }
+                  },
+                  "right": "60.210.151.42"
+                }
+              },
+              {
+                "match": {
+                  "op": "==",
+                  "left": {
+                    "payload": {
+                      "protocol": "tcp",
+                      "field": "sport"
+                    }
+                  },
+                  "right": 443
+                }
+              },
+              {
+                "counter": "r1_down"
+              }
+            ]
+          },
+          {
+            "family": "inet",
+            "table": "gia_usage_meter",
+            "chain": "output",
+            "handle": 43,
+            "expr": [
+              {
+                "match": {
+                  "op": "==",
+                  "left": {
+                    "payload": {
+                      "protocol": "ip",
+                      "field": "daddr"
+                    }
+                  },
+                  "right": "60.210.151.42"
+                }
+              },
+              {
+                "match": {
+                  "op": "==",
+                  "left": {
+                    "payload": {
+                      "protocol": "udp",
+                      "field": "sport"
+                    }
+                  },
+                  "right": 34568
+                }
+              },
+              {
+                "counter": "r1_down"
+              }
+            ]
+          },
+          {
+            "family": "inet",
+            "table": "gia_usage_meter",
+            "chain": "output",
+            "handle": 44,
+            "expr": [
+              {
+                "match": {
+                  "op": "==",
+                  "left": {
+                    "payload": {
+                      "protocol": "ip",
+                      "field": "daddr"
+                    }
+                  },
+                  "right": "58.58.177.226"
+                }
+              },
+              {
+                "match": {
+                  "op": "==",
+                  "left": {
+                    "payload": {
+                      "protocol": "tcp",
+                      "field": "sport"
+                    }
+                  },
+                  "right": 443
+                }
+              },
+              {
+                "counter": "r2_down"
+              }
+            ]
+          },
+          {
+            "family": "inet",
+            "table": "gia_usage_meter",
+            "chain": "output",
+            "handle": 45,
+            "expr": [
+              {
+                "match": {
+                  "op": "==",
+                  "left": {
+                    "payload": {
+                      "protocol": "ip",
+                      "field": "daddr"
+                    }
+                  },
+                  "right": "58.58.177.226"
+                }
+              },
+              {
+                "match": {
+                  "op": "==",
+                  "left": {
+                    "payload": {
+                      "protocol": "udp",
+                      "field": "sport"
+                    }
+                  },
+                  "right": 34568
+                }
+              },
+              {
+                "counter": "r2_down"
+              }
+            ]
+          },
+          {
+            "family": "inet",
+            "table": "gia_usage_meter",
+            "chain": "output",
+            "handle": 46,
+            "expr": [
+              {
+                "match": {
+                  "op": "==",
+                  "left": {
+                    "payload": {
+                      "protocol": "ip",
+                      "field": "daddr"
+                    }
+                  },
+                  "right": "119.176.93.186"
+                }
+              },
+              {
+                "match": {
+                  "op": "==",
+                  "left": {
+                    "payload": {
+                      "protocol": "tcp",
+                      "field": "sport"
+                    }
+                  },
+                  "right": 443
+                }
+              },
+              {
+                "counter": "r3_down"
+              }
+            ]
+          },
+          {
+            "family": "inet",
+            "table": "gia_usage_meter",
+            "chain": "output",
+            "handle": 47,
+            "expr": [
+              {
+                "match": {
+                  "op": "==",
+                  "left": {
+                    "payload": {
+                      "protocol": "ip",
+                      "field": "daddr"
+                    }
+                  },
+                  "right": "119.176.93.186"
+                }
+              },
+              {
+                "match": {
+                  "op": "==",
+                  "left": {
+                    "payload": {
+                      "protocol": "udp",
+                      "field": "sport"
+                    }
+                  },
+                  "right": 34568
+                }
+              },
+              {
+                "counter": "r3_down"
+              }
+            ]
+          },
+          {
+            "family": "inet",
+            "table": "gia_usage_meter",
+            "chain": "output",
+            "handle": 48,
+            "expr": [
+              {
+                "match": {
+                  "op": "==",
+                  "left": {
+                    "payload": {
+                      "protocol": "ip",
+                      "field": "daddr"
+                    }
+                  },
+                  "right": "27.205.184.56"
+                }
+              },
+              {
+                "match": {
+                  "op": "==",
+                  "left": {
+                    "payload": {
+                      "protocol": "tcp",
+                      "field": "sport"
+                    }
+                  },
+                  "right": 443
+                }
+              },
+              {
+                "counter": "r4_down"
+              }
+            ]
+          },
+          {
+            "family": "inet",
+            "table": "gia_usage_meter",
+            "chain": "output",
+            "handle": 49,
+            "expr": [
+              {
+                "match": {
+                  "op": "==",
+                  "left": {
+                    "payload": {
+                      "protocol": "ip",
+                      "field": "daddr"
+                    }
+                  },
+                  "right": "27.205.184.56"
+                }
+              },
+              {
+                "match": {
+                  "op": "==",
+                  "left": {
+                    "payload": {
+                      "protocol": "udp",
+                      "field": "sport"
+                    }
+                  },
+                  "right": 34568
+                }
+              },
+              {
+                "counter": "r4_down"
+              }
+            ]
+          },
+          {
+            "family": "inet",
+            "table": "gia_usage_meter",
+            "chain": "output",
+            "handle": 50,
+            "expr": [
+              {
+                "match": {
+                  "op": "==",
+                  "left": {
+                    "payload": {
+                      "protocol": "ip",
+                      "field": "daddr"
+                    }
+                  },
+                  "right": "39.90.84.192"
+                }
+              },
+              {
+                "match": {
+                  "op": "==",
+                  "left": {
+                    "payload": {
+                      "protocol": "tcp",
+                      "field": "sport"
+                    }
+                  },
+                  "right": 443
+                }
+              },
+              {
+                "counter": "r5_down"
+              }
+            ]
+          },
+          {
+            "family": "inet",
+            "table": "gia_usage_meter",
+            "chain": "output",
+            "handle": 51,
+            "expr": [
+              {
+                "match": {
+                  "op": "==",
+                  "left": {
+                    "payload": {
+                      "protocol": "ip",
+                      "field": "daddr"
+                    }
+                  },
+                  "right": "39.90.84.192"
+                }
+              },
+              {
+                "match": {
+                  "op": "==",
+                  "left": {
+                    "payload": {
+                      "protocol": "udp",
+                      "field": "sport"
+                    }
+                  },
+                  "right": 34568
+                }
+              },
+              {
+                "counter": "r5_down"
+              }
+            ]
+          },
+          {
+            "family": "inet",
+            "table": "gia_usage_meter",
+            "chain": "output",
+            "handle": 52,
+            "expr": [
+              {
+                "match": {
+                  "op": "==",
+                  "left": {
+                    "payload": {
+                      "protocol": "ip",
+                      "field": "daddr"
+                    }
+                  },
+                  "right": "58.58.185.138"
+                }
+              },
+              {
+                "match": {
+                  "op": "==",
+                  "left": {
+                    "payload": {
+                      "protocol": "tcp",
+                      "field": "sport"
+                    }
+                  },
+                  "right": 443
+                }
+              },
+              {
+                "counter": "r6_down"
+              }
+            ]
+          },
+          {
+            "family": "inet",
+            "table": "gia_usage_meter",
+            "chain": "output",
+            "handle": 53,
+            "expr": [
+              {
+                "match": {
+                  "op": "==",
+                  "left": {
+                    "payload": {
+                      "protocol": "ip",
+                      "field": "daddr"
+                    }
+                  },
+                  "right": "58.58.185.138"
+                }
+              },
+              {
+                "match": {
+                  "op": "==",
+                  "left": {
+                    "payload": {
+                      "protocol": "udp",
+                      "field": "sport"
+                    }
+                  },
+                  "right": 34568
+                }
+              },
+              {
+                "counter": "r6_down"
+              }
+            ]
+          },
+          {
+            "family": "inet",
+            "table": "gia_usage_meter",
+            "chain": "output",
+            "handle": 54,
+            "expr": [
+              {
+                "match": {
+                  "op": "==",
+                  "left": {
+                    "payload": {
+                      "protocol": "ip",
+                      "field": "daddr"
+                    }
+                  },
+                  "right": "124.134.135.120"
+                }
+              },
+              {
+                "match": {
+                  "op": "==",
+                  "left": {
+                    "payload": {
+                      "protocol": "tcp",
+                      "field": "sport"
+                    }
+                  },
+                  "right": 443
+                }
+              },
+              {
+                "counter": "r8_down"
+              }
+            ]
+          },
+          {
+            "family": "inet",
+            "table": "gia_usage_meter",
+            "chain": "output",
+            "handle": 55,
+            "expr": [
+              {
+                "match": {
+                  "op": "==",
+                  "left": {
+                    "payload": {
+                      "protocol": "ip",
+                      "field": "daddr"
+                    }
+                  },
+                  "right": "124.134.135.120"
+                }
+              },
+              {
+                "match": {
+                  "op": "==",
+                  "left": {
+                    "payload": {
+                      "protocol": "udp",
+                      "field": "sport"
+                    }
+                  },
+                  "right": 34568
+                }
+              },
+              {
+                "counter": "r8_down"
+              }
+            ]
+          },
+          {
+            "family": "inet",
+            "table": "gia_usage_meter",
+            "chain": "output",
+            "handle": 56,
+            "expr": [
+              {
+                "match": {
+                  "op": "==",
+                  "left": {
+                    "payload": {
+                      "protocol": "ip",
+                      "field": "daddr"
+                    }
+                  },
+                  "right": "182.45.197.114"
+                }
+              },
+              {
+                "match": {
+                  "op": "==",
+                  "left": {
+                    "payload": {
+                      "protocol": "tcp",
+                      "field": "sport"
+                    }
+                  },
+                  "right": 443
+                }
+              },
+              {
+                "counter": "r9_down"
+              }
+            ]
+          },
+          {
+            "family": "inet",
+            "table": "gia_usage_meter",
+            "chain": "output",
+            "handle": 57,
+            "expr": [
+              {
+                "match": {
+                  "op": "==",
+                  "left": {
+                    "payload": {
+                      "protocol": "ip",
+                      "field": "daddr"
+                    }
+                  },
+                  "right": "182.45.197.114"
+                }
+              },
+              {
+                "match": {
+                  "op": "==",
+                  "left": {
+                    "payload": {
+                      "protocol": "udp",
+                      "field": "sport"
+                    }
+                  },
+                  "right": 34568
+                }
+              },
+              {
+                "counter": "r9_down"
+              }
+            ]
+          },
+          {
+            "family": "inet",
+            "table": "gia_usage_meter",
+            "chain": "output",
+            "handle": 58,
+            "expr": [
+              {
+                "match": {
+                  "op": "==",
+                  "left": {
+                    "payload": {
+                      "protocol": "tcp",
+                      "field": "sport"
+                    }
+                  },
+                  "right": 2053
+                }
+              },
+              {
+                "counter": "cf_down_shared"
+              }
+            ]
+          },
+          {
+            "family": "inet",
+            "table": "gia_usage_meter",
+            "chain": "output",
+            "handle": 60,
+            "expr": [
+              {
+                "match": {
+                  "op": "!=",
+                  "left": {
+                    "payload": {
+                      "protocol": "ip",
+                      "field": "daddr"
+                    }
+                  },
+                  "right": {
+                    "set": [
+                      "27.205.184.56",
+                      "39.90.84.192",
+                      "58.58.177.226",
+                      "58.58.185.138",
+                      "60.210.151.42",
+                      "119.176.93.186",
+                      "124.134.135.120",
+                      "182.45.197.114"
+                    ]
+                  }
+                }
+              },
+              {
+                "counter": "unknown_down"
+              }
+            ]
+          }
+        ]
+      },
+      "sample_window": {
+        "rc": 0,
+        "stdout": "{\"lines\": 38, \"valid\": 38, \"bad\": 0, \"error_samples\": 0, \"first_ts\": \"2026-11-17 07:03:08 +0800\", \"last_ts\": \"2026-11-17 07:39:01 +0800\", \"boot_ids\": [\"07768a5d\"]}",
+        "stderr": ""
+      },
+      "vnstat": {
+        "rc": 0,
+        "stdout": "{\"vnstatversion\":\"2.12\",\"jsonversion\":\"2\",\"interfaces\":[{\"name\":\"eth0\",\"alias\":\"\",\"created\":{\"date\":{\"year\":2026,\"month\":10,\"day\":31},\"timestamp\":1793410910},\"updated\":{\"date\":{\"year\":2026,\"month\":11,\"day\":17},\"time\":{\"hour\":7,\"minute\":35},\"timestamp\":1794872100},\"traffic\":{\"total\":{\"rx\":426638456959,\"tx\":429718979679},\"month\":[{\"id\":4,\"date\":{\"year\":2026,\"month\":11},\"timestamp\":1793462400,\"rx\":424483872613,\"tx\":427621492238}]}},{\"name\":\"eth1\",\"alias\":\"\",\"created\":{\"date\":{\"year\":2026,\"month\":10,\"day\":31},\"timestamp\":1793410910},\"updated\":{\"date\":{\"year\":2026,\"month\":11,\"day\":17},\"time\":{\"hour\":7,\"minute\":35},\"timestamp\":1794872100},\"traffic\":{\"total\":{\"rx\":73404106,\"tx\":234808},\"month\":[{\"id\":3,\"date\":{\"year\":2026,\"month\":11},\"timestamp\":1793462400,\"rx\":70407378,\"tx\":233828}]}}]}",
+        "stderr": ""
+      }
+    },
+    "BWG": {
+      "connected": false,
+      "attempts": [
+        {
+          "route": "direct",
+          "port": 22,
+          "error": "authentication_failed"
+        }
+      ],
+      "local_default_key_result": "authentication_failed",
+      "followup_limit": "No further password trials; no BWG-specific existing key path found on GZ/GIA"
+    }
+  },
+  "finished_local": "2026-11-17T07:39:38+08:00",
+  "fleet_followup_started_local": "2026-11-17T07:44:42+08:00",
+  "fleet_groups_followup": {
+    "R1": {
+      "connected": true,
+      "time": "2026-11-17 07:44:44 +0800",
+      "groups": {
+        "PROXY": {
+          "type": "Selector",
+          "now": "BWG-HY2-JPTY-01",
+          "all": [
+            "AUTO",
+            "US666-CN2GIA-01",
+            "BWG-HY2-JPTY-01",
+            "GIA-HY2-US-01",
+            "BWG-VLESS-JPTY-01",
+            "CF-CDN-GIA-01",
+            "CF2-CDN-GIA-01",
+            "DIRECT"
+          ]
+        },
+        "NODE-PICK": {
+          "type": "Fallback",
+          "now": "US666-CN2GIA-01",
+          "all": [
+            "US666-CN2GIA-01",
+            "BWG-HY2-JPTY-01",
+            "GIA-HY2-US-01",
+            "BWG-VLESS-JPTY-01",
+            "CF-CDN-GIA-01",
+            "CF2-CDN-GIA-01"
+          ]
+        },
+        "US-MEDIA": {
+          "type": "Fallback",
+          "now": "NODE-PICK",
+          "all": [
+            "NODE-PICK",
+            "AIRPORT"
+          ]
+        },
+        "DOWNLOAD": {
+          "type": "Selector",
+          "now": "DIRECT",
+          "all": [
+            "DIRECT",
+            "PROXY"
+          ]
+        }
+      }
+    },
+    "R3": {
+      "connected": true,
+      "time": "2026-11-17 07:44:44 +0800",
+      "groups": {
+        "PROXY": {
+          "type": "Selector",
+          "now": "BWG-HY2-JPTY-01",
+          "all": [
+            "AUTO",
+            "US666-CN2GIA-01",
+            "BWG-HY2-JPTY-01",
+            "GIA-HY2-US-01",
+            "BWG-VLESS-JPTY-01",
+            "CF-CDN-GIA-01",
+            "CF2-CDN-GIA-01",
+            "DIRECT"
+          ]
+        },
+        "NODE-PICK": {
+          "type": "Fallback",
+          "now": "US666-CN2GIA-01",
+          "all": [
+            "US666-CN2GIA-01",
+            "BWG-HY2-JPTY-01",
+            "GIA-HY2-US-01",
+            "BWG-VLESS-JPTY-01",
+            "CF-CDN-GIA-01",
+            "CF2-CDN-GIA-01"
+          ]
+        },
+        "US-MEDIA": {
+          "type": "Fallback",
+          "now": "NODE-PICK",
+          "all": [
+            "NODE-PICK",
+            "AIRPORT"
+          ]
+        },
+        "DOWNLOAD": {
+          "type": "Selector",
+          "now": "DIRECT",
+          "all": [
+            "DIRECT",
+            "PROXY"
+          ]
+        }
+      }
+    },
+    "R4": {
+      "connected": true,
+      "time": "2026-11-17 07:44:47 +0800",
+      "groups": {
+        "PROXY": {
+          "type": "Selector",
+          "now": "BWG-HY2-JPTY-01",
+          "all": [
+            "AUTO",
+            "US666-CN2GIA-01",
+            "BWG-HY2-JPTY-01",
+            "GIA-HY2-US-01",
+            "BWG-VLESS-JPTY-01",
+            "CF-CDN-GIA-01",
+            "CF2-CDN-GIA-01",
+            "DIRECT"
+          ]
+        },
+        "NODE-PICK": {
+          "type": "Fallback",
+          "now": "US666-CN2GIA-01",
+          "all": [
+            "US666-CN2GIA-01",
+            "BWG-HY2-JPTY-01",
+            "GIA-HY2-US-01",
+            "BWG-VLESS-JPTY-01",
+            "CF-CDN-GIA-01",
+            "CF2-CDN-GIA-01"
+          ]
+        },
+        "US-MEDIA": {
+          "type": "Fallback",
+          "now": "NODE-PICK",
+          "all": [
+            "NODE-PICK",
+            "AIRPORT"
+          ]
+        },
+        "DOWNLOAD": {
+          "type": "Selector",
+          "now": "DIRECT",
+          "all": [
+            "DIRECT",
+            "PROXY"
+          ]
+        }
+      }
+    },
+    "R5": {
+      "connected": true,
+      "time": "2026-11-17 07:44:47 +0800",
+      "groups": {
+        "PROXY": {
+          "type": "Selector",
+          "now": "BWG-HY2-JPTY-01",
+          "all": [
+            "AUTO",
+            "US666-CN2GIA-01",
+            "BWG-HY2-JPTY-01",
+            "GIA-HY2-US-01",
+            "BWG-VLESS-JPTY-01",
+            "CF-CDN-GIA-01",
+            "CF2-CDN-GIA-01",
+            "DIRECT"
+          ]
+        },
+        "NODE-PICK": {
+          "type": "Fallback",
+          "now": "US666-CN2GIA-01",
+          "all": [
+            "US666-CN2GIA-01",
+            "BWG-HY2-JPTY-01",
+            "GIA-HY2-US-01",
+            "BWG-VLESS-JPTY-01",
+            "CF-CDN-GIA-01",
+            "CF2-CDN-GIA-01"
+          ]
+        },
+        "US-MEDIA": {
+          "type": "Fallback",
+          "now": "NODE-PICK",
+          "all": [
+            "NODE-PICK",
+            "AIRPORT"
+          ]
+        },
+        "DOWNLOAD": {
+          "type": "Selector",
+          "now": "DIRECT",
+          "all": [
+            "DIRECT",
+            "PROXY"
+          ]
+        }
+      }
+    },
+    "R6": {
+      "connected": true,
+      "time": "2026-11-17 07:44:50 +0800",
+      "groups": {
+        "PROXY": {
+          "type": "Selector",
+          "now": "BWG-HY2-JPTY-01",
+          "all": [
+            "AUTO",
+            "US666-CN2GIA-01",
+            "BWG-HY2-JPTY-01",
+            "GIA-HY2-US-01",
+            "BWG-VLESS-JPTY-01",
+            "CF-CDN-GIA-01",
+            "CF2-CDN-GIA-01",
+            "DIRECT"
+          ]
+        },
+        "NODE-PICK": {
+          "type": "Fallback",
+          "now": "US666-CN2GIA-01",
+          "all": [
+            "US666-CN2GIA-01",
+            "BWG-HY2-JPTY-01",
+            "GIA-HY2-US-01",
+            "BWG-VLESS-JPTY-01",
+            "CF-CDN-GIA-01",
+            "CF2-CDN-GIA-01"
+          ]
+        },
+        "US-MEDIA": {
+          "type": "Fallback",
+          "now": "NODE-PICK",
+          "all": [
+            "NODE-PICK",
+            "AIRPORT"
+          ]
+        },
+        "DOWNLOAD": {
+          "type": "Selector",
+          "now": "DIRECT",
+          "all": [
+            "DIRECT",
+            "PROXY"
+          ]
+        }
+      }
+    },
+    "R8": {
+      "connected": true,
+      "time": "2026-11-17 07:44:50 +0800",
+      "groups": {
+        "PROXY": {
+          "type": "Selector",
+          "now": "BWG-HY2-JPTY-01",
+          "all": [
+            "AUTO",
+            "US666-CN2GIA-01",
+            "BWG-HY2-JPTY-01",
+            "GIA-HY2-US-01",
+            "BWG-VLESS-JPTY-01",
+            "CF-CDN-GIA-01",
+            "CF2-CDN-GIA-01",
+            "DIRECT"
+          ]
+        },
+        "NODE-PICK": {
+          "type": "Fallback",
+          "now": "US666-CN2GIA-01",
+          "all": [
+            "US666-CN2GIA-01",
+            "BWG-HY2-JPTY-01",
+            "GIA-HY2-US-01",
+            "BWG-VLESS-JPTY-01",
+            "CF-CDN-GIA-01",
+            "CF2-CDN-GIA-01"
+          ]
+        },
+        "US-MEDIA": {
+          "type": "Fallback",
+          "now": "NODE-PICK",
+          "all": [
+            "NODE-PICK",
+            "AIRPORT"
+          ]
+        },
+        "DOWNLOAD": {
+          "type": "Selector",
+          "now": "DIRECT",
+          "all": [
+            "DIRECT",
+            "PROXY"
+          ]
+        }
+      }
+    },
+    "R9": {
+      "connected": true,
+      "time": "2026-11-17 07:44:52 +0800",
+      "groups": {
+        "PROXY": {
+          "type": "Selector",
+          "now": "BWG-HY2-JPTY-01",
+          "all": [
+            "AUTO",
+            "US666-CN2GIA-01",
+            "BWG-HY2-JPTY-01",
+            "GIA-HY2-US-01",
+            "BWG-VLESS-JPTY-01",
+            "CF-CDN-GIA-01",
+            "CF2-CDN-GIA-01",
+            "DIRECT"
+          ]
+        },
+        "NODE-PICK": {
+          "type": "Fallback",
+          "now": "US666-CN2GIA-01",
+          "all": [
+            "US666-CN2GIA-01",
+            "BWG-HY2-JPTY-01",
+            "GIA-HY2-US-01",
+            "BWG-VLESS-JPTY-01",
+            "CF-CDN-GIA-01",
+            "CF2-CDN-GIA-01"
+          ]
+        },
+        "US-MEDIA": {
+          "type": "Fallback",
+          "now": "NODE-PICK",
+          "all": [
+            "NODE-PICK",
+            "AIRPORT"
+          ]
+        },
+        "DOWNLOAD": {
+          "type": "Selector",
+          "now": "DIRECT",
+          "all": [
+            "DIRECT",
+            "PROXY"
+          ]
+        }
+      }
+    }
+  },
+  "fleet_followup_finished_local": "2026-11-17T07:44:53+08:00",
+  "closing_gz_readonly": {
+    "time_local": "2026-11-17T07:52:04+08:00",
+    "result": {
+      "rc": 0,
+      "stdout": "BEGIN\nrtr-a9bcba|33|33|33|45|0\nrtr-e9ccdd|1|1|1|44378|0\n0\nCOMMIT",
+      "stderr": ""
+    }
+  }
+}

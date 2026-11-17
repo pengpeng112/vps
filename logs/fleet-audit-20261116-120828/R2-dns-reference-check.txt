@@ -1,0 +1,8 @@
+DEVICE=rtr-a9bcba MODE=check DHCP_SHA=e34a4de09f577b55576f9ffc81b5ac71df410790d58d5be1842ce49cfa1bd07f MISSING_RULES=10
+DNS gpp-tj100-1.lol.qq.com 198.18.17.172
+DNS tqos.gamesafe.qq.com 198.18.17.173
+DNS tqos.anticheatexpert.com 198.18.17.174
+DNS ied-tqos-tgp.qq.com 198.18.17.175
+DNS ied-tqos.qq.com 198.18.17.176
+CHECK_NEEDS_DNS_FIX
+

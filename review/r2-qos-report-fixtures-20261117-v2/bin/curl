@@ -1,0 +1,3 @@
+#!/bin/sh
+printf "curl %s\n" "$*" >> "$MOCK_CALLS"
+printf 204
