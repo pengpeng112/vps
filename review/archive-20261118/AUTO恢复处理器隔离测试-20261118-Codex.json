@@ -1,0 +1,38 @@
+{
+  "source_sha256": "71a5045e43c321c2a9e18599b79fb315e4c24b6ab5db3d86031a129994ebdcce",
+  "local_only": true,
+  "calls_mocked": true,
+  "restore_before_transaction_commit": true,
+  "tests": [
+    {
+      "case": "normal",
+      "expected": "1 AUTO",
+      "actual": "1 AUTO",
+      "pass": true
+    },
+    {
+      "case": "put-failure",
+      "expected": "0 AUTO",
+      "actual": "0 AUTO",
+      "pass": true
+    },
+    {
+      "case": "readback-mismatch",
+      "expected": "0 BWG",
+      "actual": "0 BWG",
+      "pass": true
+    },
+    {
+      "case": "probe-failure",
+      "expected": "0 AUTO",
+      "actual": "0 AUTO",
+      "pass": true
+    },
+    {
+      "case": "reload-keeps-selection",
+      "expected": "1 BWG",
+      "actual": "1 BWG",
+      "pass": true
+    }
+  ]
+}

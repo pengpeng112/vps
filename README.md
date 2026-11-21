@@ -1,36 +1,35 @@
-# VPS 与路由器项目
+# VPS 与路由器集群管理系统
 
-唯一工作目录：`F:\vps`。入口核对于 **2026-10-12**。移动记录见 [2026-10-01 清单](docs/archive/20261001-manifest.md) 和 [2026-10-12 清单](docs/archive/20261012-manifest.md)。
+唯一工作目录：`F:\vps`（入口核对：**2026-11-21**）。历次归档映射见 [docs/archive/](docs/archive/README.md)（含 [20261121-manifest.md](docs/archive/20261121-manifest.md)）。
 
 ## 新会话从这里开始
 
-1. [AGENTS.md](AGENTS.md)：态势速览、工作边界、高危坑。
-2. [当前状态](docs/current/当前状态.md)：已知事实、来源日期、冲突与未验证项（顶部最新）。
-3. [跨 AI 协作入口](docs/AI协作入口.md)：启动提示词、事实优先级和交接格式。
-4. 设备接入/隧道升级看 [v3 标准流程](docs/operations/设备接入与隧道升级标准流程-v3-20261002.md)；进行中任务见 [资料索引 §二](docs/INDEX.md)。
-5. 通过 [资料索引](docs/INDEX.md) 按需阅读，不要一次加载所有历史会话和凭证。
+1. **[AGENTS.md](AGENTS.md)**（唯一权威协作规则）：分层启动（T0/T1/T2）、三色授权边界、多 AI 锁、生产红线与交付规范。
+2. **先查协作锁**：运行 `python scripts/session_guard.py status` 与 `git status --short`。
+3. **[现势总览](docs/current/现势总览.md)**：稳态现势仪表盘（广州主台、出口四层防线、舰队设备表、未决事项、净版 14 条踩坑禁令）。
+4. **[当前状态](docs/current/当前状态.md)**：近 30 天按时间倒序运行流水（顶部最新；2026-09~10 见归档）。
+5. **[系统演进与升级需求总览](docs/reference/系统演进与升级需求总览.md)**：2026-09 至今历史升级需求脉络与 `.md`/`.docx`/`.xlsx` 见证文档索引。
+6. **当前治理主线**：[docs/plans/governance-20261119/00-执行总纲与事实基线.md](docs/plans/governance-20261119/00-执行总纲与事实基线.md)（Batch 1→5 串行）。
+7. **跨 AI 协作与全仓地图**：[docs/AI协作入口.md](docs/AI协作入口.md) 与 [docs/INDEX.md](docs/INDEX.md)。
 
-## 目录分工
+## 顶层目录分工
 
 | 位置 | 用途 |
 |---|---|
-| `docs/current/` | 唯一现状摘要；运行结论附日期和证据 |
-| `docs/plans/` | 活跃/近期任务计划与执行记录（证据链） |
-| `docs/operations/` | 接入标准、运维、刷机、通道手册 |
-| `docs/reference/` | 原始需求、阶段计划、历史会话分析指南 |
-| `docs/reports/` | 验收、变更记录、诊断证据（按日期） |
-| `docs/archive/` | 历史归档；整理清单在 `20261001-manifest.md`、`20261012-manifest.md` |
-| `docs/会话导出/` | 历史对话，不视为已脱敏或当前事实 |
-| `docs/wg-peers/`、`docs/设备引导包-雅典娜.json` | WireGuard 与注册包，含密钥，不要写进索引正文 |
-| `verify/` | 2026-10-10 核查原文；[说明](verify/README.md) |
-| `logs/`、`webprobe/` | 巡检生成物；[日志说明](logs/README.md) |
-| `mgmt/` | 管理系统源码；[开发入口](mgmt/README.md)。不要遍历 `frontend/node_modules` |
-| `scripts/` | 现役运维脚本（[分类表](scripts/README.md)）+ `archive/` 历史脚本 |
-| `firmware/`、`京东云AX6600雅典娜/` | 固件与工具；[固件索引](firmware/README.md) |
-| `backups/` | 备份、凭据与现场证据（gitignore）；[备份索引](backups/README.md) |
-| `VPS远程工具包/` | 本机进 DMIT 的入口：`管理台通道-DMIT.bat`（8444） |
-| `.v2c/`、`.video_agent/` | 工具生成的定位文件，保留原位 |
-
-凭证台账仍在根目录，且有脚本运行时依赖；只在具体任务需要时读取相关段落，不复制到报告或外发附件。R2/R3/R4 管理主台是 DMIT，本机入口为 `VPS远程工具包\管理台通道-DMIT.bat`（8444）；访问与恢复细节见 [当前状态](docs/current/当前状态.md)及 [v3 标准流程](docs/operations/设备接入与隧道升级标准流程-v3-20261002.md)。
-
-当前出口涉及 BWG 东京、DMIT 美西、TX、DO 四节点；DO 仍承载部分历史依赖。设备与管理面完成范围见 [当前状态](docs/current/当前状态.md)，操作前核实现状。
+| `AGENTS.md` + 6 份工具入口 | 唯一权威规则真源；`CLAUDE.md`/`GEMINI.md`/`.cursorrules`/`.windsurfrules`/`.clinerules`/`.github/copilot-instructions.md` 为全等极简指针 |
+| `docs/current/` | 仅 2 份活档：`现势总览.md`（稳态仪表盘）+ `当前状态.md`（近 30 天运行流水） |
+| `docs/operations/` | 现行权威 SOP（每类机型/场景仅留最新版）；[索引](docs/operations/README.md) |
+| `docs/plans/` | 当前活跃治理计划（`governance-20261119/`）与近期执行记录 |
+| `docs/reports/` | 历史时点只读诊断报告与证据 |
+| `docs/reference/` | 原始需求、整体设计稿（含 `.docx`）与 [系统演进总览](docs/reference/系统演进与升级需求总览.md) |
+| `docs/archive/` | 按期归档文档、旧月 `当前状态` 与逐笔 SHA-256 manifest；[说明](docs/archive/README.md) |
+| `docs/会话导出/`、`docs/wg-peers/`、`docs/设备引导包-雅典娜.json` | 历史对话与密钥引导包（gitignore，禁止默认遍历或写入报告） |
+| `mgmt/` | 管理系统源码（`backend/`、`frontend/`、`agent/`、`qos-gate/`、`deploy/`）；[开发入口](mgmt/README.md)。禁遍历 `frontend/node_modules` |
+| `scripts/` | 现役运维脚本（含 `session_guard.py`、`build_gz_api.py`、[索引](scripts/README.md)）+ `archive/` |
+| `review/` | 多方评审轮（`round-*/`）、现役审计脚本与按日归档证据（`evidence-*/`） |
+| `verify/` | 历史四方代码核查原文（`round-1`/`round-2`）；[说明](verify/README.md) |
+| `logs/`、`webprobe/` | 巡检与本地诊断生成物（gitignore）；[说明](logs/README.md) |
+| `firmware/`、`京东云AX6600雅典娜/` | 现役刷机依赖与雅典娜救砖/现役固件（gitignore）；[索引](firmware/README.md) |
+| `backups/` | 凭证档案、快照、构建产物与协作锁（整目录 gitignore）；[索引](backups/README.md) |
+| `VPS远程工具包/` | 本机广州主台隧道入口：`管理台通道-广州.bat`（`https://127.0.0.1:8445`）；DMIT 美西为分叉温备勿日常操作 |
+| 根目录 `登录信息与配置总表-20260917.md` | 凭证台账（gitignore），被 6 个现役脚本硬编码读取，**严禁挪动或打印内容** |

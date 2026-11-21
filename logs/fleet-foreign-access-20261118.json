@@ -1,0 +1,47 @@
+{
+  "started": "2026-11-17T23:46:46+08:00",
+  "writes": false,
+  "devices": {
+    "R1": {
+      "port": 13222,
+      "reachable": true,
+      "raw": "== groups ==\nPROXY=BWG-HY2-JPTY-01\nNODE-PICK=BWG-HY2-JPTY-01\nUS-MEDIA=NODE-PICK\nAUTO=NODE-PICK\n== foreign ==\ngstatic   204 0.366030s rc=0\ngoogle    000 3.209571s rc=28\nyoutube   000 3.714872s rc=28\ngithub    301 0.575292s rc=0\nwikipedia 000 3.776355s rc=28\nx.com     000 3.711040s rc=28\npanel666  403 2.980870s rc=0\nbaidu     200 0.182231s rc=0\nexitip    60.210.151.42 rc=0\n== delays ==\nBWG-gs {\"delay\":107}\n\nCF1-gs {\"message\":\"Timeout\"}\n\nCF2-gs {\"message\":\"Timeout\"}\n\n"
+    },
+    "R2": {
+      "port": 13223,
+      "reachable": true,
+      "raw": "== groups ==\nPROXY=AUTO\nNODE-PICK=BWG-HY2-JPTY-01\nUS-MEDIA=NODE-PICK\nAUTO=NODE-PICK\n== foreign ==\ngstatic   204 0.349230s rc=0\ngoogle    000 5.978257s rc=28\nyoutube   000 3.206581s rc=28\ngithub    301 0.961887s rc=0\nwikipedia 000 3.205436s rc=28\nx.com     000 6.001105s rc=28\npanel666  403 1.040323s rc=0\nbaidu     200 0.203733s rc=0\nexitip    58.58.177.226 rc=0\n== delays ==\nBWG-gs {\"delay\":120}\n\nCF1-gs {\"message\":\"Resource not found\"}\n\nCF2-gs {\"message\":\"Resource not found\"}\n\n"
+    },
+    "R3": {
+      "port": 13227,
+      "reachable": true,
+      "raw": "== groups ==\nPROXY=BWG-HY2-JPTY-01\nNODE-PICK=BWG-HY2-JPTY-01\nUS-MEDIA=NODE-PICK\nAUTO=NODE-PICK\n== foreign ==\ngstatic   204 0.350703s rc=0\ngoogle    000 3.208434s rc=28\nyoutube   000 3.207973s rc=28\ngithub    301 0.600457s rc=0\nwikipedia 000 3.208265s rc=28\nx.com     000 3.207913s rc=28\npanel666  403 0.899204s rc=0\nbaidu     200 0.178220s rc=0\nexitip    119.176.93.186 rc=0\n== delays ==\nBWG-gs {\"delay\":239}\n\nCF1-gs {\"delay\":3608}\n\nCF2-gs {\"delay\":408}\n\n"
+    },
+    "R4": {
+      "port": 13224,
+      "reachable": true,
+      "raw": "== groups ==\nPROXY=BWG-HY2-JPTY-01\nNODE-PICK=BWG-HY2-JPTY-01\nUS-MEDIA=NODE-PICK\nAUTO=NODE-PICK\n== foreign ==\ngstatic   204 0.356281s rc=0\ngoogle    000 3.206625s rc=28\nyoutube   000 3.206142s rc=28\ngithub    000 5.999801s rc=28\nwikipedia 000 3.206878s rc=28\nx.com     000 3.207015s rc=28\npanel666  403 0.859639s rc=0\nbaidu     200 0.189818s rc=0\nexitip    27.205.184.56 rc=0\n== delays ==\nBWG-gs {\"delay\":108}\n\nCF1-gs {\"message\":\"Timeout\"}\n\nCF2-gs {\"delay\":439}\n\n"
+    },
+    "R5": {
+      "port": 13225,
+      "reachable": true,
+      "raw": "== groups ==\nPROXY=BWG-HY2-JPTY-01\nNODE-PICK=BWG-HY2-JPTY-01\nUS-MEDIA=NODE-PICK\nAUTO=NODE-PICK\n== foreign ==\ngstatic   204 0.351285s rc=0\ngoogle    000 3.205753s rc=28\nyoutube   000 3.206739s rc=28\ngithub    301 0.577576s rc=0\nwikipedia 000 3.215885s rc=28\nx.com     000 3.209284s rc=28\npanel666  403 1.144351s rc=0\nbaidu     200 0.184728s rc=0\nexitip    39.90.84.192 rc=0\n== delays ==\nBWG-gs {\"delay\":75}\n\nCF1-gs {\"delay\":336}\n\nCF2-gs {\"delay\":409}\n\n"
+    },
+    "R6": {
+      "port": 13226,
+      "reachable": true,
+      "raw": "== groups ==\nPROXY=BWG-HY2-JPTY-01\nNODE-PICK=BWG-HY2-JPTY-01\nUS-MEDIA=NODE-PICK\nAUTO=NODE-PICK\n== foreign ==\ngstatic   204 5.350820s rc=0\ngoogle    000 3.211434s rc=28\nyoutube   000 3.211487s rc=28\ngithub    301 1.998451s rc=0\nwikipedia 000 3.218644s rc=28\nx.com     000 3.214431s rc=28\npanel666  403 1.131234s rc=0\nbaidu     000 5.274516s rc=28\nexitip    58.58.185.138 rc=0\n== delays ==\nBWG-gs {\"delay\":121}\n\nCF1-gs {\"message\":\"Timeout\"}\n\nCF2-gs {\"delay\":321}\n\n"
+    },
+    "R8": {
+      "port": 13230,
+      "reachable": true,
+      "raw": "== groups ==\nPROXY=BWG-HY2-JPTY-01\nNODE-PICK=BWG-HY2-JPTY-01\nUS-MEDIA=NODE-PICK\nAUTO=NODE-PICK\n== foreign ==\ngstatic   204 0.355329s rc=0\ngoogle    000 3.207165s rc=28\nyoutube   000 3.208509s rc=28\ngithub    301 0.571767s rc=0\nwikipedia 000 3.209531s rc=28\nx.com     000 3.208176s rc=28\npanel666  403 0.931036s rc=0\nbaidu     200 0.174336s rc=0\nexitip    124.134.135.120 rc=0\n== delays ==\nBWG-gs {\"delay\":107}\n\nCF1-gs {\"message\":\"Timeout\"}\n\nCF2-gs {\"delay\":449}\n\n"
+    },
+    "R9": {
+      "port": 13231,
+      "reachable": true,
+      "raw": "== groups ==\nPROXY=BWG-HY2-JPTY-01\nNODE-PICK=BWG-HY2-JPTY-01\nUS-MEDIA=NODE-PICK\nAUTO=NODE-PICK\n== foreign ==\ngstatic   204 0.357402s rc=0\ngoogle    000 3.205000s rc=28\nyoutube   000 5.978072s rc=28\ngithub    000 6.000424s rc=28\nwikipedia 000 3.206609s rc=28\nx.com     000 6.000978s rc=28\npanel666  403 1.647501s rc=0\nbaidu     200 0.196442s rc=0\nexitip    182.45.197.114 rc=0\n== delays ==\nBWG-gs {\"delay\":123}\n\nCF1-gs {\"message\":\"Timeout\"}\n\nCF2-gs {\"delay\":310}\n\n"
+    }
+  },
+  "finished": "2026-11-17T23:50:48+08:00"
+}

@@ -1,0 +1,21 @@
+#!/bin/sh /etc/rc.common
+# R2: firewall starts at 19, cron at 50, mihomo at 99 and stops at 15.
+START=49
+STOP=16
+
+start() {
+    /etc/routermgmt/proxy-meter-v3.sh --install-only
+}
+
+stop() {
+    # Preserve evidence of whether the proxy was still running at settlement.
+    if pidof mihomo >/dev/null 2>&1; then
+        state=proxy_running
+    else
+        state=proxy_stopped
+    fi
+    PM_CHECK_ACTIVE=0 PM_REFRESH_SNAPSHOT=0 /etc/routermgmt/proxy-meter-v3.sh --settle
+    result=$?
+    printf '%s SHUTDOWN_SETTLEMENT %s rc=%s\n' "$(date '+%F %T')" "$state" "$result" +        >> /etc/routermgmt/logs/proxy-meter-v3.log
+    return "$result"
+}

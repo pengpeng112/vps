@@ -95,7 +95,10 @@ func Render(in RenderInput) ([]byte, error) {
 		}
 		purpose := n.Purpose
 		if purpose == "" {
-			purpose = "ordinary"
+			purpose = "ordinary" // 存量行兼容：空=ordinary；未知值必须显式拒绝（B15）
+		}
+		if purpose != "ordinary" && purpose != "video" {
+			return nil, fmt.Errorf("节点 %s purpose %q 非法（仅 ordinary/video），拒绝渲染", n.Name, purpose)
 		}
 		if err := validateHost(n.Host); err != nil {
 			return nil, err
@@ -127,18 +130,18 @@ func Render(in RenderInput) ([]byte, error) {
 		default:
 			return nil, fmt.Errorf("节点 %s 协议 %q 不支持（当前仅 vless-reality / vless-ws / hysteria2）", n.Name, n.Proto)
 		}
-		// 用途隔离（2026-11-17）：video/bulk 类节点只进 US-MEDIA，不进普通
-		// PROXY/AUTO/NODE-PICK 候选，防止 fallback 误入受配额治理的通道。
+		// 用途隔离（2026-11-17 v37 修订 B13/B14）：video/bulk 类节点只进 US-MEDIA
+		// （受控媒体路径），不进普通 PROXY/AUTO/NODE-PICK（含 select 手选——普通组
+		// 不得残留受配额治理通道的隐藏入口；诊断切换走平台 purpose 调整）。
 		if purpose == "video" {
 			mediaMembers = append(mediaMembers, fmt.Sprintf("      - %s", n.Name))
-			groupProxy = append(groupProxy, fmt.Sprintf("      - %s", n.Name)) // PROXY 保留手选能力（select）
-			continue // AUTO/NODE-PICK（fallback 自动组）不收 video 类
+			// B14：节点自身公网 IP /32 直连保护对全部用途生效（video 分支此前被
+			// continue 跳过，导致 BULK 节点 IP 直连保护缺失）。
+			directRules = append(directRules, fmt.Sprintf("  - IP-CIDR,%s/32,DIRECT,no-resolve", n.Host))
+			continue // 普通组不收 video 类
 		}
 		groupProxy = append(groupProxy, fmt.Sprintf("      - %s", n.Name))
 		groupAuto = append(groupAuto, fmt.Sprintf("      - %s", n.Name))
-		if strings.Contains(n.Name, "LAX") {
-			mediaMembers = append(mediaMembers, fmt.Sprintf("      - %s", n.Name))
-		}
 		// 节点自身公网 IP 直连：不做这条，TUN 会把 SSH 绕回节点（§3.1）
 		directRules = append(directRules, fmt.Sprintf("  - IP-CIDR,%s/32,DIRECT,no-resolve", n.Host))
 	}

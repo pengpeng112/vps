@@ -1,0 +1,70 @@
+{
+  "tested_at": "2026-11-18T20:51:07+08:00",
+  "cases": [
+    {
+      "sni": "hk.6849271.xyz",
+      "edge": "104.18.32.7",
+      "port": 2053,
+      "strict": true,
+      "tls": "TLSv1.3",
+      "san": [
+        "*.6849271.xyz",
+        "6849271.xyz"
+      ],
+      "san_ok": true,
+      "http": 101,
+      "accept_ok": true,
+      "upgrade_ok": true,
+      "pass": true
+    },
+    {
+      "sni": "hk.6849271.xyz",
+      "edge": "162.159.135.42",
+      "port": 2053,
+      "strict": true,
+      "tls": "TLSv1.3",
+      "san": [
+        "*.6849271.xyz",
+        "6849271.xyz"
+      ],
+      "san_ok": true,
+      "http": 101,
+      "accept_ok": true,
+      "upgrade_ok": true,
+      "pass": true
+    },
+    {
+      "sni": "usbwg.6849271.xyz",
+      "edge": "104.18.32.7",
+      "port": 2053,
+      "strict": true,
+      "tls": "TLSv1.3",
+      "san": [
+        "*.6849271.xyz",
+        "6849271.xyz"
+      ],
+      "san_ok": true,
+      "http": 101,
+      "accept_ok": true,
+      "upgrade_ok": true,
+      "pass": true
+    },
+    {
+      "sni": "usbwg.6849271.xyz",
+      "edge": "162.159.135.42",
+      "port": 2053,
+      "strict": true,
+      "tls": "TLSv1.3",
+      "san": [
+        "*.6849271.xyz",
+        "6849271.xyz"
+      ],
+      "san_ok": true,
+      "http": 101,
+      "accept_ok": true,
+      "upgrade_ok": true,
+      "pass": true
+    }
+  ],
+  "all_pass": true
+}

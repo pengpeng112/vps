@@ -1,0 +1,614 @@
+{
+  "started": "2026-11-19T09:17:09+08:00",
+  "production_writes": false,
+  "api_login": false,
+  "devices": {
+    "R4": {
+      "at": "2026-11-19T09:17:09+08:00",
+      "system": {
+        "rc": 0,
+        "stdout": "2026-11-19 09:17:13 +0800\n33416.82 64474.13\nb62c7164-37d9-4217-8fb2-1a9da2d5139f\nMemTotal:        1014720 kB\nMemAvailable:     767596 kB\nFilesystem           1K-blocks      Used Available Use% Mounted on\n/dev/loop0              962560    286020    676540  30% /overlay\ntmpfs                   507360      1396    505964   0% /tmp\n0 0 * * * /sbin/reboot #routermgmt-reboot\nqdisc noqueue 0: root refcnt 2 \n/usr/bin/python3\n/usr/bin/flock",
+        "stderr": ""
+      },
+      "cf_ws": [
+        {
+          "edge": "162.159.135.42",
+          "domain": "hk.6849271.xyz",
+          "status": "101",
+          "accept_valid": true,
+          "curl_rc": 28,
+          "error_category": "timeout",
+          "strict_tls": true
+        },
+        {
+          "edge": "104.18.32.7",
+          "domain": "hk.6849271.xyz",
+          "status": "101",
+          "accept_valid": true,
+          "curl_rc": 28,
+          "error_category": "timeout",
+          "strict_tls": true
+        },
+        {
+          "edge": "162.159.135.42",
+          "domain": "usbwg.6849271.xyz",
+          "status": "101",
+          "accept_valid": true,
+          "curl_rc": 28,
+          "error_category": "timeout",
+          "strict_tls": true
+        },
+        {
+          "edge": "104.18.32.7",
+          "domain": "usbwg.6849271.xyz",
+          "status": "101",
+          "accept_valid": true,
+          "curl_rc": 28,
+          "error_category": "timeout",
+          "strict_tls": true
+        }
+      ],
+      "delay_rounds": [
+        {
+          "CF2D-HK-01": {
+            "delay": 237
+          },
+          "CF2D-BWG-01": {
+            "delay": 282
+          }
+        },
+        {
+          "CF2D-HK-01": {
+            "delay": 236
+          },
+          "CF2D-BWG-01": {
+            "delay": 241
+          }
+        },
+        {
+          "CF2D-HK-01": {
+            "delay": 192
+          },
+          "CF2D-BWG-01": {
+            "delay": 266
+          }
+        }
+      ],
+      "cf_fields": [
+        {
+          "name": "CF2D-HK-01",
+          "edge": "162.159.135.42",
+          "sni": "hk.6849271.xyz",
+          "host_matches_sni": true,
+          "uuid_sha256": "99b7a3526731eb0277315b6b7ec0da05a43a1ebf15d2b796db7b04b03ddf82d7",
+          "path_sha256": "e9a2205e024f63598327c9ba3e42506790f01d3f03b01486272599f8a510d280"
+        },
+        {
+          "name": "CF2D-BWG-01",
+          "edge": "162.159.135.42",
+          "sni": "usbwg.6849271.xyz",
+          "host_matches_sni": true,
+          "uuid_sha256": "99b7a3526731eb0277315b6b7ec0da05a43a1ebf15d2b796db7b04b03ddf82d7",
+          "path_sha256": "e9a2205e024f63598327c9ba3e42506790f01d3f03b01486272599f8a510d280"
+        }
+      ]
+    },
+    "R1": {
+      "at": "2026-11-19T09:17:09+08:00",
+      "system": {
+        "rc": 0,
+        "stdout": "2026-11-19 09:17:13 +0800\n33411.39 64900.96\n5e1bd090-5f48-4353-908e-b03a520a611b\nMemTotal:        1014720 kB\nMemAvailable:     778300 kB\nFilesystem           1K-blocks      Used Available Use% Mounted on\n/dev/loop0              962560    280720    681840  29% /overlay\ntmpfs                   507360       136    507224   0% /tmp\n0 0 * * * /sbin/reboot #routermgmt-reboot\nqdisc noqueue 0: root refcnt 2 \n/usr/bin/python3\n/usr/bin/flock",
+        "stderr": ""
+      },
+      "cf_ws": [
+        {
+          "edge": "162.159.135.42",
+          "domain": "hk.6849271.xyz",
+          "status": "101",
+          "accept_valid": true,
+          "curl_rc": 28,
+          "error_category": "timeout",
+          "strict_tls": true
+        },
+        {
+          "edge": "104.18.32.7",
+          "domain": "hk.6849271.xyz",
+          "status": "101",
+          "accept_valid": true,
+          "curl_rc": 28,
+          "error_category": "timeout",
+          "strict_tls": true
+        },
+        {
+          "edge": "162.159.135.42",
+          "domain": "usbwg.6849271.xyz",
+          "status": "101",
+          "accept_valid": true,
+          "curl_rc": 28,
+          "error_category": "timeout",
+          "strict_tls": true
+        },
+        {
+          "edge": "104.18.32.7",
+          "domain": "usbwg.6849271.xyz",
+          "status": "101",
+          "accept_valid": true,
+          "curl_rc": 28,
+          "error_category": "timeout",
+          "strict_tls": true
+        }
+      ],
+      "delay_rounds": [
+        {
+          "CF2D-HK-01": {
+            "delay": 239
+          },
+          "CF2D-BWG-01": {
+            "delay": 251
+          }
+        },
+        {
+          "CF2D-HK-01": {
+            "delay": 223
+          },
+          "CF2D-BWG-01": {
+            "delay": 269
+          }
+        },
+        {
+          "CF2D-HK-01": {
+            "delay": 211
+          },
+          "CF2D-BWG-01": {
+            "delay": 229
+          }
+        }
+      ],
+      "cf_fields": [
+        {
+          "name": "CF2D-HK-01",
+          "edge": "162.159.135.42",
+          "sni": "hk.6849271.xyz",
+          "host_matches_sni": true,
+          "uuid_sha256": "99b7a3526731eb0277315b6b7ec0da05a43a1ebf15d2b796db7b04b03ddf82d7",
+          "path_sha256": "e9a2205e024f63598327c9ba3e42506790f01d3f03b01486272599f8a510d280"
+        },
+        {
+          "name": "CF2D-BWG-01",
+          "edge": "162.159.135.42",
+          "sni": "usbwg.6849271.xyz",
+          "host_matches_sni": true,
+          "uuid_sha256": "99b7a3526731eb0277315b6b7ec0da05a43a1ebf15d2b796db7b04b03ddf82d7",
+          "path_sha256": "e9a2205e024f63598327c9ba3e42506790f01d3f03b01486272599f8a510d280"
+        }
+      ]
+    },
+    "R2": {
+      "at": "2026-11-19T09:17:09+08:00",
+      "system": {
+        "rc": 0,
+        "stdout": "2026-11-19 09:17:13 +0800\n33416.25 64921.68\nb68237b9-959b-4102-a28b-22e1873e9027\nMemTotal:        1014720 kB\nMemAvailable:     785544 kB\nFilesystem           1K-blocks      Used Available Use% Mounted on\n/dev/loop0              962560    347340    615220  36% /overlay\ntmpfs                   507360       120    507240   0% /tmp\n0 0 * * * /sbin/reboot #routermgmt-reboot\nqdisc noqueue 0: root refcnt 2 \n/usr/bin/python3\n/usr/bin/flock",
+        "stderr": ""
+      },
+      "cf_ws": [
+        {
+          "edge": "162.159.135.42",
+          "domain": "hk.6849271.xyz",
+          "status": "101",
+          "accept_valid": true,
+          "curl_rc": 28,
+          "error_category": "timeout",
+          "strict_tls": true
+        },
+        {
+          "edge": "104.18.32.7",
+          "domain": "hk.6849271.xyz",
+          "status": "101",
+          "accept_valid": true,
+          "curl_rc": 28,
+          "error_category": "timeout",
+          "strict_tls": true
+        },
+        {
+          "edge": "162.159.135.42",
+          "domain": "usbwg.6849271.xyz",
+          "status": "101",
+          "accept_valid": true,
+          "curl_rc": 28,
+          "error_category": "timeout",
+          "strict_tls": true
+        },
+        {
+          "edge": "104.18.32.7",
+          "domain": "usbwg.6849271.xyz",
+          "status": "101",
+          "accept_valid": true,
+          "curl_rc": 28,
+          "error_category": "timeout",
+          "strict_tls": true
+        }
+      ],
+      "delay_rounds": [
+        {
+          "CF2D-HK-01": {
+            "delay": 420
+          },
+          "CF2D-BWG-01": {
+            "delay": 422
+          }
+        },
+        {
+          "CF2D-HK-01": {
+            "delay": 371
+          },
+          "CF2D-BWG-01": {
+            "delay": 403
+          }
+        },
+        {
+          "CF2D-HK-01": {
+            "delay": 392
+          },
+          "CF2D-BWG-01": {
+            "delay": 427
+          }
+        }
+      ],
+      "cf_fields": [
+        {
+          "name": "CF2D-HK-01",
+          "edge": "162.159.135.42",
+          "sni": "hk.6849271.xyz",
+          "host_matches_sni": true,
+          "uuid_sha256": "99b7a3526731eb0277315b6b7ec0da05a43a1ebf15d2b796db7b04b03ddf82d7",
+          "path_sha256": "e9a2205e024f63598327c9ba3e42506790f01d3f03b01486272599f8a510d280"
+        },
+        {
+          "name": "CF2D-BWG-01",
+          "edge": "162.159.135.42",
+          "sni": "usbwg.6849271.xyz",
+          "host_matches_sni": true,
+          "uuid_sha256": "99b7a3526731eb0277315b6b7ec0da05a43a1ebf15d2b796db7b04b03ddf82d7",
+          "path_sha256": "e9a2205e024f63598327c9ba3e42506790f01d3f03b01486272599f8a510d280"
+        }
+      ]
+    },
+    "R5": {
+      "at": "2026-11-19T09:17:51+08:00",
+      "system": {
+        "rc": 0,
+        "stdout": "2026-11-19 09:17:54 +0800\n119858.47 212519.58\ned0d26fc-0acb-4382-90af-2be9a528bd00\nMemTotal:        1014720 kB\nMemAvailable:     340764 kB\nFilesystem           1K-blocks      Used Available Use% Mounted on\n/dev/loop0              962560    285704    676856  30% /overlay\ntmpfs                   507360       268    507092   0% /tmp\nqdisc noqueue 0: root refcnt 2 \n/usr/bin/python3\n/usr/bin/flock",
+        "stderr": ""
+      },
+      "cf_ws": [
+        {
+          "edge": "162.159.135.42",
+          "domain": "hk.6849271.xyz",
+          "status": "101",
+          "accept_valid": true,
+          "curl_rc": 28,
+          "error_category": "timeout",
+          "strict_tls": true
+        },
+        {
+          "edge": "104.18.32.7",
+          "domain": "hk.6849271.xyz",
+          "status": "101",
+          "accept_valid": true,
+          "curl_rc": 28,
+          "error_category": "timeout",
+          "strict_tls": true
+        },
+        {
+          "edge": "162.159.135.42",
+          "domain": "usbwg.6849271.xyz",
+          "status": "101",
+          "accept_valid": true,
+          "curl_rc": 28,
+          "error_category": "timeout",
+          "strict_tls": true
+        },
+        {
+          "edge": "104.18.32.7",
+          "domain": "usbwg.6849271.xyz",
+          "status": "101",
+          "accept_valid": true,
+          "curl_rc": 28,
+          "error_category": "timeout",
+          "strict_tls": true
+        }
+      ],
+      "delay_rounds": [
+        {
+          "CF2D-HK-01": {
+            "delay": 189
+          },
+          "CF2D-BWG-01": {
+            "delay": 288
+          }
+        },
+        {
+          "CF2D-HK-01": {
+            "delay": 194
+          },
+          "CF2D-BWG-01": {
+            "delay": 273
+          }
+        },
+        {
+          "CF2D-HK-01": {
+            "delay": 240
+          },
+          "CF2D-BWG-01": {
+            "delay": 251
+          }
+        }
+      ],
+      "cf_fields": [
+        {
+          "name": "CF2D-HK-01",
+          "edge": "162.159.135.42",
+          "sni": "hk.6849271.xyz",
+          "host_matches_sni": true,
+          "uuid_sha256": "99b7a3526731eb0277315b6b7ec0da05a43a1ebf15d2b796db7b04b03ddf82d7",
+          "path_sha256": "e9a2205e024f63598327c9ba3e42506790f01d3f03b01486272599f8a510d280"
+        },
+        {
+          "name": "CF2D-BWG-01",
+          "edge": "162.159.135.42",
+          "sni": "usbwg.6849271.xyz",
+          "host_matches_sni": true,
+          "uuid_sha256": "99b7a3526731eb0277315b6b7ec0da05a43a1ebf15d2b796db7b04b03ddf82d7",
+          "path_sha256": "e9a2205e024f63598327c9ba3e42506790f01d3f03b01486272599f8a510d280"
+        }
+      ]
+    },
+    "R8": {
+      "at": "2026-11-19T09:17:51+08:00",
+      "system": {
+        "rc": 0,
+        "stdout": "2026-11-19 09:17:54 +0800\n33459.81 61439.04\n3bdb2656-316d-46a0-a1d0-3cb56d5e4cac\nMemTotal:        1014720 kB\nMemAvailable:     806120 kB\nFilesystem           1K-blocks      Used Available Use% Mounted on\n/dev/loop0              962560    834104    128456  87% /overlay\ntmpfs                   507360       144    507216   0% /tmp\n0 0 * * * /sbin/reboot #routermgmt-reboot\nqdisc noqueue 0: root refcnt 2 \n/usr/bin/python3\n/usr/bin/flock",
+        "stderr": ""
+      },
+      "cf_ws": [
+        {
+          "edge": "162.159.135.42",
+          "domain": "hk.6849271.xyz",
+          "status": "101",
+          "accept_valid": true,
+          "curl_rc": 28,
+          "error_category": "timeout",
+          "strict_tls": true
+        },
+        {
+          "edge": "104.18.32.7",
+          "domain": "hk.6849271.xyz",
+          "status": "101",
+          "accept_valid": true,
+          "curl_rc": 28,
+          "error_category": "timeout",
+          "strict_tls": true
+        },
+        {
+          "edge": "162.159.135.42",
+          "domain": "usbwg.6849271.xyz",
+          "status": "101",
+          "accept_valid": true,
+          "curl_rc": 28,
+          "error_category": "timeout",
+          "strict_tls": true
+        },
+        {
+          "edge": "104.18.32.7",
+          "domain": "usbwg.6849271.xyz",
+          "status": "101",
+          "accept_valid": true,
+          "curl_rc": 28,
+          "error_category": "timeout",
+          "strict_tls": true
+        }
+      ],
+      "delay_rounds": [
+        {
+          "CF2D-HK-01": {
+            "delay": 255
+          },
+          "CF2D-BWG-01": {
+            "delay": 240
+          }
+        },
+        {
+          "CF2D-HK-01": {
+            "delay": 185
+          },
+          "CF2D-BWG-01": {
+            "delay": 249
+          }
+        },
+        {
+          "CF2D-HK-01": {
+            "delay": 232
+          },
+          "CF2D-BWG-01": {
+            "delay": 271
+          }
+        }
+      ],
+      "cf_fields": [
+        {
+          "name": "CF2D-HK-01",
+          "edge": "162.159.135.42",
+          "sni": "hk.6849271.xyz",
+          "host_matches_sni": true,
+          "uuid_sha256": "99b7a3526731eb0277315b6b7ec0da05a43a1ebf15d2b796db7b04b03ddf82d7",
+          "path_sha256": "e9a2205e024f63598327c9ba3e42506790f01d3f03b01486272599f8a510d280"
+        },
+        {
+          "name": "CF2D-BWG-01",
+          "edge": "162.159.135.42",
+          "sni": "usbwg.6849271.xyz",
+          "host_matches_sni": true,
+          "uuid_sha256": "99b7a3526731eb0277315b6b7ec0da05a43a1ebf15d2b796db7b04b03ddf82d7",
+          "path_sha256": "e9a2205e024f63598327c9ba3e42506790f01d3f03b01486272599f8a510d280"
+        }
+      ]
+    },
+    "R9": {
+      "at": "2026-11-19T09:18:00+08:00",
+      "system": {
+        "rc": 0,
+        "stdout": "2026-11-19 09:18:03 +0800\n33467.39 63948.72\nef748b04-8a4d-455e-a630-06b2b9f10845\nMemTotal:        1014720 kB\nMemAvailable:     800328 kB\nFilesystem           1K-blocks      Used Available Use% Mounted on\n/dev/loop0              962560    814220    148340  85% /overlay\ntmpfs                   507360       120    507240   0% /tmp\n0 0 * * * /sbin/reboot #routermgmt-reboot\nqdisc noqueue 0: root refcnt 2 \n/usr/bin/python3\n/usr/bin/flock",
+        "stderr": ""
+      },
+      "cf_ws": [
+        {
+          "edge": "162.159.135.42",
+          "domain": "hk.6849271.xyz",
+          "status": "101",
+          "accept_valid": true,
+          "curl_rc": 28,
+          "error_category": "timeout",
+          "strict_tls": true
+        },
+        {
+          "edge": "104.18.32.7",
+          "domain": "hk.6849271.xyz",
+          "status": "101",
+          "accept_valid": true,
+          "curl_rc": 28,
+          "error_category": "timeout",
+          "strict_tls": true
+        },
+        {
+          "edge": "162.159.135.42",
+          "domain": "usbwg.6849271.xyz",
+          "status": "101",
+          "accept_valid": true,
+          "curl_rc": 28,
+          "error_category": "timeout",
+          "strict_tls": true
+        },
+        {
+          "edge": "104.18.32.7",
+          "domain": "usbwg.6849271.xyz",
+          "status": "101",
+          "accept_valid": true,
+          "curl_rc": 28,
+          "error_category": "timeout",
+          "strict_tls": true
+        }
+      ],
+      "delay_rounds": [
+        {
+          "CF2D-HK-01": {
+            "delay": 374
+          },
+          "CF2D-BWG-01": {
+            "delay": 401
+          }
+        },
+        {
+          "CF2D-HK-01": {
+            "delay": 389
+          },
+          "CF2D-BWG-01": {
+            "delay": 898
+          }
+        },
+        {
+          "CF2D-HK-01": {
+            "delay": 346
+          },
+          "CF2D-BWG-01": {
+            "delay": 456
+          }
+        }
+      ],
+      "cf_fields": [
+        {
+          "name": "CF2D-HK-01",
+          "edge": "162.159.135.42",
+          "sni": "hk.6849271.xyz",
+          "host_matches_sni": true,
+          "uuid_sha256": "99b7a3526731eb0277315b6b7ec0da05a43a1ebf15d2b796db7b04b03ddf82d7",
+          "path_sha256": "e9a2205e024f63598327c9ba3e42506790f01d3f03b01486272599f8a510d280"
+        },
+        {
+          "name": "CF2D-BWG-01",
+          "edge": "162.159.135.42",
+          "sni": "usbwg.6849271.xyz",
+          "host_matches_sni": true,
+          "uuid_sha256": "99b7a3526731eb0277315b6b7ec0da05a43a1ebf15d2b796db7b04b03ddf82d7",
+          "path_sha256": "e9a2205e024f63598327c9ba3e42506790f01d3f03b01486272599f8a510d280"
+        }
+      ]
+    }
+  },
+  "servers": {
+    "HK": {
+      "connected": true,
+      "system": {
+        "rc": 1,
+        "stdout": "2026-11-18T17:18:46-08:00\n7.0.0-27-generic\nMemTotal:         979272 kB\nMemAvailable:     809192 kB\nFilesystem     1K-blocks    Used Available Use% Mounted on\n/dev/vda1       20553408 2224404  17431924  12% /\n/dev/vda1       20553408 2224404  17431924  12% /\ndefault via 193.41.250.250 dev eth0 \nqdisc noqueue 0: dev lo root refcnt 2 \n Sent 0 bytes 0 pkt (dropped 0, overlimits 0 requeues 0) \n backlog 0b 0p requeues 0\nqdisc mq 0: dev eth0 root \n Sent 69354932 bytes 315643 pkt (dropped 0, overlimits 0 requeues 0) \n backlog 0b 0p requeues 0\nqdisc fq 0: dev eth0 parent :1 limit 10000p flow_limit 100p buckets 1024 orphan_mask 1023 bands 3 priomap 1 2 2 2 1 2 0 0 1 1 1 1 1 1 1 1 weights 589824 196608 65536 quantum 3028b initial_quantum 15140b low_rate_threshold 550Kbit refill_delay 40ms timer_slack 10us horizon 10s horizon_drop offload_horizon 0us \n Sent 69354932 bytes 315643 pkt (dropped 0, overlimits 0 requeues 0) \n backlog 0b 0p requeues 0\n  flows 182 (inactive 182 throttled 0) band0_pkts 0 band1_pkts 0 band2_pkts 0\n  gc 8 highprio 0 fastpath 295879 throttled 4518 latency 22.9us\nudp 0.0.0.0:68\nudp 127.0.0.54:53\nudp 127.0.0.53%lo:53\nudp *:34567\ntcp 0.0.0.0:22\ntcp 127.0.0.54:53\ntcp 127.0.0.53%lo:53\ntcp 127.0.0.1:18322\ntcp 127.0.0.1:18422\ntcp *:2053\ntcp [::]:22\ntcp *:5201\ntcp [::1]:18322\ntcp [::1]:18422\ncf2053-guard.service active exited\ns-box-ws.service active running\ns-hy2.service active running",
+        "stderr": ""
+      },
+      "inbounds": [
+        {
+          "service": "s-box-ws.service",
+          "type": "vless",
+          "tag": "cfws-in",
+          "port": 2053,
+          "transport": "ws",
+          "tls_enabled": true,
+          "users_count": 1,
+          "uuid_sha256": [
+            "99b7a3526731eb0277315b6b7ec0da05a43a1ebf15d2b796db7b04b03ddf82d7"
+          ],
+          "path_sha256": "e9a2205e024f63598327c9ba3e42506790f01d3f03b01486272599f8a510d280"
+        }
+      ],
+      "meter_inventory": {
+        "rc": 0,
+        "stdout": "",
+        "stderr": ""
+      }
+    },
+    "BWG": {
+      "connected": true,
+      "system": {
+        "rc": 1,
+        "stdout": "2026-11-19T01:18:51+00:00\n6.8.0-117-generic\nMemTotal:        1048216 kB\nMemAvailable:     650276 kB\nFilesystem     1K-blocks    Used Available Use% Mounted on\n/dev/sda2       19082080 3563792  14528404  20% /\n/dev/sda2       19082080 3563792  14528404  20% /\ndefault via 74.82.192.1 dev eth0 \nqdisc noqueue 0: dev lo root refcnt 2 \n Sent 0 bytes 0 pkt (dropped 0, overlimits 0 requeues 0) \n backlog 0b 0p requeues 0\nqdisc fq 0: dev eth0 root refcnt 2 limit 10000p flow_limit 100p buckets 1024 orphan_mask 1023 quantum 3028b initial_quantum 15140b low_rate_threshold 550Kbit refill_delay 40ms timer_slack 10us horizon 10s horizon_drop \n Sent 127872783048 bytes 126009019 pkt (dropped 0, overlimits 0 requeues 50) \n backlog 0b 0p requeues 50\n  flows 1024 (inactive 1024 throttled 0)\n  gc 19432 highprio 0 throttled 5536530 latency 28us\nqdisc noqueue 0: dev wg0 root refcnt 2 \n Sent 0 bytes 0 pkt (dropped 0, overlimits 0 requeues 0) \n backlog 0b 0p requeues 0\nqdisc noqueue 0: dev docker0 root refcnt 2 \n Sent 0 bytes 0 pkt (dropped 0, overlimits 0 requeues 0) \n backlog 0b 0p requeues 0\nqdisc noqueue 0: dev br-fb9aa7acb8e0 root refcnt 2 \n Sent 0 bytes 0 pkt (dropped 0, overlimits 0 requeues 0) \n backlog 0b 0p requeues 0\nudp 0.0.0.0:68\nudp 127.0.0.1:323\nudp 0.0.0.0:49826\nudp [::1]:323\nudp *:443\nudp [::]:49826\nudp *:34567\ntcp 0.0.0.0:22\ntcp 0.0.0.0:28722\ntcp [::]:22\ntcp *:2053\ntcp [::]:28722\ntcp *:443\ncf2053-guard.service active exited\nhysteria.service active running\ns-box-ws.service active running\nsing-box.service active running",
+        "stderr": ""
+      },
+      "inbounds": [
+        {
+          "service": "s-box-ws.service",
+          "type": "vless",
+          "tag": "vless-ws-in",
+          "port": 2053,
+          "transport": "ws",
+          "tls_enabled": true,
+          "users_count": 1,
+          "uuid_sha256": [
+            "99b7a3526731eb0277315b6b7ec0da05a43a1ebf15d2b796db7b04b03ddf82d7"
+          ],
+          "path_sha256": "e9a2205e024f63598327c9ba3e42506790f01d3f03b01486272599f8a510d280"
+        },
+        {
+          "service": "sing-box.service",
+          "metadata_error": "StopIteration"
+        }
+      ],
+      "meter_inventory": {
+        "rc": 0,
+        "stdout": "",
+        "stderr": ""
+      }
+    },
+    "GIA": {
+      "connected": false,
+      "error_type": "TimeoutError"
+    }
+  },
+  "finished": "2026-11-19T09:19:05+08:00"
+}

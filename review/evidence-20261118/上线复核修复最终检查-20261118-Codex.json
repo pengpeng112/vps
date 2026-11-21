@@ -1,0 +1,69 @@
+{
+  "checked_at": "2026-11-18T22:55:12+08:00",
+  "checks": [
+    {
+      "name": "session_guard",
+      "pass": true
+    },
+    {
+      "name": "shell syntax scripts/qos-r2/proxy-meter-v3.sh",
+      "pass": true
+    },
+    {
+      "name": "shell syntax scripts/qos-r2/proxy-meter-endpoints.sh",
+      "pass": true
+    },
+    {
+      "name": "shell syntax scripts/qos-r2/ratelimit-ctl-v2.sh",
+      "pass": true
+    },
+    {
+      "name": "shell syntax mgmt/agent/handlers/switch_node.sh",
+      "pass": true
+    },
+    {
+      "name": "8 devices both new CF nodes successful",
+      "pass": true
+    },
+    {
+      "name": "8 handler hashes and AUTO",
+      "pass": true
+    },
+    {
+      "name": "GZ SQL committed no errors",
+      "pass": true
+    },
+    {
+      "name": "old current-status bytes preserved",
+      "pass": true
+    },
+    {
+      "name": "review/计量修复隔离测试-20261118-Codex.json",
+      "pass": true,
+      "cases": 11
+    },
+    {
+      "name": "review/AUTO恢复处理器隔离测试-20261118-Codex.json",
+      "pass": true,
+      "cases": 5
+    },
+    {
+      "name": "review/配额启用门禁隔离测试-20261118-Codex.json",
+      "pass": true,
+      "cases": 9
+    },
+    {
+      "name": "selected public artifacts omit controlled UUID/path",
+      "pass": true
+    },
+    {
+      "name": "controlled credentials unchanged",
+      "pass": true
+    },
+    {
+      "name": "git diff --check",
+      "pass": true
+    }
+  ],
+  "all_pass": true
+}

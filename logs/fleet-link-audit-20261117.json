@@ -1,0 +1,599 @@
+{
+  "started": "2026-11-17T22:43:15+08:00",
+  "writes": false,
+  "gz": {
+    "health": {
+      "rc": 0,
+      "stdout": "2026-11-17T22:43:19+08:00\ngz-api=active\nnginx=active\npostgresql=active\n{\"db\":true,\"status\":\"ok\"}\n",
+      "stderr": ""
+    },
+    "listeners": {
+      "rc": 0,
+      "stdout": "127.0.0.1:13222 127.0.0.1:13223 127.0.0.1:13224 127.0.0.1:13225 127.0.0.1:13226 127.0.0.1:13227 127.0.0.1:13228 127.0.0.1:13230 127.0.0.1:13231 \n",
+      "stderr": ""
+    },
+    "db": {
+      "rc": 0,
+      "stdout": "rtr-101be0|approved|4|4|2026-11-17 22:43:11.646617+08|8|74.82.193.113\nrtr-1eff66|approved|8|8|2026-10-02 08:59:21.297577+08|4023839|43.134.46.44\nrtr-1f6f0f|approved|8|8|2026-11-17 22:43:15.246282+08|5|74.82.193.113\nrtr-25730c|approved|3|3|2026-10-14 15:40:00.828781+08|2962999|74.82.203.175\nrtr-354647|approved|3|3|2026-10-14 14:16:20.388589+08|2968020|74.82.203.175\nrtr-37cf72|approved|8|8|2026-11-01 18:24:41.091165+08|1397919|154.36.139.155\nrtr-38aa54|approved|30|30|2026-11-17 22:42:31.718347+08|48|74.82.193.113\nrtr-5e1a8d|approved|0|0|2026-11-17 22:43:14.413896+08|6|74.82.193.113\nrtr-673568|approved|22|22|2026-11-17 22:43:02.127893+08|18|74.82.193.113\nrtr-a9bcba|approved|36|36|2026-11-17 22:42:56.320979+08|24|74.82.193.113\nrtr-bf0292|revoked|0|0|||\nrtr-c46a25|approved|20|20|2026-11-17 22:42:21.270562+08|59|74.82.193.113\nrtr-cd473f|approved|29|29|2026-11-17 22:42:23.865268+08|56|74.82.193.113\nrtr-d3847d|approved|27|27|2026-11-17 22:43:05.517802+08|14|74.82.193.113\nrtr-e9ccdd|approved|1|1|2026-11-16 19:32:27.492593+08|97853|154.36.139.155\n",
+      "stderr": ""
+    },
+    "vps_tcp": {
+      "rc": 0,
+      "stdout": "GIA-vless443 fail\nGIA-ws2053 fail\nGIA-bulk2054 fail\nBWG-vless443 fail\nBWG-ws2053 fail\nCF1-2053 ok\nCF2-2053 ok\n",
+      "stderr": ""
+    }
+  },
+  "devices": {
+    "R1": {
+      "port": 13222,
+      "reachable": true,
+      "basic": {
+        "rc": 0,
+        "stdout": "2026-11-17T22:43:36+08:00\nagent=not-running\ngrp PROXY=BWG-HY2-JPTY-01\ngrp US-MEDIA=NODE-PICK\ngrp NODE-PICK=BWG-HY2-JPTY-01\ngrp AUTO=NODE-PICK\ngrp AIRPORT=AP | 🇯🇵REALITY日本\ngrp DOWNLOAD=DIRECT\n---egress---\ngstatic 204 1.394926s rc=0\ngoogle  000 6.712289s rc=28\nyoutube 000 6.208256s rc=28\nbaidu   200 0.197989s rc=0\nexitip_ipify  rc=7\nexitip_ifme  2408:8215:3d10:93b0:74a7:c8ff:fee0:4f21 rc=0\n",
+        "stderr": ""
+      },
+      "groups": {
+        "AIRPORT": "AP | 🇯🇵REALITY日本",
+        "AUTO": "NODE-PICK",
+        "CN-MEDIA": "DIRECT",
+        "DOWNLOAD": "DIRECT",
+        "NODE-PICK": "BWG-HY2-JPTY-01",
+        "PROXY": "BWG-HY2-JPTY-01",
+        "US-MEDIA": "NODE-PICK"
+      },
+      "nodes": [
+        {
+          "name": "BWG-HY2-JPTY-01",
+          "type": "Hysteria2",
+          "alive": true,
+          "delay_ms": 112
+        },
+        {
+          "name": "BWG-VLESS-JPTY-01",
+          "type": "Vless",
+          "alive": false,
+          "delay_ms": 0
+        },
+        {
+          "name": "CF-CDN-GIA-01",
+          "type": "Vless",
+          "alive": false,
+          "delay_ms": 0
+        },
+        {
+          "name": "CF2-CDN-GIA-01",
+          "type": "Vless",
+          "alive": true,
+          "delay_ms": 387
+        },
+        {
+          "name": "GIA-HY2-US-01",
+          "type": "Hysteria2",
+          "alive": true,
+          "delay_ms": 160
+        },
+        {
+          "name": "PASS-RULE",
+          "type": "PassRule",
+          "alive": true,
+          "delay_ms": null
+        },
+        {
+          "name": "REJECT-DROP",
+          "type": "RejectDrop",
+          "alive": true,
+          "delay_ms": null
+        },
+        {
+          "name": "US666-CN2GIA-01",
+          "type": "Vless",
+          "alive": false,
+          "delay_ms": 0
+        }
+      ],
+      "node_history": {
+        "US666": "{\"alive\":false,\"dialer-proxy\":\"\",\"extra\":{\"https://www.gstatic.com/generate_204\":{\"alive\":false,\"history\":[{\"time\":\"2026-11-17T14:24:54.514830316Z\",\"delay\":0},{\"time\":\"2026-11-17T14:26:54.514996489Z\",\"delay\":0},{\"time\":\"2026-11-17T14:28:54.514400098Z\",\"delay\":0},{\"time\":\"2026-11-17T14:30:54.514894031Z\",\"delay\":0},{\"time\":\"2026-11-17T14:32:54.51443882Z\",\"delay\":0},{\"time\":\"2026-11-17T14:34:54.514376608Z\",\"delay\":0},{\"time\":\"2026-11-17T14:36:54.513509367Z\",\"delay\":0},{\"time\":\"2026-11-17T14:38:54.514598207Z\",\"delay\":0},{\"time\":\"2026-11-17T14:40:54.513858988Z\",\"delay\":0},{\"time\":\"2026-11-17T14:42:54.514626502Z\",\"delay\":0}]}},\"history\":[{\"time\":\"2026-11-17T14:24:54.514830316Z\",\"delay\":0},{\"time\":\"2026-11-17T14:26:54.514996489Z\",\"delay\":0},{\"time\":\"2026-11-17T14:28:54.514400098Z\",\"delay\":0},{\"time\":\"2026-11-17T14:30:54.514894031Z\",\"delay\":0},{\"time\":\"2026-11-17T14:32:54.51443882Z\",\"delay\":0},{\"time\":\"2026-11-17T14:34:54.514376608Z\",\"delay\":0},{\"time\":\"2026-11-17T14:36:54.513509367Z\",\"delay\":0},{\"time\":\"2026-11-17T14:38:54.514598207Z\",\"delay\":0},{\"time\":\"2026-11-17T14:40:54.513858988Z\",\"delay\":0},{\"time\":\"2026-11-17T14:42:54.514626502Z\",\"delay\":0}],\"id\":\"537f09ef-6f2c-4ba6-a7c1-9807d634ce2e\",\"interface\":\"\",\"mptcp\":false,\"name\":\"US666-CN2GIA-01\",\"provider-name\":\"\",\"routing-mark\":0,\"smux\":false,\"tfo\":false,\"type\":\"Vless\",\"udp\":true,\"uot\":true,\"xudp\":true}\n",
+        "BWG-HY2": "{\"alive\":true,\"dialer-proxy\":\"\",\"extra\":{\"https://www.gstatic.com/generate_204\":{\"alive\":true,\"history\":[{\"time\":\"2026-11-17T14:24:50.078017544Z\",\"delay\":106},{\"time\":\"2026-11-17T14:26:49.834613427Z\",\"delay\":81},{\"time\":\"2026-11-17T14:28:49.976484624Z\",\"delay\":107},{\"time\":\"2026-11-17T14:30:50.206360325Z\",\"delay\":246},{\"time\":\"2026-11-17T14:32:49.882596513Z\",\"delay\":108},{\"time\":\"2026-11-17T14:34:49.99811393Z\",\"delay\":107},{\"time\":\"2026-11-17T14:36:49.99541097Z\",\"delay\":106},{\"time\":\"2026-11-17T14:38:50.081640978Z\",\"delay\":106},{\"time\":\"2026-11-17T14:40:49.891772313Z\",\"delay\":107},{\"time\":\"2026-11-17T14:42:50.105717062Z\",\"delay\":112}]}},\"history\":[{\"time\":\"2026-11-17T14:24:50.078017544Z\",\"delay\":106},{\"time\":\"2026-11-17T14:26:49.834613427Z\",\"delay\":81},{\"time\":\"2026-11-17T14:28:49.976484624Z\",\"delay\":107},{\"time\":\"2026-11-17T14:30:50.206360325Z\",\"delay\":246},{\"time\":\"2026-11-17T14:32:49.882596513Z\",\"delay\":108},{\"time\":\"2026-11-17T14:34:49.99811393Z\",\"delay\":107},{\"time\":\"2026-11-17T14:36:49.99541097Z\",\"delay\":106},{\"time\":\"2026-11-17T14:38:50.081640978Z\",\"delay\":106},{\"time\":\"2026-11-17T14:40:49.891772313Z\",\"delay\":107},{\"time\":\"2026-11-17T14:42:50.105717062Z\",\"delay\":112}],\"id\":\"61ad3ded-02d4-4b33-996b-65eff315ec02\",\"interface\":\"\",\"mptcp\":false,\"name\":\"BWG-HY2-JPTY-01\",\"provider-name\":\"\",\"routing-mark\":0,\"smux\":false,\"tfo\":false,\"type\":\"Hysteria2\",\"udp\":true,\"uot\":false,\"xudp\":false}\n"
+      }
+    },
+    "R2": {
+      "port": 13223,
+      "reachable": true,
+      "basic": {
+        "rc": 0,
+        "stdout": "2026-11-17T22:43:54+08:00\nagent=not-running\ngrp PROXY=AUTO\ngrp US-MEDIA=NODE-PICK\ngrp NODE-PICK=BWG-HY2-JPTY-01\ngrp AUTO=NODE-PICK\ngrp AIRPORT=AP | 🇯🇵三网优化日本\ngrp DOWNLOAD=DIRECT\n---egress---\ngstatic 204 0.359310s rc=0\ngoogle  000 11.954934s rc=28\nyoutube 000 11.955098s rc=28\nbaidu   200 0.189079s rc=0\nexitip_ipify  rc=7\nexitip_ifme  58.58.177.226 rc=0\n",
+        "stderr": ""
+      },
+      "groups": {
+        "AIRPORT": "AP | 🇯🇵三网优化日本",
+        "AUTO": "NODE-PICK",
+        "CN-MEDIA": "DIRECT",
+        "DOWNLOAD": "DIRECT",
+        "NODE-PICK": "BWG-HY2-JPTY-01",
+        "PROXY": "AUTO",
+        "US-MEDIA": "NODE-PICK"
+      },
+      "nodes": [
+        {
+          "name": "BULK-LAX-GIA-01",
+          "type": "Vless",
+          "alive": false,
+          "delay_ms": 0
+        },
+        {
+          "name": "BWG-HY2-JPTY-01",
+          "type": "Hysteria2",
+          "alive": true,
+          "delay_ms": 132
+        },
+        {
+          "name": "BWG-VLESS-JPTY-01",
+          "type": "Vless",
+          "alive": false,
+          "delay_ms": 0
+        },
+        {
+          "name": "PASS-RULE",
+          "type": "PassRule",
+          "alive": true,
+          "delay_ms": null
+        },
+        {
+          "name": "REJECT-DROP",
+          "type": "RejectDrop",
+          "alive": true,
+          "delay_ms": null
+        }
+      ],
+      "node_history": {
+        "US666": "{\"message\":\"Resource not found\"}\n",
+        "BWG-HY2": "{\"alive\":true,\"dialer-proxy\":\"\",\"extra\":{\"https://www.gstatic.com/generate_204\":{\"alive\":true,\"history\":[{\"time\":\"2026-11-17T14:25:58.083181554Z\",\"delay\":288},{\"time\":\"2026-11-17T14:27:58.214883823Z\",\"delay\":133},{\"time\":\"2026-11-17T14:29:58.09860584Z\",\"delay\":298},{\"time\":\"2026-11-17T14:31:58.697890379Z\",\"delay\":556},{\"time\":\"2026-11-17T14:33:57.936700373Z\",\"delay\":131},{\"time\":\"2026-11-17T14:35:58.391605797Z\",\"delay\":294},{\"time\":\"2026-11-17T14:37:58.077474407Z\",\"delay\":131},{\"time\":\"2026-11-17T14:39:58.266236653Z\",\"delay\":132},{\"time\":\"2026-11-17T14:41:57.93222602Z\",\"delay\":132},{\"time\":\"2026-11-17T14:43:58.055639823Z\",\"delay\":132}]}},\"history\":[{\"time\":\"2026-11-17T14:25:58.083181554Z\",\"delay\":288},{\"time\":\"2026-11-17T14:27:58.214883823Z\",\"delay\":133},{\"time\":\"2026-11-17T14:29:58.09860584Z\",\"delay\":298},{\"time\":\"2026-11-17T14:31:58.697890379Z\",\"delay\":556},{\"time\":\"2026-11-17T14:33:57.936700373Z\",\"delay\":131},{\"time\":\"2026-11-17T14:35:58.391605797Z\",\"delay\":294},{\"time\":\"2026-11-17T14:37:58.077474407Z\",\"delay\":131},{\"time\":\"2026-11-17T14:39:58.266236653Z\",\"delay\":132},{\"time\":\"2026-11-17T14:41:57.93222602Z\",\"delay\":132},{\"time\":\"2026-11-17T14:43:58.055639823Z\",\"delay\":132}],\"id\":\"6ef29e78-f831-4af2-8483-804914c3ec77\",\"interface\":\"\",\"mptcp\":false,\"name\":\"BWG-HY2-JPTY-01\",\"provider-name\":\"\",\"routing-mark\":0,\"smux\":false,\"tfo\":false,\"type\":\"Hysteria2\",\"udp\":true,\"uot\":false,\"xudp\":false}\n"
+      },
+      "meter_v3": {
+        "rc": 0,
+        "stdout": "{\"day_key\":\"2026-11-17\",\"total\":1099274,\"delta_last\":192799,\"sampled_at\":\"2026-11-17 22:40:00+0800\",\"meter_id\":\"rtr-a9bcba\",\"seq\":8,\"health\":\"ok\",\"partial\":false,\"events\":\"\",\"read_fail_eps\":\"-\"}\n\n",
+        "stderr": ""
+      }
+    },
+    "R3": {
+      "port": 13227,
+      "reachable": true,
+      "basic": {
+        "rc": 0,
+        "stdout": "2026-11-17T22:44:21+08:00\nagent=not-running\ngrp PROXY=BWG-HY2-JPTY-01\ngrp US-MEDIA=NODE-PICK\ngrp NODE-PICK=BWG-HY2-JPTY-01\ngrp AUTO=NODE-PICK\ngrp AIRPORT=AP | 🇯🇵三网优化日本\ngrp DOWNLOAD=DIRECT\n---egress---\ngstatic 204 0.370532s rc=0\ngoogle  000 6.208916s rc=28\nyoutube 000 6.209758s rc=28\nbaidu   200 0.195300s rc=0\nexitip_ipify  rc=7\nexitip_ifme  119.176.93.186 rc=0\n",
+        "stderr": ""
+      },
+      "groups": {
+        "AIRPORT": "AP | 🇯🇵三网优化日本",
+        "AUTO": "NODE-PICK",
+        "CN-MEDIA": "DIRECT",
+        "DOWNLOAD": "DIRECT",
+        "NODE-PICK": "BWG-HY2-JPTY-01",
+        "PROXY": "BWG-HY2-JPTY-01",
+        "US-MEDIA": "NODE-PICK"
+      },
+      "nodes": [
+        {
+          "name": "BWG-HY2-JPTY-01",
+          "type": "Hysteria2",
+          "alive": true,
+          "delay_ms": 109
+        },
+        {
+          "name": "BWG-VLESS-JPTY-01",
+          "type": "Vless",
+          "alive": false,
+          "delay_ms": 0
+        },
+        {
+          "name": "CF-CDN-GIA-01",
+          "type": "Vless",
+          "alive": false,
+          "delay_ms": 0
+        },
+        {
+          "name": "CF2-CDN-GIA-01",
+          "type": "Vless",
+          "alive": true,
+          "delay_ms": 397
+        },
+        {
+          "name": "GIA-HY2-US-01",
+          "type": "Hysteria2",
+          "alive": true,
+          "delay_ms": 158
+        },
+        {
+          "name": "PASS-RULE",
+          "type": "PassRule",
+          "alive": true,
+          "delay_ms": null
+        },
+        {
+          "name": "REJECT-DROP",
+          "type": "RejectDrop",
+          "alive": true,
+          "delay_ms": null
+        },
+        {
+          "name": "US666-CN2GIA-01",
+          "type": "Vless",
+          "alive": false,
+          "delay_ms": 0
+        }
+      ]
+    },
+    "R4": {
+      "port": 13224,
+      "reachable": true,
+      "basic": {
+        "rc": 0,
+        "stdout": "2026-11-17T22:44:36+08:00\nagent=not-running\ngrp PROXY=BWG-HY2-JPTY-01\ngrp US-MEDIA=NODE-PICK\ngrp NODE-PICK=BWG-HY2-JPTY-01\ngrp AUTO=NODE-PICK\ngrp AIRPORT=AP | 🇯🇵三网优化日本\ngrp DOWNLOAD=DIRECT\n---egress---\ngstatic 204 0.834421s rc=0\ngoogle  000 6.207618s rc=28\nyoutube 000 6.208257s rc=28\nbaidu   200 0.194075s rc=0\nexitip_ipify  rc=7\nexitip_ifme  27.205.184.56 rc=0\n",
+        "stderr": ""
+      },
+      "groups": {
+        "AIRPORT": "AP | 🇯🇵三网优化日本",
+        "AUTO": "NODE-PICK",
+        "CN-MEDIA": "DIRECT",
+        "DOWNLOAD": "DIRECT",
+        "NODE-PICK": "BWG-HY2-JPTY-01",
+        "PROXY": "BWG-HY2-JPTY-01",
+        "US-MEDIA": "NODE-PICK"
+      },
+      "nodes": [
+        {
+          "name": "BWG-HY2-JPTY-01",
+          "type": "Hysteria2",
+          "alive": true,
+          "delay_ms": 107
+        },
+        {
+          "name": "BWG-VLESS-JPTY-01",
+          "type": "Vless",
+          "alive": false,
+          "delay_ms": 0
+        },
+        {
+          "name": "CF-CDN-GIA-01",
+          "type": "Vless",
+          "alive": false,
+          "delay_ms": 0
+        },
+        {
+          "name": "CF-WORKERS-01",
+          "type": "Vless",
+          "alive": true,
+          "delay_ms": null
+        },
+        {
+          "name": "CF2-CDN-GIA-01",
+          "type": "Vless",
+          "alive": true,
+          "delay_ms": 398
+        },
+        {
+          "name": "GIA-HY2-US-01",
+          "type": "Hysteria2",
+          "alive": true,
+          "delay_ms": 152
+        },
+        {
+          "name": "PASS-RULE",
+          "type": "PassRule",
+          "alive": true,
+          "delay_ms": null
+        },
+        {
+          "name": "REJECT-DROP",
+          "type": "RejectDrop",
+          "alive": true,
+          "delay_ms": null
+        },
+        {
+          "name": "US666-CN2GIA-01",
+          "type": "Vless",
+          "alive": false,
+          "delay_ms": 0
+        }
+      ]
+    },
+    "R5": {
+      "port": 13225,
+      "reachable": true,
+      "basic": {
+        "rc": 0,
+        "stdout": "2026-11-17T22:44:52+08:00\nagent=not-running\ngrp PROXY=BWG-HY2-JPTY-01\ngrp US-MEDIA=NODE-PICK\ngrp NODE-PICK=BWG-HY2-JPTY-01\ngrp AUTO=NODE-PICK\ngrp AIRPORT=AP | 🇯🇵日本NET\ngrp DOWNLOAD=DIRECT\n---egress---\ngstatic 204 0.434037s rc=0\ngoogle  000 6.206055s rc=28\nyoutube 000 6.205710s rc=28\nbaidu   200 0.168521s rc=0\nexitip_ipify  rc=7\nexitip_ifme  2408:8214:3e14:1c60:74a7:c8ff:fee0:4f25 rc=0\n",
+        "stderr": ""
+      },
+      "groups": {
+        "AIRPORT": "AP | 🇯🇵日本NET",
+        "AUTO": "NODE-PICK",
+        "CN-MEDIA": "DIRECT",
+        "DOWNLOAD": "DIRECT",
+        "NODE-PICK": "BWG-HY2-JPTY-01",
+        "PROXY": "BWG-HY2-JPTY-01",
+        "US-MEDIA": "NODE-PICK"
+      },
+      "nodes": [
+        {
+          "name": "BWG-HY2-JPTY-01",
+          "type": "Hysteria2",
+          "alive": true,
+          "delay_ms": 62
+        },
+        {
+          "name": "BWG-VLESS-JPTY-01",
+          "type": "Vless",
+          "alive": false,
+          "delay_ms": 0
+        },
+        {
+          "name": "CF-CDN-GIA-01",
+          "type": "Vless",
+          "alive": false,
+          "delay_ms": 0
+        },
+        {
+          "name": "CF2-CDN-GIA-01",
+          "type": "Vless",
+          "alive": true,
+          "delay_ms": 372
+        },
+        {
+          "name": "GIA-HY2-US-01",
+          "type": "Hysteria2",
+          "alive": true,
+          "delay_ms": 160
+        },
+        {
+          "name": "PASS-RULE",
+          "type": "PassRule",
+          "alive": true,
+          "delay_ms": null
+        },
+        {
+          "name": "REJECT-DROP",
+          "type": "RejectDrop",
+          "alive": true,
+          "delay_ms": null
+        },
+        {
+          "name": "US666-CN2GIA-01",
+          "type": "Vless",
+          "alive": false,
+          "delay_ms": 0
+        }
+      ]
+    },
+    "R6": {
+      "port": 13226,
+      "reachable": true,
+      "basic": {
+        "rc": 0,
+        "stdout": "2026-11-17T22:45:07+08:00\nagent=not-running\ngrp PROXY=BWG-HY2-JPTY-01\ngrp US-MEDIA=NODE-PICK\ngrp NODE-PICK=BWG-HY2-JPTY-01\ngrp AUTO=NODE-PICK\ngrp AIRPORT=AP | 🇸🇬新加坡NET\ngrp DOWNLOAD=DIRECT\n---egress---\ngstatic 000 0.000000s rc=6\ngoogle  000 6.210259s rc=28\nyoutube 000 6.211417s rc=28\nbaidu   200 5.297707s rc=0\nexitip_ipify  rc=7\nexitip_ifme  58.58.185.138 rc=0\n",
+        "stderr": ""
+      },
+      "groups": {
+        "AIRPORT": "AP | 🇸🇬新加坡NET",
+        "AUTO": "NODE-PICK",
+        "CN-MEDIA": "DIRECT",
+        "DOWNLOAD": "DIRECT",
+        "NODE-PICK": "BWG-HY2-JPTY-01",
+        "PROXY": "BWG-HY2-JPTY-01",
+        "US-MEDIA": "NODE-PICK"
+      },
+      "nodes": [
+        {
+          "name": "BWG-HY2-JPTY-01",
+          "type": "Hysteria2",
+          "alive": true,
+          "delay_ms": 123
+        },
+        {
+          "name": "BWG-VLESS-JPTY-01",
+          "type": "Vless",
+          "alive": false,
+          "delay_ms": 0
+        },
+        {
+          "name": "CF-CDN-GIA-01",
+          "type": "Vless",
+          "alive": true,
+          "delay_ms": 848
+        },
+        {
+          "name": "CF2-CDN-GIA-01",
+          "type": "Vless",
+          "alive": true,
+          "delay_ms": 336
+        },
+        {
+          "name": "GIA-HY2-US-01",
+          "type": "Hysteria2",
+          "alive": true,
+          "delay_ms": 165
+        },
+        {
+          "name": "PASS-RULE",
+          "type": "PassRule",
+          "alive": true,
+          "delay_ms": null
+        },
+        {
+          "name": "REJECT-DROP",
+          "type": "RejectDrop",
+          "alive": true,
+          "delay_ms": null
+        },
+        {
+          "name": "US666-CN2GIA-01",
+          "type": "Vless",
+          "alive": false,
+          "delay_ms": 0
+        }
+      ]
+    },
+    "R7": {
+      "port": 13229,
+      "reachable": false,
+      "error": "ChannelException"
+    },
+    "R8": {
+      "port": 13230,
+      "reachable": true,
+      "basic": {
+        "rc": 0,
+        "stdout": "2026-11-17T22:45:34+08:00\nagent=not-running\ngrp PROXY=BWG-HY2-JPTY-01\ngrp US-MEDIA=NODE-PICK\ngrp NODE-PICK=BWG-HY2-JPTY-01\ngrp AUTO=NODE-PICK\ngrp AIRPORT=AP | 🇯🇵REALITY日本\ngrp DOWNLOAD=DIRECT\n---egress---\ngstatic 204 0.377233s rc=0\ngoogle  000 6.207918s rc=28\nyoutube 000 6.207867s rc=28\nbaidu   200 0.177098s rc=0\nexitip_ipify  rc=7\nexitip_ifme  124.134.135.120 rc=0\n",
+        "stderr": ""
+      },
+      "groups": {
+        "AIRPORT": "AP | 🇯🇵REALITY日本",
+        "AUTO": "NODE-PICK",
+        "CN-MEDIA": "DIRECT",
+        "DOWNLOAD": "DIRECT",
+        "NODE-PICK": "BWG-HY2-JPTY-01",
+        "PROXY": "BWG-HY2-JPTY-01",
+        "US-MEDIA": "NODE-PICK"
+      },
+      "nodes": [
+        {
+          "name": "BWG-HY2-JPTY-01",
+          "type": "Hysteria2",
+          "alive": true,
+          "delay_ms": 120
+        },
+        {
+          "name": "BWG-VLESS-JPTY-01",
+          "type": "Vless",
+          "alive": false,
+          "delay_ms": 0
+        },
+        {
+          "name": "CF-CDN-GIA-01",
+          "type": "Vless",
+          "alive": false,
+          "delay_ms": 0
+        },
+        {
+          "name": "CF2-CDN-GIA-01",
+          "type": "Vless",
+          "alive": true,
+          "delay_ms": 409
+        },
+        {
+          "name": "GIA-HY2-US-01",
+          "type": "Hysteria2",
+          "alive": true,
+          "delay_ms": 258
+        },
+        {
+          "name": "PASS-RULE",
+          "type": "PassRule",
+          "alive": true,
+          "delay_ms": null
+        },
+        {
+          "name": "REJECT-DROP",
+          "type": "RejectDrop",
+          "alive": true,
+          "delay_ms": null
+        },
+        {
+          "name": "US666-CN2GIA-01",
+          "type": "Vless",
+          "alive": false,
+          "delay_ms": 0
+        }
+      ]
+    },
+    "R9": {
+      "port": 13231,
+      "reachable": true,
+      "basic": {
+        "rc": 0,
+        "stdout": "2026-11-17T22:45:50+08:00\nagent=not-running\ngrp PROXY=BWG-HY2-JPTY-01\ngrp US-MEDIA=NODE-PICK\ngrp NODE-PICK=BWG-HY2-JPTY-01\ngrp AUTO=NODE-PICK\ngrp AIRPORT=AP | 🇯🇵日本NET\ngrp DOWNLOAD=DIRECT\n---egress---\ngstatic 204 0.438160s rc=0\ngoogle  000 11.955369s rc=28\nyoutube 000 6.208098s rc=28\nbaidu   200 0.170987s rc=0\nexitip_ipify  rc=7\nexitip_ifme  182.45.197.114 rc=0\n",
+        "stderr": ""
+      },
+      "groups": {
+        "AIRPORT": "AP | 🇯🇵日本NET",
+        "AUTO": "NODE-PICK",
+        "CN-MEDIA": "DIRECT",
+        "DOWNLOAD": "DIRECT",
+        "NODE-PICK": "BWG-HY2-JPTY-01",
+        "PROXY": "BWG-HY2-JPTY-01",
+        "US-MEDIA": "NODE-PICK"
+      },
+      "nodes": [
+        {
+          "name": "BWG-HY2-JPTY-01",
+          "type": "Hysteria2",
+          "alive": true,
+          "delay_ms": 365
+        },
+        {
+          "name": "BWG-VLESS-JPTY-01",
+          "type": "Vless",
+          "alive": false,
+          "delay_ms": 0
+        },
+        {
+          "name": "CF-CDN-GIA-01",
+          "type": "Vless",
+          "alive": false,
+          "delay_ms": 0
+        },
+        {
+          "name": "CF2-CDN-GIA-01",
+          "type": "Vless",
+          "alive": true,
+          "delay_ms": 854
+        },
+        {
+          "name": "GIA-HY2-US-01",
+          "type": "Hysteria2",
+          "alive": true,
+          "delay_ms": 169
+        },
+        {
+          "name": "PASS-RULE",
+          "type": "PassRule",
+          "alive": true,
+          "delay_ms": null
+        },
+        {
+          "name": "REJECT-DROP",
+          "type": "RejectDrop",
+          "alive": true,
+          "delay_ms": null
+        },
+        {
+          "name": "US666-CN2GIA-01",
+          "type": "Vless",
+          "alive": false,
+          "delay_ms": 0
+        }
+      ]
+    },
+    "R10": {
+      "port": 13232,
+      "reachable": false,
+      "error": "ChannelException"
+    },
+    "R11": {
+      "port": 13233,
+      "reachable": false,
+      "error": "ChannelException"
+    },
+    "GL": {
+      "port": 13234,
+      "reachable": false,
+      "error": "ChannelException"
+    },
+    "ATHENA": {
+      "port": 13228,
+      "reachable": false,
+      "error": "AuthenticationException"
+    }
+  },
+  "finished": "2026-11-17T22:46:08+08:00"
+}

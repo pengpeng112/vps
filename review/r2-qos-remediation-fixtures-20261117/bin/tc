@@ -1,0 +1,32 @@
+#!/bin/sh
+D=$(dirname "$0")
+ST="$D/../tc-state.json"
+printf 'tc %s\n' "$*" >> "$D/../mock-tc.log"
+python3 - "$ST" "$@" <<'PY'
+import json, sys
+st_path, args = sys.argv[1], sys.argv[2:]
+try: st = json.load(open(st_path))
+except Exception: st = {"devs": {}}
+def save(): json.dump(st, open(st_path, "w"))
+if args[:2] == ["qdisc", "show"]:
+    dev = args[args.index("dev") + 1]
+    root = st["devs"].get(dev, {}).get("root")
+    if root: print("qdisc %s %s root refcnt 2" % (root["kind"], root["handle"]))
+    sys.exit(0)
+if args[:2] == ["qdisc", "add"] or args[:2] == ["qdisc", "replace"]:
+    dev = args[args.index("dev") + 1]
+    if "clsact" in args:
+        st["devs"].setdefault(dev, {})["clsact"] = True; save(); sys.exit(0)
+    h = args[args.index("handle") + 1]
+    st["devs"].setdefault(dev, {})["root"] = {"kind": "htb", "handle": h}; save(); sys.exit(0)
+if args[:2] == ["class", "add"]:
+    dev = args[args.index("dev") + 1]; cid = args[args.index("classid") + 1]
+    st["devs"].setdefault(dev, {}).setdefault("classes", {})[cid] = " ".join(args)
+    save(); sys.exit(0)
+if args[:2] == ["class", "del"]:
+    dev = args[args.index("dev") + 1]; cid = args[args.index("classid") + 1]
+    st["devs"].get(dev, {}).get("classes", {}).pop(cid, None); save(); sys.exit(0)
+if args[:1] == ["filter"]:
+    save(); sys.exit(0)
+sys.exit(0)
+PY

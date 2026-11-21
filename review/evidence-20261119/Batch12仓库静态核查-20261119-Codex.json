@@ -1,0 +1,305 @@
+{
+  "at": "2026-11-19T21:29:54.142574+08:00",
+  "archive_rows": [
+    {
+      "old": "review/path_a_gz_probe_20261118.py",
+      "new": "review/archive-20261118/path_a_gz_probe_20261118.py",
+      "expected": "66c2d60fe96566e763729cd03aef0aaa4e73e22f809dadcb6be892eb4df3526b",
+      "actual": "66c2d60fe96566e763729cd03aef0aaa4e73e22f809dadcb6be892eb4df3526b",
+      "sha_ok": true,
+      "size_ok": true
+    },
+    {
+      "old": "review/path_a_gz_arch_probe.py",
+      "new": "review/archive-20261118/path_a_gz_arch_probe.py",
+      "expected": "4fe56668c6747fa74c4cfaf0e83b3781809adec3f5d592387fe75cb8e333fd08",
+      "actual": "4fe56668c6747fa74c4cfaf0e83b3781809adec3f5d592387fe75cb8e333fd08",
+      "sha_ok": true,
+      "size_ok": true
+    },
+    {
+      "old": "review/path_a_cf01_backup.py",
+      "new": "review/archive-20261118/path_a_cf01_backup.py",
+      "expected": "680bd525a931645c0ca760588b829c224aec0a80b30e4e73f11a359a1e1cdb11",
+      "actual": "680bd525a931645c0ca760588b829c224aec0a80b30e4e73f11a359a1e1cdb11",
+      "sha_ok": true,
+      "size_ok": true
+    },
+    {
+      "old": "review/path_a_gz_api.py",
+      "new": "review/archive-20261118/path_a_gz_api.py",
+      "expected": "01963cf24ae7e351a564249de4a0726d73fdfd07cea26d89bc2ddc3aecec6c3c",
+      "actual": "01963cf24ae7e351a564249de4a0726d73fdfd07cea26d89bc2ddc3aecec6c3c",
+      "sha_ok": true,
+      "size_ok": true
+    },
+    {
+      "old": "review/path_a_03b_rehearsal_step1.py",
+      "new": "review/archive-20261118/path_a_03b_rehearsal_step1.py",
+      "expected": "42c3cb92a6ce88b8c86973599670169d9f62994b95cdb28cf285bd8e89d9d1b2",
+      "actual": "42c3cb92a6ce88b8c86973599670169d9f62994b95cdb28cf285bd8e89d9d1b2",
+      "sha_ok": true,
+      "size_ok": true
+    },
+    {
+      "old": "review/path_a_03b_rehearsal_step2.py",
+      "new": "review/archive-20261118/path_a_03b_rehearsal_step2.py",
+      "expected": "7686e76d44999b37a247e96a2a2916164f7c8e911f46da2a4bf068a370944f7d",
+      "actual": "7686e76d44999b37a247e96a2a2916164f7c8e911f46da2a4bf068a370944f7d",
+      "sha_ok": true,
+      "size_ok": true
+    },
+    {
+      "old": "review/path_a_03b_rehearsal_step2b.py",
+      "new": "review/archive-20261118/path_a_03b_rehearsal_step2b.py",
+      "expected": "3703242d0604712f95bd1538af98fe8578fe5e7f6e47cc25bbadc7c1cf799744",
+      "actual": "3703242d0604712f95bd1538af98fe8578fe5e7f6e47cc25bbadc7c1cf799744",
+      "sha_ok": true,
+      "size_ok": true
+    },
+    {
+      "old": "review/path_a_03c_deploy.py",
+      "new": "review/archive-20261118/path_a_03c_deploy.py",
+      "expected": "2ef1ef20f908eef990e2e24e299d69652391b4aa1bb03d0282ab0b01487d0251",
+      "actual": "2ef1ef20f908eef990e2e24e299d69652391b4aa1bb03d0282ab0b01487d0251",
+      "sha_ok": true,
+      "size_ok": true
+    },
+    {
+      "old": "review/path_a_cf02_preview_gate.py",
+      "new": "review/archive-20261118/path_a_cf02_preview_gate.py",
+      "expected": "e7ddceca1116c63a1b66f5e2aacc27cac4e9350d574a0e08e81322ef04bf1855",
+      "actual": "e7ddceca1116c63a1b66f5e2aacc27cac4e9350d574a0e08e81322ef04bf1855",
+      "sha_ok": true,
+      "size_ok": true
+    },
+    {
+      "old": "review/path_a_cf03_tls_ws.py",
+      "new": "review/archive-20261118/path_a_cf03_tls_ws.py",
+      "expected": "3ba91bf3b1e7f08c7278e15a9452bd819956a4671f69faf0e17f6d9da1c3fa74",
+      "actual": "3ba91bf3b1e7f08c7278e15a9452bd819956a4671f69faf0e17f6d9da1c3fa74",
+      "sha_ok": true,
+      "size_ok": true
+    },
+    {
+      "old": "review/path_a_cf04_cf05.py",
+      "new": "review/archive-20261118/path_a_cf04_cf05.py",
+      "expected": "ad0895427cff9b94f4cd417eee8e0f181e7a2ca88b85f390dfe493978907f303",
+      "actual": "ad0895427cff9b94f4cd417eee8e0f181e7a2ca88b85f390dfe493978907f303",
+      "sha_ok": true,
+      "size_ok": true
+    },
+    {
+      "old": "review/path_a_cf06_stage1.py",
+      "new": "review/archive-20261118/path_a_cf06_stage1.py",
+      "expected": "9689b17b2166a587e4e7197237c97bbb2687da4e6c7f074fc20502f84367acb4",
+      "actual": "9689b17b2166a587e4e7197237c97bbb2687da4e6c7f074fc20502f84367acb4",
+      "sha_ok": true,
+      "size_ok": true
+    },
+    {
+      "old": "review/path_a_cf06_stage2_apply.py",
+      "new": "review/archive-20261118/path_a_cf06_stage2_apply.py",
+      "expected": "99ecac6de4d5a88330b69fad1fd6456a982743ac83dad2bb75820ed2c6739a97",
+      "actual": "99ecac6de4d5a88330b69fad1fd6456a982743ac83dad2bb75820ed2c6739a97",
+      "sha_ok": true,
+      "size_ok": true
+    },
+    {
+      "old": "review/path_a_cf07_cf08_forced_path.py",
+      "new": "review/archive-20261118/path_a_cf07_cf08_forced_path.py",
+      "expected": "4d31518da6bba7c2a14e021dfef546f4d6154abde42fa6201299cbcf3d695c30",
+      "actual": "4d31518da6bba7c2a14e021dfef546f4d6154abde42fa6201299cbcf3d695c30",
+      "sha_ok": true,
+      "size_ok": true
+    },
+    {
+      "old": "review/path_a_cf09_lan_test.py",
+      "new": "review/archive-20261118/path_a_cf09_lan_test.py",
+      "expected": "47a4edf778984a883c7a789c335b05529c0551182230d01193e12b389f08eaa4",
+      "actual": "47a4edf778984a883c7a789c335b05529c0551182230d01193e12b389f08eaa4",
+      "sha_ok": true,
+      "size_ok": true
+    },
+    {
+      "old": "review/path_a_cf09_rest.py",
+      "new": "review/archive-20261118/path_a_cf09_rest.py",
+      "expected": "bc8237cfdd2476daf8c7eecc68240e0ab4f405360c7f4aae32319ee051f91320",
+      "actual": "bc8237cfdd2476daf8c7eecc68240e0ab4f405360c7f4aae32319ee051f91320",
+      "sha_ok": true,
+      "size_ok": true
+    },
+    {
+      "old": "review/path_a_cf11_rollout.py",
+      "new": "review/archive-20261118/path_a_cf11_rollout.py",
+      "expected": "d5799784f5ba93dbf21602e7603606e4d57c35ca6eb4378a81b3414f5c85dda8",
+      "actual": "d5799784f5ba93dbf21602e7603606e4d57c35ca6eb4378a81b3414f5c85dda8",
+      "sha_ok": true,
+      "size_ok": true
+    },
+    {
+      "old": "review/cf_repair_tools_20261118.py",
+      "new": "review/archive-20261118/cf_repair_tools_20261118.py",
+      "expected": "0850918d6696fe4a1c549e0de15cf70d52edbdf2c60a33160f34967733ae7cc0",
+      "actual": "0850918d6696fe4a1c549e0de15cf70d52edbdf2c60a33160f34967733ae7cc0",
+      "sha_ok": true,
+      "size_ok": true
+    },
+    {
+      "old": "review/deploy_meter_repair_20261118.py",
+      "new": "review/archive-20261118/deploy_meter_repair_20261118.py",
+      "expected": "91abc5fd319a4b1098708134021654469e39af9bbd38b8c1b3cad7bdec0e45dc",
+      "actual": "91abc5fd319a4b1098708134021654469e39af9bbd38b8c1b3cad7bdec0e45dc",
+      "sha_ok": true,
+      "size_ok": true
+    },
+    {
+      "old": "review/fleet-foreign-access-20261118.py",
+      "new": "review/archive-20261118/fleet-foreign-access-20261118.py",
+      "expected": "916cbe57daed9efb07f11780ac88e4e37c83b4507d34947c1733598803e3b4ec",
+      "actual": "916cbe57daed9efb07f11780ac88e4e37c83b4507d34947c1733598803e3b4ec",
+      "sha_ok": true,
+      "size_ok": true
+    },
+    {
+      "old": "review/dmit-usability-probe-20261117.py",
+      "new": "review/archive-20261118/dmit-usability-probe-20261117.py",
+      "expected": "21fa23e4b89642a4c92cee866b5696f84ba86ef7d271c7b24b5e166a3addad81",
+      "actual": "21fa23e4b89642a4c92cee866b5696f84ba86ef7d271c7b24b5e166a3addad81",
+      "sha_ok": true,
+      "size_ok": true
+    },
+    {
+      "old": "review/AUTO恢复处理器隔离测试-20261118-Codex.json",
+      "new": "review/archive-20261118/AUTO恢复处理器隔离测试-20261118-Codex.json",
+      "expected": "41a570f690728d59aa85d18ae4f5cde67596c537c74fb62919c8ae7de2cd8cc8",
+      "actual": "41a570f690728d59aa85d18ae4f5cde67596c537c74fb62919c8ae7de2cd8cc8",
+      "sha_ok": true,
+      "size_ok": true
+    },
+    {
+      "old": "review/CF上线独立复核-20261118-2215-Codex.json",
+      "new": "review/archive-20261118/CF上线独立复核-20261118-2215-Codex.json",
+      "expected": "c726894f108a758237df661a972b62f022fd3e8cd30aebe4236527aceffff731",
+      "actual": "c726894f108a758237df661a972b62f022fd3e8cd30aebe4236527aceffff731",
+      "sha_ok": true,
+      "size_ok": true
+    },
+    {
+      "old": "review/CF上线补充核查-20261118-2219-Codex.json",
+      "new": "review/archive-20261118/CF上线补充核查-20261118-2219-Codex.json",
+      "expected": "02da7bbd40bce5bca6de0afd0031ca29f4f4071439f3494b46e0e58b4759f193",
+      "actual": "02da7bbd40bce5bca6de0afd0031ca29f4f4071439f3494b46e0e58b4759f193",
+      "sha_ok": true,
+      "size_ok": true
+    },
+    {
+      "old": "review/CF修复-probe-20261118-Codex.json",
+      "new": "review/archive-20261118/CF修复-probe-20261118-Codex.json",
+      "expected": "861ac010516935ff0b3b54ef94dee430021ebe02ddfcb662642538dac53048bc",
+      "actual": "861ac010516935ff0b3b54ef94dee430021ebe02ddfcb662642538dac53048bc",
+      "sha_ok": true,
+      "size_ok": true
+    },
+    {
+      "old": "review/CF修复-probe-20261118-Codex-1795011817.json",
+      "new": "review/archive-20261118/CF修复-probe-20261118-Codex-1795011817.json",
+      "expected": "1e86d9103f6d060deec35c34779f3f536cddc12b5844ab13a40e02bea14512a3",
+      "actual": "1e86d9103f6d060deec35c34779f3f536cddc12b5844ab13a40e02bea14512a3",
+      "sha_ok": true,
+      "size_ok": true
+    },
+    {
+      "old": "review/CF修复-probe-20261118-Codex-1795011927.json",
+      "new": "review/archive-20261118/CF修复-probe-20261118-Codex-1795011927.json",
+      "expected": "bbff267fc82793d29ec1ad0095ad01d9bfa1f22ad8eaf31f7df1e0418c814977",
+      "actual": "bbff267fc82793d29ec1ad0095ad01d9bfa1f22ad8eaf31f7df1e0418c814977",
+      "sha_ok": true,
+      "size_ok": true
+    },
+    {
+      "old": "review/治理计划修订一致性检查-20261118-Codex.json",
+      "new": "review/archive-20261118/治理计划修订一致性检查-20261118-Codex.json",
+      "expected": "371f227c7d1b927b9034908788d0fecf10c6bb613c6bf8f9f334f4298cfdc6d3",
+      "actual": "371f227c7d1b927b9034908788d0fecf10c6bb613c6bf8f9f334f4298cfdc6d3",
+      "sha_ok": true,
+      "size_ok": true
+    },
+    {
+      "old": "review/计量修复隔离测试-20261118-Codex.json",
+      "new": "review/archive-20261118/计量修复隔离测试-20261118-Codex.json",
+      "expected": "6c47656fea251f2a79517718fb49dae212e612a3d9a144d4fa1ab4c23f19794b",
+      "actual": "6c47656fea251f2a79517718fb49dae212e612a3d9a144d4fa1ab4c23f19794b",
+      "sha_ok": true,
+      "size_ok": true
+    },
+    {
+      "old": "review/配额启用门禁隔离测试-20261118-Codex.json",
+      "new": "review/archive-20261118/配额启用门禁隔离测试-20261118-Codex.json",
+      "expected": "23ccde19a1ab12fad764c1f0f61d9b0ed1f2711ccfaefa133a745a4d6059bdbe",
+      "actual": "23ccde19a1ab12fad764c1f0f61d9b0ed1f2711ccfaefa133a745a4d6059bdbe",
+      "sha_ok": true,
+      "size_ok": true
+    },
+    {
+      "old": "logs/fleet_nodes_20261119.py",
+      "new": "logs/diag-scripts-archive/fleet_nodes_20261119.py",
+      "expected": "d927b5ce1fbe49daf3542149d5f35cedfed075bf06b13036e050b9362b4ccbba",
+      "actual": "d927b5ce1fbe49daf3542149d5f35cedfed075bf06b13036e050b9362b4ccbba",
+      "sha_ok": true,
+      "size_ok": true
+    },
+    {
+      "old": "logs/nodes_redo_20261119.py",
+      "new": "logs/diag-scripts-archive/nodes_redo_20261119.py",
+      "expected": "2379c7909afd9084f969ffa38bba16a23ddd09c10eadc005218f7733a175836d",
+      "actual": "2379c7909afd9084f969ffa38bba16a23ddd09c10eadc005218f7733a175836d",
+      "sha_ok": true,
+      "size_ok": true
+    }
+  ],
+  "archive_count": 32,
+  "archive_all_match": true,
+  "cf_device_count": 6,
+  "cf_delay_samples": 36,
+  "cf_samples_pass": 36,
+  "files": {
+    "README.md": {
+      "sha256": "d4209987b6c972edc5694a0eada975fb316827af7883856133420066fd66ec7b",
+      "cr_count": 0
+    },
+    ".gitignore": {
+      "sha256": "36df0ce53cc6807970fee73afc7185cbda4daaa4e07ca0f04c3d1c37256a7c43",
+      "cr_count": 0
+    },
+    ".gitattributes": {
+      "sha256": "1e879fb9ffbd7022353b322b4f6d213016013216c24128937838b2e2f6230851",
+      "cr_count": 5
+    },
+    "mgmt\\agent\\rssh-probe.py": {
+      "sha256": "50674c0d4df8b3ee3789e3b09bf59119d8dc7bd478496e8d001ebd79e64576e6",
+      "cr_count": 0
+    },
+    "scripts\\qos-r2\\proxy-meter-v3.sh": {
+      "sha256": "4d7705b0c52ee11eec894a798f11b96efd85a27d15bd22af4a89d4576b46e85d",
+      "cr_count": 0
+    },
+    "scripts\\qos-r2\\proxy-meter-endpoints.sh": {
+      "sha256": "23b6b2f6681207f0e0d64854b83d744863cdad84fa1c2473cec636c13dbfe6b7",
+      "cr_count": 0
+    },
+    "mgmt\\backend\\internal\\clash\\golden.yaml": {
+      "sha256": "d401c21ed0507ce96f4791fd083584a3d3c41859f383201a265fde81a3e81208",
+      "cr_count": 0
+    },
+    "mgmt\\backend\\internal\\clash\\template_test.go": {
+      "sha256": "fd7b3fa85b7b2a0e5d00771cc0c34a94a674045eb43f0af1eaca673cd1fb5358",
+      "cr_count": 0
+    }
+  },
+  "missing_repair_dependencies": [
+    "review/cf_repair_tools_20261118.py",
+    "review/path_a_cf11_rollout.py",
+    "review/AUTO恢复处理器隔离测试-20261118-Codex.json"
+  ]
+}

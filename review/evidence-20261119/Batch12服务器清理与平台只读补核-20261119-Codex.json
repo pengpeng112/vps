@@ -1,0 +1,24 @@
+{
+  "at": "2026-11-19T21:29:19.645307+08:00",
+  "production_writes": false,
+  "gz_database": {
+    "rc": 0,
+    "stdout": "BEGIN\n10\nrtr-a9bcba|41|41|41|0\nCOMMIT",
+    "stderr": ""
+  },
+  "gz_rssh_source_metadata": {
+    "rc": 0,
+    "stdout": "{\"path\": \"/opt/mgmt/rssh-probe.py\", \"sha256\": \"4a6b8a02d62925c9d5dc69729e2d781d8878fcee653fef2c087f8630cf2588dc\", \"embedded_password_dsn\": true, \"reads_ROUTERMGMT_DB_DSN\": false}",
+    "stderr": ""
+  },
+  "hk_cleanup": {
+    "rc": 0,
+    "stdout": "2026-11-19T05:29:25-08:00\nPOC_SERVER_DIR_ABSENT",
+    "stderr": ""
+  },
+  "bwg_cleanup": {
+    "rc": 0,
+    "stdout": "2026-11-19T13:29:27+00:00",
+    "stderr": ""
+  }
+}

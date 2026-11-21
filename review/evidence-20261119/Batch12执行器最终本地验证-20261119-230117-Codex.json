@@ -1,0 +1,37 @@
+[
+  {
+    "command": [
+      "go",
+      "vet",
+      "./..."
+    ],
+    "rc": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "go",
+      "test",
+      "-count=1",
+      "./..."
+    ],
+    "rc": 0,
+    "stdout": "ok  \tqosgate\t23.969s\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "go",
+      "test",
+      "-race",
+      "-short",
+      "-run",
+      "TestConcurrentControlGenerationIsMonotonic",
+      "./..."
+    ],
+    "rc": 1,
+    "stdout": "FAIL\tqosgate [build failed]\nFAIL\n",
+    "stderr": "# runtime/cgo\ncgo: C compiler \"gcc\" not found: exec: \"gcc\": executable file not found in %PATH%\n"
+  }
+]

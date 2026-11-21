@@ -1,0 +1,66 @@
+{
+  "at": "2026-11-19T12:53:15+08:00",
+  "checks": [
+    {
+      "name": "本机雅典娜身份一致",
+      "pass": true
+    },
+    {
+      "name": "雅典娜当前BWG出口",
+      "pass": true
+    },
+    {
+      "name": "8台SN当前同出口",
+      "pass": true
+    },
+    {
+      "name": "美国机登陆和出口实证",
+      "pass": true
+    },
+    {
+      "name": "雅典娜美国直连未通过且对照通过",
+      "pass": true
+    },
+    {
+      "name": "香港到美国两TCP口通过",
+      "pass": true
+    },
+    {
+      "name": "全部证据无生产写入",
+      "pass": true
+    },
+    {
+      "name": "报告有未切换边界",
+      "pass": true
+    },
+    {
+      "name": "报告不夸大完整链路通过",
+      "pass": true
+    },
+    {
+      "name": "报告不含受控WS凭据",
+      "pass": true
+    },
+    {
+      "name": "证据存在 review/雅典娜独立固定出口只读核查-20261119-Codex.json",
+      "pass": true
+    },
+    {
+      "name": "证据存在 review/雅典娜与舰队出口共享及DMIT备选核查-20261119-Codex.json",
+      "pass": true
+    },
+    {
+      "name": "证据存在 review/雅典娜到独立出口候选TCP只读探测-20261119-Codex.json",
+      "pass": true
+    },
+    {
+      "name": "证据存在 review/雅典娜备用出口香港中继可达性只读核查-20261119-Codex.json",
+      "pass": true
+    },
+    {
+      "name": "UTF8 LF格式",
+      "pass": true
+    }
+  ],
+  "plan_sha256": "4e8706cbc6ea9e7ed123184a317cdcc5c6c0e21f154e9f62dd943a9200365035"
+}

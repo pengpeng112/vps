@@ -1,0 +1,2 @@
+{"ts":"2026-11-17 22:15:04+0800","actor":"ratelimit-ctl-v2","action":"release","detail":{"release": {"outcome": "ok", "scope": "all", "mode": "emergency", "reason": "line down", "until": "", "generation": 1}}}
+{"ts":"2026-11-17 22:15:07+0800","actor":"ratelimit-ctl-v2","action":"resume","detail":{"resume": {"outcome": "ok", "what": "emergency", "scope": "all", "authorized_by": "ops", "reason": "restored"}}}

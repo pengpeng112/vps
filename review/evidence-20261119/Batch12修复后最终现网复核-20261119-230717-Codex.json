@@ -1,0 +1,41 @@
+{
+  "at": "2026-11-19T23:07:03.902970+08:00",
+  "GZ": {
+    "rc": 0,
+    "stdout": "active\nactive\n1d0d88299ea25ba6964bcc32f4f1b01a9684282a2fb9ba5820aca03ef7a01a05  /opt/mgmt/server\nBEGIN\n10\nrtr-a9bcba|41|41|41|0\n0\nCOMMIT",
+    "stderr": ""
+  },
+  "meter_stage_cleanup": {
+    "rc": 0,
+    "stdout": "OWN_METER_STAGE_CLEANED",
+    "stderr": ""
+  },
+  "R2": {
+    "rc": 0,
+    "stdout": "2026-11-19T23:07:06+08:00\n4880\n73e830e5085eb7dd2b80bbde5bd25efbb9ea19141d798cb917086ba54c584674  /etc/mihomo/config.yaml\n6519a8b4e28e38f0a12932444626218d7f92bd95950a813421cca04cca11dd27  /etc/config/dhcp\n7ed820da9a00b05438f107d52b63cfc5ad3a5f7c4170ad9b4f543503678fd61f  /etc/routermgmt/tunnel.conf\nqdisc noqueue 0: root refcnt 2 \n2026-11-19 22:45:20 OK DELTA=8920 HEALTH=ok EVENTS=- DAY_TOTAL=888341714\n2026-11-19 22:50:01 OK DELTA=336734 HEALTH=ok EVENTS=- DAY_TOTAL=888678448\n2026-11-19 22:55:01 OK DELTA=709220 HEALTH=ok EVENTS=- DAY_TOTAL=889387668\n2026-11-19 23:00:01 OK DELTA=4839425 HEALTH=ok EVENTS=- DAY_TOTAL=894227093\n2026-11-19 23:05:01 OK DELTA=4513244 HEALTH=ok EVENTS=- DAY_TOTAL=898740337\ng204=204 t=0.622046\nbaidu=200 t=0.185073",
+    "stderr": ""
+  },
+  "meter": {
+    "seq": 598,
+    "day_key": "2026-11-19",
+    "day_total": 898740337,
+    "health": "ok",
+    "partial": true,
+    "quota_eligible": false,
+    "coverage_complete": false,
+    "crossday_unassigned": 0
+  },
+  "local_remote_script_SHA_match": {
+    "proxy-meter-v3.sh": true,
+    "proxy-meter-endpoints.sh": true,
+    "proxy-meter-io.py": true
+  },
+  "cf_delays": {
+    "CF2D-HK-01": {
+      "delay": 380
+    },
+    "CF2D-BWG-01": {
+      "delay": 429
+    }
+  }
+}

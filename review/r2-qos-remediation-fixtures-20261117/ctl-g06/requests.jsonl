@@ -1,0 +1,3 @@
+{"ts":"2026-11-17 22:15:15+0800","request_id":"g06-a","fingerprint":"f55fa97346d95b23","action":"apply","outcome":"applied","detail":{"version":1,"enforcement":"limited","classes":" video download"}}
+{"ts":"2026-11-17 22:15:18+0800","request_id":"g06-r1","fingerprint":"f8ae7ff91a377fb0","action":"release","outcome":"ok","detail":{"scope":"video","mode":"manual","generation":1}}
+{"ts":"2026-11-17 22:15:21+0800","request_id":"g06-dl","fingerprint":"b2f94a5778abfdbf","action":"apply","outcome":"applied","detail":{"version":2,"enforcement":"limited","classes":" download"}}

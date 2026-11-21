@@ -1,0 +1,20 @@
+{
+  "at": "2026-11-19T16:40:33+08:00",
+  "production_writes": false,
+  "checks": [
+    "evidence_paths_exist",
+    "new_probe_ast_parses",
+    "controlled_credentials_absent",
+    "production_config_pid_unchanged_verified"
+  ],
+  "files": [
+    {
+      "path": "docs\\plans\\东营国外访问慢诊断记录与处置建议-20261119-Codex.md",
+      "sha256": "bf1bef2992c124bf97e8acf8af28067adaf8551fbdfeae21a5a282510c5be189"
+    },
+    {
+      "path": "review\\r9_isolated_transport_probe_20261119.py",
+      "sha256": "1e14d80c2e9a6c0cd74e888af8ff7b87d90404e489b4f3eeac8e62fed48254d8"
+    }
+  ]
+}

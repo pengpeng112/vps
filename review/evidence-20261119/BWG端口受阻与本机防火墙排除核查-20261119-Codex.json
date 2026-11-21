@@ -1,0 +1,11 @@
+{
+  "started": "2026-11-19T16:46:41+08:00",
+  "production_writes": false,
+  "firewall": {
+    "rc": 0,
+    "stdout": "-P INPUT ACCEPT\n-A INPUT -p tcp -m tcp --dport 2053 -j CF2053\nStatus\n|- Number of jail:\t1\n`- Jail list:\tsshd",
+    "stderr": "sh: 1: ufw: not found"
+  },
+  "HK_to_BWG_TCP443": true,
+  "finished": "2026-11-19T16:46:43+08:00"
+}

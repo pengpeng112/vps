@@ -1,0 +1,3 @@
+{"ts":"2026-11-17 22:15:47+0800","actor":"ratelimit-ctl-v2","action":"apply","detail":{"apply": {"outcome": "applied", "version": 1, "enforcement": "limited", "classes": "videodownload"}}}
+{"ts":"2026-11-17 22:15:56+0800","actor":"ratelimit-ctl-v2","action":"apply","detail":{"apply": {"outcome": "effect_failed_rolled_back", "cls": "video", "where": "executor"}}}
+{"ts":"2026-11-17 22:16:02+0800","actor":"ratelimit-ctl-v2","action":"apply","detail":{"apply": {"outcome": "effect_failed_rolled_back", "cls": "download", "where": "executor"}}}

@@ -1,0 +1,16 @@
+{
+  "at": "2026-11-19T22:40:29.636560+08:00",
+  "cwd": "F:\\vps\\backups\\batch12-fix-20261119-221752\\build-tree",
+  "command": [
+    "python",
+    "scripts/build_gz_api.py",
+    "--check-only",
+    "--review-range",
+    "mgmt/backend/internal/clash/golden.yaml,mgmt/backend/internal/clash/template_test.go,scripts/build_gz_api.py,mgmt/backend/internal/db/migrations/0001_init.sql,mgmt/backend/internal/db/migrations/0002_grants.sql,mgmt/backend/internal/db/migrations/0003_device_policy.sql,mgmt/backend/internal/db/migrations/0004_proxy_access_mode.sql,mgmt/backend/internal/db/migrations/0005_device_online_term.sql,mgmt/backend/internal/db/migrations/0006_remote_ssh_health.sql,mgmt/backend/internal/db/migrations/0007_device_mac.sql,mgmt/backend/internal/db/migrations/0008_device_traffic_alert.sql,mgmt/backend/internal/db/migrations/0009_node_purpose.sql,mgmt/backend/internal/db/migrations/0010_node_purpose_constraints.sql"
+  ],
+  "rc": 0,
+  "stdout": "[1/5] LF 检查 PASS（golden + 10 迁移）\n[2/5] 源码状态：HEAD@600ada42524b dirty=14（全部在已审核范围）\n[3/5] go vet PASS\n[4/5] go test PASS（数据库集成测试未设 DSN 自动跳过）\n[check-only] ALL GREEN（LF/源码范围/vet/test 通过；不产出二进制）\n",
+  "stderr": "",
+  "sql_semantic_change": false,
+  "production_deployed": false
+}

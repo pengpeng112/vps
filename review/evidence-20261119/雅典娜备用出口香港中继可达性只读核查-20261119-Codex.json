@@ -1,0 +1,15 @@
+{
+  "started": "2026-11-19T12:50:04+08:00",
+  "production_writes": false,
+  "scope": "Hong Kong to DMIT TCP reachability only",
+  "tests": [
+    {
+      "port": 443,
+      "tcp_connected": true
+    },
+    {
+      "port": 28722,
+      "tcp_connected": true
+    }
+  ]
+}

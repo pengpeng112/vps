@@ -1,0 +1,21 @@
+{
+  "at": "2026-11-20T17:25:00.328827+08:00",
+  "probe": [
+    {
+      "unavailable": true,
+      "rc": 0
+    },
+    {
+      "unavailable": true,
+      "rc": 0
+    },
+    {
+      "unavailable": true,
+      "rc": 0
+    }
+  ],
+  "previous": "BWG-HY2-JPTY-01",
+  "protected_before": "30408\n67bcab884951fcc73a9bffbc169a40f576829fee74ab7258e14726348169490b  /etc/mihomo/run.yaml\n20158 20130\n1",
+  "result": "failed",
+  "stage": "line preflight"
+}

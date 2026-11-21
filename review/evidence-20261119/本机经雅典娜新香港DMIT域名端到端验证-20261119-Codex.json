@@ -1,0 +1,18 @@
+{
+  "started": "2026-11-19T14:02:41+08:00",
+  "production_writes": false,
+  "source": "local PC 192.168.2.105 via Athena gateway; direct socket to CF edge, no OS proxy",
+  "domain": "hk.6849271.xyz",
+  "edge": "162.159.135.42",
+  "scope": "temporary in-memory VLESS-over-WS client; no production config/selection changes",
+  "outer_tls_verified": true,
+  "authenticated_vless_response": true,
+  "inner_https_tls_verified": true,
+  "http_status": 200,
+  "ip": "191.223.215.12",
+  "loc": "HK",
+  "colo": "HKG",
+  "response_bytes": 1167,
+  "passed": true,
+  "finished": "2026-11-19T14:02:43+08:00"
+}

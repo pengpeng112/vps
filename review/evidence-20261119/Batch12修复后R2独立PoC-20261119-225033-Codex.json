@@ -1,0 +1,40 @@
+{
+  "started": "2026-11-19T22:50:33.054213+08:00",
+  "device": "R2",
+  "production_config_touched": false,
+  "counter_scope": "HK dedicated HTTP port; BWG HY2 to R2 public IPv4 (includes positive background upper bound)",
+  "work": "/tmp/qos-poc-Codex-20261119-225033",
+  "server_dir": "/tmp/qos-source-Codex-20261119-225033",
+  "phases": {},
+  "before": {
+    "rc": 0,
+    "stdout": "2026-11-19T22:50:36+08:00\n4880\n73e830e5085eb7dd2b80bbde5bd25efbb9ea19141d798cb917086ba54c584674  /etc/mihomo/config.yaml\n6519a8b4e28e38f0a12932444626218d7f92bd95950a813421cca04cca11dd27  /etc/config/dhcp\n7ed820da9a00b05438f107d52b63cfc5ad3a5f7c4170ad9b4f543503678fd61f  /etc/routermgmt/tunnel.conf",
+    "stderr": ""
+  },
+  "mihomo_syntax": {
+    "rc": 0,
+    "stdout": "time=\"2026-11-19T14:51:08.171136948Z\" level=info msg=\"Start initial configuration in progress\"\ntime=\"2026-11-19T14:51:08.255608583Z\" level=info msg=\"Geodata Loader mode: memconservative\"\ntime=\"2026-11-19T14:51:08.255722150Z\" level=info msg=\"Geosite Matcher implementation: succinct\"\ntime=\"2026-11-19T14:51:08.256143179Z\" level=info msg=\"Initial configuration complete, total time: 84ms\"\nconfiguration file /tmp/qos-poc-Codex-20261119-225033/mihomo.yaml test is successful",
+    "stderr": ""
+  },
+  "result": "BLOCK_ENFORCE",
+  "error_type": "RuntimeError",
+  "error_code": "R2 public IPv4 discovery failed",
+  "cleanup": {
+    "R2": {
+      "rc": 0,
+      "stdout": "OWNED_POC_CLEANED",
+      "stderr": ""
+    },
+    "HK": {
+      "rc": 0,
+      "stdout": "OWNED_POC_CLEANED",
+      "stderr": ""
+    }
+  },
+  "after": {
+    "rc": 0,
+    "stdout": "2026-11-19T22:51:12+08:00\n4880\n73e830e5085eb7dd2b80bbde5bd25efbb9ea19141d798cb917086ba54c584674  /etc/mihomo/config.yaml\n6519a8b4e28e38f0a12932444626218d7f92bd95950a813421cca04cca11dd27  /etc/config/dhcp\n7ed820da9a00b05438f107d52b63cfc5ad3a5f7c4170ad9b4f543503678fd61f  /etc/routermgmt/tunnel.conf\ng204=204 time=0.465282",
+    "stderr": ""
+  },
+  "finished": "2026-11-19T22:51:12.839355+08:00"
+}

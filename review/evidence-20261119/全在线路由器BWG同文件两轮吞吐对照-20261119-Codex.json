@@ -1,0 +1,396 @@
+{
+  "started": "2026-11-19T16:43:41+08:00",
+  "production_writes": false,
+  "api_login": false,
+  "method": "Each router native curl via formal 7890, same Cloudflare 512KiB, at most 2 simultaneous probes; HEAD not video playback",
+  "devices": {
+    "R1": {
+      "at": "2026-11-19T16:43:41+08:00",
+      "groups": {
+        "PROXY": {
+          "now": "AUTO"
+        },
+        "NODE-PICK": {
+          "now": "BWG-HY2-JPTY-01"
+        }
+      },
+      "config_pid": {
+        "rc": 0,
+        "stdout": "4976\ndd7c4e7b92cb59a6fcdfb4ae91d1d2999fb84b36d49d562c790ae7430093f42d  /etc/mihomo/config.yaml",
+        "stderr": ""
+      },
+      "exit": {
+        "rc": 0,
+        "stdout": "ip=74.82.193.113\ncolo=NRT\nloc=JP",
+        "stderr": ""
+      },
+      "websites": {
+        "Google": {
+          "rc": 0,
+          "stdout": "http=200 t=0.514298",
+          "stderr": ""
+        },
+        "YouTube": {
+          "rc": 0,
+          "stdout": "http=200 t=0.782946",
+          "stderr": ""
+        }
+      },
+      "download_round1": {
+        "rc": 0,
+        "stdout": "http=200 bytes=524288 t=4.579896 tls=0.313157 speed_Bps=114475",
+        "stderr": ""
+      },
+      "download_round2": {
+        "rc": 0,
+        "stdout": "http=200 bytes=524288 t=2.441678 tls=0.312441 speed_Bps=214724",
+        "stderr": ""
+      }
+    },
+    "R2": {
+      "at": "2026-11-19T16:43:41+08:00",
+      "groups": {
+        "PROXY": {
+          "now": "AUTO"
+        },
+        "NODE-PICK": {
+          "now": "BWG-HY2-JPTY-01"
+        }
+      },
+      "config_pid": {
+        "rc": 0,
+        "stdout": "4880\n73e830e5085eb7dd2b80bbde5bd25efbb9ea19141d798cb917086ba54c584674  /etc/mihomo/config.yaml",
+        "stderr": ""
+      },
+      "exit": {
+        "rc": 0,
+        "stdout": "ip=74.82.193.113\ncolo=NRT\nloc=JP",
+        "stderr": ""
+      },
+      "websites": {
+        "Google": {
+          "rc": 0,
+          "stdout": "http=200 t=1.084817",
+          "stderr": ""
+        },
+        "YouTube": {
+          "rc": 0,
+          "stdout": "http=200 t=2.280593",
+          "stderr": ""
+        }
+      },
+      "download_round1": {
+        "rc": 0,
+        "stdout": "http=200 bytes=524288 t=3.897279 tls=0.476086 speed_Bps=134526",
+        "stderr": ""
+      },
+      "download_round2": {
+        "rc": 0,
+        "stdout": "http=200 bytes=524288 t=3.791594 tls=0.471541 speed_Bps=138276",
+        "stderr": ""
+      }
+    },
+    "R3": {
+      "at": "2026-11-19T16:43:51+08:00",
+      "groups": {
+        "PROXY": {
+          "now": "AUTO"
+        },
+        "NODE-PICK": {
+          "now": "BWG-HY2-JPTY-01"
+        }
+      },
+      "config_pid": {
+        "rc": 0,
+        "stdout": "4935\ndd7c4e7b92cb59a6fcdfb4ae91d1d2999fb84b36d49d562c790ae7430093f42d  /etc/mihomo/config.yaml",
+        "stderr": ""
+      },
+      "exit": {
+        "rc": 0,
+        "stdout": "ip=74.82.193.113\ncolo=NRT\nloc=JP",
+        "stderr": ""
+      },
+      "websites": {
+        "Google": {
+          "rc": 0,
+          "stdout": "http=200 t=0.477913",
+          "stderr": ""
+        },
+        "YouTube": {
+          "rc": 0,
+          "stdout": "http=200 t=0.584631",
+          "stderr": ""
+        }
+      },
+      "download_round1": {
+        "rc": 0,
+        "stdout": "http=200 bytes=524288 t=2.575472 tls=0.292455 speed_Bps=203569",
+        "stderr": ""
+      },
+      "download_round2": {
+        "rc": 0,
+        "stdout": "http=200 bytes=524288 t=1.581504 tls=0.303826 speed_Bps=331512",
+        "stderr": ""
+      }
+    },
+    "R4": {
+      "at": "2026-11-19T16:43:53+08:00",
+      "groups": {
+        "PROXY": {
+          "now": "AUTO"
+        },
+        "NODE-PICK": {
+          "now": "BWG-HY2-JPTY-01"
+        }
+      },
+      "config_pid": {
+        "rc": 0,
+        "stdout": "4941\ndd7c4e7b92cb59a6fcdfb4ae91d1d2999fb84b36d49d562c790ae7430093f42d  /etc/mihomo/config.yaml",
+        "stderr": ""
+      },
+      "exit": {
+        "rc": 0,
+        "stdout": "ip=74.82.193.113\ncolo=NRT\nloc=JP",
+        "stderr": ""
+      },
+      "websites": {
+        "Google": {
+          "rc": 0,
+          "stdout": "http=200 t=0.532898",
+          "stderr": ""
+        },
+        "YouTube": {
+          "rc": 0,
+          "stdout": "http=200 t=0.628356",
+          "stderr": ""
+        }
+      },
+      "download_round1": {
+        "rc": 0,
+        "stdout": "http=200 bytes=524288 t=1.049033 tls=0.312128 speed_Bps=499782",
+        "stderr": ""
+      },
+      "download_round2": {
+        "rc": 0,
+        "stdout": "http=200 bytes=524288 t=0.867647 tls=0.326810 speed_Bps=604264",
+        "stderr": ""
+      }
+    },
+    "R5": {
+      "at": "2026-11-19T16:43:58+08:00",
+      "groups": {
+        "PROXY": {
+          "now": "AUTO"
+        },
+        "NODE-PICK": {
+          "now": "BWG-HY2-JPTY-01"
+        }
+      },
+      "config_pid": {
+        "rc": 0,
+        "stdout": "3477\ndd7c4e7b92cb59a6fcdfb4ae91d1d2999fb84b36d49d562c790ae7430093f42d  /etc/mihomo/config.yaml",
+        "stderr": ""
+      },
+      "exit": {
+        "rc": 0,
+        "stdout": "ip=74.82.193.113\ncolo=NRT\nloc=JP",
+        "stderr": ""
+      },
+      "websites": {
+        "Google": {
+          "rc": 0,
+          "stdout": "http=200 t=0.530002",
+          "stderr": ""
+        },
+        "YouTube": {
+          "rc": 0,
+          "stdout": "http=200 t=0.587200",
+          "stderr": ""
+        }
+      },
+      "download_round1": {
+        "rc": 0,
+        "stdout": "http=200 bytes=524288 t=0.710435 tls=0.318093 speed_Bps=737981",
+        "stderr": ""
+      },
+      "download_round2": {
+        "rc": 0,
+        "stdout": "http=200 bytes=524288 t=0.662469 tls=0.455742 speed_Bps=791415",
+        "stderr": ""
+      }
+    },
+    "R6": {
+      "at": "2026-11-19T16:43:59+08:00",
+      "groups": {
+        "PROXY": {
+          "now": "AUTO"
+        },
+        "NODE-PICK": {
+          "now": "BWG-HY2-JPTY-01"
+        }
+      },
+      "config_pid": {
+        "rc": 0,
+        "stdout": "4697\ndd7c4e7b92cb59a6fcdfb4ae91d1d2999fb84b36d49d562c790ae7430093f42d  /etc/mihomo/config.yaml",
+        "stderr": ""
+      },
+      "exit": {
+        "rc": 0,
+        "stdout": "ip=74.82.193.113\ncolo=NRT\nloc=JP",
+        "stderr": ""
+      },
+      "websites": {
+        "Google": {
+          "rc": 0,
+          "stdout": "http=200 t=0.549704",
+          "stderr": ""
+        },
+        "YouTube": {
+          "rc": 0,
+          "stdout": "http=200 t=0.772968",
+          "stderr": ""
+        }
+      },
+      "download_round1": {
+        "rc": 0,
+        "stdout": "http=200 bytes=524288 t=1.752217 tls=0.454533 speed_Bps=299214",
+        "stderr": ""
+      },
+      "download_round2": {
+        "rc": 0,
+        "stdout": "http=200 bytes=524288 t=2.179884 tls=0.547328 speed_Bps=240511",
+        "stderr": ""
+      }
+    },
+    "R8": {
+      "at": "2026-11-19T16:44:04+08:00",
+      "groups": {
+        "PROXY": {
+          "now": "AUTO"
+        },
+        "NODE-PICK": {
+          "now": "BWG-HY2-JPTY-01"
+        }
+      },
+      "config_pid": {
+        "rc": 0,
+        "stdout": "4276\ndd7c4e7b92cb59a6fcdfb4ae91d1d2999fb84b36d49d562c790ae7430093f42d  /etc/mihomo/config.yaml",
+        "stderr": ""
+      },
+      "exit": {
+        "rc": 0,
+        "stdout": "ip=74.82.193.113\ncolo=NRT\nloc=JP",
+        "stderr": ""
+      },
+      "websites": {
+        "Google": {
+          "rc": 0,
+          "stdout": "http=200 t=0.539737",
+          "stderr": ""
+        },
+        "YouTube": {
+          "rc": 0,
+          "stdout": "http=200 t=0.627151",
+          "stderr": ""
+        }
+      },
+      "download_round1": {
+        "rc": 0,
+        "stdout": "http=200 bytes=524288 t=0.612582 tls=0.311968 speed_Bps=855865",
+        "stderr": ""
+      },
+      "download_round2": {
+        "rc": 0,
+        "stdout": "http=200 bytes=524288 t=0.597247 tls=0.312167 speed_Bps=877841",
+        "stderr": ""
+      }
+    },
+    "Athena": {
+      "at": "2026-11-19T16:44:09+08:00",
+      "groups": {
+        "PROXY": {
+          "now": "BWG-HY2-JPTY-01"
+        },
+        "NODE-PICK": {
+          "now": "BWG-HY2-JPTY-01"
+        }
+      },
+      "config_pid": {
+        "rc": 0,
+        "stdout": "5410\n97f66d28534df7fee84ff2b9d82f915ddcb2f9926e9a92c8b3ffc2954f809d8d  /etc/mihomo/run.yaml",
+        "stderr": ""
+      },
+      "exit": {
+        "rc": 0,
+        "stdout": "ip=74.82.193.113\ncolo=NRT\nloc=JP",
+        "stderr": ""
+      },
+      "websites": {
+        "Google": {
+          "rc": 0,
+          "stdout": "http=200 t=0.352264",
+          "stderr": ""
+        },
+        "YouTube": {
+          "rc": 0,
+          "stdout": "http=200 t=0.549617",
+          "stderr": ""
+        }
+      },
+      "download_round1": {
+        "rc": 0,
+        "stdout": "http=200 bytes=524288 t=0.385254 tls=0.131827 speed_Bps=1360889",
+        "stderr": ""
+      },
+      "download_round2": {
+        "rc": 0,
+        "stdout": "http=200 bytes=524288 t=0.285752 tls=0.129476 speed_Bps=1834765",
+        "stderr": ""
+      }
+    },
+    "R9": {
+      "at": "2026-11-19T16:44:06+08:00",
+      "groups": {
+        "PROXY": {
+          "now": "AUTO"
+        },
+        "NODE-PICK": {
+          "now": "BWG-HY2-JPTY-01"
+        }
+      },
+      "config_pid": {
+        "rc": 0,
+        "stdout": "4086\n1eb54b96092fd96f449d4360a7c805418d468275b8c6ec897f2bffd83a101ebb  /etc/mihomo/config.yaml",
+        "stderr": ""
+      },
+      "exit": {
+        "rc": 0,
+        "stdout": "ip=74.82.193.113\ncolo=NRT\nloc=JP",
+        "stderr": ""
+      },
+      "websites": {
+        "Google": {
+          "rc": 0,
+          "stdout": "http=200 t=0.564513",
+          "stderr": ""
+        },
+        "YouTube": {
+          "rc": 0,
+          "stdout": "http=200 t=1.095338",
+          "stderr": ""
+        }
+      },
+      "download_round1": {
+        "rc": 0,
+        "stdout": "http=200 bytes=524288 t=3.656014 tls=0.436902 speed_Bps=143404",
+        "stderr": ""
+      },
+      "download_round2": {
+        "rc": 0,
+        "stdout": "http=200 bytes=524288 t=2.936562 tls=0.654729 speed_Bps=178538",
+        "stderr": ""
+      }
+    }
+  },
+  "finished": "2026-11-19T16:44:27+08:00"
+}

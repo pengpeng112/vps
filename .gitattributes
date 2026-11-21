@@ -3,3 +3,8 @@
 *.yaml text eol=lf
 *.yml text eol=lf
 *.sh text eol=lf
+
+# 2026-11-19 Batch1（governance-20261119/01-C6.2）：后端/迁移/配置强制 LF
+*.go text eol=lf
+*.sql text eol=lf
+*.conf text eol=lf

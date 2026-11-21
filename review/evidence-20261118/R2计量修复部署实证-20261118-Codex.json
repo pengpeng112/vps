@@ -1,0 +1,165 @@
+{
+  "started": "2026-11-18T22:30:33+08:00",
+  "device": "R2",
+  "limiting_enabled": false,
+  "protected_before": {
+    "rc": 0,
+    "stdout": "f13d6b9dae93b5157911a6247a1b62040bec42a67871e8aa44ce430480852185  /etc/mihomo/config.yaml\n6519a8b4e28e38f0a12932444626218d7f92bd95950a813421cca04cca11dd27  /etc/config/dhcp\n7ed820da9a00b05438f107d52b63cfc5ad3a5f7c4170ad9b4f543503678fd61f  /etc/routermgmt/tunnel.conf\nc65d51a7066eb05a141ead4692361472c6e89a6e16327ca4dc7da356c12bfd6e  /etc/routermgmt/self-heal.sh\n15617\nqdisc noqueue 0: root refcnt 2",
+    "stderr": ""
+  },
+  "remote_backup": "/etc/routermgmt/codex-meterfix.MNNCaD",
+  "duplicate_counter_rules_removed": {
+    "PROXY_METER_OUT": 112,
+    "PROXY_METER_IN": 112
+  },
+  "busybox_fixture": [
+    {
+      "day_key": "2026-11-18",
+      "total": 0,
+      "delta_last": 0,
+      "sampled_at": "2026-11-18 22:30:41+0800",
+      "meter_id": "fixture",
+      "seq": 1,
+      "health": "ok",
+      "partial": true,
+      "quota_eligible": false,
+      "events": "init_baseline",
+      "read_fail_eps": "-"
+    },
+    {
+      "day_key": "2026-11-18",
+      "total": 130,
+      "delta_last": 130,
+      "sampled_at": "2026-11-18 22:30:41+0800",
+      "meter_id": "fixture",
+      "seq": 2,
+      "health": "ok",
+      "partial": true,
+      "quota_eligible": false,
+      "events": "",
+      "read_fail_eps": "-"
+    },
+    {
+      "day_key": "2026-11-18",
+      "total": 230,
+      "delta_last": 100,
+      "sampled_at": "2026-11-18 22:30:42+0800",
+      "meter_id": "fixture",
+      "seq": 3,
+      "health": "ok",
+      "partial": true,
+      "quota_eligible": false,
+      "events": "",
+      "read_fail_eps": "-"
+    }
+  ],
+  "install": {
+    "rc": 0,
+    "stdout": "generated_at=2026-11-18 22:30:44+0800 registered_rules=14 proxy_nodes=7 unresolved=<provider names withheld; domain coverage remains incomplete>\n63b206e0d078261d9ff0310dbbef5bc6163ba3f82f2fc037efe40b48171cbeb1  /etc/routermgmt/proxy-meter-rules-v3.conf\nf774f1cc603c6b19e0f3131ec8573e9af4193abe5b34c1c235cf320282ee16b6  /etc/routermgmt/proxy-meter-coverage-v3.json\nOK rules=/etc/routermgmt/proxy-meter-rules-v3.conf cover=/etc/routermgmt/proxy-meter-coverage-v3.json\nINSTALLED",
+    "stderr": ""
+  },
+  "state_first": {
+    "schema": 3,
+    "counter_key_format": "direction-v1",
+    "meter_id": "rtr-a9bcba",
+    "seq": 300,
+    "boot_id": "56d8dc3e-af38-4d0c-b763-a4a094663c27",
+    "rules_sha": "63b206e0d078261d",
+    "continuity_id": "reboot-56d8dc3e-af38-4d0c-b763-a4a094663c27",
+    "prev_continuity": "reboot-56d8dc3e-af38-4d0c-b763-a4a094663c27",
+    "prev_epoch": 1795012245,
+    "day_key": "2026-11-18",
+    "day_total": 4437452,
+    "day_first_at": "2026-11-18 00:00:00+0800",
+    "health": "degraded",
+    "partial": true,
+    "quota_eligible": false,
+    "read_fail_eps": "-",
+    "endpoints": {
+      "CF-CDN-GIA-01_down": 975948,
+      "BWG-VLESS-JPTY-01_down": 0,
+      "BWG-HY2-JPTY-01_up": 1694922,
+      "BULK-LAX-GIA-01_down": 0,
+      "CF-CDN-GIA-01_up": 497422,
+      "GIA-HY2-US-01_up": 142213,
+      "CF2-CDN-GIA-01_down": 951067,
+      "CF2-CDN-GIA-01_up": 473555,
+      "GIA-HY2-US-01_down": 240229,
+      "BULK-LAX-GIA-01_up": 2700,
+      "DMIT-HY2-US-01_up": 497040,
+      "BWG-HY2-JPTY-01_down": 2009536,
+      "BWG-VLESS-JPTY-01_up": 6840,
+      "DMIT-HY2-US-01_down": 0
+    }
+  },
+  "bounded_proxy_get": {
+    "rc": 0,
+    "stdout": "200 65536 1.086063",
+    "stderr": ""
+  },
+  "state_second": {
+    "schema": 3,
+    "counter_key_format": "direction-v1",
+    "meter_id": "rtr-a9bcba",
+    "seq": 301,
+    "boot_id": "56d8dc3e-af38-4d0c-b763-a4a094663c27",
+    "rules_sha": "63b206e0d078261d",
+    "continuity_id": "reboot-56d8dc3e-af38-4d0c-b763-a4a094663c27",
+    "prev_continuity": "reboot-56d8dc3e-af38-4d0c-b763-a4a094663c27",
+    "prev_epoch": 1795012249,
+    "day_key": "2026-11-18",
+    "day_total": 4517743,
+    "day_first_at": "2026-11-18 00:00:00+0800",
+    "health": "ok",
+    "partial": true,
+    "quota_eligible": false,
+    "read_fail_eps": "-",
+    "endpoints": {
+      "CF-CDN-GIA-01_down": 975948,
+      "BWG-VLESS-JPTY-01_down": 0,
+      "BWG-HY2-JPTY-01_up": 1698548,
+      "BULK-LAX-GIA-01_down": 0,
+      "CF-CDN-GIA-01_up": 497422,
+      "GIA-HY2-US-01_up": 142213,
+      "CF2-CDN-GIA-01_down": 951067,
+      "CF2-CDN-GIA-01_up": 473555,
+      "GIA-HY2-US-01_down": 240229,
+      "BULK-LAX-GIA-01_up": 2700,
+      "DMIT-HY2-US-01_up": 497040,
+      "BWG-HY2-JPTY-01_down": 2086201,
+      "BWG-VLESS-JPTY-01_up": 6840,
+      "DMIT-HY2-US-01_down": 0
+    }
+  },
+  "day_second": {
+    "day_key": "2026-11-18",
+    "total": 4517743,
+    "delta_last": 80291,
+    "sampled_at": "2026-11-18 22:30:49+0800",
+    "meter_id": "rtr-a9bcba",
+    "seq": 301,
+    "health": "ok",
+    "partial": true,
+    "quota_eligible": false,
+    "events": "",
+    "read_fail_eps": "-"
+  },
+  "both_direction_delta_verified": true,
+  "rule_counts": {
+    "rc": 0,
+    "stdout": "7\n7",
+    "stderr": ""
+  },
+  "protected_after": {
+    "rc": 0,
+    "stdout": "f13d6b9dae93b5157911a6247a1b62040bec42a67871e8aa44ce430480852185  /etc/mihomo/config.yaml\n6519a8b4e28e38f0a12932444626218d7f92bd95950a813421cca04cca11dd27  /etc/config/dhcp\n7ed820da9a00b05438f107d52b63cfc5ad3a5f7c4170ad9b4f543503678fd61f  /etc/routermgmt/tunnel.conf\nc65d51a7066eb05a141ead4692361472c6e89a6e16327ca4dc7da356c12bfd6e  /etc/routermgmt/self-heal.sh\n15617\nqdisc noqueue 0: root refcnt 2",
+    "stderr": ""
+  },
+  "final_hashes": {
+    "rc": 0,
+    "stdout": "e9879454d449299b06e2e6ff4006bb46bbe479d5da701a83d37284dc5fda4ada  /etc/routermgmt/proxy-meter-v3.sh\n2d8fe9618d2213092f80e555f9972214f8ec14685146b49173be704f78c667f2  /etc/routermgmt/proxy-meter-endpoints.sh",
+    "stderr": ""
+  },
+  "success": true,
+  "finished": "2026-11-18T22:30:50+08:00"
+}

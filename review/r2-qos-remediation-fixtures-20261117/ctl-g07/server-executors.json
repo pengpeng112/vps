@@ -1,0 +1,1 @@
+{"video": {"invoke": ["bash", "F:/vps/review/r2-qos-remediation-fixtures-20261117/fake-executor.sh"], "timeout_s": 5}, "download": {"invoke": ["bash", "F:/vps/review/r2-qos-remediation-fixtures-20261117/fake-executor.sh"], "timeout_s": 5}}

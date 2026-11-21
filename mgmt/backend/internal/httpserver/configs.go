@@ -62,6 +62,10 @@ func (s *Server) resolveRenderNodes(tx *gorm.DB, dev *models.Device) ([]clash.No
 		if purpose == "" {
 			purpose = "ordinary"
 		}
+		// B15：primary 必须 ordinary——video 类不得承载普通出口（渲染层最终防线）
+		if r.IsPrimary && purpose != "ordinary" {
+			return nil, nil, fmt.Errorf("primary 节点 %s purpose=%s 非法（primary 必须 ordinary）", n.Name, purpose)
+		}
 		out = append(out, clash.NodeRender{
 			ID: n.ID, Name: n.Name, Proto: n.Proto, Host: n.Host, Port: n.Port,
 			Purpose: purpose,

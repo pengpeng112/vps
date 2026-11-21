@@ -1,0 +1,25 @@
+{
+  "at": "2026-11-20T06:21:54.287663+08:00",
+  "backup": "/etc/routermgmt/backup-meter-20261120-062035-Codex",
+  "hashes": {
+    "proxy-meter-io.py": "a52cea15d63c3eac07ec0926ad4c91cd75b3935af5b4e0816b656630238e6913",
+    "proxy-meter-v3.sh": "f28a07cd5ea2d9e62ef876d64e9321a867519f8dee62d4df17e9e34e2a934d96",
+    "proxy-meter-lifecycle.init": "ce89622793bbc275f63e17852e722deb6ba98e638fc7339af38862b3bf6e1311"
+  },
+  "before": "4831\n73e830e5085eb7dd2b80bbde5bd25efbb9ea19141d798cb917086ba54c584674  /etc/mihomo/config.yaml\n6519a8b4e28e38f0a12932444626218d7f92bd95950a813421cca04cca11dd27  /etc/config/dhcp\n7ed820da9a00b05438f107d52b63cfc5ad3a5f7c4170ad9b4f543503678fd61f  /etc/routermgmt/tunnel.conf\n63b206e0d078261d9ff0310dbbef5bc6163ba3f82f2fc037efe40b48171cbeb1  /etc/routermgmt/proxy-meter-rules-v3.conf\nqdisc noqueue 0: root refcnt 2",
+  "install": "",
+  "hooks": "lrwxrwxrwx    1 root     root            24 Nov 20 06:21 /etc/rc.d/K16r2-proxy-meter -> ../init.d/r2-proxy-meter\nlrwxrwxrwx    1 root     root            24 Nov 20 06:21 /etc/rc.d/S49r2-proxy-meter -> ../init.d/r2-proxy-meter\n2026-11-20 06:21:59 BOOT_COUNTERS_READY boot_id=13c509f9-b87a-42fb-89ed-391cbd255526 rules_sha=63b206e0d078261d added=0",
+  "refresh_sample": {
+    "rc": 3,
+    "stdout": "OK DELTA=139752 HEALTH=degraded EVENTS=cover_snapshot_refreshed DAY_TOTAL=27893744",
+    "stderr": ""
+  },
+  "after": "4831\n73e830e5085eb7dd2b80bbde5bd25efbb9ea19141d798cb917086ba54c584674  /etc/mihomo/config.yaml\n6519a8b4e28e38f0a12932444626218d7f92bd95950a813421cca04cca11dd27  /etc/config/dhcp\n7ed820da9a00b05438f107d52b63cfc5ad3a5f7c4170ad9b4f543503678fd61f  /etc/routermgmt/tunnel.conf\n63b206e0d078261d9ff0310dbbef5bc6163ba3f82f2fc037efe40b48171cbeb1  /etc/routermgmt/proxy-meter-rules-v3.conf\nqdisc noqueue 0: root refcnt 2",
+  "state": {
+    "seq": 686,
+    "health": "degraded",
+    "partial": true,
+    "coverage_complete": false,
+    "quota_eligible": false
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "at": "2026-11-20T06:22:17.656385+08:00",
+  "settle_rehearsal": {
+    "rc": 0,
+    "stdout": "OK DELTA=12958 HEALTH=ok EVENTS=- DAY_TOTAL=27906702",
+    "stderr": ""
+  },
+  "coverage": {
+    "rc": 0,
+    "stdout": "COVER_NOTE=ok\nACTIVE_UNCOVERED=none\nCOVER_COMPLETE=0",
+    "stderr": ""
+  },
+  "checks": {
+    "rc": 0,
+    "stdout": "4831\n0 0 * * * /sbin/reboot #routermgmt-reboot\n*/5 * * * * /etc/routermgmt/proxy-meter-v3.sh #proxy-meter\n2026-11-20 06:15:02 OK DELTA=368500 HEALTH=degraded EVENTS=cover_invalid_cover DAY_TOTAL=27445749\n2026-11-20 06:20:02 OK DELTA=308243 HEALTH=degraded EVENTS=cover_invalid_cover DAY_TOTAL=27753992\n2026-11-20 06:21:59 BOOT_COUNTERS_READY boot_id=13c509f9-b87a-42fb-89ed-391cbd255526 rules_sha=63b206e0d078261d added=0\n2026-11-20 06:22:02 OK DELTA=139752 HEALTH=degraded EVENTS=cover_snapshot_refreshed DAY_TOTAL=27893744\n2026-11-20 06:22:20 OK DELTA=12958 HEALTH=ok EVENTS=- DAY_TOTAL=27906702\ng204=204",
+    "stderr": ""
+  },
+  "state": {
+    "seq": 687,
+    "health": "ok",
+    "partial": true,
+    "coverage_complete": false,
+    "quota_eligible": false
+  }
+}

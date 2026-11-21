@@ -1,0 +1,451 @@
+{
+  "started": "2026-11-19T22:55:50.121631+08:00",
+  "device": "R2",
+  "production_config_touched": false,
+  "counter_scope": "HK dedicated HTTP port; BWG HY2 to R2 public IPv4 (includes positive background upper bound)",
+  "work": "/tmp/qos-poc-Codex-20261119-225550",
+  "server_dir": "/tmp/qos-source-Codex-20261119-225550",
+  "phases": {
+    "release": {
+      "same_connection_release": {
+        "command_seconds": 0.0021171459957258776,
+        "payload_recovery_seconds": 0.002282571993418969,
+        "bytes": 524288,
+        "waiting_before_release": true,
+        "same_curl_pid": 13720
+      },
+      "restart_lock_preserved": true,
+      "last_payload": {
+        "rc": 0,
+        "bytes": 524288,
+        "sha256": "33bc8aab40703678c3ebe94d2dd8f2afff285dd901f9234e841e4679f8204fd5",
+        "expected_sha256": "33bc8aab40703678c3ebe94d2dd8f2afff285dd901f9234e841e4679f8204fd5",
+        "seconds": 3.4048947900009807,
+        "bytes_per_second": 153980.67556732026,
+        "http": [
+          "200"
+        ]
+      },
+      "baseline": {
+        "rc": 0,
+        "bytes": 524288,
+        "sha256": "33bc8aab40703678c3ebe94d2dd8f2afff285dd901f9234e841e4679f8204fd5",
+        "expected_sha256": "33bc8aab40703678c3ebe94d2dd8f2afff285dd901f9234e841e4679f8204fd5",
+        "seconds": 3.4048947900009807,
+        "bytes_per_second": 153980.67556732026,
+        "http": [
+          "200"
+        ]
+      },
+      "ok": true
+    },
+    "rates": {
+      "rounds": [
+        {
+          "class": "video",
+          "connections": 1,
+          "total_bytes": 524288,
+          "seconds": 83.43489874000079,
+          "bytes_per_second": 6283.797402736502,
+          "files": [
+            {
+              "rc": 0,
+              "bytes": 524288,
+              "sha256": "33bc8aab40703678c3ebe94d2dd8f2afff285dd901f9234e841e4679f8204fd5",
+              "expected_sha256": "33bc8aab40703678c3ebe94d2dd8f2afff285dd901f9234e841e4679f8204fd5",
+              "seconds": 83.42799054700299,
+              "bytes_per_second": 6284.317727928713,
+              "http": [
+                "200"
+              ]
+            }
+          ]
+        },
+        {
+          "class": "download",
+          "connections": 1,
+          "total_bytes": 524288,
+          "seconds": 83.47223155900429,
+          "bytes_per_second": 6280.986984628473,
+          "files": [
+            {
+              "rc": 0,
+              "bytes": 524288,
+              "sha256": "33bc8aab40703678c3ebe94d2dd8f2afff285dd901f9234e841e4679f8204fd5",
+              "expected_sha256": "33bc8aab40703678c3ebe94d2dd8f2afff285dd901f9234e841e4679f8204fd5",
+              "seconds": 83.46165852500417,
+              "bytes_per_second": 6281.782668420485,
+              "http": [
+                "200"
+              ]
+            }
+          ]
+        },
+        {
+          "class": "video",
+          "connections": 2,
+          "total_bytes": 524288,
+          "seconds": 76.67506892399979,
+          "bytes_per_second": 6837.78974518658,
+          "files": [
+            {
+              "rc": 0,
+              "bytes": 262144,
+              "sha256": "2312394bd99545d9de131c24efb781e765ac1aec243f2ed9347597a793a415e9",
+              "expected_sha256": "2312394bd99545d9de131c24efb781e765ac1aec243f2ed9347597a793a415e9",
+              "seconds": 76.67044061000342,
+              "bytes_per_second": 3419.101258768523,
+              "http": [
+                "200"
+              ]
+            },
+            {
+              "rc": 0,
+              "bytes": 262144,
+              "sha256": "2312394bd99545d9de131c24efb781e765ac1aec243f2ed9347597a793a415e9",
+              "expected_sha256": "2312394bd99545d9de131c24efb781e765ac1aec243f2ed9347597a793a415e9",
+              "seconds": 70.30794975100434,
+              "bytes_per_second": 3728.511511548597,
+              "http": [
+                "200"
+              ]
+            }
+          ]
+        },
+        {
+          "class": "download",
+          "connections": 2,
+          "total_bytes": 524288,
+          "seconds": 74.11342157599574,
+          "bytes_per_second": 7074.130283708413,
+          "files": [
+            {
+              "rc": 0,
+              "bytes": 262144,
+              "sha256": "2312394bd99545d9de131c24efb781e765ac1aec243f2ed9347597a793a415e9",
+              "expected_sha256": "2312394bd99545d9de131c24efb781e765ac1aec243f2ed9347597a793a415e9",
+              "seconds": 74.09687104300247,
+              "bytes_per_second": 3537.8551929387613,
+              "http": [
+                "200"
+              ]
+            },
+            {
+              "rc": 0,
+              "bytes": 262144,
+              "sha256": "2312394bd99545d9de131c24efb781e765ac1aec243f2ed9347597a793a415e9",
+              "expected_sha256": "2312394bd99545d9de131c24efb781e765ac1aec243f2ed9347597a793a415e9",
+              "seconds": 73.14896635900368,
+              "bytes_per_second": 3583.7006734099054,
+              "http": [
+                "200"
+              ]
+            }
+          ]
+        },
+        {
+          "class": "video",
+          "connections": 4,
+          "total_bytes": 524288,
+          "seconds": 71.97635235200869,
+          "bytes_per_second": 7284.170187395838,
+          "files": [
+            {
+              "rc": 0,
+              "bytes": 131072,
+              "sha256": "59f410ae5e17962412e2aed4f815918f634932f2abf084f00bb638c4db017850",
+              "expected_sha256": "59f410ae5e17962412e2aed4f815918f634932f2abf084f00bb638c4db017850",
+              "seconds": 68.37331734399777,
+              "bytes_per_second": 1917.0051284853491,
+              "http": [
+                "200"
+              ]
+            },
+            {
+              "rc": 0,
+              "bytes": 131072,
+              "sha256": "59f410ae5e17962412e2aed4f815918f634932f2abf084f00bb638c4db017850",
+              "expected_sha256": "59f410ae5e17962412e2aed4f815918f634932f2abf084f00bb638c4db017850",
+              "seconds": 71.96682427100313,
+              "bytes_per_second": 1821.2836446197268,
+              "http": [
+                "200"
+              ]
+            },
+            {
+              "rc": 0,
+              "bytes": 131072,
+              "sha256": "59f410ae5e17962412e2aed4f815918f634932f2abf084f00bb638c4db017850",
+              "expected_sha256": "59f410ae5e17962412e2aed4f815918f634932f2abf084f00bb638c4db017850",
+              "seconds": 68.50776458499604,
+              "bytes_per_second": 1913.2429848500153,
+              "http": [
+                "200"
+              ]
+            },
+            {
+              "rc": 0,
+              "bytes": 131072,
+              "sha256": "59f410ae5e17962412e2aed4f815918f634932f2abf084f00bb638c4db017850",
+              "expected_sha256": "59f410ae5e17962412e2aed4f815918f634932f2abf084f00bb638c4db017850",
+              "seconds": 63.167524579010205,
+              "bytes_per_second": 2074.99028770796,
+              "http": [
+                "200"
+              ]
+            }
+          ]
+        },
+        {
+          "class": "download",
+          "connections": 4,
+          "total_bytes": 524288,
+          "seconds": 72.21524961999967,
+          "bytes_per_second": 7260.073222191022,
+          "files": [
+            {
+              "rc": 0,
+              "bytes": 131072,
+              "sha256": "59f410ae5e17962412e2aed4f815918f634932f2abf084f00bb638c4db017850",
+              "expected_sha256": "59f410ae5e17962412e2aed4f815918f634932f2abf084f00bb638c4db017850",
+              "seconds": 61.2555103009945,
+              "bytes_per_second": 2139.7585189633464,
+              "http": [
+                "200"
+              ]
+            },
+            {
+              "rc": 0,
+              "bytes": 131072,
+              "sha256": "59f410ae5e17962412e2aed4f815918f634932f2abf084f00bb638c4db017850",
+              "expected_sha256": "59f410ae5e17962412e2aed4f815918f634932f2abf084f00bb638c4db017850",
+              "seconds": 70.48582395700214,
+              "bytes_per_second": 1859.5512209654628,
+              "http": [
+                "200"
+              ]
+            },
+            {
+              "rc": 0,
+              "bytes": 131072,
+              "sha256": "59f410ae5e17962412e2aed4f815918f634932f2abf084f00bb638c4db017850",
+              "expected_sha256": "59f410ae5e17962412e2aed4f815918f634932f2abf084f00bb638c4db017850",
+              "seconds": 70.08570850700198,
+              "bytes_per_second": 1870.1672964739328,
+              "http": [
+                "200"
+              ]
+            },
+            {
+              "rc": 0,
+              "bytes": 131072,
+              "sha256": "59f410ae5e17962412e2aed4f815918f634932f2abf084f00bb638c4db017850",
+              "expected_sha256": "59f410ae5e17962412e2aed4f815918f634932f2abf084f00bb638c4db017850",
+              "seconds": 72.15544147399487,
+              "bytes_per_second": 1816.5227365040641,
+              "http": [
+                "200"
+              ]
+            }
+          ]
+        }
+      ],
+      "last_payload": {
+        "rc": 0,
+        "bytes": 131072,
+        "sha256": "59f410ae5e17962412e2aed4f815918f634932f2abf084f00bb638c4db017850",
+        "expected_sha256": "59f410ae5e17962412e2aed4f815918f634932f2abf084f00bb638c4db017850",
+        "seconds": 72.15544147399487,
+        "bytes_per_second": 1816.5227365040641,
+        "http": [
+          "200"
+        ]
+      },
+      "gate_stats": {
+        "elephant": {
+          "down": 0,
+          "up": 0
+        },
+        "foreign_download": {
+          "down": 1573809,
+          "up": 770
+        },
+        "video": {
+          "down": 1573809,
+          "up": 770
+        }
+      },
+      "ok": true
+    },
+    "steady": {
+      "curl_pid": 16788,
+      "warmup_stats": {
+        "elephant": {
+          "burst": 1,
+          "down_bps": 0,
+          "emergency": false,
+          "name": "elephant",
+          "rate_bps": 0,
+          "rate_bytes_per_second": 0,
+          "tokens": 0,
+          "total": 0,
+          "unlimited": true,
+          "waiting": 0
+        },
+        "elephant_implemented": false,
+        "foreign_download": {
+          "burst": 3750,
+          "down_bps": 60000,
+          "emergency": false,
+          "name": "foreign_download",
+          "rate_bps": 7500,
+          "rate_bytes_per_second": 7500,
+          "tokens": 3750,
+          "total": 1573809,
+          "unlimited": false,
+          "waiting": 0
+        },
+        "generation": 6,
+        "ok": true,
+        "state_error": "",
+        "stats": {
+          "elephant": {
+            "down": 0,
+            "up": 0
+          },
+          "foreign_download": {
+            "down": 1573809,
+            "up": 770
+          },
+          "video": {
+            "down": 1802774,
+            "up": 882
+          }
+        },
+        "tcp_only": true,
+        "video": {
+          "burst": 3750,
+          "down_bps": 60000,
+          "emergency": false,
+          "name": "video",
+          "rate_bps": 7500,
+          "rate_bytes_per_second": 7500,
+          "tokens": 2550.6751425,
+          "total": 1802774,
+          "unlimited": false,
+          "waiting": 1
+        }
+      },
+      "warmup_epoch": 1795100474.8884442,
+      "finish_stats": {
+        "elephant": {
+          "burst": 1,
+          "down_bps": 0,
+          "emergency": false,
+          "name": "elephant",
+          "rate_bps": 0,
+          "rate_bytes_per_second": 0,
+          "tokens": 0,
+          "total": 0,
+          "unlimited": true,
+          "waiting": 0
+        },
+        "elephant_implemented": false,
+        "foreign_download": {
+          "burst": 3750,
+          "down_bps": 60000,
+          "emergency": false,
+          "name": "foreign_download",
+          "rate_bps": 7500,
+          "rate_bytes_per_second": 7500,
+          "tokens": 3750,
+          "total": 1574000,
+          "unlimited": false,
+          "waiting": 0
+        },
+        "generation": 6,
+        "ok": true,
+        "state_error": "",
+        "stats": {
+          "elephant": {
+            "down": 0,
+            "up": 0
+          },
+          "foreign_download": {
+            "down": 1574000,
+            "up": 132026
+          },
+          "video": {
+            "down": 2891618,
+            "up": 882
+          }
+        },
+        "tcp_only": true,
+        "video": {
+          "burst": 3750,
+          "down_bps": 60000,
+          "emergency": false,
+          "name": "video",
+          "rate_bps": 7500,
+          "rate_bytes_per_second": 7500,
+          "tokens": 303.2456325,
+          "total": 2891618,
+          "unlimited": false,
+          "waiting": 1
+        }
+      },
+      "finish_epoch": 1795100654.972836,
+      "window_payload_bytes": 1088844,
+      "window_seconds": 180.08439183235168,
+      "ok": true
+    }
+  },
+  "before": {
+    "rc": 0,
+    "stdout": "2026-11-19T22:55:53+08:00\n4880\n73e830e5085eb7dd2b80bbde5bd25efbb9ea19141d798cb917086ba54c584674  /etc/mihomo/config.yaml\n6519a8b4e28e38f0a12932444626218d7f92bd95950a813421cca04cca11dd27  /etc/config/dhcp\n7ed820da9a00b05438f107d52b63cfc5ad3a5f7c4170ad9b4f543503678fd61f  /etc/routermgmt/tunnel.conf",
+    "stderr": ""
+  },
+  "mihomo_syntax": {
+    "rc": 0,
+    "stdout": "time=\"2026-11-19T14:56:26.930755100Z\" level=info msg=\"Start initial configuration in progress\"\ntime=\"2026-11-19T14:56:27.019728556Z\" level=info msg=\"Geodata Loader mode: memconservative\"\ntime=\"2026-11-19T14:56:27.019830735Z\" level=info msg=\"Geosite Matcher implementation: succinct\"\ntime=\"2026-11-19T14:56:27.020027169Z\" level=info msg=\"Initial configuration complete, total time: 88ms\"\nconfiguration file /tmp/qos-poc-Codex-20261119-225550/mihomo.yaml test is successful",
+    "stderr": ""
+  },
+  "r2_public_ipv4_sha256": "fc10dfb76bb6c522910a0b12f4529b2b7f10767b2c096cc7c319d917f378e8a4",
+  "save_traffic": {
+    "payload_bytes": 1088844,
+    "seconds": 180.08439183235168,
+    "hk_ip_bytes": 973939,
+    "bwg_ip_bytes_upper_bound": 1210565,
+    "hk_ratio": 0.8944706496063716,
+    "bwg_ratio_upper_bound": 1.1117892002894814
+  },
+  "result": "PASS_SCOPED_TCP_POC_ONLY",
+  "cleanup": {
+    "HK_counter": {
+      "rc": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    "BWG_counter": {
+      "rc": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    "R2": {
+      "rc": 0,
+      "stdout": "OWNED_POC_CLEANED",
+      "stderr": ""
+    },
+    "HK": {
+      "rc": 0,
+      "stdout": "OWNED_POC_CLEANED",
+      "stderr": ""
+    }
+  },
+  "after": {
+    "rc": 0,
+    "stdout": "2026-11-19T23:04:20+08:00\n4880\n73e830e5085eb7dd2b80bbde5bd25efbb9ea19141d798cb917086ba54c584674  /etc/mihomo/config.yaml\n6519a8b4e28e38f0a12932444626218d7f92bd95950a813421cca04cca11dd27  /etc/config/dhcp\n7ed820da9a00b05438f107d52b63cfc5ad3a5f7c4170ad9b4f543503678fd61f  /etc/routermgmt/tunnel.conf\ng204=204 time=0.932574",
+    "stderr": ""
+  },
+  "finished": "2026-11-19T23:04:21.084535+08:00"
+}

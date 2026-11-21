@@ -1,0 +1,9 @@
+{
+  "at": "2026-11-19T23:01:41.342305+08:00",
+  "phase": "steady PoC simultaneous upload and formal web control",
+  "result": {
+    "rc": 0,
+    "stdout": "{\"upload_curl_rc\": 0, \"upload_server\": {\"received\": 131072, \"receive_seconds\": 0.24512246099766344}, \"gate_resources\": {\"VmHWM\": \"4284 kB\", \"VmRSS\": \"4284 kB\", \"Threads\": \"8\", \"fd_count\": 11}, \"mihomo_resources\": {\"VmHWM\": \"41308 kB\", \"VmRSS\": \"40440 kB\", \"Threads\": \"9\", \"fd_count\": 11}}\ngithub=200 t=1.078565\ngoogle_g204=204 t=2.295425\nbaidu=200 t=0.204249",
+    "stderr": ""
+  }
+}

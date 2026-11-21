@@ -1,0 +1,166 @@
+{
+  "local_only": true,
+  "production_commands": false,
+  "started": "2026-11-17T22:14:02+08:00",
+  "cases": {
+    "G01": {
+      "pass": true,
+      "detail": {
+        "deltas": [
+          0,
+          130,
+          100
+        ],
+        "day_total": 230,
+        "zero_traffic": {
+          "total": 230,
+          "delta": 0,
+          "rc": 0
+        }
+      }
+    },
+    "G02": {
+      "pass": true,
+      "detail": {
+        "read_fail_preserves_prev_good": true,
+        "healthy_eps_still_counted": 105,
+        "recover_accumulates": 135,
+        "corrupt_recovery": true,
+        "disk_full_rc1": true,
+        "lock_held": "not_tested_on_windows_flock"
+      }
+    },
+    "G03": {
+      "pass": true,
+      "detail": {
+        "rebuild": "rebaseline_day_preserved",
+        "reboot": "rebaseline_day_preserved",
+        "new_ep": "baseline",
+        "drop_ep": "coverage_gap_degraded",
+        "rollover": {
+          "new_day_total": 300,
+          "partial": true
+        },
+        "crash_recovery": {
+          "total": 310
+        }
+      }
+    },
+    "G04": {
+      "pass": true,
+      "detail": {
+        "status_validate_preview_zero_calls": true,
+        "invalid_no_partial_commit": true,
+        "observe_enforce_intent_only": true,
+        "cas_reject": true,
+        "mandatory_args": true
+      }
+    },
+    "G05": {
+      "pass": true,
+      "detail": {
+        "emergency_blocks_apply": true,
+        "resume_requires_auth_and_generation": true,
+        "stale_and_future_generation_rejected": true,
+        "no_executor_rc6": true
+      }
+    },
+    "G06": {
+      "pass": true,
+      "detail": {
+        "single_class_release_only_own_objects": true,
+        "meter_untouched": true,
+        "per_scope_temporary_lock": true
+      }
+    },
+    "G07": {
+      "pass": true,
+      "detail": {
+        "no_registry_rc6": true,
+        "partial_registry_rc6": true,
+        "unhealthy_meter_rc6": true,
+        "no_local_wan_fallback": true
+      }
+    },
+    "G08": {
+      "pass": true,
+      "detail": {
+        "unit_conflict_neg_unknown_all_rejected": true,
+        "hard_default_null": true,
+        "json_safe_reason": true
+      }
+    },
+    "G09": {
+      "pass": true,
+      "detail": {
+        "per_class_independent_60000bit": [
+          "9:10",
+          "9:11"
+        ],
+        "no_combined_rate": true,
+        "threshold_source": "router_meter_total_all_providers",
+        "real_shaping_experiment": "NOT_TESTED_needs_isolated_linux_or_window"
+      }
+    },
+    "G10": {
+      "pass": true,
+      "detail": {
+        "go_tests": [
+          "=== RUN   TestMediaFallbackMembers",
+          "--- PASS: TestMediaFallbackMembers (0.00s)",
+          "=== RUN   TestRenderPurposeIsolation",
+          "--- PASS: TestRenderPurposeIsolation (0.00s)",
+          "=== RUN   TestGoldenRules",
+          "--- PASS: TestGoldenRules (0.00s)",
+          "=== RUN   TestGoldenRuleOrderStaticTail",
+          "--- PASS: TestGoldenRuleOrderStaticTail (0.00s)",
+          "ok  \troutermgmt/internal/clash\t0.042s"
+        ]
+      }
+    },
+    "G11": {
+      "pass": true,
+      "detail": {
+        "foreign_root_untouched": true,
+        "empty_manifest_release_noop": true
+      }
+    },
+    "G12": {
+      "pass": true,
+      "detail": {
+        "success_version_and_evidence": true,
+        "idempotent_replay": true,
+        "conflict_rejected": true,
+        "timeout_rolled_back": true,
+        "partial_rolled_back": true,
+        "server_executor_additive_objects": true,
+        "missing_wan_or_class_refused": true
+      }
+    },
+    "GEN": {
+      "pass": true,
+      "detail": {
+        "registered": [
+          "BWG-HY2-JPTY-01|up|74.82.193.113|udp|34567",
+          "BWG-HY2-JPTY-01|down|74.82.193.113|udp|34567",
+          "BULK-LAX-GIA-01|up|154.36.139.155|tcp|2054",
+          "BULK-LAX-GIA-01|down|154.36.139.155|tcp|2054",
+          "ap_HK-01|up|203.0.113.5|tcp|443",
+          "ap_HK-01|down|203.0.113.5|tcp|443",
+          "ap_JP-flow-01|up|203.0.113.7|tcp|8443",
+          "ap_JP-flow-01|down|203.0.113.7|tcp|8443"
+        ],
+        "unresolved": "US-dom,套餐到期：长期有效",
+        "check_mode": true
+      }
+    }
+  },
+  "finished": "2026-11-17T22:16:10+08:00",
+  "source_sha256": {
+    "scripts/qos-r2/proxy-meter-v3.sh": "693470ef881ab21f94b0ed3a9d8dc388e3018aebe110331dfa5eb5e061b785ff",
+    "scripts/qos-r2/proxy-meter-endpoints.sh": "e1731b7e20f46020a1c26adc98ddb30686669470ce70500be4362952426ccb88",
+    "scripts/qos-r2/ratelimit-ctl-v2.sh": "c93a84802162793ea89c27c2c8e6eac17a44dc535f452507ce6f339dc5df1354",
+    "scripts/qos-r2/ratelimit-server-executor.sh": "4a11c0a945708a266ed83016f05352f9c29e06bbbd4fdad0b37f89cdfbaaa94b"
+  },
+  "all_pass": true
+}

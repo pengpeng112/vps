@@ -1,0 +1,49 @@
+{
+  "started": "2026-11-19T16:34:59+08:00",
+  "production_writes": false,
+  "servers": {
+    "HK": {
+      "downloads": [
+        {
+          "target": "cloudflare512K",
+          "rc": 0,
+          "stdout": "http=200 bytes=524288 t=0.058030 speed_Bps=9034775",
+          "stderr": ""
+        },
+        {
+          "target": "hetzner1MiB",
+          "rc": 56,
+          "stdout": "http=000 bytes=0 t=0.571310 speed_Bps=0",
+          "stderr": "curl: (56) OpenSSL SSL_read: OpenSSL/3.5.5: error:0A000126:SSL routines::unexpected eof while reading, errno 0"
+        }
+      ],
+      "system": {
+        "rc": 0,
+        "stdout": "2026-11-19T00:35:05-08:00\n0.11 0.10 0.09 1/155 121303\nMemAvailable:     803268 kB\nqdisc mq 0: root \n Sent 103850137 bytes 461984 pkt (dropped 0, overlimits 0 requeues 0) \n backlog 0b 0p requeues 0\nqdisc fq 0: parent :1 limit 10000p flow_limit 100p buckets 1024 orphan_mask 1023 bands 3 priomap 1 2 2 2 1 2 0 0 1 1 1 1 1 1 1 1 weights 589824 196608 65536 quantum 3028b initial_quantum 15140b low_rate_threshold 550Kbit refill_delay 40ms timer_slack 10us horizon 10s horizon_drop offload_horizon 0us",
+        "stderr": ""
+      }
+    },
+    "BWG": {
+      "downloads": [
+        {
+          "target": "cloudflare512K",
+          "rc": 0,
+          "stdout": "http=200 bytes=524288 t=0.142516 speed_Bps=3678800",
+          "stderr": ""
+        },
+        {
+          "target": "hetzner1MiB",
+          "rc": 52,
+          "stdout": "http=000 bytes=0 t=0.678191 speed_Bps=0",
+          "stderr": "curl: (52) Empty reply from server"
+        }
+      ],
+      "system": {
+        "rc": 0,
+        "stdout": "2026-11-19T08:35:06+00:00\n0.04 0.01 0.00 1/160 700675\nMemAvailable:     669364 kB\nqdisc fq 0: root refcnt 2 limit 10000p flow_limit 100p buckets 1024 orphan_mask 1023 quantum 3028b initial_quantum 15140b low_rate_threshold 550Kbit refill_delay 40ms timer_slack 10us horizon 10s horizon_drop \n Sent 266813578803 bytes 226320508 pkt (dropped 0, overlimits 0 requeues 524) \n backlog 0b 0p requeues 524\n  flows 1023 (inactive 1023 throttled 0)",
+        "stderr": ""
+      }
+    }
+  },
+  "finished": "2026-11-19T16:35:03+08:00"
+}

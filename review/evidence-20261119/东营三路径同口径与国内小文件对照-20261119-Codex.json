@@ -1,0 +1,49 @@
+{
+  "started": "2026-11-19T16:36:09+08:00",
+  "production_writes": false,
+  "method": "same R9 SSH return path; 512KiB HTTPS body for all transports",
+  "results": [
+    {
+      "name": "formal-PROXY-current-BWG-HY2",
+      "requested_bytes": 524288,
+      "http_status": 200,
+      "bytes": 524288,
+      "body_s": 4.363759799976833,
+      "total_s": 5.221450300014112,
+      "payload_Bps": 120146,
+      "passed": true
+    },
+    {
+      "name": "CF2D-HK-01",
+      "edge": "162.159.135.42",
+      "domain": "hk.6849271.xyz",
+      "requested_bytes": 524288,
+      "handshake_s": 2.4375,
+      "http_status": 200,
+      "bytes": 524288,
+      "body_s": 2.0613,
+      "total_s": 4.4988,
+      "payload_Bps": 254348,
+      "passed": true
+    },
+    {
+      "name": "CF2D-BWG-01",
+      "edge": "162.159.135.42",
+      "domain": "usbwg.6849271.xyz",
+      "requested_bytes": 524288,
+      "handshake_s": 2.8269,
+      "http_status": 200,
+      "bytes": 524288,
+      "body_s": 2.6013,
+      "total_s": 5.4282,
+      "payload_Bps": 201548,
+      "passed": true
+    }
+  ],
+  "domestic_range": {
+    "rc": 0,
+    "stdout": "http=206 bytes=262144 t=0.270887 speed_Bps=967724",
+    "stderr": ""
+  },
+  "finished": "2026-11-19T16:36:27+08:00"
+}

@@ -1,0 +1,153 @@
+{
+  "started_local": "2026-11-17T18:39:44+08:00",
+  "configuration_writes": false,
+  "db": {
+    "rc": 0,
+    "stdout": "BEGIN\nrtr-a9bcba|36|36|36|59|0\n4|ordinary|f\n8|ordinary|t\n14|video|f\n0\nCOMMIT",
+    "stderr": ""
+  },
+  "hashes_and_qos": {
+    "rc": 0,
+    "stdout": "2026-11-17 18:39:48 +0800\n40b79770aab4d127baf6bf91f6d5a3e38709d4e05a53bddf04737e3d85b05a6a  /etc/routermgmt/proxy-meter-v2.sh\nbf9f00d44d82631a5d96459518793fce8cdd8f4d6128cf744b385de9ecf7b289  /etc/routermgmt/ratelimit-ctl\n7deed3e44b811b0f677b85e47b16672ab4a775a25db9cb2da0e6d5d56649a562  /etc/routermgmt/proxy-meter-rules.conf\nqdisc noqueue 0: root refcnt 2 \n*/5 * * * * /etc/routermgmt/proxy-meter-v2.sh #proxy-meter\n2026-11-17 18:15:00 OK seq=90 cont=cont-b3883a56-cont delta=0 day_total=0\n2026-11-17 18:20:00 OK seq=91 cont=cont-b3883a56-cont delta=0 day_total=0\n2026-11-17 18:25:00 OK seq=92 cont=cont-b3883a56-cont delta=0 day_total=0\n2026-11-17 18:30:00 OK seq=93 cont=cont-b3883a56-cont delta=0 day_total=0\n2026-11-17 18:35:00 OK seq=94 cont=cont-b3883a56-cont delta=0 day_total=0",
+    "stderr": ""
+  },
+  "meter": {
+    "schema": 2,
+    "seq": 94,
+    "boot_id": "b3883a56",
+    "continuity_id": "cont-b3883a56-cont",
+    "prev_continuity_id": "cont-b3883a56-cont",
+    "sampled_at": "2026-11-17 18:35:00+0800",
+    "read_fail_eps": "",
+    "endpoints": {
+      "pm_bwg_hy2_up": 78820272,
+      "pm_bwg_hy2_down": 437732844,
+      "pm_bwg_vless_up": 1666825,
+      "pm_bwg_vless_down": 4009030,
+      "pm_gia_vless_up": 18548,
+      "pm_gia_vless_down": 46708,
+      "pm_gia_hy2_up": 7277,
+      "pm_gia_hy2_down": 13082,
+      "pm_cf1_up": 11118,
+      "pm_cf1_down": 21196,
+      "pm_cf2_up": 11042,
+      "pm_cf2_down": 21185,
+      "BULK-GIA-up": 67412,
+      "BULK-GIA-down": 108432,
+      "BULK-BWG-up": 0,
+      "BULK-BWG-down": 0
+    }
+  },
+  "daily": {
+    "day_key": "2026-11-17",
+    "total": 0,
+    "delta_last": 0,
+    "sampled_at": "2026-11-17 18:35:00+0800"
+  },
+  "policy": {
+    "schema": 2,
+    "policy_id": "pol-r2-001",
+    "device_id": "rtr-a9bcba",
+    "enforcement": "observe",
+    "scope": "download_video",
+    "quota": {
+      "period": "daily",
+      "timezone": "Asia/Shanghai",
+      "used_bytes_source": "router_meter",
+      "warn_gib": 1.0,
+      "action_gib": 3.0,
+      "hard_gib": 6.0
+    },
+    "actions": {
+      "video": {
+        "mode": "shape",
+        "down": {
+          "value": 60,
+          "unit": "kbps",
+          "bits_per_second": 60000
+        },
+        "up": {
+          "mode": "unchanged"
+        }
+      },
+      "download": {
+        "mode": "shape",
+        "down": {
+          "value": 60,
+          "unit": "kbps",
+          "bits_per_second": 60000
+        },
+        "up": {
+          "mode": "unchanged"
+        }
+      },
+      "web": {
+        "mode": "unchanged"
+      }
+    },
+    "exempt": false,
+    "temporary_release": null
+  },
+  "latch": {
+    "unavailable": true,
+    "rc": 1
+  },
+  "groups": {
+    "PROXY": {
+      "type": "Selector",
+      "now": "AUTO",
+      "all": [
+        "AUTO",
+        "BWG-HY2-JPTY-01",
+        "BULK-LAX-GIA-01",
+        "BWG-VLESS-JPTY-01",
+        "DIRECT"
+      ]
+    },
+    "NODE-PICK": {
+      "type": "Fallback",
+      "now": "BWG-HY2-JPTY-01",
+      "all": [
+        "BWG-HY2-JPTY-01",
+        "BWG-VLESS-JPTY-01"
+      ]
+    },
+    "US-MEDIA": {
+      "type": "Selector",
+      "now": "NODE-PICK",
+      "all": [
+        "BULK-LAX-GIA-01",
+        "NODE-PICK",
+        "AIRPORT"
+      ]
+    },
+    "DOWNLOAD": {
+      "type": "Selector",
+      "now": "DIRECT",
+      "all": [
+        "DIRECT",
+        "PROXY"
+      ]
+    }
+  },
+  "finished_local": "2026-11-17T18:39:49+08:00",
+  "source_sha256": {
+    "logs/proxy-meter-v2.sh": "40b79770aab4d127baf6bf91f6d5a3e38709d4e05a53bddf04737e3d85b05a6a",
+    "logs/ratelimit-ctl.sh": "bf9f00d44d82631a5d96459518793fce8cdd8f4d6128cf744b385de9ecf7b289",
+    "review/R2用途隔离与限速准备完成情况核查报告-20261117.md": "97f50edccacf954533cbffdcbe2fe31872bf30cb2f66d1b15179c256c91bcafb"
+  },
+  "comparison_with_1305": {
+    "same_boot_id": true,
+    "old_seq": 28,
+    "new_seq": 94,
+    "bwg_hy2_counter_net_increase_bytes": {
+      "pm_bwg_hy2_up": 38197811,
+      "pm_bwg_hy2_down": 261150999
+    },
+    "sum_net_increase_bytes": 299348810,
+    "sum_net_increase_mib": 285.4812717437744,
+    "old_daily_total": 0,
+    "new_daily_total": 0,
+    "interpretation": "Counter net growth over the snapshots; not a complete bill or historical usage backfill"
+  }
+}

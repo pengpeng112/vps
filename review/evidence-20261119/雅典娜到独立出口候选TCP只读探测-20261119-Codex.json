@@ -1,0 +1,35 @@
+{
+  "started": "2026-11-19T12:49:00+08:00",
+  "production_writes": false,
+  "scope": "Athena-origin TCP only, not authenticated proxy/UDP proof",
+  "tests": [
+    {
+      "host": "69.63.219.156",
+      "port": 443,
+      "tcp_connected": false,
+      "error_type": "SSHException"
+    },
+    {
+      "host": "69.63.219.156",
+      "port": 28722,
+      "tcp_connected": false,
+      "error_type": "SSHException"
+    },
+    {
+      "host": "191.223.215.12",
+      "port": 22,
+      "tcp_connected": true
+    },
+    {
+      "host": "134.175.151.213",
+      "port": 28722,
+      "tcp_connected": true
+    }
+  ],
+  "tunnel_metadata": {
+    "rc": 0,
+    "stdout": "VPS_HOST=134.175.151.213\nVPS_PORT=28722\nMGMT_TARGET=127.0.0.1:8443\nRSSH_TARGET=127.0.0.1:22",
+    "stderr": ""
+  },
+  "finished": "2026-11-19T12:49:08+08:00"
+}

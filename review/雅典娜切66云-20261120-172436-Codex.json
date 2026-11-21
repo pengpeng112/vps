@@ -1,0 +1,12 @@
+{
+  "at": "2026-11-20T17:24:33.895603+08:00",
+  "previous": "BWG-HY2-JPTY-01",
+  "baseline_exit": {
+    "rc": 0,
+    "stdout": "74.82.193.113",
+    "stderr": ""
+  },
+  "protected_before": "30408\n67bcab884951fcc73a9bffbc169a40f576829fee74ab7258e14726348169490b  /etc/mihomo/run.yaml\n20158 20130\n1",
+  "result": "failed",
+  "error_type": "AssertionError"
+}

@@ -1,0 +1,347 @@
+{
+  "started_local": "2026-11-18T15:05:07+08:00",
+  "production_configuration_writes": false,
+  "api_login": false,
+  "cloudflare_account_authenticated": false,
+  "limitations": [
+    "Public DNS/RDAP cannot establish account ownership or origin A-record content behind orange cloud.",
+    "WS101 does not test VLESS authentication or full proxy traffic."
+  ],
+  "dns": [
+    {
+      "name": "usbwg.6849271.xyz",
+      "type": "A",
+      "http": 200,
+      "rcode": 0,
+      "answers": [
+        {
+          "type": 1,
+          "data": "104.21.82.57"
+        },
+        {
+          "type": 1,
+          "data": "172.67.153.206"
+        }
+      ]
+    },
+    {
+      "name": "usbwg.8364927.xyz",
+      "type": "A",
+      "http": 200,
+      "rcode": 0,
+      "answers": [
+        {
+          "type": 1,
+          "data": "104.21.56.149"
+        },
+        {
+          "type": 1,
+          "data": "172.67.152.189"
+        }
+      ]
+    },
+    {
+      "name": "hk.6849271.xyz",
+      "type": "A",
+      "http": 200,
+      "rcode": 0,
+      "answers": [
+        {
+          "type": 1,
+          "data": "172.67.153.206"
+        },
+        {
+          "type": 1,
+          "data": "104.21.82.57"
+        }
+      ]
+    },
+    {
+      "name": "8364927.xyz",
+      "type": "NS",
+      "http": 200,
+      "rcode": 0,
+      "answers": [
+        {
+          "type": 2,
+          "data": "grace.ns.cloudflare.com."
+        },
+        {
+          "type": 2,
+          "data": "glen.ns.cloudflare.com."
+        }
+      ]
+    },
+    {
+      "name": "83649271.xyz",
+      "type": "NS",
+      "http": 200,
+      "rcode": 3,
+      "answers": []
+    },
+    {
+      "name": "hk.8364927.xyz",
+      "type": "A",
+      "http": 200,
+      "rcode": 0,
+      "answers": [
+        {
+          "type": 1,
+          "data": "104.21.56.149"
+        },
+        {
+          "type": 1,
+          "data": "172.67.152.189"
+        }
+      ]
+    },
+    {
+      "name": "6849271.xyz",
+      "type": "NS",
+      "http": 200,
+      "rcode": 0,
+      "answers": [
+        {
+          "type": 2,
+          "data": "glen.ns.cloudflare.com."
+        },
+        {
+          "type": 2,
+          "data": "grace.ns.cloudflare.com."
+        }
+      ]
+    },
+    {
+      "name": "hk.83649271.xyz",
+      "type": "A",
+      "http": 200,
+      "rcode": 3,
+      "answers": []
+    },
+    {
+      "name": "usbwg.83649271.xyz",
+      "type": "A",
+      "http": 200,
+      "rcode": 3,
+      "answers": []
+    }
+  ],
+  "rdap": [
+    {
+      "domain": "83649271.xyz",
+      "http": 200,
+      "ldhName": "83649271.xyz",
+      "status": [
+        "client hold",
+        "client transfer prohibited"
+      ],
+      "nameservers": [
+        "jasmine.ns.cloudflare.com",
+        "razvan.ns.cloudflare.com"
+      ]
+    },
+    {
+      "domain": "8364927.xyz",
+      "http": 200,
+      "ldhName": "8364927.xyz",
+      "status": [
+        "server transfer prohibited",
+        "client transfer prohibited",
+        "add period"
+      ],
+      "nameservers": [
+        "grace.ns.cloudflare.com",
+        "glen.ns.cloudflare.com"
+      ]
+    },
+    {
+      "domain": "6849271.xyz",
+      "http": 200,
+      "ldhName": "6849271.xyz",
+      "status": [
+        "server transfer prohibited",
+        "client transfer prohibited",
+        "add period"
+      ],
+      "nameservers": [
+        "grace.ns.cloudflare.com",
+        "glen.ns.cloudflare.com"
+      ]
+    }
+  ],
+  "tls_ws": [
+    {
+      "sni": "hk.6849271.xyz",
+      "edge": "162.159.135.42",
+      "port": 2053,
+      "strict_certificate_validation": true,
+      "tls": "TLSv1.3",
+      "certificate_san": [
+        "*.6849271.xyz",
+        "6849271.xyz"
+      ],
+      "http_status": 101,
+      "accept_valid": true,
+      "upgrade_valid": true,
+      "ws101_pass": true,
+      "cf_ray": "a5c52018cbc7ddc6-HKG"
+    },
+    {
+      "sni": "usbwg.6849271.xyz",
+      "edge": "162.159.135.42",
+      "port": 2053,
+      "strict_certificate_validation": true,
+      "tls": "TLSv1.3",
+      "certificate_san": [
+        "*.6849271.xyz",
+        "6849271.xyz"
+      ],
+      "http_status": 101,
+      "accept_valid": true,
+      "upgrade_valid": true,
+      "ws101_pass": true,
+      "cf_ray": "a5c5201899940723-HKG"
+    },
+    {
+      "sni": "usbwg.6849271.xyz",
+      "edge": "104.18.32.7",
+      "port": 2053,
+      "strict_certificate_validation": true,
+      "tls": "TLSv1.3",
+      "certificate_san": [
+        "*.6849271.xyz",
+        "6849271.xyz"
+      ],
+      "http_status": 101,
+      "accept_valid": true,
+      "upgrade_valid": true,
+      "ws101_pass": true,
+      "cf_ray": "a5c5201a0f3bf018-LAX"
+    },
+    {
+      "sni": "hk.6849271.xyz",
+      "edge": "104.18.32.7",
+      "port": 2053,
+      "strict_certificate_validation": true,
+      "tls": "TLSv1.3",
+      "certificate_san": [
+        "*.6849271.xyz",
+        "6849271.xyz"
+      ],
+      "http_status": 101,
+      "accept_valid": true,
+      "upgrade_valid": true,
+      "ws101_pass": true,
+      "cf_ray": "a5c5202e6a831d4d-LAX"
+    }
+  ],
+  "remote": [
+    {
+      "GZ": {
+        "services": {
+          "rc": 0,
+          "stdout": "2026-11-18T15:05:12+08:00\nactive\nactive\nactive\n2026-11-18 08:04:04.612402934 +0800 40089670\n9875c5f13e0c704459a218abf67515c4af2e39647efbbcf5d8a38ea55462ce6f  /opt/mgmt/server",
+          "stderr": ""
+        },
+        "database": {
+          "rc": 0,
+          "stdout": "BEGIN\nschema|9\nrtr-101be0|SN-R9-AX3000东营经开区网安|4|5|4|2\nrtr-1eff66|雅典娜-AX6600-客厅|8|8|8|4082752\nrtr-1f6f0f|SN-R8-AX3000 安丘2|8|8|8|9\nrtr-25730c|SN-R11-AX3000|3|3|3|3021912\nrtr-354647|SN-R10-AX3000|3|3|3|3026933\nrtr-37cf72|SN-R7-AX3000|8|8|8|1456832\nrtr-38aa54|SN-R3-AX3000安丘网警01|30|30|30|9\nrtr-5e1a8d|雅典娜-AX6600|0|0|0|6\nrtr-673568|SN-R6-AX3000日照国保2已付|22|22|22|12\nrtr-a9bcba|SN-R2-AX3000日照国保1已付|39|39|39|2\nrtr-bf0292|GL-MT3600BE-Beryl7|0|0|0|\nrtr-c46a25|SN-R5-AX3000 昌乐网警|20|20|20|55\nrtr-cd473f|SN-R4-AX3000 坊子网警|29|29|29|72\nrtr-d3847d|SN-R1-AX3000 临朐网警|27|27|27|1\nrtr-e9ccdd|GL-MT3600BE-Beryl7|1|1|1|156765\nrtr-a9bcba|8|BWG-HY2-JPTY-01|74.82.193.113|34567|hysteria2|ordinary|t|0\nrtr-a9bcba|9|GIA-HY2-US-01|154.36.139.155|34568|hysteria2|ordinary|f|0\nrtr-a9bcba|10|CF-CDN-GIA-01|104.18.32.7|2053|vless-ws|ordinary|f|0\nrtr-a9bcba|11|CF2-CDN-GIA-01|162.159.135.42|2053|vless-ws|ordinary|f|0\nrtr-a9bcba|14|BULK-LAX-GIA-01|154.36.139.155|2054|vless-reality|video|f|0\nrtr-a9bcba|15|DMIT-HY2-US-01|69.63.219.156|34567|hysteria2|ordinary|f|0\nrtr-a9bcba|4|BWG-VLESS-JPTY-01|74.82.193.113|443|vless-reality|ordinary|f|1\nCOMMIT",
+          "stderr": ""
+        }
+      },
+      "R2": {
+        "config_metadata": {
+          "cf_nodes": [
+            {
+              "name": "CF-CDN-GIA-01",
+              "server": "104.18.32.7",
+              "port": 2053,
+              "servername": "cf.k3x9m2.top",
+              "udp": false
+            },
+            {
+              "name": "CF2-CDN-GIA-01",
+              "server": "162.159.135.42",
+              "port": 2053,
+              "servername": "cf.k3x9m2.top",
+              "udp": false
+            }
+          ],
+          "tail_rules": [
+            "DOMAIN-SUFFIX,githubusercontent.com,US-MEDIA",
+            "DOMAIN-SUFFIX,githubassets.com,US-MEDIA",
+            "AND,((NETWORK,UDP),(DST-PORT,443)),REJECT",
+            "GEOSITE,geolocation-!cn,PROXY",
+            "MATCH,DIRECT"
+          ],
+          "fallback_dns": [
+            "223.5.5.5",
+            "119.29.29.29"
+          ],
+          "listeners_count": 0
+        },
+        "groups": {
+          "PROXY": {
+            "type": "Selector",
+            "now": "AUTO",
+            "all": [
+              "AUTO",
+              "BWG-HY2-JPTY-01",
+              "GIA-HY2-US-01",
+              "CF-CDN-GIA-01",
+              "CF2-CDN-GIA-01",
+              "BULK-LAX-GIA-01",
+              "DMIT-HY2-US-01",
+              "BWG-VLESS-JPTY-01",
+              "DIRECT"
+            ]
+          },
+          "AUTO": {
+            "type": "Fallback",
+            "now": "NODE-PICK",
+            "all": [
+              "NODE-PICK",
+              "AIRPORT",
+              "DIRECT"
+            ]
+          },
+          "NODE-PICK": {
+            "type": "Fallback",
+            "now": "BWG-HY2-JPTY-01",
+            "all": [
+              "BWG-HY2-JPTY-01",
+              "GIA-HY2-US-01",
+              "CF-CDN-GIA-01",
+              "CF2-CDN-GIA-01",
+              "DMIT-HY2-US-01",
+              "BWG-VLESS-JPTY-01"
+            ]
+          },
+          "US-MEDIA": {
+            "type": "Selector",
+            "now": "NODE-PICK",
+            "all": [
+              "BULK-LAX-GIA-01",
+              "NODE-PICK",
+              "AIRPORT"
+            ]
+          },
+          "DOWNLOAD": {
+            "type": "Selector",
+            "now": "DIRECT",
+            "all": [
+              "DIRECT",
+              "PROXY"
+            ]
+          }
+        },
+        "state": {
+          "rc": 0,
+          "stdout": "2026-11-18 15:05:16 +0800\nqdisc noqueue 0: dev lo root refcnt 2 \nqdisc fq_codel 0: dev eth0 root refcnt 2 limit 10240p flows 1024 quantum 1514 target 5ms interval 100ms memory_limit 4Mb ecn drop_batch 64 \nqdisc fq_codel 0: dev eth1 root refcnt 2 limit 10240p flows 1024 quantum 1514 target 5ms interval 100ms memory_limit 4Mb ecn drop_batch 64 \nqdisc noqueue 0: dev wan root refcnt 2 \nqdisc noqueue 0: dev lan1 root refcnt 2 \nqdisc noqueue 0: dev lan3 root refcnt 2 \nqdisc noqueue 0: dev lan4 root refcnt 2 \nqdisc noqueue 0: dev lan2 root refcnt 2 \nqdisc fq_codel 0: dev ra0 root refcnt 2 limit 10240p flows 1024 quantum 1514 target 5ms interval 100ms memory_limit 512Kb ecn drop_batch 64 \nqdisc noqueue 0: dev br-lan root refcnt 2 \nqdisc fq_codel 0: dev ra1 root refcnt 2 limit 10240p flows 1024 quantum 1514 target 5ms interval 100ms memory_limit 512Kb ecn drop_batch 64 \nqdisc fq_codel 0: dev ra2 root refcnt 2 limit 10240p flows 1024 quantum 1514 target 5ms interval 100ms memory_limit 512Kb ecn drop_batch 64 \nqdisc fq_codel 0: dev ra3 root refcnt 2 limit 10240p flows 1024 quantum 1514 target 5ms interval 100ms memory_limit 512Kb ecn drop_batch 64 \nqdisc fq_codel 0: dev ra4 root refcnt 2 limit 10240p flows 1024 quantum 1514 target 5ms interval 100ms memory_limit 512Kb ecn drop_batch 64 \nqdisc fq_codel 0: dev ra5 root refcnt 2 limit 10240p flows 1024 quantum 1514 target 5ms interval 100ms memory_limit 512Kb ecn drop_batch 64 \nqdisc fq_codel 0: dev rax0 root refcnt 2 limit 10240p flows 1024 quantum 1514 target 5ms interval 100ms memory_limit 512Kb ecn drop_batch 64 \nqdisc fq_codel 0: dev rax1 root refcnt 2 limit 10240p flows 1024 quantum 1514 target 5ms interval 100ms memory_limit 512Kb ecn drop_batch 64 \nqdisc fq_codel 0: dev rax2 root refcnt 2 limit 10240p flows 1024 quantum 1514 target 5ms interval 100ms memory_limit 512Kb ecn drop_batch 64 \nqdisc fq_codel 0: dev rax3 root refcnt 2 limit 10240p flows 1024 quantum 1514 target 5ms interval 100ms memory_limit 512Kb ecn drop_batch 64 \nqdisc fq_codel 0: dev rax4 root refcnt 2 limit 10240p flows 1024 quantum 1514 target 5ms interval 100ms memory_limit 512Kb ecn drop_batch 64 \nqdisc fq_codel 0: dev rax5 root refcnt 2 limit 10240p flows 1024 quantum 1514 target 5ms interval 100ms memory_limit 512Kb ecn drop_batch 64 \n{\"schema\":3,\"meter_id\":\"rtr-a9bcba\",\"seq\":206,\"boot_id\":\"56d8dc3e-af38-4d0c-b763-a4a094663c27\",\"rules_sha\":\"fcca886f0b687797\",\"continuity_id\":\"reboot-56d8dc3e-af38-4d0c-b763-a4a094663c27\",\"prev_continuity\":\"reboot-56d8dc3e-af38-4d0c-b763-a4a094663c27\",\"prev_epoch\":1794985500,\"day_key\":\"2026-11-18\",\"day_total\":248441,\"day_first_at\":\"2026-11-18 00:00:00+0800\",\"endpoints\":{\"BWG-VLESS-JPTY-01\":0,\"BULK-LAX-GIA-01\":0,\"BWG-HY2-JPTY-01\":0,\"DMIT-HY2-US-01\":0}}",
+          "stderr": ""
+        }
+      }
+    }
+  ],
+  "finished_local": "2026-11-18T15:05:15+08:00"
+}

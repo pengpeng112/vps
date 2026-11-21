@@ -1,0 +1,3 @@
+{"ts":"2026-11-17 22:14:59+0800","request_id":"g04-bad","fingerprint":"7ef0de4f40d1fe53","action":"apply","outcome":"rejected_invalid","detail":{"reason":"validation"}}
+{"ts":"2026-11-17 22:15:01+0800","request_id":"g04-ok","fingerprint":"ba1d5ca62996c01b","action":"apply","outcome":"applied","detail":{"version":1,"enforcement":"observe","classes":""}}
+{"ts":"2026-11-17 22:15:02+0800","request_id":"g04-cas","fingerprint":"ba1d5ca62996c01b","action":"apply","outcome":"rejected_cas","detail":{"expected":0}}

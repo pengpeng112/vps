@@ -1,0 +1,40 @@
+{
+  "at": "2026-11-18T22:29:45+08:00",
+  "devices": {
+    "R2": {
+      "rc": 0,
+      "stdout": "2026-11-18 22:29:46\nf13d6b9dae93b5157911a6247a1b62040bec42a67871e8aa44ce430480852185  /etc/mihomo/config.yaml\n15617\n{\"alive\":true,\"all\":[\"AUTO\",\"BWG-HY2-JPTY-01\",\"GIA-HY2-US-01\",\"CF-CDN-GIA-01\",\"CF2-CDN-GIA-01\",\"DMIT-HY2-US-01\",\"CF2D-HK-01\",\"CF2D-BWG-01\",\"BWG-VLESS-JPTY-01\",\"DIRECT\"],\"dialer-proxy\":\"\",\"emptyFallback\":\"COMPATIBLE\",\"extra\":{},\"hidden\":false,\"history\":[],\"icon\":\"\",\"interface\":\"\",\"mptcp\":false,\"name\":\"PROXY\",\"now\":\"AUTO\",\"provider-name\":\"\",\"routing-mark\":0,\"smux\":false,\"testUrl\":\"\",\"tfo\":false,\"type\":\"Selector\",\"udp\":true,\"uot\":false,\"xudp\":false}\n\ng204=204 t=0.624333\nbaidu=200 t=0.170603",
+      "stderr": ""
+    },
+    "R3": {
+      "rc": 0,
+      "stdout": "2026-11-18 22:29:48\nf26fb050fbe30c8cfed523519097479fe543406a02e51ef4ebc7d75a8dea1b2e  /etc/mihomo/config.yaml\n10714\n{\"alive\":true,\"all\":[\"AUTO\",\"BWG-HY2-JPTY-01\",\"GIA-HY2-US-01\",\"US666-CN2GIA-01\",\"CF2D-HK-01\",\"CF2D-BWG-01\",\"BWG-VLESS-JPTY-01\",\"CF-CDN-GIA-01\",\"CF2-CDN-GIA-01\",\"DIRECT\"],\"dialer-proxy\":\"\",\"emptyFallback\":\"COMPATIBLE\",\"extra\":{},\"hidden\":false,\"history\":[],\"icon\":\"\",\"interface\":\"\",\"mptcp\":false,\"name\":\"PROXY\",\"now\":\"AUTO\",\"provider-name\":\"\",\"routing-mark\":0,\"smux\":false,\"testUrl\":\"\",\"tfo\":false,\"type\":\"Selector\",\"udp\":true,\"uot\":false,\"xudp\":false}\n\ng204=204 t=0.433120\nbaidu=200 t=0.160712",
+      "stderr": ""
+    },
+    "R4": {
+      "rc": 0,
+      "stdout": "2026-11-18 22:29:50\nf26fb050fbe30c8cfed523519097479fe543406a02e51ef4ebc7d75a8dea1b2e  /etc/mihomo/config.yaml\n13157\n{\"alive\":true,\"all\":[\"AUTO\",\"BWG-HY2-JPTY-01\",\"GIA-HY2-US-01\",\"US666-CN2GIA-01\",\"CF2D-HK-01\",\"CF2D-BWG-01\",\"BWG-VLESS-JPTY-01\",\"CF-CDN-GIA-01\",\"CF2-CDN-GIA-01\",\"DIRECT\"],\"dialer-proxy\":\"\",\"emptyFallback\":\"COMPATIBLE\",\"extra\":{},\"hidden\":false,\"history\":[],\"icon\":\"\",\"interface\":\"\",\"mptcp\":false,\"name\":\"PROXY\",\"now\":\"AUTO\",\"provider-name\":\"\",\"routing-mark\":0,\"smux\":false,\"testUrl\":\"\",\"tfo\":false,\"type\":\"Selector\",\"udp\":true,\"uot\":false,\"xudp\":false}\n\ng204=204 t=0.425646\nbaidu=200 t=0.160169",
+      "stderr": ""
+    },
+    "R5": {
+      "rc": 0,
+      "stdout": "2026-11-18 22:29:51\nf26fb050fbe30c8cfed523519097479fe543406a02e51ef4ebc7d75a8dea1b2e  /etc/mihomo/config.yaml\n3477\n{\"alive\":true,\"all\":[\"AUTO\",\"BWG-HY2-JPTY-01\",\"GIA-HY2-US-01\",\"US666-CN2GIA-01\",\"CF2D-HK-01\",\"CF2D-BWG-01\",\"BWG-VLESS-JPTY-01\",\"CF-CDN-GIA-01\",\"CF2-CDN-GIA-01\",\"DIRECT\"],\"dialer-proxy\":\"\",\"emptyFallback\":\"COMPATIBLE\",\"extra\":{},\"hidden\":false,\"history\":[],\"icon\":\"\",\"interface\":\"\",\"mptcp\":false,\"name\":\"PROXY\",\"now\":\"AUTO\",\"provider-name\":\"\",\"routing-mark\":0,\"smux\":false,\"testUrl\":\"\",\"tfo\":false,\"type\":\"Selector\",\"udp\":true,\"uot\":false,\"xudp\":false}\n\ng204=204 t=0.426888\nbaidu=200 t=0.150448",
+      "stderr": ""
+    },
+    "R6": {
+      "rc": 0,
+      "stdout": "2026-11-18 22:29:52\nf26fb050fbe30c8cfed523519097479fe543406a02e51ef4ebc7d75a8dea1b2e  /etc/mihomo/config.yaml\n30075\n{\"alive\":true,\"all\":[\"AUTO\",\"BWG-HY2-JPTY-01\",\"GIA-HY2-US-01\",\"US666-CN2GIA-01\",\"CF2D-HK-01\",\"CF2D-BWG-01\",\"BWG-VLESS-JPTY-01\",\"CF-CDN-GIA-01\",\"CF2-CDN-GIA-01\",\"DIRECT\"],\"dialer-proxy\":\"\",\"emptyFallback\":\"COMPATIBLE\",\"extra\":{},\"hidden\":false,\"history\":[],\"icon\":\"\",\"interface\":\"\",\"mptcp\":false,\"name\":\"PROXY\",\"now\":\"AUTO\",\"provider-name\":\"\",\"routing-mark\":0,\"smux\":false,\"testUrl\":\"\",\"tfo\":false,\"type\":\"Selector\",\"udp\":true,\"uot\":false,\"xudp\":false}\n\ng204=204 t=0.580757\nbaidu=200 t=0.166290",
+      "stderr": ""
+    },
+    "R8": {
+      "rc": 0,
+      "stdout": "2026-11-18 22:29:54\nf26fb050fbe30c8cfed523519097479fe543406a02e51ef4ebc7d75a8dea1b2e  /etc/mihomo/config.yaml\n23962\n{\"alive\":true,\"all\":[\"AUTO\",\"BWG-HY2-JPTY-01\",\"GIA-HY2-US-01\",\"US666-CN2GIA-01\",\"CF2D-HK-01\",\"CF2D-BWG-01\",\"BWG-VLESS-JPTY-01\",\"CF-CDN-GIA-01\",\"CF2-CDN-GIA-01\",\"DIRECT\"],\"dialer-proxy\":\"\",\"emptyFallback\":\"COMPATIBLE\",\"extra\":{},\"hidden\":false,\"history\":[],\"icon\":\"\",\"interface\":\"\",\"mptcp\":false,\"name\":\"PROXY\",\"now\":\"AUTO\",\"provider-name\":\"\",\"routing-mark\":0,\"smux\":false,\"testUrl\":\"\",\"tfo\":false,\"type\":\"Selector\",\"udp\":true,\"uot\":false,\"xudp\":false}\n\ng204=204 t=0.350407\nbaidu=200 t=0.165123",
+      "stderr": ""
+    },
+    "R9": {
+      "rc": 0,
+      "stdout": "2026-11-18 22:29:56\n4fde341da6456cea4a98756c0565e9a0771f587bb9f67f0f69f40a23a8cd05b1  /etc/mihomo/config.yaml\n27458\n{\"alive\":true,\"all\":[\"AUTO\",\"BWG-HY2-JPTY-01\",\"GIA-HY2-US-01\",\"BWG-VLESS-JPTY-01\",\"US666-CN2GIA-01\",\"CF2D-HK-01\",\"CF2D-BWG-01\",\"CF-CDN-GIA-01\",\"CF2-CDN-GIA-01\",\"DIRECT\"],\"dialer-proxy\":\"\",\"emptyFallback\":\"COMPATIBLE\",\"extra\":{},\"hidden\":false,\"history\":[],\"icon\":\"\",\"interface\":\"\",\"mptcp\":false,\"name\":\"PROXY\",\"now\":\"AUTO\",\"provider-name\":\"\",\"routing-mark\":0,\"smux\":false,\"testUrl\":\"\",\"tfo\":false,\"type\":\"Selector\",\"udp\":true,\"uot\":false,\"xudp\":false}\n\ng204=204 t=0.464207\nbaidu=200 t=0.163119",
+      "stderr": ""
+    }
+  }
+}

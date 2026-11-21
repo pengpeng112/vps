@@ -1,0 +1,67 @@
+{
+  "started": "2026-11-18T22:24:39+08:00",
+  "operation": "probe",
+  "devices": {
+    "R2": {
+      "samples": [
+        {
+          "rc": 0,
+          "stdout": "204 2.220968",
+          "stderr": ""
+        },
+        {
+          "rc": 0,
+          "stdout": "204 2.433948",
+          "stderr": ""
+        },
+        {
+          "rc": 0,
+          "stdout": "204 2.985324",
+          "stderr": ""
+        }
+      ],
+      "exit": {
+        "rc": 0,
+        "stdout": "191.223.215.12",
+        "stderr": ""
+      },
+      "download": {
+        "rc": 0,
+        "stdout": "200 65536 3.681463",
+        "stderr": ""
+      },
+      "pass": true
+    },
+    "R4": {
+      "samples": [
+        {
+          "rc": 0,
+          "stdout": "204 1.697728",
+          "stderr": ""
+        },
+        {
+          "rc": 0,
+          "stdout": "204 2.075552",
+          "stderr": ""
+        },
+        {
+          "rc": 0,
+          "stdout": "204 1.448742",
+          "stderr": ""
+        }
+      ],
+      "exit": {
+        "rc": 0,
+        "stdout": "191.223.215.12",
+        "stderr": ""
+      },
+      "download": {
+        "rc": 0,
+        "stdout": "200 65536 4.685400",
+        "stderr": ""
+      },
+      "pass": true
+    }
+  },
+  "finished": "2026-11-18T22:25:27+08:00"
+}

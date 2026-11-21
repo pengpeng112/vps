@@ -25,35 +25,83 @@ func renderOK(t *testing.T, in RenderInput) []byte {
 	return out
 }
 
+// TestMediaFallbackMembers 用途驱动语义（2026-11-17 v37）：US-MEDIA 成员 = video 用途
+// 节点 + NODE-PICK（+AIRPORT）；ordinary 节点即使名称含 LAX 也不进入（名称猜测已移除）。
 func TestMediaFallbackMembers(t *testing.T) {
-	for _, hasLAX := range []bool{false, true} {
-		nodes := fakeNodes()
-		if hasLAX {
-			nodes[1].Name = "LAX-VLESS-US-01"
+	nodes := fakeNodes()
+	nodes[1].Name = "LAX-VLESS-US-01" // ordinary：不得因名称进入媒体组
+	var doc map[string]any
+	if err := yaml.Unmarshal(renderOK(t, RenderInput{DeviceID: "rtr-media", Nodes: nodes}), &doc); err != nil {
+		t.Fatal(err)
+	}
+	found := false
+	for _, item := range doc["proxy-groups"].([]any) {
+		g := item.(map[string]any)
+		if g["name"] != "US-MEDIA" {
+			continue
 		}
-		var doc map[string]any
-		if err := yaml.Unmarshal(renderOK(t, RenderInput{DeviceID: "rtr-media", Nodes: nodes}), &doc); err != nil {
-			t.Fatal(err)
+		found = true
+		members := toStrings(g["proxies"].([]any))
+		if strings.Join(members, ",") != "NODE-PICK" || g["include-all"] != nil {
+			t.Fatalf("ordinary-only 渲染时 US-MEDIA 必须只含 NODE-PICK 兜底: %v", g)
 		}
-		found := false
-		for _, item := range doc["proxy-groups"].([]any) {
-			g := item.(map[string]any)
-			if g["name"] != "US-MEDIA" {
-				continue
+	}
+	if !found {
+		t.Fatal("US-MEDIA missing")
+	}
+}
+
+// TestRenderPurposeIsolation 用途边界闭环（B13/B14/B15）：
+//   - video 节点只进 US-MEDIA，绝不进 PROXY/AUTO/NODE-PICK（含手选）；
+//   - video 节点 IP 的 /32 直连保护必须生成（此前 continue 跳过=漏保护）；
+//   - 未知 purpose 拒绝渲染（不静默落 ordinary）；
+//   - 全 ordinary 设备输出与历史语义一致（非试点兼容：无 video 节点则零差异）。
+func TestRenderPurposeIsolation(t *testing.T) {
+	nodes := append(fakeNodes(), NodeRender{
+		Name: "BULK-LAX-GIA-01", Purpose: "video", Proto: ProtoVLESS,
+		Host: "203.0.113.77", Port: 2054,
+		UUID: "12345678-1234-1234-1234-123456789012",
+		PBK:  "CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC", SNI: "www.microsoft.com", SID: "00001111",
+	})
+	raw := renderOK(t, RenderInput{DeviceID: "rtr-pi", Nodes: nodes})
+	var doc map[string]any
+	if err := yaml.Unmarshal(raw, &doc); err != nil {
+		t.Fatal(err)
+	}
+	s := string(raw)
+	groups := map[string]map[string]any{}
+	for _, item := range doc["proxy-groups"].([]any) {
+		g := item.(map[string]any)
+		groups[g["name"].(string)] = g
+	}
+	for _, gn := range []string{"PROXY", "AUTO", "NODE-PICK"} {
+		members := toStrings(groups[gn]["proxies"].([]any))
+		for _, m := range members {
+			if m == "BULK-LAX-GIA-01" {
+				t.Errorf("%s 组不得包含 video 节点（含手选）: %v", gn, members)
 			}
-			found = true
-			members := toStrings(g["proxies"].([]any))
-			want := "NODE-PICK"
-			if hasLAX {
-				want = "LAX-VLESS-US-01,NODE-PICK"
-			}
-			if strings.Join(members, ",") != want || g["include-all"] != nil {
-				t.Fatalf("invalid media fallback (LAX=%v): %v", hasLAX, g)
-			}
 		}
-		if !found {
-			t.Fatal("US-MEDIA missing")
-		}
+	}
+	um := toStrings(groups["US-MEDIA"]["proxies"].([]any))
+	if !listHas(groups["US-MEDIA"]["proxies"], "BULK-LAX-GIA-01") || um[len(um)-1] != "NODE-PICK" {
+		t.Fatalf("US-MEDIA 应含 video 节点且以 NODE-PICK 兜底: %v", um)
+	}
+	if !strings.Contains(s, "IP-CIDR,203.0.113.77/32,DIRECT,no-resolve") {
+		t.Error("video 节点缺少 /32 直连保护（B14）")
+	}
+	// 未知 purpose 拒绝
+	bad := append(fakeNodes(), NodeRender{Name: "BAD-PURPOSE", Purpose: "bulk",
+		Host: "203.0.113.10", Port: 443, UUID: "11111111-2222-3333-4444-555555555555",
+		PBK: "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA", SID: "aabb"})
+	if _, err := Render(RenderInput{DeviceID: "rtr-bad", Nodes: bad}); err == nil {
+		t.Error("未知 purpose 必须拒绝渲染")
+	}
+	// 空 purpose=ordinary 兼容
+	ok := append(fakeNodes(), NodeRender{Name: "EMPTY-PURPOSE", Host: "203.0.113.11", Port: 443,
+		UUID: "11111111-2222-3333-4444-555555555555",
+		PBK:  "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA", SID: "aabb"})
+	if _, err := Render(RenderInput{DeviceID: "rtr-empty", Nodes: ok}); err != nil {
+		t.Errorf("空 purpose 应按 ordinary 兼容: %v", err)
 	}
 }
 
@@ -192,12 +240,13 @@ func TestGoldenRules(t *testing.T) {
 	} else if gcn < 0 || gs > gcn {
 		t.Errorf("gstatic PROXY 规则必须在 GEOSITE,google-cn 之前（gs=%d gcn=%d）", gs, gcn)
 	}
-	// 10b. dl.google.com 同理（2026-09-30：google-cn 判 DIRECT 使大文件下载在劣质线路必死）
-	dlg := indexOf(ruleStrs, "DOMAIN-SUFFIX,dl.google.com,PROXY")
+	// 10b. dl.google.com 同理（2026-09-30：google-cn 判 DIRECT 使大文件下载在劣质线路必死；
+	//      2026-11-19 Batch2 按 02-Q2.1 改入 FOREIGN-DL，"先于 google-cn"语义保持）
+	dlg := indexOf(ruleStrs, "DOMAIN-SUFFIX,dl.google.com,FOREIGN-DL")
 	if dlg < 0 {
-		t.Error("缺少 DOMAIN-SUFFIX,dl.google.com,PROXY 规则")
+		t.Error("缺少 DOMAIN-SUFFIX,dl.google.com,FOREIGN-DL 规则")
 	} else if dlg > gcn {
-		t.Errorf("dl.google PROXY 规则必须在 GEOSITE,google-cn 之前（dlg=%d gcn=%d）", dlg, gcn)
+		t.Errorf("dl.google FOREIGN-DL 规则必须在 GEOSITE,google-cn 之前（dlg=%d gcn=%d）", dlg, gcn)
 	}
 }
 
@@ -465,5 +514,132 @@ func TestRenderAirport(t *testing.T) {
 		if item.(map[string]any)["name"] == "AIRPORT" {
 			t.Fatal("无机场时不应有 AIRPORT 组")
 		}
+	}
+}
+
+// TestGoldenDNSFallbackDomestic 2026-11-18（governance-20261118/03 最小模板修复）：
+// fallback 必须是国内 DNS。全舰队现场已为 223.5.5.5/119.29.29.29（MATCH,DIRECT 直连
+// 域名需本地可解析，国外 DoH 在强管控网络超时）。此断言防止源码模板回退国外 DoH
+// 导致新发布覆盖现场修复。
+func TestGoldenDNSFallbackDomestic(t *testing.T) {
+	var doc map[string]any
+	if err := yaml.Unmarshal(renderOK(t, RenderInput{DeviceID: "rtr-dns", Nodes: fakeNodes()}), &doc); err != nil {
+		t.Fatal(err)
+	}
+	dns, ok := doc["dns"].(map[string]any)
+	if !ok {
+		t.Fatal("dns 段缺失")
+	}
+	fb := toStrings(dns["fallback"].([]any))
+	if strings.Join(fb, ",") != "223.5.5.5,119.29.29.29" {
+		t.Fatalf("dns.fallback 必须是国内 DNS 223.5.5.5,119.29.29.29（现场已验），实际 %v", fb)
+	}
+	for _, item := range fb {
+		if strings.Contains(item, "dns.google") || strings.Contains(item, "cloudflare-dns.com") {
+			t.Fatalf("dns.fallback 不得回退国外 DoH: %v", fb)
+		}
+	}
+	// default-nameserver 同样必须国内（域名服务器自举解析不依赖国外）
+	dn := toStrings(dns["default-nameserver"].([]any))
+	if strings.Join(dn, ",") != "223.5.5.5,119.29.29.29" {
+		t.Fatalf("dns.default-nameserver 必须国内，实际 %v", dn)
+	}
+}
+
+// TestGoldenQ21ClassSplit 2026-11-19 Batch2（governance-20261119/02 Q2.1 精确拆分表）：
+//   - US-MEDIA 仅纯视频：Spotify（spotify/scdn.co/spotifycdn）与 GitHub 静态资源（githubassets）
+//     绝不出现，改归普通 PROXY（永不限速防误伤网页）；
+//   - FOREIGN-DL 组存在且承接海外大下载精确子域（含 dl.google.com，且必须先于 google-cn 段命中）；
+//   - githubusercontent.com 其余子域兜底 PROXY（在 FOREIGN-DL 精确子域之后）；
+//   - DOWNLOAD 组保持 DIRECT 首位（Steam/WinUpdate/Apple 直连更新不动）。
+func TestGoldenQ21ClassSplit(t *testing.T) {
+	in := RenderInput{DeviceID: "rtr-q21", Nodes: fakeNodes()}
+	raw := renderOK(t, in)
+	var doc map[string]any
+	if err := yaml.Unmarshal(raw, &doc); err != nil {
+		t.Fatal(err)
+	}
+	s := string(raw)
+	rules := doc["rules"].([]any)
+	pos := func(rule string) int {
+		for i, r := range rules {
+			if rs, ok := r.(string); ok && strings.HasPrefix(rs, rule) {
+				return i
+			}
+		}
+		return -1
+	}
+
+	// 1) US-MEDIA 不含音乐/GitHub；PROXY 收回
+	for _, bad := range []string{"DOMAIN-SUFFIX,spotify.com,US-MEDIA", "DOMAIN-SUFFIX,scdn.co,US-MEDIA",
+		"DOMAIN-SUFFIX,spotifycdn.com,US-MEDIA", "DOMAIN-SUFFIX,githubassets.com,US-MEDIA",
+		"DOMAIN-SUFFIX,githubusercontent.com,US-MEDIA"} {
+		if strings.Contains(s, bad) {
+			t.Errorf("US-MEDIA 仍含非纯视频规则: %s", bad)
+		}
+	}
+	for _, good := range []string{"DOMAIN-SUFFIX,spotify.com,PROXY", "DOMAIN-SUFFIX,githubassets.com,PROXY"} {
+		if !strings.Contains(s, good) {
+			t.Errorf("缺少 PROXY 归属规则: %s", good)
+		}
+	}
+
+	// 2) FOREIGN-DL 组存在且承接精确子域
+	var fdl map[string]any
+	for _, g := range doc["proxy-groups"].([]any) {
+		gm := g.(map[string]any)
+		if gm["name"] == "FOREIGN-DL" {
+			fdl = gm
+		}
+	}
+	if fdl == nil {
+		t.Fatal("FOREIGN-DL 组缺失")
+	}
+	if mem := toStrings(fdl["proxies"].([]any)); len(mem) == 0 || mem[0] != "PROXY" {
+		t.Fatalf("FOREIGN-DL 成员应首为 PROXY（PoC 全速），实际 %v", mem)
+	}
+	for _, dl := range []string{
+		"DOMAIN-SUFFIX,objects.githubusercontent.com,FOREIGN-DL",
+		"DOMAIN-SUFFIX,release-assets.githubusercontent.com,FOREIGN-DL",
+		"DOMAIN-SUFFIX,codeload.github.com,FOREIGN-DL",
+		"DOMAIN-SUFFIX,dl.google.com,FOREIGN-DL",
+		"DOMAIN-SUFFIX,gvt1.com,FOREIGN-DL",
+		"DOMAIN-SUFFIX,huggingface.co,FOREIGN-DL",
+		"DOMAIN-SUFFIX,civitai.com,FOREIGN-DL",
+		"DOMAIN-SUFFIX,mega.nz,FOREIGN-DL",
+	} {
+		if !strings.Contains(s, dl) {
+			t.Errorf("缺少 FOREIGN-DL 规则: %s", dl)
+		}
+	}
+
+	// 3) 顺序：dl.google.com,FOREIGN-DL 必须先于 GEOSITE,google-cn,DIRECT（google-cn 会把 dl.google 拉直连）
+	if pDL, pGC := pos("DOMAIN-SUFFIX,dl.google.com,FOREIGN-DL"), pos("GEOSITE,google-cn,DIRECT"); pDL < 0 || pGC < 0 || pDL > pGC {
+		t.Fatalf("dl.google.com,FOREIGN-DL(%d) 必须先于 GEOSITE,google-cn(%d)", pDL, pGC)
+	}
+	// FOREIGN-DL 精确子域必须先于 githubusercontent.com,PROXY 兜底
+	if pObj, pFall := pos("DOMAIN-SUFFIX,objects.githubusercontent.com,FOREIGN-DL"), pos("DOMAIN-SUFFIX,githubusercontent.com,PROXY"); pObj < 0 || pFall < 0 || pObj > pFall {
+		t.Fatalf("objects...FOREIGN-DL(%d) 必须先于 githubusercontent.com,PROXY 兜底(%d)", pObj, pFall)
+	}
+
+	// 4) DOWNLOAD 组保持 DIRECT 首位
+	for _, g := range doc["proxy-groups"].([]any) {
+		gm := g.(map[string]any)
+		if gm["name"] == "DOWNLOAD" {
+			if mem := toStrings(gm["proxies"].([]any)); mem[0] != "DIRECT" {
+				t.Fatalf("DOWNLOAD 首位必须 DIRECT，实际 %v", mem)
+			}
+		}
+	}
+
+	// 5) 国内/游戏/保护规则不动：五业务站与 MATCH,DIRECT 尾条
+	for _, keep := range []string{"DOMAIN-SUFFIX,istarshine.com,DIRECT", "DOMAIN-SUFFIX,bboluo.com,DIRECT",
+		"GEOSITE,geolocation-!cn,PROXY", "MATCH,DIRECT"} {
+		if !strings.Contains(s, keep) {
+			t.Errorf("保护规则缺失: %s", keep)
+		}
+	}
+	if last := rules[len(rules)-1].(string); last != "MATCH,DIRECT" {
+		t.Fatalf("末条必须 MATCH,DIRECT，实际 %v", last)
 	}
 }

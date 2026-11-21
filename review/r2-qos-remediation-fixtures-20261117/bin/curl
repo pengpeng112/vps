@@ -1,0 +1,8 @@
+#!/bin/sh
+D=$(dirname "$0")
+printf 'curl %s\n' "$*" >> "$D/../mock-curl.log"
+case "$*" in
+  *proxies/NODE-PICK*) printf '{"now":"BWG-HY2-JPTY-01"}' ;;
+  *proxies/AIRPORT*)   printf '{"now":"AP| HK-01"}' ;;
+  *) printf '' ;;
+esac

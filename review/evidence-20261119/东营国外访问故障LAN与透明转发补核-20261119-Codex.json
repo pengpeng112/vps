@@ -1,0 +1,80 @@
+{
+  "started": "2026-11-19T16:27:39+08:00",
+  "production_writes": false,
+  "gz": {
+    "rc": 0,
+    "stdout": "BEGIN\nrtr-101be0|SN-R9-AX3000东营经开区网安|7|7|7|74.82.193.113|6|0|t|2027-11-11 21:59:33.473261+08|rule|all\nt-2b6db80713ab|rtr-101be0|switch_node|ok\nt-f852e24def8c|rtr-101be0|switch_node|ok\nt-3644cf0df000|rtr-101be0|switch_node|rolled_back\nt-f0664f6c8d0e|rtr-101be0|switch_node|rolled_back\nt-baefbb030337|rtr-101be0|apply_policy|ok\nCOMMIT",
+    "stderr": ""
+  },
+  "transparent_and_lan": {
+    "rc": 0,
+    "stdout": "2026-11-19 16:27:47 +0800\n:PREROUTING ACCEPT [1269306:57328013]\n:INPUT ACCEPT [8069:637879]\n:OUTPUT ACCEPT [103389:6626489]\n:POSTROUTING ACCEPT [38577:2331610]\n:MIHOMO - [0:0]\n:MIHOMO_DNS - [0:0]\n:MINIUPNPD - [0:0]\n:MINIUPNPD-POSTROUTING - [0:0]\n:postrouting_docker_rule - [0:0]\n:postrouting_lan_rule - [0:0]\n:postrouting_rule - [0:0]\n:postrouting_wan_rule - [0:0]\n:prerouting_docker_rule - [0:0]\n:prerouting_lan_rule - [0:0]\n:prerouting_rule - [0:0]\n:prerouting_wan_rule - [0:0]\n:zone_docker_postrouting - [0:0]\n:zone_docker_prerouting - [0:0]\n:zone_lan_postrouting - [0:0]\n:zone_lan_prerouting - [0:0]\n:zone_wan_postrouting - [0:0]\n:zone_wan_prerouting - [0:0]\n[15336:1383324] -A PREROUTING -i br-lan -j MIHOMO\n[8634:1034814] -A PREROUTING -i br-lan -j MIHOMO_DNS\n[0:0] -A MIHOMO -d 0.0.0.0/8 -j RETURN\n[169:8788] -A MIHOMO -d 10.0.0.0/8 -j RETURN\n[0:0] -A MIHOMO -d 127.0.0.0/8 -j RETURN\n[0:0] -A MIHOMO -d 100.64.0.0/10 -j RETURN\n[0:0] -A MIHOMO -d 169.254.0.0/16 -j RETURN\n[0:0] -A MIHOMO -d 172.16.0.0/12 -j RETURN\n[1254:68879] -A MIHOMO -d 192.168.0.0/16 -j RETURN\n[2446:298742] -A MIHOMO -d 224.0.0.0/4 -j RETURN\n[0:0] -A MIHOMO -d 159.223.36.119/32 -j RETURN\n[0:0] -A MIHOMO -d 43.134.46.44/32 -j RETURN\n[6702:348510] -A MIHOMO -p tcp -j REDIRECT --to-ports 7892\n[180:12773] -A MIHOMO_DNS -d 192.168.132.0/24 -j RETURN\n[6:873] -A MIHOMO_DNS -p udp -m udp --dport 53 -j REDIRECT --to-ports 1053\n[0:0] -A MIHOMO_DNS -p tcp -m tcp --dport 53 -j REDIRECT --to-ports 1053\n:PREROUTING ACCEPT [8553973:6432938093]\n:INPUT ACCEPT [6464046:6272478690]\n:FORWARD ACCEPT [851251:111216747]\n:OUTPUT ACCEPT [4648874:6145605603]\n:POSTROUTING ACCEPT [5506131:6256847572]\n:INPUT ACCEPT [0:0]\n:FORWARD DROP [0:0]\n:OUTPUT ACCEPT [0:0]\n:MINIUPNPD - [0:0]\n:forwarding_docker_rule - [0:0]\n:forwarding_lan_rule - [0:0]\n:forwarding_rule - [0:0]\n:forwarding_wan_rule - [0:0]\n:input_docker_rule - [0:0]\n:input_lan_rule - [0:0]\n:input_rule - [0:0]\n:input_wan_rule - [0:0]\n:output_docker_rule - [0:0]\n:output_lan_rule - [0:0]\n:output_rule - [0:0]\n:output_wan_rule - [0:0]\n:reject - [0:0]\n:syn_flood - [0:0]\n:zone_docker_dest_ACCEPT - [0:0]\n:zone_docker_forward - [0:0]\n:zone_docker_input - [0:0]\n:zone_docker_output - [0:0]\n:zone_docker_src_ACCEPT - [0:0]\n:zone_lan_dest_ACCEPT - [0:0]\n:zone_lan_dest_DROP - [0:0]\n:zone_lan_forward - [0:0]\n:zone_lan_input - [0:0]\n:zone_lan_output - [0:0]\n:zone_lan_src_ACCEPT - [0:0]\n:zone_wan_dest_ACCEPT - [0:0]\n:zone_wan_dest_REJECT - [0:0]\n:zone_wan_forward - [0:0]\n:zone_wan_input - [0:0]\n:zone_wan_output - [0:0]\n:zone_wan_src_REJECT - [0:0]\n[0:0] -A FORWARD -i br-lan -p udp -m udp --dport 443 -m comment --comment mihomo-quic-drop -j DROP\n0:\tfrom all lookup local \n32766:\tfrom all lookup main \n32767:\tfrom all lookup default \ndhcp.lan=dhcp\ndhcp.lan.interface='lan'\ndhcp.lan.force='1'\ndhcp.lan.start='100'\ndhcp.lan.limit='150'\ndhcp.lan.leasetime='12h'\ndhcp.lan.dhcpv4='server'\ndhcp.lan.ra_slaac='1'\ndhcp.lan.ra_flags='managed-config' 'other-config'\ndhcp.lan.dhcpv6_na='1'\ndhcp.lan.ra_dns='1'\ndhcp.lan.ndp='hybrid'\ndhcp.lan.dns_service='1'\ndhcp.lan.ignore='0'\ndhcp.lan.ra_management='0'\ndhcp.lan.ra='relay'\ndhcp.lan.dhcpv6='server'\n192.168.132.1\n255.255.255.0\nrelay\nserver\n1795119347 192.168.132.182\n1795102355 192.168.132.188\n1795113297 192.168.132.216\nNO_PAUSE",
+    "stderr": ""
+  },
+  "runtime_core": {
+    "mode": "rule",
+    "allow-lan": true,
+    "bind-address": "*",
+    "mixed-port": 7890,
+    "redir-port": 7892,
+    "tproxy-port": 0,
+    "ipv6": false
+  },
+  "client_flow_summary": [
+    {
+      "source": "192.168.132.216",
+      "network": "tcp",
+      "type": "Redir",
+      "chains": "DIRECT",
+      "rule": "GeoSite",
+      "count": 23
+    },
+    {
+      "source": "192.168.132.182",
+      "network": "tcp",
+      "type": "Redir",
+      "chains": "DIRECT",
+      "rule": "GeoIP",
+      "count": 3
+    },
+    {
+      "source": "192.168.132.182",
+      "network": "tcp",
+      "type": "Redir",
+      "chains": "DIRECT",
+      "rule": "GeoSite",
+      "count": 7
+    },
+    {
+      "source": "192.168.132.216",
+      "network": "tcp",
+      "type": "Redir",
+      "chains": "BWG-HY2-JPTY-01 > NODE-PICK > AUTO > PROXY",
+      "rule": "GeoSite",
+      "count": 1
+    },
+    {
+      "source": "192.168.132.216",
+      "network": "tcp",
+      "type": "Redir",
+      "chains": "DIRECT",
+      "rule": "GeoIP",
+      "count": 3
+    },
+    {
+      "source": "192.168.132.182",
+      "network": "tcp",
+      "type": "Redir",
+      "chains": "BWG-HY2-JPTY-01 > NODE-PICK > AUTO > PROXY",
+      "rule": "GeoSite",
+      "count": 1
+    }
+  ],
+  "selected_public_site_connections": [],
+  "selfheal_log_metadata": {
+    "rc": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  "finished": "2026-11-19T16:27:48+08:00"
+}

@@ -1,0 +1,53 @@
+{
+  "at": "2026-11-20T17:25:46.489877+08:00",
+  "probes": [
+    {
+      "delay": 158
+    },
+    {
+      "delay": 170
+    },
+    {
+      "delay": 1120
+    }
+  ],
+  "previous": "BWG-HY2-JPTY-01",
+  "protected_before": "30408\n67bcab884951fcc73a9bffbc169a40f576829fee74ab7258e14726348169490b  /etc/mihomo/run.yaml\n20158 20130\n1",
+  "baseline_pages": {
+    "google": {
+      "rc": 0,
+      "stdout": "204 0.245376",
+      "stderr": ""
+    },
+    "baidu": {
+      "rc": 0,
+      "stdout": "200 0.120325",
+      "stderr": ""
+    }
+  },
+  "put": {
+    "rc": 0,
+    "stdout": "204",
+    "stderr": ""
+  },
+  "selection": "GIA-HY2-US-01",
+  "exit": {
+    "rc": 0,
+    "stdout": "154.36.139.155",
+    "stderr": ""
+  },
+  "pages": {
+    "google": {
+      "rc": 0,
+      "stdout": "204 0.355118",
+      "stderr": ""
+    },
+    "baidu": {
+      "rc": 0,
+      "stdout": "200 0.119404",
+      "stderr": ""
+    }
+  },
+  "protected_after": "30408\n67bcab884951fcc73a9bffbc169a40f576829fee74ab7258e14726348169490b  /etc/mihomo/run.yaml\n20158 20130\n1",
+  "result": "switched_verified"
+}

@@ -76,6 +76,7 @@ func (s *Server) nodeToDTO(n *models.Node) gin.H {
 	params := s.decryptNodeParams(n)
 	return gin.H{
 		"id": n.ID, "name": n.Name, "host": n.Host, "port": n.Port, "proto": n.Proto,
+		"purpose": n.Purpose,
 		"params": gin.H{
 			"uuid":     crypto.MaskNodeParam("uuid", params.UUID),
 			"pbk":      crypto.MaskNodeParam("pbk", params.PBK),
@@ -218,6 +219,7 @@ func (s *Server) handleNodePatch(c *gin.Context) {
 		Params   *nodeParams `json:"params"`
 		Priority *int        `json:"priority"`
 		Enabled  *bool       `json:"enabled"`
+		Purpose  *string     `json:"purpose"`
 	}
 	if err := c.ShouldBindJSON(&req); err != nil {
 		fail422(c, "报文不合法")
@@ -242,6 +244,26 @@ func (s *Server) handleNodePatch(c *gin.Context) {
 	}
 	if req.Enabled != nil {
 		updates["enabled"] = *req.Enabled
+	}
+	if req.Purpose != nil {
+		p := *req.Purpose
+		if p == "" {
+			p = "ordinary"
+		}
+		if p != "ordinary" && p != "video" {
+			fail422(c, "purpose 仅支持 ordinary / video")
+			return
+		}
+		if p == "video" && n.Purpose != "video" {
+			// B15：已是某设备 primary 的节点不得转为 video（primary 必须 ordinary）
+			var primaryUse int64
+			s.DB.Raw(`SELECT COUNT(*) FROM node_assignments WHERE node_id=? AND is_primary`, n.ID).Scan(&primaryUse)
+			if primaryUse > 0 {
+				fail422(c, fmt.Sprintf("该节点仍是 %d 台设备的 primary 绑定；primary 必须 ordinary，先调整绑定再改 purpose", primaryUse))
+				return
+			}
+		}
+		updates["purpose"] = p
 	}
 	if name != n.Name || host != n.Host || port != n.Port {
 		if err := validateNodeBase(name, host, port); err != nil {
@@ -433,6 +455,15 @@ func (s *Server) handleAssignmentsBatch(c *gin.Context) {
 	}
 	if !node.Enabled {
 		fail409(c, "节点已停用，不能绑定")
+		return
+	}
+	// B15：video 类节点不得作为 primary（primary 必须 ordinary）
+	nodePurpose := node.Purpose
+	if nodePurpose == "" {
+		nodePurpose = "ordinary"
+	}
+	if req.IsPrimary && nodePurpose != "ordinary" {
+		fail422(c, "video 用途节点不能作为 primary 绑定")
 		return
 	}
 	results := make([]assignmentResult, 0, len(req.DeviceIDs))

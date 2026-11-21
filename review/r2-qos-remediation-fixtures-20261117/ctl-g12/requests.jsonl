@@ -1,0 +1,3 @@
+{"ts":"2026-11-17 22:15:47+0800","request_id":"g12-1","fingerprint":"1bfd377e4326a945","action":"apply","outcome":"applied","detail":{"version":1,"enforcement":"limited","classes":" video download"}}
+{"ts":"2026-11-17 22:15:56+0800","request_id":"g12-4","fingerprint":"cad89b297274c208","action":"apply","outcome":"effect_failed_rolled_back","detail":{"cls":"video","where":"executor"}}
+{"ts":"2026-11-17 22:16:02+0800","request_id":"g12-5","fingerprint":"cad89b297274c208","action":"apply","outcome":"effect_failed_rolled_back","detail":{"cls":"download","where":"executor"}}

@@ -1,0 +1,116 @@
+{
+  "started": "2026-11-19T06:22:15+08:00",
+  "production_writes": false,
+  "devices": {
+    "R1": {
+      "CF2D-HK-01": [
+        {
+          "unavailable": true,
+          "rc": 22
+        },
+        {
+          "unavailable": true,
+          "rc": 22
+        }
+      ],
+      "CF2D-BWG-01": [
+        {
+          "unavailable": true,
+          "rc": 22
+        },
+        {
+          "unavailable": true,
+          "rc": 22
+        }
+      ]
+    },
+    "R4": {
+      "CF2D-HK-01": [
+        {
+          "unavailable": true,
+          "rc": 22
+        },
+        {
+          "unavailable": true,
+          "rc": 22
+        }
+      ],
+      "CF2D-BWG-01": [
+        {
+          "unavailable": true,
+          "rc": 22
+        },
+        {
+          "unavailable": true,
+          "rc": 22
+        }
+      ]
+    },
+    "R3": {
+      "CF2D-HK-01": [
+        {
+          "unavailable": true,
+          "rc": 22
+        },
+        {
+          "unavailable": true,
+          "rc": 22
+        }
+      ],
+      "CF2D-BWG-01": [
+        {
+          "unavailable": true,
+          "rc": 22
+        },
+        {
+          "unavailable": true,
+          "rc": 22
+        }
+      ]
+    },
+    "R8": {
+      "CF2D-HK-01": [
+        {
+          "unavailable": true,
+          "rc": 22
+        },
+        {
+          "unavailable": true,
+          "rc": 22
+        }
+      ],
+      "CF2D-BWG-01": [
+        {
+          "delay": 896
+        },
+        {
+          "unavailable": true,
+          "rc": 22
+        }
+      ]
+    },
+    "R5": {
+      "CF2D-HK-01": [
+        {
+          "unavailable": true,
+          "rc": 22
+        },
+        {
+          "unavailable": true,
+          "rc": 22
+        }
+      ],
+      "CF2D-BWG-01": [
+        {
+          "unavailable": true,
+          "rc": 22
+        },
+        {
+          "unavailable": true,
+          "rc": 22
+        }
+      ]
+    }
+  },
+  "finished": "2026-11-19T06:24:16+08:00"
+}

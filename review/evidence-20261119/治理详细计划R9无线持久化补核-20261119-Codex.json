@@ -1,0 +1,9 @@
+{
+  "at": "2026-11-19T09:33:55+08:00",
+  "production_writes": false,
+  "R9": {
+    "rc": 1,
+    "stdout": "2026-11-19 09:33:58 +0800\n/etc/wireless/mediatek/DBDC_card0.dat:CountryCode=CN\n/etc/wireless/mediatek/DBDC_card0.dat:CountryRegion=1\n/etc/wireless/mediatek/DBDC_card0.dat:Channel=1;149\n/etc/wireless/mediatek/DBDC_card0.dat:AutoChannelSelect=0;0\n/etc/wireless/mediatek/DBDC_card0.dat:HT_BW=1;1;1;1;1;1;1;1;1;1;1;1;\n/etc/wireless/mediatek/DBDC_card0.dat:VHT_BW=0;0;0;0;0;0;2;2;2;2;2;2;\n/etc/wireless/mediatek/mt7981.1.dat:AutoChannelSelect=0\n/etc/wireless/mediatek/mt7981.1.dat:Channel=6\n/etc/wireless/mediatek/mt7981.1.dat:CountryCode=US\n/etc/wireless/mediatek/mt7981.1.dat:CountryRegion=0\n/etc/wireless/mediatek/mt7981.1.dat:HT_BW=1\n/etc/wireless/mediatek/mt7981.1.dat:VHT_BW=0\n/etc/wireless/mediatek/mt7981.2.dat:AutoChannelSelect=0\n/etc/wireless/mediatek/mt7981.2.dat:Channel=36\n/etc/wireless/mediatek/mt7981.2.dat:CountryCode=US\n/etc/wireless/mediatek/mt7981.2.dat:CountryRegion=0\n/etc/wireless/mediatek/mt7981.2.dat:HT_BW=1\n/etc/wireless/mediatek/mt7981.2.dat:VHT_BW=1\n/etc/wireless/mediatek/mt7981.dbdc.b0.dat:AutoChannelSelect=0\n/etc/wireless/mediatek/mt7981.dbdc.b0.dat:Channel=1\n/etc/wireless/mediatek/mt7981.dbdc.b0.dat:CountryCode=CN\n/etc/wireless/mediatek/mt7981.dbdc.b0.dat:CountryRegion=1\n/etc/wireless/mediatek/mt7981.dbdc.b0.dat:HT_BW=1\n/etc/wireless/mediatek/mt7981.dbdc.b0.dat:VHT_BW=0\n/etc/wireless/mediatek/mt7981.dbdc.b1.dat:AutoChannelSelect=0\n/etc/wireless/mediatek/mt7981.dbdc.b1.dat:Channel=149\n/etc/wireless/mediatek/mt7981.dbdc.b1.dat:CountryCode=CN\n/etc/wireless/mediatek/mt7981.dbdc.b1.dat:CountryRegion=1\n/etc/wireless/mediatek/mt7981.dbdc.b1.dat:HT_BW=1\n/etc/wireless/mediatek/mt7981.dbdc.b1.dat:VHT_BW=2\nra0/flags=0x1303\nra0/operstate=unknown\nra0/carrier=1\nrax0/flags=0x1302\nrax0/operstate=down\nrax0/carrier=",
+    "stderr": ""
+  }
+}

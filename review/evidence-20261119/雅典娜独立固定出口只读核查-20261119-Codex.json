@@ -1,0 +1,277 @@
+{
+  "started": "2026-11-19T12:46:46+08:00",
+  "production_writes": false,
+  "api_login": false,
+  "local_gateway": "192.168.2.1",
+  "local_ipv4": "192.168.2.105",
+  "gz": {
+    "rc": 0,
+    "stdout": "2026-11-19T12:46:49+08:00\nactive\nactive\nactive\nBEGIN\nrtr-1eff66|雅典娜-AX6600-客厅|43.134.46.44|4160849\nrtr-5e1a8d|雅典娜-AX6600|74.82.193.113|8\n1|VPS-SG-01|159.223.36.119|443|vless-reality|ordinary|1|rtr-1eff66\n2|VPS-TX-SG-02|43.134.46.44|443|vless-reality|ordinary|3|rtr-1eff66,rtr-354647,rtr-25730c\n3|TX-HY2-SG-01|43.134.46.44|443|hysteria2|ordinary|2|rtr-354647,rtr-25730c\n4|BWG-VLESS-JPTY-01|74.82.193.113|443|vless-reality|ordinary|12|rtr-354647,rtr-cd473f,rtr-d3847d,rtr-1f6f0f,rtr-25730c,rtr-a9bcba,rtr-38aa54,rtr-c46a25,rtr-673568,rtr-37cf72,rtr-101be0,rtr-e9ccdd\n5|LAX-VLESS-US-01|69.63.219.156|443|vless-reality|ordinary|2|rtr-354647,rtr-25730c\n7|US666-CN2GIA-01|154.36.139.155|443|vless-reality|ordinary|9|rtr-1f6f0f,rtr-d3847d,rtr-101be0,rtr-37cf72,rtr-e9ccdd,rtr-38aa54,rtr-cd473f,rtr-c46a25,rtr-673568\n8|BWG-HY2-JPTY-01|74.82.193.113|34567|hysteria2|ordinary|9|rtr-d3847d,rtr-1f6f0f,rtr-37cf72,rtr-a9bcba,rtr-38aa54,rtr-cd473f,rtr-c46a25,rtr-673568,rtr-101be0\n9|GIA-HY2-US-01|154.36.139.155|34568|hysteria2|ordinary|10|rtr-cd473f,rtr-38aa54,rtr-c46a25,rtr-673568,rtr-1f6f0f,rtr-a9bcba,rtr-37cf72,rtr-d3847d,rtr-101be0,rtr-e9ccdd\n10|CF-CDN-GIA-01|104.18.32.7|2053|vless-ws|ordinary|10|rtr-1f6f0f,rtr-d3847d,rtr-38aa54,rtr-cd473f,rtr-c46a25,rtr-673568,rtr-a9bcba,rtr-37cf72,rtr-101be0,rtr-e9ccdd\n11|CF2-CDN-GIA-01|162.159.135.42|2053|vless-ws|ordinary|10|rtr-1f6f0f,rtr-d3847d,rtr-38aa54,rtr-cd473f,rtr-c46a25,rtr-673568,rtr-a9bcba,rtr-37cf72,rtr-101be0,rtr-e9ccdd\n12|EDGE-TUNNEL-V1|104.18.32.7|443|vless-ws|ordinary|0|\n13|EDGE-TUNNEL-V2|104.18.32.7|443|vless-ws|ordinary|1|rtr-37cf72\n14|BULK-LAX-GIA-01|154.36.139.155|2054|vless-reality|video|1|rtr-a9bcba\n15|DMIT-HY2-US-01|69.63.219.156|34567|hysteria2|ordinary|1|rtr-a9bcba\n16|CF2D-HK-01|162.159.135.42|2053|vless-ws|ordinary|8|rtr-a9bcba,rtr-d3847d,rtr-1f6f0f,rtr-38aa54,rtr-cd473f,rtr-c46a25,rtr-673568,rtr-101be0\n17|CF2D-BWG-01|162.159.135.42|2053|vless-ws|ordinary|8|rtr-a9bcba,rtr-1f6f0f,rtr-d3847d,rtr-38aa54,rtr-cd473f,rtr-c46a25,rtr-673568,rtr-101be0\nCOMMIT",
+    "stderr": ""
+  },
+  "athena": {
+    "connected": true,
+    "system": {
+      "rc": 1,
+      "stdout": "2026-11-19 12:46:50 +0800\nJDCloud RE-CS-02\naarch64\nMihomo Meta alpha-ge183c58 linux arm64 with go1.26.5 Mon Aug 10 14:32:53 UTC 2026\n5410\ndefault via 10.1.2.254 dev wan proto static src 10.1.2.105 \ntable inet fw4\ntable ip borrow18\ntable inet mihomo\ntable inet hosp_fwd\n97f66d28534df7fee84ff2b9d82f915ddcb2f9926e9a92c8b3ffc2954f809d8d  /etc/mihomo/run.yaml\n8abaac6581813fc3debfc2537ffc380b51490043c0088bda0e170d0422112c03  /etc/config/dhcp\nb57c71abf15bf74fbdfdaeb2ff45f8722ec531b1698c5a82d9404082d45e9e87  /etc/routermgmt/tunnel.conf",
+      "stderr": ""
+    },
+    "groups": {
+      "PROXY": {
+        "type": "Selector",
+        "now": "BWG-HY2-JPTY-01",
+        "all": [
+          "AUTO",
+          "US666-CN2GIA-01",
+          "BWG-HY2-JPTY-01",
+          "GIA-HY2-US-01",
+          "BWG-VLESS-JPTY-01",
+          "CF-CDN-GIA-01",
+          "CF2-CDN-GIA-01",
+          "VPS-TX-SG-02",
+          "VPS-SG-01",
+          "DIRECT"
+        ]
+      },
+      "AUTO": {
+        "type": "Fallback",
+        "now": "NODE-PICK",
+        "all": [
+          "NODE-PICK",
+          "DIRECT"
+        ]
+      },
+      "NODE-PICK": {
+        "type": "Fallback",
+        "now": "BWG-HY2-JPTY-01",
+        "all": [
+          "US666-CN2GIA-01",
+          "BWG-HY2-JPTY-01",
+          "GIA-HY2-US-01",
+          "BWG-VLESS-JPTY-01",
+          "CF-CDN-GIA-01",
+          "CF2-CDN-GIA-01",
+          "VPS-TX-SG-02",
+          "VPS-SG-01"
+        ]
+      },
+      "US-MEDIA": {
+        "unavailable": true,
+        "rc": 22
+      },
+      "DOWNLOAD": {
+        "type": "Selector",
+        "now": "DIRECT",
+        "all": [
+          "DIRECT",
+          "PROXY"
+        ]
+      }
+    },
+    "config": {
+      "proxies": [
+        {
+          "name": "VPS-TX-SG-02",
+          "server": "43.134.46.44",
+          "port": 443,
+          "type": "vless",
+          "network": "tcp",
+          "servername": "www.microsoft.com"
+        },
+        {
+          "name": "VPS-SG-01",
+          "server": "159.223.36.119",
+          "port": 443,
+          "type": "vless",
+          "network": "tcp",
+          "servername": "www.microsoft.com"
+        },
+        {
+          "name": "US666-CN2GIA-01",
+          "server": "154.36.139.155",
+          "port": 443,
+          "type": "vless",
+          "network": "tcp",
+          "servername": "www.microsoft.com"
+        },
+        {
+          "name": "BWG-HY2-JPTY-01",
+          "server": "74.82.193.113",
+          "port": 34567,
+          "type": "hysteria2",
+          "network": null,
+          "servername": null
+        },
+        {
+          "name": "GIA-HY2-US-01",
+          "server": "154.36.139.155",
+          "port": 34568,
+          "type": "hysteria2",
+          "network": null,
+          "servername": null
+        },
+        {
+          "name": "BWG-VLESS-JPTY-01",
+          "server": "74.82.193.113",
+          "port": 443,
+          "type": "vless",
+          "network": "tcp",
+          "servername": "www.microsoft.com"
+        },
+        {
+          "name": "CF-CDN-GIA-01",
+          "server": "104.18.32.7",
+          "port": 2053,
+          "type": "vless",
+          "network": "ws",
+          "servername": "cf.k3x9m2.top"
+        },
+        {
+          "name": "CF2-CDN-GIA-01",
+          "server": "162.159.135.42",
+          "port": 2053,
+          "type": "vless",
+          "network": "ws",
+          "servername": "cf.k3x9m2.top"
+        }
+      ],
+      "groups": [
+        {
+          "name": "PROXY",
+          "type": "select",
+          "proxies": [
+            "AUTO",
+            "US666-CN2GIA-01",
+            "BWG-HY2-JPTY-01",
+            "GIA-HY2-US-01",
+            "BWG-VLESS-JPTY-01",
+            "CF-CDN-GIA-01",
+            "CF2-CDN-GIA-01",
+            "VPS-TX-SG-02",
+            "VPS-SG-01",
+            "DIRECT"
+          ]
+        },
+        {
+          "name": "AUTO",
+          "type": "fallback",
+          "url": "http://captive.apple.com/hotspot-detect.html",
+          "interval": 300,
+          "proxies": [
+            "NODE-PICK",
+            "DIRECT"
+          ]
+        },
+        {
+          "name": "NODE-PICK",
+          "type": "fallback",
+          "url": "https://www.gstatic.com/generate_204",
+          "interval": 300,
+          "proxies": [
+            "US666-CN2GIA-01",
+            "BWG-HY2-JPTY-01",
+            "GIA-HY2-US-01",
+            "BWG-VLESS-JPTY-01",
+            "CF-CDN-GIA-01",
+            "CF2-CDN-GIA-01",
+            "VPS-TX-SG-02",
+            "VPS-SG-01"
+          ]
+        },
+        {
+          "name": "CN-MEDIA",
+          "type": "select",
+          "proxies": [
+            "DIRECT"
+          ]
+        },
+        {
+          "name": "DOWNLOAD",
+          "type": "select",
+          "proxies": [
+            "DIRECT",
+            "PROXY"
+          ]
+        }
+      ],
+      "rules": [
+        "IP-CIDR,43.134.46.44/32,DIRECT,no-resolve",
+        "IP-CIDR,159.223.36.119/32,DIRECT,no-resolve",
+        "IP-CIDR,154.36.139.155/32,DIRECT,no-resolve",
+        "IP-CIDR,74.82.193.113/32,DIRECT,no-resolve",
+        "IP-CIDR,104.18.32.7/32,DIRECT,no-resolve",
+        "IP-CIDR,162.159.135.42/32,DIRECT,no-resolve",
+        "GEOIP,private,DIRECT,no-resolve",
+        "IP-CIDR,192.168.0.0/16,DIRECT,no-resolve",
+        "IP-CIDR,10.0.0.0/8,DIRECT,no-resolve",
+        "IP-CIDR,172.16.0.0/12,DIRECT,no-resolve",
+        "IP-CIDR,100.64.0.0/10,DIRECT,no-resolve",
+        "IP-CIDR,169.254.0.0/16,DIRECT,no-resolve",
+        "IP-CIDR6,fc00::/7,DIRECT,no-resolve",
+        "IP-CIDR6,fe80::/10,DIRECT,no-resolve",
+        "GEOSITE,private,DIRECT",
+        "GEOSITE,bilibili,CN-MEDIA",
+        "GEOSITE,iqiyi,CN-MEDIA",
+        "GEOSITE,youku,CN-MEDIA",
+        "GEOSITE,bytedance,CN-MEDIA",
+        "DOMAIN-SUFFIX,bilivideo.com,CN-MEDIA",
+        "DOMAIN-SUFFIX,hdslb.com,CN-MEDIA",
+        "DOMAIN-SUFFIX,iqiyi.com,CN-MEDIA",
+        "DOMAIN-SUFFIX,iqiyipic.com,CN-MEDIA",
+        "DOMAIN-SUFFIX,youku.com,CN-MEDIA",
+        "DOMAIN-SUFFIX,ykimg.com,CN-MEDIA",
+        "DOMAIN-SUFFIX,v.qq.com,CN-MEDIA",
+        "DOMAIN-SUFFIX,video.qq.com,CN-MEDIA",
+        "DOMAIN-SUFFIX,mgtv.com,CN-MEDIA",
+        "DOMAIN-SUFFIX,hitv.com,CN-MEDIA",
+        "DOMAIN-SUFFIX,douyin.com,CN-MEDIA",
+        "DOMAIN-SUFFIX,douyinvod.com,CN-MEDIA",
+        "DOMAIN-SUFFIX,amemv.com,CN-MEDIA",
+        "DOMAIN-SUFFIX,byteimg.com,CN-MEDIA",
+        "DOMAIN-SUFFIX,ixigua.com,CN-MEDIA",
+        "DOMAIN-SUFFIX,kuaishou.com,CN-MEDIA",
+        "DOMAIN-SUFFIX,yximgs.com,CN-MEDIA",
+        "DOMAIN-SUFFIX,xiaohongshu.com,CN-MEDIA",
+        "DOMAIN-SUFFIX,xhscdn.com,CN-MEDIA",
+        "GEOSITE,tencent,DIRECT",
+        "GEOSITE,alibaba,DIRECT",
+        "GEOSITE,baidu,DIRECT",
+        "GEOSITE,netease,DIRECT",
+        "GEOSITE,xiaomi,DIRECT",
+        "GEOSITE,apple-cn,DIRECT",
+        "DOMAIN-SUFFIX,gstatic.com,PROXY",
+        "GEOSITE,google-cn,DIRECT",
+        "GEOSITE,category-games@cn,DIRECT",
+        "GEOSITE,cn,DIRECT",
+        "GEOIP,CN,DIRECT,no-resolve",
+        "DOMAIN-SUFFIX,sdent.com.cn,DIRECT",
+        "DOMAIN-SUFFIX,steamcontent.com,DOWNLOAD",
+        "DOMAIN-SUFFIX,steamserver.net,DOWNLOAD",
+        "DOMAIN-KEYWORD,steampipe,DOWNLOAD",
+        "DOMAIN-SUFFIX,windowsupdate.com,DOWNLOAD",
+        "DOMAIN-SUFFIX,update.microsoft.com,DOWNLOAD",
+        "DOMAIN-SUFFIX,dl.delivery.mp.microsoft.com,DOWNLOAD",
+        "DOMAIN-SUFFIX,swcdn.apple.com,DOWNLOAD",
+        "AND,((NETWORK,UDP),(DST-PORT,443)),REJECT",
+        "MATCH,PROXY"
+      ],
+      "ipv6": false,
+      "provider_names": []
+    },
+    "actual_exit": {
+      "rc": 0,
+      "stdout": "ip=74.82.193.113\ncolo=NRT\nloc=JP\ng204=204 t=0.235656",
+      "stderr": ""
+    },
+    "connection_chains_count": {
+      "DIRECT": 125,
+      "BWG-HY2-JPTY-01 > PROXY": 27
+    }
+  },
+  "local_gateway_identity": {
+    "rc": 0,
+    "stdout": "JDCloud RE-CS-02\nrtr-5e1a8d",
+    "stderr": ""
+  },
+  "finished": "2026-11-19T12:47:09+08:00"
+}

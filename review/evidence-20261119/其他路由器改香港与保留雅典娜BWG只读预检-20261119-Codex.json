@@ -1,0 +1,542 @@
+{
+  "started": "2026-11-19T14:12:30+08:00",
+  "production_writes": false,
+  "api_login": false,
+  "devices": {
+    "R1": {
+      "groups": {
+        "PROXY": {
+          "type": "Selector",
+          "now": "AUTO",
+          "all": [
+            "AUTO",
+            "BWG-HY2-JPTY-01",
+            "GIA-HY2-US-01",
+            "US666-CN2GIA-01",
+            "CF2D-HK-01",
+            "CF2D-BWG-01",
+            "BWG-VLESS-JPTY-01",
+            "CF-CDN-GIA-01",
+            "CF2-CDN-GIA-01",
+            "DIRECT"
+          ]
+        },
+        "NODE-PICK": {
+          "type": "Fallback",
+          "now": "BWG-HY2-JPTY-01",
+          "all": [
+            "BWG-HY2-JPTY-01",
+            "GIA-HY2-US-01",
+            "US666-CN2GIA-01",
+            "CF2D-HK-01",
+            "CF2D-BWG-01",
+            "BWG-VLESS-JPTY-01",
+            "CF-CDN-GIA-01",
+            "CF2-CDN-GIA-01"
+          ]
+        },
+        "US-MEDIA": {
+          "type": "Selector",
+          "now": "NODE-PICK",
+          "all": [
+            "NODE-PICK",
+            "AIRPORT"
+          ]
+        },
+        "DOWNLOAD": {
+          "type": "Selector",
+          "now": "DIRECT",
+          "all": [
+            "DIRECT",
+            "PROXY"
+          ]
+        }
+      },
+      "hk_delay_rounds": [
+        {
+          "delay": 242
+        },
+        {
+          "delay": 192
+        },
+        {
+          "delay": 254
+        }
+      ],
+      "hashes": {
+        "rc": 0,
+        "stdout": "dd7c4e7b92cb59a6fcdfb4ae91d1d2999fb84b36d49d562c790ae7430093f42d  /etc/mihomo/config.yaml\n71a5045e43c321c2a9e18599b79fb315e4c24b6ab5db3d86031a129994ebdcce  /etc/routermgmt/handlers/switch_node.sh\n7db2b6f1370f7119d2cdb9ba65e3b9ace49b5ddd169f1c0855dcef758d5ddbe7  /etc/config/dhcp\n13909d85cc8cefa3ac42f862c9071fc68a80aeb33210806da75b437211f47582  /etc/routermgmt/tunnel.conf",
+        "stderr": ""
+      }
+    },
+    "R2": {
+      "groups": {
+        "PROXY": {
+          "type": "Selector",
+          "now": "AUTO",
+          "all": [
+            "AUTO",
+            "BWG-HY2-JPTY-01",
+            "GIA-HY2-US-01",
+            "CF-CDN-GIA-01",
+            "CF2-CDN-GIA-01",
+            "DMIT-HY2-US-01",
+            "CF2D-HK-01",
+            "CF2D-BWG-01",
+            "BWG-VLESS-JPTY-01",
+            "DIRECT"
+          ]
+        },
+        "NODE-PICK": {
+          "type": "Fallback",
+          "now": "BWG-HY2-JPTY-01",
+          "all": [
+            "BWG-HY2-JPTY-01",
+            "GIA-HY2-US-01",
+            "CF-CDN-GIA-01",
+            "CF2-CDN-GIA-01",
+            "DMIT-HY2-US-01",
+            "CF2D-HK-01",
+            "CF2D-BWG-01",
+            "BWG-VLESS-JPTY-01"
+          ]
+        },
+        "US-MEDIA": {
+          "type": "Selector",
+          "now": "NODE-PICK",
+          "all": [
+            "BULK-LAX-GIA-01",
+            "NODE-PICK",
+            "AIRPORT"
+          ]
+        },
+        "DOWNLOAD": {
+          "type": "Selector",
+          "now": "DIRECT",
+          "all": [
+            "DIRECT",
+            "PROXY"
+          ]
+        }
+      },
+      "hk_delay_rounds": [
+        {
+          "delay": 343
+        },
+        {
+          "delay": 351
+        },
+        {
+          "delay": 354
+        }
+      ],
+      "hashes": {
+        "rc": 0,
+        "stdout": "73e830e5085eb7dd2b80bbde5bd25efbb9ea19141d798cb917086ba54c584674  /etc/mihomo/config.yaml\n71a5045e43c321c2a9e18599b79fb315e4c24b6ab5db3d86031a129994ebdcce  /etc/routermgmt/handlers/switch_node.sh\n6519a8b4e28e38f0a12932444626218d7f92bd95950a813421cca04cca11dd27  /etc/config/dhcp\n7ed820da9a00b05438f107d52b63cfc5ad3a5f7c4170ad9b4f543503678fd61f  /etc/routermgmt/tunnel.conf",
+        "stderr": ""
+      }
+    },
+    "R3": {
+      "groups": {
+        "PROXY": {
+          "type": "Selector",
+          "now": "AUTO",
+          "all": [
+            "AUTO",
+            "BWG-HY2-JPTY-01",
+            "GIA-HY2-US-01",
+            "US666-CN2GIA-01",
+            "CF2D-HK-01",
+            "CF2D-BWG-01",
+            "BWG-VLESS-JPTY-01",
+            "CF-CDN-GIA-01",
+            "CF2-CDN-GIA-01",
+            "DIRECT"
+          ]
+        },
+        "NODE-PICK": {
+          "type": "Fallback",
+          "now": "BWG-HY2-JPTY-01",
+          "all": [
+            "BWG-HY2-JPTY-01",
+            "GIA-HY2-US-01",
+            "US666-CN2GIA-01",
+            "CF2D-HK-01",
+            "CF2D-BWG-01",
+            "BWG-VLESS-JPTY-01",
+            "CF-CDN-GIA-01",
+            "CF2-CDN-GIA-01"
+          ]
+        },
+        "US-MEDIA": {
+          "type": "Selector",
+          "now": "NODE-PICK",
+          "all": [
+            "NODE-PICK",
+            "AIRPORT"
+          ]
+        },
+        "DOWNLOAD": {
+          "type": "Selector",
+          "now": "DIRECT",
+          "all": [
+            "DIRECT",
+            "PROXY"
+          ]
+        }
+      },
+      "hk_delay_rounds": [
+        {
+          "delay": 900
+        },
+        {
+          "delay": 232
+        },
+        {
+          "delay": 196
+        }
+      ],
+      "hashes": {
+        "rc": 0,
+        "stdout": "dd7c4e7b92cb59a6fcdfb4ae91d1d2999fb84b36d49d562c790ae7430093f42d  /etc/mihomo/config.yaml\n71a5045e43c321c2a9e18599b79fb315e4c24b6ab5db3d86031a129994ebdcce  /etc/routermgmt/handlers/switch_node.sh\n6519a8b4e28e38f0a12932444626218d7f92bd95950a813421cca04cca11dd27  /etc/config/dhcp\n7797dab42b34a31e86d6251b83b7ded53e536a90e42326c5e221b769b4bf6d62  /etc/routermgmt/tunnel.conf",
+        "stderr": ""
+      }
+    },
+    "R4": {
+      "groups": {
+        "PROXY": {
+          "type": "Selector",
+          "now": "AUTO",
+          "all": [
+            "AUTO",
+            "BWG-HY2-JPTY-01",
+            "GIA-HY2-US-01",
+            "US666-CN2GIA-01",
+            "CF2D-HK-01",
+            "CF2D-BWG-01",
+            "BWG-VLESS-JPTY-01",
+            "CF-CDN-GIA-01",
+            "CF2-CDN-GIA-01",
+            "DIRECT"
+          ]
+        },
+        "NODE-PICK": {
+          "type": "Fallback",
+          "now": "BWG-HY2-JPTY-01",
+          "all": [
+            "BWG-HY2-JPTY-01",
+            "GIA-HY2-US-01",
+            "US666-CN2GIA-01",
+            "CF2D-HK-01",
+            "CF2D-BWG-01",
+            "BWG-VLESS-JPTY-01",
+            "CF-CDN-GIA-01",
+            "CF2-CDN-GIA-01"
+          ]
+        },
+        "US-MEDIA": {
+          "type": "Selector",
+          "now": "NODE-PICK",
+          "all": [
+            "NODE-PICK",
+            "AIRPORT"
+          ]
+        },
+        "DOWNLOAD": {
+          "type": "Selector",
+          "now": "DIRECT",
+          "all": [
+            "DIRECT",
+            "PROXY"
+          ]
+        }
+      },
+      "hk_delay_rounds": [
+        {
+          "delay": 194
+        },
+        {
+          "delay": 250
+        },
+        {
+          "delay": 258
+        }
+      ],
+      "hashes": {
+        "rc": 0,
+        "stdout": "dd7c4e7b92cb59a6fcdfb4ae91d1d2999fb84b36d49d562c790ae7430093f42d  /etc/mihomo/config.yaml\n71a5045e43c321c2a9e18599b79fb315e4c24b6ab5db3d86031a129994ebdcce  /etc/routermgmt/handlers/switch_node.sh\n6519a8b4e28e38f0a12932444626218d7f92bd95950a813421cca04cca11dd27  /etc/config/dhcp\na9d2afc592c293e09921d84d8bf17365ecbad2684a9eaccf6755f5c4ce02c28f  /etc/routermgmt/tunnel.conf",
+        "stderr": ""
+      }
+    },
+    "R5": {
+      "groups": {
+        "PROXY": {
+          "type": "Selector",
+          "now": "AUTO",
+          "all": [
+            "AUTO",
+            "BWG-HY2-JPTY-01",
+            "GIA-HY2-US-01",
+            "US666-CN2GIA-01",
+            "CF2D-HK-01",
+            "CF2D-BWG-01",
+            "BWG-VLESS-JPTY-01",
+            "CF-CDN-GIA-01",
+            "CF2-CDN-GIA-01",
+            "DIRECT"
+          ]
+        },
+        "NODE-PICK": {
+          "type": "Fallback",
+          "now": "BWG-HY2-JPTY-01",
+          "all": [
+            "BWG-HY2-JPTY-01",
+            "GIA-HY2-US-01",
+            "US666-CN2GIA-01",
+            "CF2D-HK-01",
+            "CF2D-BWG-01",
+            "BWG-VLESS-JPTY-01",
+            "CF-CDN-GIA-01",
+            "CF2-CDN-GIA-01"
+          ]
+        },
+        "US-MEDIA": {
+          "type": "Selector",
+          "now": "NODE-PICK",
+          "all": [
+            "NODE-PICK",
+            "AIRPORT"
+          ]
+        },
+        "DOWNLOAD": {
+          "type": "Selector",
+          "now": "DIRECT",
+          "all": [
+            "DIRECT",
+            "PROXY"
+          ]
+        }
+      },
+      "hk_delay_rounds": [
+        {
+          "delay": 190
+        },
+        {
+          "delay": 208
+        },
+        {
+          "delay": 199
+        }
+      ],
+      "hashes": {
+        "rc": 0,
+        "stdout": "dd7c4e7b92cb59a6fcdfb4ae91d1d2999fb84b36d49d562c790ae7430093f42d  /etc/mihomo/config.yaml\n71a5045e43c321c2a9e18599b79fb315e4c24b6ab5db3d86031a129994ebdcce  /etc/routermgmt/handlers/switch_node.sh\n139643e16cf8d0e744d3ee3e7d00d48cc617593f46ce28d848293f1e365853ce  /etc/config/dhcp\n16138b483c0f47464216cc8045e7f1ee555276f35571285f34cf4be7d37dad4d  /etc/routermgmt/tunnel.conf",
+        "stderr": ""
+      }
+    },
+    "R6": {
+      "groups": {
+        "PROXY": {
+          "type": "Selector",
+          "now": "AUTO",
+          "all": [
+            "AUTO",
+            "BWG-HY2-JPTY-01",
+            "GIA-HY2-US-01",
+            "US666-CN2GIA-01",
+            "CF2D-HK-01",
+            "CF2D-BWG-01",
+            "BWG-VLESS-JPTY-01",
+            "CF-CDN-GIA-01",
+            "CF2-CDN-GIA-01",
+            "DIRECT"
+          ]
+        },
+        "NODE-PICK": {
+          "type": "Fallback",
+          "now": "BWG-HY2-JPTY-01",
+          "all": [
+            "BWG-HY2-JPTY-01",
+            "GIA-HY2-US-01",
+            "US666-CN2GIA-01",
+            "CF2D-HK-01",
+            "CF2D-BWG-01",
+            "BWG-VLESS-JPTY-01",
+            "CF-CDN-GIA-01",
+            "CF2-CDN-GIA-01"
+          ]
+        },
+        "US-MEDIA": {
+          "type": "Selector",
+          "now": "NODE-PICK",
+          "all": [
+            "NODE-PICK",
+            "AIRPORT"
+          ]
+        },
+        "DOWNLOAD": {
+          "type": "Selector",
+          "now": "DIRECT",
+          "all": [
+            "DIRECT",
+            "PROXY"
+          ]
+        }
+      },
+      "hk_delay_rounds": [
+        {
+          "delay": 383
+        },
+        {
+          "delay": 405
+        },
+        {
+          "delay": 398
+        }
+      ],
+      "hashes": {
+        "rc": 0,
+        "stdout": "dd7c4e7b92cb59a6fcdfb4ae91d1d2999fb84b36d49d562c790ae7430093f42d  /etc/mihomo/config.yaml\n71a5045e43c321c2a9e18599b79fb315e4c24b6ab5db3d86031a129994ebdcce  /etc/routermgmt/handlers/switch_node.sh\n6519a8b4e28e38f0a12932444626218d7f92bd95950a813421cca04cca11dd27  /etc/config/dhcp\n464d1e59187d93491d2f8060667bed31ff6c72f8a95ffc88b1ecbb4b1fc00cfe  /etc/routermgmt/tunnel.conf",
+        "stderr": ""
+      }
+    },
+    "R8": {
+      "groups": {
+        "PROXY": {
+          "type": "Selector",
+          "now": "AUTO",
+          "all": [
+            "AUTO",
+            "BWG-HY2-JPTY-01",
+            "GIA-HY2-US-01",
+            "US666-CN2GIA-01",
+            "CF2D-HK-01",
+            "CF2D-BWG-01",
+            "BWG-VLESS-JPTY-01",
+            "CF-CDN-GIA-01",
+            "CF2-CDN-GIA-01",
+            "DIRECT"
+          ]
+        },
+        "NODE-PICK": {
+          "type": "Fallback",
+          "now": "BWG-HY2-JPTY-01",
+          "all": [
+            "BWG-HY2-JPTY-01",
+            "GIA-HY2-US-01",
+            "US666-CN2GIA-01",
+            "CF2D-HK-01",
+            "CF2D-BWG-01",
+            "BWG-VLESS-JPTY-01",
+            "CF-CDN-GIA-01",
+            "CF2-CDN-GIA-01"
+          ]
+        },
+        "US-MEDIA": {
+          "type": "Selector",
+          "now": "NODE-PICK",
+          "all": [
+            "NODE-PICK",
+            "AIRPORT"
+          ]
+        },
+        "DOWNLOAD": {
+          "type": "Selector",
+          "now": "DIRECT",
+          "all": [
+            "DIRECT",
+            "PROXY"
+          ]
+        }
+      },
+      "hk_delay_rounds": [
+        {
+          "delay": 206
+        },
+        {
+          "delay": 211
+        },
+        {
+          "delay": 219
+        }
+      ],
+      "hashes": {
+        "rc": 0,
+        "stdout": "dd7c4e7b92cb59a6fcdfb4ae91d1d2999fb84b36d49d562c790ae7430093f42d  /etc/mihomo/config.yaml\n71a5045e43c321c2a9e18599b79fb315e4c24b6ab5db3d86031a129994ebdcce  /etc/routermgmt/handlers/switch_node.sh\n6519a8b4e28e38f0a12932444626218d7f92bd95950a813421cca04cca11dd27  /etc/config/dhcp\n2db05b79cd2644b8c3570bdd970d996266f5b15f196b2d0b7610f4fc49df987a  /etc/routermgmt/tunnel.conf",
+        "stderr": ""
+      }
+    },
+    "R9": {
+      "groups": {
+        "PROXY": {
+          "type": "Selector",
+          "now": "AUTO",
+          "all": [
+            "AUTO",
+            "BWG-HY2-JPTY-01",
+            "GIA-HY2-US-01",
+            "BWG-VLESS-JPTY-01",
+            "US666-CN2GIA-01",
+            "CF2D-HK-01",
+            "CF2D-BWG-01",
+            "CF-CDN-GIA-01",
+            "CF2-CDN-GIA-01",
+            "DIRECT"
+          ]
+        },
+        "NODE-PICK": {
+          "type": "Fallback",
+          "now": "BWG-HY2-JPTY-01",
+          "all": [
+            "BWG-HY2-JPTY-01",
+            "GIA-HY2-US-01",
+            "BWG-VLESS-JPTY-01",
+            "US666-CN2GIA-01",
+            "CF2D-HK-01",
+            "CF2D-BWG-01",
+            "CF-CDN-GIA-01",
+            "CF2-CDN-GIA-01"
+          ]
+        },
+        "US-MEDIA": {
+          "type": "Selector",
+          "now": "NODE-PICK",
+          "all": [
+            "NODE-PICK",
+            "AIRPORT"
+          ]
+        },
+        "DOWNLOAD": {
+          "type": "Selector",
+          "now": "DIRECT",
+          "all": [
+            "DIRECT",
+            "PROXY"
+          ]
+        }
+      },
+      "hk_delay_rounds": [
+        {
+          "delay": 366
+        },
+        {
+          "delay": 389
+        },
+        {
+          "delay": 368
+        }
+      ],
+      "hashes": {
+        "rc": 0,
+        "stdout": "1eb54b96092fd96f449d4360a7c805418d468275b8c6ec897f2bffd83a101ebb  /etc/mihomo/config.yaml\n71a5045e43c321c2a9e18599b79fb315e4c24b6ab5db3d86031a129994ebdcce  /etc/routermgmt/handlers/switch_node.sh\n6519a8b4e28e38f0a12932444626218d7f92bd95950a813421cca04cca11dd27  /etc/config/dhcp\n4911dbbe7962b4c8425526a23b45896732ec53fbc1539bd0f17355f5b36fad98  /etc/routermgmt/tunnel.conf",
+        "stderr": ""
+      }
+    }
+  },
+  "gz": {
+    "rc": 0,
+    "stdout": "2026-11-19T14:12:33+08:00\nactive\nactive\nactive\n1d0d88299ea25ba6964bcc32f4f1b01a9684282a2fb9ba5820aca03ef7a01a05  /opt/mgmt/server\nBEGIN\n10\nrtr-101be0|7|7|7|6\nrtr-1eff66|8|8|8|4165992\nrtr-1f6f0f|10|10|10|5\nrtr-25730c|3|3|3|3105152\nrtr-354647|3|3|3|3110173\nrtr-37cf72|8|8|8|1540072\nrtr-38aa54|32|32|32|18\nrtr-5e1a8d|0|0|0|0\nrtr-673568|24|24|24|33\nrtr-a9bcba|41|41|41|12\nrtr-bf0292|0|0|0|\nrtr-c46a25|22|22|22|34\nrtr-cd473f|31|31|31|55\nrtr-d3847d|30|30|30|42\nrtr-e9ccdd|1|1|1|240006\nCOMMIT",
+    "stderr": ""
+  },
+  "finished": "2026-11-19T14:12:58+08:00"
+}

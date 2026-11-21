@@ -1,5 +1,0 @@
-name = "vless-test"
-main = "_worker.js"
-compatibility_date = "2025-01-01"
-# 测试用途：不绑定 KV / 域名 / 路由
-# 代理功能（WS/gRPC）只需 UUID Secret；管理面板和订阅需要 KV（本测试不配置）

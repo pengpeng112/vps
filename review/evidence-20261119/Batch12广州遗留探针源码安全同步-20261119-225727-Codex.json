@@ -1,0 +1,15 @@
+{
+  "started": "2026-11-19T22:57:27.334405+08:00",
+  "active_timer_unchanged": true,
+  "gz_api_unchanged": true,
+  "install": {
+    "rc": 0,
+    "stdout": "{\"target\": \"/opt/mgmt/rssh-probe.py\", \"old_sha256\": \"4a6b8a02d62925c9d5dc69729e2d781d8878fcee653fef2c087f8630cf2588dc\", \"new_sha256\": \"25f2603d25fe9295dd4aabbd9ad37704b157bc974649af997b4f278cdb968813\", \"backup\": \"/root/rssh-probe-backup-20261119-225727/rssh-probe.py\", \"missing_env_exit\": 2, \"timer_units_changed\": false, \"password_rotated\": false}",
+    "stderr": ""
+  },
+  "after": {
+    "rc": 0,
+    "stdout": "1d0d88299ea25ba6964bcc32f4f1b01a9684282a2fb9ba5820aca03ef7a01a05  /opt/mgmt/server\nactive\nactive\nactive\nactive",
+    "stderr": ""
+  }
+}

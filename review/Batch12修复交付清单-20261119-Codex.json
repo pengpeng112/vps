@@ -1,0 +1,50 @@
+{
+  "at": "2026-11-19T23:20:51.258217+08:00",
+  "session": "Codex-Batch12-fix-20261119",
+  "files": {
+    "mgmt/qos-gate/bucket.go": "5b022aeab6ace435792d2eebf32aa7c936e38c76132278f4131d76b78856489e",
+    "mgmt/qos-gate/config.go": "3c19012def3f15e9d026dda020e67f1ff9d7653c273dea94e17d0ce06263f248",
+    "mgmt/qos-gate/ctl.go": "a30c915e0fcbd87f80e718a98bc1c0acda54f37bcde6411e818c88e7446bc416",
+    "mgmt/qos-gate/gate.go": "59b8aec9cc8232a56d5e48c62f18bf3ce5aeee9141a979d3c71ebb7c3c932a75",
+    "mgmt/qos-gate/main.go": "716019ef2c82101ac396ca7ee7c579ef338d79ce4963c713653dcf5e9ac6855f",
+    "mgmt/qos-gate/pipe.go": "f5cc2c22ffad15c27e386e212f74c088c00def5203eaf93733569b6d48c97c6c",
+    "mgmt/qos-gate/qosgate_test.go": "228b204cc84dfdc3876bc970b15ea187bc6aa29f8bb0e67aaadbde06739e79ad",
+    "mgmt/qos-gate/safety_test.go": "58dac00d24867b2fe3075adf9705d2f09a37d2d5526b156c2699c453cb8423bf",
+    "mgmt/qos-gate/socks.go": "488495578cc605aacbf1fa4d447bfa7969d2efad792fe7276f4d017e62588ed3",
+    "mgmt/qos-gate/README.md": "70f4ca9e16cb4e8ade8bb670f81209a7460cf9451759207953a578e79e3cedea",
+    "mgmt/agent/rssh-probe.py": "25f2603d25fe9295dd4aabbd9ad37704b157bc974649af997b4f278cdb968813",
+    "scripts/qos-r2/proxy-meter-v3.sh": "33b2846a9e78912b89e193d2ebd348bd42f2992c755b7902bacb12cd807b19dc",
+    "scripts/qos-r2/proxy-meter-endpoints.sh": "1a816c95d2ffbe96c0453003bdc66b20cc2c8fbc31c979ff1e6d9548a51a3c6d",
+    "scripts/qos-r2/proxy-meter-io.py": "1a8fcedafc385458aba8a813461eb678f6196ebf1048933d499a189448683a24",
+    "scripts/build_gz_api.py": "e2df8a11b2ceac254abab12176684aff39b029278e1d76d9aaebd6ac35023ef3",
+    ".gitignore": "bf8e2c39d519df3077c00ab26832f2eb99ea2b890495b3b0e0e941b27c488d79",
+    "GEMINI.md": "58958c1524cae702724dc47c06d251f1fb7c554daf66c30929330f837d953b65",
+    ".cursorrules": "58958c1524cae702724dc47c06d251f1fb7c554daf66c30929330f837d953b65",
+    ".windsurfrules": "58958c1524cae702724dc47c06d251f1fb7c554daf66c30929330f837d953b65",
+    ".clinerules": "58958c1524cae702724dc47c06d251f1fb7c554daf66c30929330f837d953b65",
+    ".github/copilot-instructions.md": "58958c1524cae702724dc47c06d251f1fb7c554daf66c30929330f837d953b65"
+  },
+  "evidence": [
+    "review/Batch12计量隔离矩阵-20261119-224016-Codex.json",
+    "review/Batch12缺失负例隔离复现-20261119-223114-Codex.json",
+    "review/Batch12执行器最终本地验证-20261119-230117-Codex.json",
+    "review/Batch12隔离构建验证-20261119-224029-Codex.json",
+    "review/Batch12计量修复R2部署-20261119-224507-Codex.json",
+    "review/Batch12修复后R2独立PoC-20261119-225550-Codex.json",
+    "review/Batch12修复后R2独立PoC-20261119-231053-Codex.json",
+    "review/Batch12广州遗留探针源码安全同步-20261119-225727-Codex.json",
+    "review/Batch12修复收尾清理与门禁复核-20261119-231949-Codex.json"
+  ],
+  "product_go_test_functions": 15,
+  "qualified_observation_start": null,
+  "technical_observation_start": "2026-11-19T22:45:18+08:00",
+  "earliest_technical_24h_review": "2026-11-20T22:45:18+08:00",
+  "formal_enforce_enabled": false,
+  "pending": [
+    "38 actual airport domain endpoints coverage",
+    "real midnight and planned restart settlement",
+    "UDP and elephant sentinel",
+    "production recovery and API-agent-UI",
+    "race test environment"
+  ]
+}

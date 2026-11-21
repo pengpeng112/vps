@@ -1,0 +1,3 @@
+{"ts":"2026-11-17 22:15:23+0800","request_id":"g07-1","fingerprint":"1bfd377e4326a945","action":"apply","outcome":"rejected_no_executor","detail":{"reason":"no_registry"}}
+{"ts":"2026-11-17 22:15:24+0800","request_id":"g07-2","fingerprint":"1bfd377e4326a945","action":"apply","outcome":"rejected_no_executor","detail":{"reason":"no_executor","classes":"download"}}
+{"ts":"2026-11-17 22:15:26+0800","request_id":"g07-3","fingerprint":"1bfd377e4326a945","action":"apply","outcome":"rejected_meter","detail":{"reason":"meter_unhealthy"}}

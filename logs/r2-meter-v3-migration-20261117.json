@@ -1,0 +1,76 @@
+{
+  "started": "2026-11-17T22:06:14+08:00",
+  "controller_invoked": false,
+  "gz_writes": false,
+  "local_backup_dir": "F:\\vps\\backups\\r2-meter-v3-migration-20261117",
+  "steps": [
+    {
+      "step": "gate_gz",
+      "rc": 0,
+      "stdout_tail": "tasks|0\nr2ver|36|36\n",
+      "stderr_tail": ""
+    },
+    {
+      "step": "A_generator_preview",
+      "rc": 0,
+      "stdout_tail": "generated_at=2026-11-17 22:06:20+0800 registered_rules=6 proxy_nodes=3 unresolved=none\ne41e869ce2a8e2c824714c8a99dbb8ad49fc12fca02223a1ace9ca5e53105775  /tmp/pm3-preview/rules.conf\n5c838d6c600f456d8283807f622a659b35d5f78604b05eed1c308699ba6d8733  /tmp/pm3-preview/coverage.json\nOK rules=/tmp/pm3-preview/rules.conf cover=/tmp/pm3-preview/coverage.json\n=== rules ===\nBWG-HY2-JPTY-01|up|74.82.193.113|udp|34567\nBWG-HY2-JPTY-01|down|74.82.193.113|udp|34567\nBULK-LAX-GIA-01|up|154.36.139.155|tcp|2054\nBULK-LAX-GIA-01|down|154.36.139.155|tcp|2054\nBWG-VLESS-JPTY-01|up|74.82.193.113|tcp|443\nBWG-VLESS-JPTY-01|down|74.82.193.113|tcp|443\n=== coverage ===\n{\"generated_at\":\"2026-11-17 22:06:20+0800\",\"registered_rules\":6,\"proxy_nodes\":3,\"unresolved_names\":\"\"}\n",
+      "stderr_tail": ""
+    },
+    {
+      "step": "A_meter_dryrun",
+      "rc": 0,
+      "stdout_tail": "OK DELTA=0 HEALTH=degraded EVENTS=jump_missing DAY_TOTAL=0\nrc=3\n{\"schema\":3,\"meter_id\":\"rtr-a9bcba\",\"seq\":1,\"boot_id\":\"b3883a56-53ac-402f-af6f-5478316d1d03\",\"rules_sha\":\"e41e869ce2a8e2c8\",\"continuity_id\":\"init-b3883a56-53ac-402f-af6f-5478316d1d03\",\"prev_continuity\":\"none\",\"prev_epoch\":1794924381,\"day_key\":\"2026-11-17\",\"day_total\":0,\"day_first_at\":\"2026-11-17 22:06:21+0800\",\"endpoints\":{\"BWG-VLESS-JPTY-01\":0,\"BULK-LAX-GIA-01\":0,\"BWG-HY2-JPTY-01\":0}}\n\n{\"day_key\":\"2026-11-17\",\"total\":0,\"delta_last\":0,\"sampled_at\":\"2026-11-17 22:06:21+0800\",\"meter_id\":\"rtr-a9bcba\",\"seq\":1,\"health\":\"degraded\",\"partial\":false,\"events\":\"init_baseline\",\"read_fail_eps\":\"-\"}\n\n",
+      "stderr_tail": ""
+    },
+    {
+      "step": "B_backup_on_device",
+      "rc": 0,
+      "stdout_tail": "f70801b4e184488898a27829a522f7d7c322a37c74200b25ee4617cf99206b8c  /etc/routermgmt/backup-meter-v3-20261117/crontab.bak-20261117\n0b68569a7df603c160750407fe2f8eb3f1da4ed8c2f4a94e6859922e0fb4eef0  /etc/routermgmt/backup-meter-v3-20261117/proxy-meter-daily.json\n7deed3e44b811b0f677b85e47b16672ab4a775a25db9cb2da0e6d5d56649a562  /etc/routermgmt/backup-meter-v3-20261117/proxy-meter-rules.conf\ndb564193ac3e8f3f6fa24bf94bcd8e65224ab97c0d3eea2f24c59ca7b7f9924c  /etc/routermgmt/backup-meter-v3-20261117/proxy-meter-v2.json\n40b79770aab4d127baf6bf91f6d5a3e38709d4e05a53bddf04737e3d85b05a6a  /etc/routermgmt/backup-meter-v3-20261117/proxy-meter-v2.sh\nfe09735fd3137e797e61042733088572d4df99fa52ac3dfa073947877b837263  /etc/routermgmt/backup-meter-v3-20261117/proxy-meter.sh\nbf9f00d44d82631a5d96459518793fce8cdd8f4d6128cf744b385de9ecf7b289  /etc/routermgmt/backup-meter-v3-20261117/ratelimit-ctl\n",
+      "stderr_tail": ""
+    },
+    {
+      "step": "B_generate_rules",
+      "rc": 0,
+      "stdout_tail": "generated_at=2026-11-17 22:06:24+0800 registered_rules=6 proxy_nodes=3 unresolved=none\ne41e869ce2a8e2c824714c8a99dbb8ad49fc12fca02223a1ace9ca5e53105775  /etc/routermgmt/proxy-meter-rules-v3.conf\n84427f5a15766a71b82ef21f3a44523cc966eda6eb5880a63f0cb02f3cafe56b  /etc/routermgmt/proxy-meter-coverage-v3.json\nOK rules=/etc/routermgmt/proxy-meter-rules-v3.conf cover=/etc/routermgmt/proxy-meter-coverage-v3.json\n6 /etc/routermgmt/proxy-meter-rules-v3.conf\n",
+      "stderr_tail": ""
+    },
+    {
+      "step": "B_first_run",
+      "rc": 0,
+      "stdout_tail": "OK DELTA=0 HEALTH=ok EVENTS=- DAY_TOTAL=0\nrc=0\n{\"schema\":3,\"meter_id\":\"rtr-a9bcba\",\"seq\":1,\"boot_id\":\"b3883a56-53ac-402f-af6f-5478316d1d03\",\"rules_sha\":\"e41e869ce2a8e2c8\",\"continuity_id\":\"init-b3883a56-53ac-402f-af6f-5478316d1d03\",\"prev_continuity\":\"none\",\"prev_epoch\":1794924385,\"day_key\":\"2026-11-17\",\"day_total\":0,\"day_first_at\":\"2026-11-17 22:06:25+0800\",\"endpoints\":{\"BWG-VLESS-JPTY-01\":0,\"BULK-LAX-GIA-01\":0,\"BWG-HY2-JPTY-01\":0}}\n\n{\"day_key\":\"2026-11-17\",\"total\":0,\"delta_last\":0,\"sampled_at\":\"2026-11-17 22:06:25+0800\",\"meter_id\":\"rtr-a9bcba\",\"seq\":1,\"health\":\"ok\",\"partial\":false,\"events\":\"init_baseline\",\"read_fail_eps\":\"-\"}\n",
+      "stderr_tail": ""
+    },
+    {
+      "step": "B_cron_switch",
+      "rc": 0,
+      "stdout_tail": "*/5 * * * * /etc/routermgmt/netprobe.sh #routermgmt-netprobe\n* * * * * /etc/routermgmt/mgmt-port-discovery.sh #mgmt-port\n*/5 * * * * /etc/routermgmt/connlog.sh #routermgmt-connlog\n* * * * * /etc/routermgmt/self-heal.sh #self-heal\n0 0 * * * /sbin/reboot #routermgmt-reboot\n# 20261117 v3 迁移: v2 停用保留回退\n#*/5 * * * * /etc/routermgmt/proxy-meter-v2.sh #proxy-meter\n*/5 * * * * /etc/routermgmt/proxy-meter-v3.sh #proxy-meter\n",
+      "stderr_tail": ""
+    },
+    {
+      "step": "B_controller_refs_recheck",
+      "rc": 0,
+      "stdout_tail": "no-refs\nno-process\n",
+      "stderr_tail": ""
+    },
+    {
+      "step": "B_controller_contained",
+      "rc": 0,
+      "stdout_tail": "----------    1 root     root          8292 Nov 17 11:04 /etc/routermgmt/ratelimit-ctl.disabled-20261117\n",
+      "stderr_tail": ""
+    },
+    {
+      "step": "B_post_check_r2",
+      "rc": 0,
+      "stdout_tail": "PROXY=AUTO\nUS-MEDIA=NODE-PICK\nNODE-PICK=BWG-HY2-JPTY-01\nAUTO=NODE-PICK\n0\n13\n13\n",
+      "stderr_tail": ""
+    },
+    {
+      "step": "B_post_check_gz_hb",
+      "rc": 1,
+      "stdout_tail": "",
+      "stderr_tail": "ERROR:  column \"agent_version\" does not exist\nLINE 1: SELECT last_heartbeat_at, agent_version FROM devices WHERE i...\n                                  ^\n"
+    }
+  ],
+  "first_state": "OK DELTA=0 HEALTH=ok EVENTS=- DAY_TOTAL=0\nrc=0\n{\"schema\":3,\"meter_id\":\"rtr-a9bcba\",\"seq\":1,\"boot_id\":\"b3883a56-53ac-402f-af6f-5478316d1d03\",\"rules_sha\":\"e41e869ce2a8e2c8\",\"continuity_id\":\"init-b3883a56-53ac-402f-af6f-5478316d1d03\",\"prev_continuity\":\"none\",\"prev_epoch\":1794924385,\"day_key\":\"2026-11-17\",\"day_total\":0,\"day_first_at\":\"2026-11-17 22:06:25+0800\",\"endpoints\":{\"BWG-VLESS-JPTY-01\":0,\"BULK-LAX-GIA-01\":0,\"BWG-HY2-JPTY-01\":0}}\n\n{\"day_key\":\"2026-11-17\",\"total\":0,\"delta_last\":0,\"sampled_at\":\"2026-11-17 22:06:25+0800\",\"meter_id\":\"rtr-a9bcba\",\"seq\":1,\"health\":\"ok\",\"partial\":false,\"events\":\"init_baseline\",\"read_fail_eps\":\"-\"}\n",
+  "finished_phase_b": "2026-11-17T22:06:24+08:00"
+}

@@ -1,0 +1,44 @@
+#!/bin/sh
+# state: ipt-state.json {"chains":{NAME:[{spec,comment,bytes}]},"jumps":bool}
+D=$(dirname "$0")
+ST="$D/../ipt-state.json"
+log(){ printf 'iptables %s\n' "$*" >> "$D/../mock-iptables.log"; }
+log "$@"
+python3 - "$ST" "$@" <<'PY'
+import json, sys
+st_path, args = sys.argv[1], sys.argv[2:]
+try: st = json.load(open(st_path))
+except Exception: st = {"chains": {}, "jumps": True}
+def save(): json.dump(st, open(st_path, "w"))
+if args[:1] == ["-N"]:
+    st["chains"].setdefault(args[1], []); save(); sys.exit(0)
+if "-L" in args:
+    ch = args[args.index("-L") + 1]
+    if ch in st.get("fail_L", []):
+        sys.exit(1)                     # 模拟 iptables -L 整链读失败
+    print("Chain %s (0 references)" % ch)
+    print(" pkts bytes target prot opt in out source destination")
+    for r in st["chains"].get(ch, []):
+        print("%d %d RETURN tcp -- * * 0.0.0.0/0 0.0.0.0/0 /* %s */" % (r["bytes"]//10 or 1, r["bytes"], r["comment"]))
+    sys.exit(0)
+if args[:1] == ["-S"] and len(args) == 1:
+    print("-P INPUT ACCEPT"); print("-P OUTPUT ACCEPT")
+    if st.get("jumps"):
+        for ch in st.get("chains", {}):
+            print("-A OUTPUT -j %s" % ch); print("-A INPUT -j %s" % ch)
+    for ch, rules in st["chains"].items():
+        for r in rules: print("-A %s %s" % (ch, r["spec"]))
+    sys.exit(0)
+if args[:1] == ["-S"]:
+    ch = args[1]
+    print("-N %s" % ch)
+    for r in st["chains"].get(ch, []): print("-A %s %s" % (ch, r["spec"]))
+    sys.exit(0)
+if args[:1] == ["-A"]:
+    ch, rest = args[1], args[2:]
+    comment = rest[rest.index("--comment") + 1]
+    spec = " ".join(rest)
+    st["chains"].setdefault(ch, []).append({"spec": spec, "comment": comment, "bytes": 0})
+    save(); sys.exit(0)
+sys.exit(0)
+PY

@@ -1,29 +1,34 @@
 # 跨 AI 协作入口
 
-适用于 ZCode、Codex、Claude Code、Grok 及使用 GPT、Kimi、GLM、Grok 等模型的会话。**模型名称不决定事实或授权**；每个新会话都从本地文件与本轮用户要求重新确认。修订：2026-10-12。目录地图在 `docs/INDEX.md`。
+适用于 Codex、Claude Code、Gemini、Cursor、Windsurf、Cline、Copilot、ZCode（GLM/Kimi/Grok）等所有工具与模型。**模型名称不决定事实或授权**；唯一权威协作规则在根目录 [AGENTS.md](../AGENTS.md)。修订：2026-11-21。
 
-## 启动与资料定位
+## 1. 启动与防冲突（所有工具统一）
 
-1. 在 `F:\vps` 工作。先读 `README.md`、`AGENTS.md`、`docs/current/当前状态.md` 顶部，再读 `docs/INDEX.md`；只按任务补充相关计划、手册、报告与源码。没有自动加载入口能力的工具，使用下方启动提示词。
-2. 本轮用户要求决定任务范围；`AGENTS.md` 给出工作边界；`docs/current/当前状态.md` 是唯一持续维护的现网摘要；`docs/plans/` 记录任务进度；`docs/reports/` 保留时点证据。旧计划、会话和 AI 回答仅作线索。遇到冲突列明来源、时间与验证方式，不用文件修改时间直接裁决。
-3. 查文件先用 `docs/INDEX.md`。不要整库载入会话、备份、固件、`node_modules` 或凭据。不要把含密材料粘贴给网页版模型；只使用经过脱敏核查的必要片段。
+1. 在 `F:\vps` 工作，先完整阅读根目录 `AGENTS.md`。
+2. 开工第一步执行：
+   ```bash
+   python scripts/session_guard.py status
+   git status --short
+   ```
+3. 按 `AGENTS.md` §1 任务等级（**T0 纯本地只读 / T1 本地修改 / T2 现网诊断或变更**）读取对应上下文：
+   - 稳态架构、设备表、未决项与 14 条禁令 → [docs/current/现势总览.md](current/现势总览.md)
+   - 近 30 天运行流水 → [docs/current/当前状态.md](current/当前状态.md) 顶部 3 条
+   - 全仓资料地图 → [docs/INDEX.md](INDEX.md)
+4. 写操作前按标准 `scope` 申请锁（`gz-prod`、`device:<id>`、`server:<name>`、`code:<module>`、`docs`），严禁抢占或代解他人锁，收尾务必解锁。
 
-## 可复制的启动提示词
+## 2. 可复制的通用启动提示词（用于不支持自动加载的工具）
 
-> 你在 `F:\vps` 工作。先阅读 `README.md`、`AGENTS.md`、`docs/current/当前状态.md` 顶部和 `docs/INDEX.md`，然后只读取本任务相关文件。用户本轮要求是：**〔在此填写任务与授权范围〕**。请区分本次实测、历史记录、源码推断和待验证项；先检查工作区已有改动，保留其他会话的修改。只读任务不运行可能写入生产环境的脚本或 API。处理完后按照 `docs/plans/AI协作交接规范.md` 记录可核验的结果、未验证项和下一步；不要记录或输出凭证。
+> 你在 `F:\vps` 工作。先阅读 `AGENTS.md`，再运行 `python scripts/session_guard.py status` 和 `git status --short`。按 `AGENTS.md` §1 任务等级按需读取 `docs/current/现势总览.md` 与 `docs/current/当前状态.md` 顶部 3 条，不要整库遍历 `node_modules`/固件/备份/凭证。用户本轮要求是：**〔在此填写具体任务与授权范围〕**。请严格遵守 `AGENTS.md` 中的三色授权边界、生产红线、3 次失败熔断与脱敏规则；保留其他会话的未提交改动；新建文件必须按 `AGENTS.md` §5 落位命名，若发现用户新建未归位文书请按规范提示或协助归档；交付时按 `AGENTS.md` §6 输出可核验四要素，有变更则完成收尾闭环并释放本人锁。
 
-## 多工具交接
+## 3. 各工具自动入口映射
 
-- 开始前查看 `git status --short`、相关文件最新段落和 [交接规范](plans/AI协作交接规范.md)，确认是否有人同时修改；同一文件由一个会话负责，交叉修改先协调。Git 状态只是本机状态，不代表其他 AI 已完成任务。
-- 过程中的**事实**写到相应执行记录，并给出采集时间与证据；仅经验证的现网变化更新 `current` 顶部。最后给用户的交接文字按“完成、证据/验证、未验证或阻塞、下一条精确动作”组织。
-- 需要移档时，先查引用与消费者，再记录旧新路径、SHA-256，避免覆盖；历史原文保持时点属性。跨工具消息和交接记录不授予新的生产变更权限。
+| 工具 | 项目自动入口 | 维护方式 |
+|---|---|---|
+| Codex / 支持 AGENTS 规范工具 | 根目录 `AGENTS.md` | **唯一权威真源** |
+| Claude Code / Gemini / Cursor / Windsurf / Cline / GitHub Copilot | `CLAUDE.md`、`GEMINI.md`、`.cursorrules`、`.windsurfrules`、`.clinerules`、`.github/copilot-instructions.md` | **6 份完全一致的极简指针**，只重定向 `AGENTS.md` 与 `session_guard.py`，不另行夹带差异化规则 |
+| ZCode / 网页模型 | 提供 `F:\vps` 目录并附上方启动提示词 | 网页模型严禁粘贴未脱敏材料 |
 
-## 各工具入口
+## 4. 交接与多方评审
 
-| 工具/使用方式 | 项目入口 |
-|---|---|
-| Codex 等识别 `AGENTS.md` 的工具 | 根目录 `AGENTS.md`；仍按启动阅读顺序核对 |
-| Claude Code | 根目录 `CLAUDE.md` 作为简短指针，再读共用文件 |
-| ZCode、Grok、网页 GPT/Kimi/GLM 等 | 在可访问本地文件的会话中提供工作目录并使用上述启动提示词；无法访问本地文件时只提供经检查、脱敏的任务片段 |
-
-工具的自动读取行为依版本和配置而变；实际进入会话时检查它读到了哪些文件。
+- 交接格式细则见 [docs/plans/AI协作交接规范.md](plans/AI协作交接规范.md)。
+- 多模型交叉评审/变更核查请仅在用户明确要求时调用 `multi-review` / `multi-verify` 技能（脏工作区必须按本轮白名单文件生成 diff，避免混入他人未提交改动）。

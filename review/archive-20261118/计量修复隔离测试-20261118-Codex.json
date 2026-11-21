@@ -1,0 +1,54 @@
+{
+  "at": "2026-11-18T22:27:45+08:00",
+  "local_only": true,
+  "kernel_calls_mocked": true,
+  "source_sha256": "e9879454d449299b06e2e6ff4006bb46bbe479d5da701a83d37284dc5fda4ada",
+  "generator_sha256": "2d8fe9618d2213092f80e555f9972214f8ec14685146b49173be704f78c667f2",
+  "fixture": "F:\\vps\\backups\\meter-repair-5n1ivfhg",
+  "checks": [
+    {
+      "name": "up+down deltas 130,100; total230",
+      "pass": true
+    },
+    {
+      "name": "same tag is represented by independent direction keys",
+      "pass": true
+    },
+    {
+      "name": "repeated sampling never adds duplicate rules",
+      "pass": true
+    },
+    {
+      "name": "new partial baseline remains partial and quota stays disabled",
+      "pass": true
+    },
+    {
+      "name": "absent counter hooks restored once",
+      "pass": true
+    },
+    {
+      "name": "3GiB per direction adds to exact6GiB without saturation",
+      "pass": true
+    },
+    {
+      "name": "migration preserves historical lower bound and counts only new deltas",
+      "pass": true
+    },
+    {
+      "name": "legacy migration explicitly degraded",
+      "pass": true
+    },
+    {
+      "name": "provider zero-indent records parsed; endpoint tuples deduplicated",
+      "pass": true
+    },
+    {
+      "name": "protocol parsed after server/port before emitting",
+      "pass": true
+    },
+    {
+      "name": "unresolved provider names retained including spaces",
+      "pass": true
+    }
+  ]
+}

@@ -1,0 +1,187 @@
+{
+  "started": "2026-11-18T22:27:40+08:00",
+  "operation": "cleanup-malformed-tests",
+  "devices": {
+    "R1": {
+      "removed_exact_malformed_test_pids": [],
+      "remaining": [
+        {
+          "pid": 5090,
+          "argv": [
+            "/usr/bin/mihomo",
+            "-d",
+            "/etc/mihomo",
+            "-f",
+            "/etc/mihomo/config.yaml"
+          ],
+          "start": "2199"
+        }
+      ],
+      "proxy_health": {
+        "rc": 0,
+        "stdout": "204",
+        "stderr": ""
+      }
+    },
+    "R2": {
+      "removed_exact_malformed_test_pids": [
+        30825
+      ],
+      "remaining": [
+        {
+          "pid": 15617,
+          "argv": [
+            "/usr/bin/mihomo",
+            "-d",
+            "/etc/mihomo",
+            "-f",
+            "/etc/mihomo/config.yaml"
+          ],
+          "start": "8085020"
+        }
+      ],
+      "proxy_health": {
+        "rc": 7,
+        "stdout": "000",
+        "stderr": "curl: (7) Failed to connect to 127.0.0.1 port 7890 after 0 ms: Connection refused"
+      }
+    },
+    "R3": {
+      "removed_exact_malformed_test_pids": [
+        24360
+      ],
+      "remaining": [
+        {
+          "pid": 10714,
+          "argv": [
+            "/usr/bin/mihomo",
+            "-d",
+            "/etc/mihomo",
+            "-f",
+            "/etc/mihomo/config.yaml"
+          ],
+          "start": "3597619"
+        }
+      ],
+      "proxy_health": {
+        "rc": 0,
+        "stdout": "204",
+        "stderr": ""
+      }
+    },
+    "R4": {
+      "removed_exact_malformed_test_pids": [],
+      "remaining": [
+        {
+          "pid": 13157,
+          "argv": [
+            "/usr/bin/mihomo",
+            "-d",
+            "/etc/mihomo",
+            "-f",
+            "/etc/mihomo/config.yaml"
+          ],
+          "start": "3346578"
+        }
+      ],
+      "proxy_health": {
+        "rc": 0,
+        "stdout": "204",
+        "stderr": ""
+      }
+    },
+    "R5": {
+      "removed_exact_malformed_test_pids": [
+        7553
+      ],
+      "remaining": [
+        {
+          "pid": 3477,
+          "argv": [
+            "/usr/bin/mihomo",
+            "-d",
+            "/etc/mihomo",
+            "-f",
+            "/etc/mihomo/config.yaml"
+          ],
+          "start": "8086487"
+        }
+      ],
+      "proxy_health": {
+        "rc": 7,
+        "stdout": "000",
+        "stderr": "curl: (7) Failed to connect to 127.0.0.1 port 7890 after 0 ms: Connection refused"
+      }
+    },
+    "R6": {
+      "removed_exact_malformed_test_pids": [
+        4901
+      ],
+      "remaining": [
+        {
+          "pid": 30075,
+          "argv": [
+            "/usr/bin/mihomo",
+            "-d",
+            "/etc/mihomo",
+            "-f",
+            "/etc/mihomo/config.yaml"
+          ],
+          "start": "8086455"
+        }
+      ],
+      "proxy_health": {
+        "rc": 7,
+        "stdout": "000",
+        "stderr": "curl: (7) Failed to connect to 127.0.0.1 port 7890 after 0 ms: Connection refused"
+      }
+    },
+    "R8": {
+      "removed_exact_malformed_test_pids": [
+        10853
+      ],
+      "remaining": [
+        {
+          "pid": 23962,
+          "argv": [
+            "/usr/bin/mihomo",
+            "-d",
+            "/etc/mihomo",
+            "-f",
+            "/etc/mihomo/config.yaml"
+          ],
+          "start": "8087552"
+        }
+      ],
+      "proxy_health": {
+        "rc": 7,
+        "stdout": "000",
+        "stderr": "curl: (7) Failed to connect to 127.0.0.1 port 7890 after 0 ms: Connection refused"
+      }
+    },
+    "R9": {
+      "removed_exact_malformed_test_pids": [
+        20705
+      ],
+      "remaining": [
+        {
+          "pid": 27458,
+          "argv": [
+            "/usr/bin/mihomo",
+            "-d",
+            "/etc/mihomo",
+            "-f",
+            "/etc/mihomo/config.yaml"
+          ],
+          "start": "8087924"
+        }
+      ],
+      "proxy_health": {
+        "rc": 7,
+        "stdout": "000",
+        "stderr": "curl: (7) Failed to connect to 127.0.0.1 port 7890 after 0 ms: Connection refused"
+      }
+    }
+  },
+  "finished": "2026-11-18T22:28:16+08:00"
+}

@@ -1,0 +1,37 @@
+{
+  "now": "2026-11-18T22:55:11+08:00",
+  "registry": "F:\\vps\\backups\\session-guard-final-tests\\sg-test-z5f7afvs\\locks\\registry.json",
+  "lock_count": 0,
+  "locks": [],
+  "git": {
+    "branch": "master",
+    "head": "600ada42524b21f4d9950340fc2ea7491ef215c5",
+    "dirty_count": 67
+  },
+  "overview_doc": "docs/current/一周重大变更与现势总览-20261025_1031.md",
+  "status_doc": "docs/current/当前状态.md",
+  "note": "本地协作锁不阻止不调用本工具的会话；生产动作前仍需对拍远端状态。"
+}
+LOCKED lock-b9c03dad2552 scope=server:HK
+unlock: python scripts/session_guard.py unlock --lock-id lock-b9c03dad2552 --session sess-C
+UNLOCKED lock-5857dac5a5e6 (was scope=gz-prod)
+  PASS T1 status缺文件只读零写 
+  PASS T2 双进程争用仅一方成功 [3, 0]
+  PASS T2b 注册表恰一把锁 
+  PASS T3 不同scope可并存 
+  PASS T3b 层级scope冲突被拒 
+  PASS T4 过期锁不抢占仍拒新锁且标STALE 
+  PASS T5 非所有者解锁被拒 
+  PASS T5c 省略所有者不能解锁 
+  PASS T5b 所有者解锁成功 
+  PASS T6 损坏注册表拒写不清空 
+  PASS T7 未知锁ID报4 
+  PASS T8 真实注册表字节未被夹具触碰 
+self-test: 12/12 PASS
+
+ERROR: scope 冲突：gz-prod（active） 由 sess-p2 @ DESKTOP-J4OGV5M pid=25332 持有
+ERROR: scope 冲突：server:HK（STALE） 由 sess-C @ DESKTOP-J4OGV5M pid=37736 持有 [STALE>4h，但仍不自动抢占——联系所有者或人工审计]
+ERROR: 非所有者（lock 属 sess-p2，你声明 sess-其他会话）；跨会话回收需人工审计后在注册表中处理
+ERROR: --lock-id 与 --session 必填（不得省略所有者校验）
+ERROR: 注册表损坏（拒绝写入，人工检查 F:\vps\backups\session-guard-final-tests\sg-test-z5f7afvs\locks\registry.json）: Expecting property name enclosed in double quotes: line 1 column 3 (char 2)
+ERROR: 锁不存在或已解除: lock-nonexist

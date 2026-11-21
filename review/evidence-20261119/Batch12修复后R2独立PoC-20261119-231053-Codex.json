@@ -1,0 +1,114 @@
+{
+  "started": "2026-11-19T23:10:53.773082+08:00",
+  "device": "R2",
+  "production_config_touched": false,
+  "counter_scope": "HK dedicated HTTP port; BWG HY2 to R2 public IPv4 (includes positive background upper bound)",
+  "work": "/tmp/qos-poc-Codex-20261119-231053",
+  "server_dir": "/tmp/qos-source-Codex-20261119-231053",
+  "phases": {
+    "release": {
+      "same_connection_release": {
+        "command_seconds": 0.0014974520017858595,
+        "payload_recovery_seconds": 0.02196342901152093,
+        "bytes": 524288,
+        "waiting_before_release": true,
+        "same_curl_pid": 24882
+      },
+      "restart_lock_preserved": true,
+      "last_payload": {
+        "rc": 0,
+        "bytes": 524288,
+        "sha256": "33bc8aab40703678c3ebe94d2dd8f2afff285dd901f9234e841e4679f8204fd5",
+        "expected_sha256": "33bc8aab40703678c3ebe94d2dd8f2afff285dd901f9234e841e4679f8204fd5",
+        "seconds": 3.722428275999846,
+        "bytes_per_second": 140845.69563913922,
+        "http": [
+          "200"
+        ]
+      },
+      "baseline": {
+        "rc": 0,
+        "bytes": 524288,
+        "sha256": "33bc8aab40703678c3ebe94d2dd8f2afff285dd901f9234e841e4679f8204fd5",
+        "expected_sha256": "33bc8aab40703678c3ebe94d2dd8f2afff285dd901f9234e841e4679f8204fd5",
+        "seconds": 3.722428275999846,
+        "bytes_per_second": 140845.69563913922,
+        "http": [
+          "200"
+        ]
+      },
+      "ok": true
+    },
+    "resources": {
+      "sampled_peaks": {
+        "gate": {
+          "rss_kib_peak": 3988,
+          "fd_peak": 25,
+          "one_core_cpu_percent_peak": 3.902175321043495
+        },
+        "mihomo": {
+          "rss_kib_peak": 41328,
+          "fd_peak": 18,
+          "one_core_cpu_percent_peak": 19.39078737778385
+        }
+      },
+      "parallel_connections": 8,
+      "sample_seconds": 10,
+      "post_cancel_gate_stats": {
+        "elephant": {
+          "down": 0,
+          "up": 0
+        },
+        "foreign_download": {
+          "down": 82500,
+          "up": 448
+        },
+        "video": {
+          "down": 82500,
+          "up": 448
+        }
+      },
+      "ok": true
+    }
+  },
+  "before": {
+    "rc": 0,
+    "stdout": "2026-11-19T23:10:57+08:00\n4880\n73e830e5085eb7dd2b80bbde5bd25efbb9ea19141d798cb917086ba54c584674  /etc/mihomo/config.yaml\n6519a8b4e28e38f0a12932444626218d7f92bd95950a813421cca04cca11dd27  /etc/config/dhcp\n7ed820da9a00b05438f107d52b63cfc5ad3a5f7c4170ad9b4f543503678fd61f  /etc/routermgmt/tunnel.conf",
+    "stderr": ""
+  },
+  "mihomo_syntax": {
+    "rc": 0,
+    "stdout": "time=\"2026-11-19T15:11:29.287260879Z\" level=info msg=\"Start initial configuration in progress\"\ntime=\"2026-11-19T15:11:29.371932335Z\" level=info msg=\"Geodata Loader mode: memconservative\"\ntime=\"2026-11-19T15:11:29.372044825Z\" level=info msg=\"Geosite Matcher implementation: succinct\"\ntime=\"2026-11-19T15:11:29.372243875Z\" level=info msg=\"Initial configuration complete, total time: 84ms\"\nconfiguration file /tmp/qos-poc-Codex-20261119-231053/mihomo.yaml test is successful",
+    "stderr": ""
+  },
+  "r2_public_ipv4_sha256": "fc10dfb76bb6c522910a0b12f4529b2b7f10767b2c096cc7c319d917f378e8a4",
+  "result": "PASS_SELECTED_POC_PHASES",
+  "cleanup": {
+    "HK_counter": {
+      "rc": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    "BWG_counter": {
+      "rc": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    "R2": {
+      "rc": 0,
+      "stdout": "OWNED_POC_CLEANED",
+      "stderr": ""
+    },
+    "HK": {
+      "rc": 0,
+      "stdout": "OWNED_POC_CLEANED",
+      "stderr": ""
+    }
+  },
+  "after": {
+    "rc": 0,
+    "stdout": "2026-11-19T23:12:03+08:00\n4880\n73e830e5085eb7dd2b80bbde5bd25efbb9ea19141d798cb917086ba54c584674  /etc/mihomo/config.yaml\n6519a8b4e28e38f0a12932444626218d7f92bd95950a813421cca04cca11dd27  /etc/config/dhcp\n7ed820da9a00b05438f107d52b63cfc5ad3a5f7c4170ad9b4f543503678fd61f  /etc/routermgmt/tunnel.conf\ng204=204 time=0.792760",
+    "stderr": ""
+  },
+  "finished": "2026-11-19T23:12:04.048271+08:00"
+}

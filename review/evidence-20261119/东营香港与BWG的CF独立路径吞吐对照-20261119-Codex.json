@@ -1,0 +1,45 @@
+{
+  "started": "2026-11-19T16:32:44+08:00",
+  "production_writes": false,
+  "source": "R9-origin TCP channels; independent TLS/WS/VLESS clients, formal selections unchanged",
+  "before": {
+    "rc": 0,
+    "stdout": "1eb54b96092fd96f449d4360a7c805418d468275b8c6ec897f2bffd83a101ebb  /etc/mihomo/config.yaml\n4086",
+    "stderr": ""
+  },
+  "results": [
+    {
+      "name": "CF2D-HK-01",
+      "edge": "162.159.135.42",
+      "domain": "hk.6849271.xyz",
+      "requested_bytes": 262144,
+      "handshake_s": 2.508,
+      "http_status": 200,
+      "bytes": 262144,
+      "body_s": 2.1941,
+      "total_s": 4.7021,
+      "payload_Bps": 119477,
+      "passed": true
+    },
+    {
+      "name": "CF2D-BWG-01",
+      "edge": "162.159.135.42",
+      "domain": "usbwg.6849271.xyz",
+      "requested_bytes": 262144,
+      "handshake_s": 2.744,
+      "http_status": 200,
+      "bytes": 262144,
+      "body_s": 2.0568,
+      "total_s": 4.8008,
+      "payload_Bps": 127452,
+      "passed": true
+    }
+  ],
+  "after": {
+    "rc": 0,
+    "stdout": "1eb54b96092fd96f449d4360a7c805418d468275b8c6ec897f2bffd83a101ebb  /etc/mihomo/config.yaml\n4086",
+    "stderr": ""
+  },
+  "formal_config_pid_unchanged": true,
+  "finished": "2026-11-19T16:32:56+08:00"
+}

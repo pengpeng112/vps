@@ -1,0 +1,64 @@
+{
+  "checked_local": "2026-11-18T15:28:54+08:00",
+  "documents": 10,
+  "json_blocks_parsed": 2,
+  "relative_links_checked": 12,
+  "original_snapshots_verified": 8,
+  "strict_tls_ws_cases_passed": 4,
+  "diagnostic_source_compiles": true,
+  "exact_controlled_secret_scan_files": 12,
+  "issues": [],
+  "production_changes": false,
+  "files": [
+    {
+      "path": "docs/plans/governance-20261118/00-全局诊断与总体治理蓝图.md",
+      "sha256": "983aa94dba8d31458b60fa7be22bb5650d28b8e90ac48695f7378a296b98ee56",
+      "lines": 58
+    },
+    {
+      "path": "docs/plans/governance-20261118/01-文件整理与多AI防冲突启动治理计划.md",
+      "sha256": "74fefb5f5a79d8942afdf9aa7d4e9665db3127b655a559a4aeb162b636abcc80",
+      "lines": 59
+    },
+    {
+      "path": "docs/plans/governance-20261118/02-远程控制绝对稳定加固执行计划.md",
+      "sha256": "2b2207442c1af7d1b387cccc41fc87d68e7738847d1855b4493c3a3a08ba117e",
+      "lines": 58
+    },
+    {
+      "path": "docs/plans/governance-20261118/03-国内优先分流与DNS根治执行计划.md",
+      "sha256": "a3d6513a32558b02bea1d0a92d9666bd01dcba64676d8743ba6cdb4c7d08b12e",
+      "lines": 71
+    },
+    {
+      "path": "docs/plans/governance-20261118/04-单路由器超3GB国外下载视频限速与解封执行计划.md",
+      "sha256": "f30b42be44dcca1a1f272ee9cc34685825eda2e5c9b6146b72b748819ff85dc0",
+      "lines": 97
+    },
+    {
+      "path": "docs/plans/governance-20261118/05-抗封锁加固与新协议扩展执行计划.md",
+      "sha256": "9a211e212f04fd56d8ff9ebe8e36a426f0954c7a0d4f4ce9f71fc92ae6fac5b6",
+      "lines": 60
+    },
+    {
+      "path": "docs/plans/governance-20261118/06-备用域名购买与Cloudflare绑定详细指南.md",
+      "sha256": "ac00d16999554e550a1c1223f42b5cb9e7bd8123e838e607f46299650140d7fe",
+      "lines": 169
+    },
+    {
+      "path": "docs/plans/governance-20261118/07-核查结论与执行验收总表.md",
+      "sha256": "100618e48fd25865446504a1e8c1faa2ba217a63c9ea4ff727ee6af5475d7753",
+      "lines": 73
+    },
+    {
+      "path": "docs/operations/Cloudflare多域名与源站应急切换台账-20261118.md",
+      "sha256": "eca3ab276c597f3261b632e3993a52d06d89ba4170474ad705cd2575aa8e62b8",
+      "lines": 75
+    },
+    {
+      "path": "docs/plans/治理计划核查与备用域名台账修订记录-20261118-Codex.md",
+      "sha256": "014113d2cc5eba7931dcaedacb11f9bf86d6f5a70a2b40480d27c9407149a46c",
+      "lines": 34
+    }
+  ]
+}

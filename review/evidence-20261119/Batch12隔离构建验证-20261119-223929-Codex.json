@@ -1,0 +1,15 @@
+{
+  "at": "2026-11-19T22:39:29.054899+08:00",
+  "cwd": "F:\\vps\\backups\\batch12-fix-20261119-221752\\build-tree",
+  "command": [
+    "python",
+    "scripts/build_gz_api.py",
+    "--check-only",
+    "--review-range",
+    "mgmt/backend/internal/clash/golden.yaml,mgmt/backend/internal/clash/template_test.go,scripts/build_gz_api.py"
+  ],
+  "rc": 1,
+  "stdout": "[1/5] LF 检查 PASS（golden + 10 迁移）\nFAIL: 存在未审核范围外的工作树改动（先审核或用 --review-range 显式声明）：\n     M mgmt/backend/internal/db/migrations/0001_init.sql\n     M mgmt/backend/internal/db/migrations/0002_grants.sql\n     M mgmt/backend/internal/db/migrations/0003_device_policy.sql\n     M mgmt/backend/internal/db/migrations/0004_proxy_access_mode.sql\n     M mgmt/backend/internal/db/migrations/0005_device_online_term.sql\n     M mgmt/backend/internal/db/migrations/0006_remote_ssh_health.sql\n     M mgmt/backend/internal/db/migrations/0007_device_mac.sql\n     M mgmt/backend/internal/db/migrations/0008_device_traffic_alert.sql\n     M mgmt/backend/internal/db/migrations/0009_node_purpose.sql\n     M mgmt/backend/internal/db/migrations/0010_node_purpose_constraints.sql\n",
+  "stderr": "",
+  "production_deployed": false
+}

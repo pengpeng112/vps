@@ -1,0 +1,19 @@
+{
+  "started": "2026-11-18T22:35:01+08:00",
+  "devices": {
+    "R2": {
+      "handler_sha256": "71a5045e43c321c2a9e18599b79fb315e4c24b6ab5db3d86031a129994ebdcce",
+      "agent_only_restart": true
+    }
+  },
+  "firmware_changed": false,
+  "qos_enabled": false,
+  "node_patch": {
+    "id": 16,
+    "old_host": "104.18.32.7",
+    "new_host": "162.159.135.42",
+    "sni": "hk.6849271.xyz",
+    "primary_unchanged": true
+  },
+  "finished": "2026-11-18T22:35:09+08:00"
+}

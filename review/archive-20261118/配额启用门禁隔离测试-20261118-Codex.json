@@ -1,0 +1,62 @@
+{
+  "at": "2026-11-18T22:38:53+08:00",
+  "local_only": true,
+  "production_controller_executed": false,
+  "controller_sha": "aa518e0ee4e853d29ca908d390e6cf16a4664134e975bd716eeb54f0a1bf422f",
+  "tests": [
+    {
+      "case": "qualified",
+      "expected": true,
+      "actual": true,
+      "pass": true
+    },
+    {
+      "case": "partial",
+      "expected": false,
+      "actual": false,
+      "pass": true
+    },
+    {
+      "case": "observe-only",
+      "expected": false,
+      "actual": false,
+      "pass": true
+    },
+    {
+      "case": "coverage-incomplete",
+      "expected": false,
+      "actual": false,
+      "pass": true
+    },
+    {
+      "case": "stale",
+      "expected": false,
+      "actual": false,
+      "pass": true
+    },
+    {
+      "case": "other-device",
+      "expected": false,
+      "actual": false,
+      "pass": true
+    },
+    {
+      "case": "negative-total",
+      "expected": false,
+      "actual": false,
+      "pass": true
+    },
+    {
+      "case": "threshold-3221225471",
+      "expected_rc": 1,
+      "actual_rc": 1,
+      "pass": true
+    },
+    {
+      "case": "threshold-3221225472",
+      "expected_rc": 0,
+      "actual_rc": 0,
+      "pass": true
+    }
+  ]
+}

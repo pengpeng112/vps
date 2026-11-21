@@ -1,0 +1,70 @@
+{
+  "started": "2026-11-19T22:45:07.378607+08:00",
+  "scope": "R2 observe meter only",
+  "stage": "/tmp/batch12-meter-20261119-224507",
+  "backup": "/etc/routermgmt/backup-meter-20261119-224507-Codex",
+  "phases": [],
+  "before": {
+    "rc": 0,
+    "stdout": "2026-11-19T22:45:09+08:00\n4880\n6519a8b4e28e38f0a12932444626218d7f92bd95950a813421cca04cca11dd27  /etc/config/dhcp\n7ed820da9a00b05438f107d52b63cfc5ad3a5f7c4170ad9b4f543503678fd61f  /etc/routermgmt/tunnel.conf\n73e830e5085eb7dd2b80bbde5bd25efbb9ea19141d798cb917086ba54c584674  /etc/mihomo/config.yaml",
+    "stderr": ""
+  },
+  "scripts": {
+    "proxy-meter-io.py": "1a8fcedafc385458aba8a813461eb678f6196ebf1048933d499a189448683a24",
+    "proxy-meter-endpoints.sh": "1a816c95d2ffbe96c0453003bdc66b20cc2c8fbc31c979ff1e6d9548a51a3c6d",
+    "proxy-meter-v3.sh": "33b2846a9e78912b89e193d2ebd348bd42f2992c755b7902bacb12cd807b19dc"
+  },
+  "syntax": {
+    "rc": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  "registry_rehearsal": {
+    "rc": 0,
+    "stdout": "OK registered_rules=14 unresolved_count=38 filtered_metadata=2 coverage_complete=False",
+    "stderr": ""
+  },
+  "coverage_summary": {
+    "coverage_schema": 2,
+    "registered_rules": 14,
+    "proxy_nodes": 7,
+    "filtered_metadata_count": 2,
+    "coverage_complete": false,
+    "unresolved_count": 38
+  },
+  "coverage_preflight": {
+    "rc": 0,
+    "stdout": "COVER_NOTE=ok\nACTIVE_UNCOVERED=none\nCOVER_COMPLETE=0",
+    "stderr": ""
+  },
+  "install": {
+    "rc": 0,
+    "stdout": "1a8fcedafc385458aba8a813461eb678f6196ebf1048933d499a189448683a24  /etc/routermgmt/proxy-meter-io.py.new\n1a816c95d2ffbe96c0453003bdc66b20cc2c8fbc31c979ff1e6d9548a51a3c6d  /etc/routermgmt/proxy-meter-endpoints.sh.new\n33b2846a9e78912b89e193d2ebd348bd42f2992c755b7902bacb12cd807b19dc  /etc/routermgmt/proxy-meter-v3.sh.new",
+    "stderr": ""
+  },
+  "first_sample": {
+    "rc": 0,
+    "stdout": "OK DELTA=8920 HEALTH=ok EVENTS=- DAY_TOTAL=888341714",
+    "stderr": ""
+  },
+  "state": {
+    "seq": 594,
+    "day_key": "2026-11-19",
+    "day_total": 888341714,
+    "prev_epoch": 1795099518,
+    "health": "ok",
+    "partial": true,
+    "quota_eligible": false,
+    "coverage_complete": false,
+    "crossday_unassigned": 0
+  },
+  "after": {
+    "rc": 0,
+    "stdout": "2026-11-19T22:45:21+08:00\n4880\n6519a8b4e28e38f0a12932444626218d7f92bd95950a813421cca04cca11dd27  /etc/config/dhcp\n7ed820da9a00b05438f107d52b63cfc5ad3a5f7c4170ad9b4f543503678fd61f  /etc/routermgmt/tunnel.conf\n73e830e5085eb7dd2b80bbde5bd25efbb9ea19141d798cb917086ba54c584674  /etc/mihomo/config.yaml",
+    "stderr": ""
+  },
+  "technical_observation_start": "2026-11-19T22:45:18+08:00",
+  "qualified_observation_start": null,
+  "result": "DEPLOYED_OBSERVE_HEALTHY_QUOTA_BLOCKED_COVERAGE",
+  "finished": "2026-11-19T22:45:20.990754+08:00"
+}

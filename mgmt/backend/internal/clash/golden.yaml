@@ -50,9 +50,12 @@ dns:
   nameserver:
     - https://doh.pub/dns-query
     - https://dns.alidns.com/dns-query
+  # 2026-11-18 fallback 国产化（governance-20261118/03 最小模板修复）：全舰队已实测
+  # MATCH,DIRECT 直连域名需本地可解析，国外 DoH 在强管控网络超时（9 台 PASS 验证）；
+  # 与现场 fleet-md-device.sh sed 结果一致，防止新发布覆盖现场修复。
   fallback:
-    - https://dns.google/dns-query
-    - https://cloudflare-dns.com/dns-query
+    - 223.5.5.5
+    - 119.29.29.29
   fallback-filter:
     geoip: true
     geoip-code: CN
@@ -72,6 +75,10 @@ dns:
     "geosite:cn,private":
       - https://doh.pub/dns-query
       - https://dns.alidns.com/dns-query
+    # 2026-11-18 国内业务域不在 geosite:cn 名单（MATCH,DIRECT 直连需本地可解析，
+    # fallback 国外 DNS 在强管控网络超时）：强制走国内 DNS（昌乐 bboluo 案例）
+    "bboluo.com":
+      - 223.5.5.5
 
 proxies:
 #{{NODE_PROXIES}}
@@ -134,12 +141,27 @@ proxy-groups:
     expected-status: 204
     proxies:
 #{{MEDIA_MEMBERS}}
+  # FOREIGN-DL（2026-11-19 Batch2，governance-20261119/02 Q2.1）：国外大下载专用组，
+  # 与 US-MEDIA（纯视频）互相独立。PoC 阶段成员=PROXY（全速走普通出口）；
+  # Batch3 enforce 时由平台渲染切 QOS-DL-GATE（60/100kbit 共享桶）。
+  # 只挂海外大下载精确子域；Steam/WindowsUpdate/Apple 等国内可直连更新仍归 DOWNLOAD=DIRECT。
+  - name: "FOREIGN-DL"
+    type: select
+    url: https://www.gstatic.com/generate_204
+    interval: 300
+    lazy: false
+    timeout: 4000
+    expected-status: 204
+    proxies:
+      - PROXY
 
 rules:
 #{{NODE_DIRECT_RULES}}
   # 2026-10-29 政企业务系统强制直连（昌乐实测：阿里云高防域名 GeoIP 误判海外→走代理→站点拒访）
   # 2026-11-17 昌乐/东营系业务站批量补录（GeoIP 新段未收录，兜底代理致站点拒访，同款机制）
+  # 2026-11-18 bboluo.com（用户确认国内站；注意需配合 dns.nameserver-policy 国内解析，见 dns 段）
   - DOMAIN-SUFFIX,istarshine.com,DIRECT
+  - DOMAIN-SUFFIX,bboluo.com,DIRECT
   - DOMAIN-SUFFIX,antdu.net,DIRECT
   - DOMAIN-SUFFIX,dlbrowser.com,DIRECT
   - DOMAIN-SUFFIX,qhupdate.com,DIRECT
@@ -189,9 +211,10 @@ rules:
   - GEOSITE,apple-cn,DIRECT
   # gstatic 资源域：google-cn 名单把它判 DIRECT，但办公网下 mihomo DNS fallback
   # 可能给出境外不可达答案（09-27 实测 SN-R1 得 142.251.12.94 直连超时），
-  # 强制走 PROXY 且必须先于 GEOSITE,google-cn 命中（统一优化 M02）
+  # 强制走代理且必须先于 GEOSITE,google-cn 命中（统一优化 M02）；
+  # dl.google.com 于 2026-11-19 Batch2 按 02-Q2.1 改入 FOREIGN-DL（海外大下载类，先于 google-cn 语义保持）
   - DOMAIN-SUFFIX,gstatic.com,PROXY
-  - DOMAIN-SUFFIX,dl.google.com,PROXY
+  - DOMAIN-SUFFIX,dl.google.com,FOREIGN-DL
   - GEOSITE,google-cn,DIRECT
   - GEOSITE,category-games@cn,DIRECT
   - GEOSITE,cn,DIRECT
@@ -209,7 +232,8 @@ rules:
   - DOMAIN-SUFFIX,dl.delivery.mp.microsoft.com,DOWNLOAD
   - DOMAIN-SUFFIX,swcdn.apple.com,DOWNLOAD
 
-  # 海外视频/流媒体/大文件 → 美西分流（2026-10-02 阶段1）：
+  # 海外视频 → US-MEDIA 纯视频分流（2026-10-02 阶段1；2026-11-19 Batch2 按 02-Q2.1 收窄为纯视频：
+  # Spotify/GitHub 静态资源移回 PROXY 不限速，海外大下载精确子域移入 FOREIGN-DL）。
   # GEOSITE 类别仅用设备 dat 中已确证存在的 youtube/netflix，其余手工域名（零启动风险）。
   # 顺序在国内直连段之后，不影响国内判定。
   - GEOSITE,youtube,US-MEDIA
@@ -233,11 +257,28 @@ rules:
   - DOMAIN-SUFFIX,tiktokcdn.com,US-MEDIA
   - DOMAIN-SUFFIX,tiktokv.com,US-MEDIA
   - DOMAIN-SUFFIX,byteoversea.com,US-MEDIA
-  - DOMAIN-SUFFIX,spotify.com,US-MEDIA
-  - DOMAIN-SUFFIX,scdn.co,US-MEDIA
-  - DOMAIN-SUFFIX,spotifycdn.com,US-MEDIA
-  - DOMAIN-SUFFIX,githubusercontent.com,US-MEDIA
-  - DOMAIN-SUFFIX,githubassets.com,US-MEDIA
+
+  # FOREIGN-DL（2026-11-19 Batch2，Q2.1 精确表）：明确走国外的安装包/仓库发布/网盘下载。
+  # 必须先于 githubusercontent.com 的 PROXY 兜底（精确子域优先命中）。
+  - DOMAIN-SUFFIX,objects.githubusercontent.com,FOREIGN-DL
+  - DOMAIN-SUFFIX,release-assets.githubusercontent.com,FOREIGN-DL
+  - DOMAIN-SUFFIX,codeload.github.com,FOREIGN-DL
+  - DOMAIN-SUFFIX,gvt1.com,FOREIGN-DL
+  - DOMAIN-SUFFIX,huggingface.co,FOREIGN-DL
+  - DOMAIN-SUFFIX,cdn-lfs.huggingface.co,FOREIGN-DL
+  - DOMAIN-SUFFIX,civitai.com,FOREIGN-DL
+  - DOMAIN-SUFFIX,mega.nz,FOREIGN-DL
+  - DOMAIN-SUFFIX,dropboxusercontent.com,FOREIGN-DL
+  - DOMAIN-SUFFIX,mediafire.com,FOREIGN-DL
+  - DOMAIN-SUFFIX,cdn-telegram.org,FOREIGN-DL
+
+  # 音乐（Spotify）与 GitHub 网页/静态资源 → 普通 PROXY（Q2.1：永不限速，防误伤网页）
+  - DOMAIN-SUFFIX,spotify.com,PROXY
+  - DOMAIN-SUFFIX,scdn.co,PROXY
+  - DOMAIN-SUFFIX,spotifycdn.com,PROXY
+  - DOMAIN-SUFFIX,githubassets.com,PROXY
+  - DOMAIN-SUFFIX,raw.githubusercontent.com,PROXY
+  - DOMAIN-SUFFIX,githubusercontent.com,PROXY
 
   - AND,((NETWORK,UDP),(DST-PORT,443)),REJECT
   # 2026-11-17 兜底反转（用户拍板）：业务画像国内为主，未命中名单一律直连国内，

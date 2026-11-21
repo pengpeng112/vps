@@ -1,0 +1,46 @@
+{
+  "snapshot_directory": "F:\\vps\\backups\\governance-pre-codex-review-20261118-150632",
+  "created_local": "2026-11-18T15:06:32+08:00",
+  "files": [
+    {
+      "path": "docs/plans/governance-20261118/00-全局诊断与总体治理蓝图.md",
+      "sha256": "544e61b3fe1e2ed34490886e6b07a152ac5d868c9e0c2b61e9db516fbd6f0877",
+      "bytes": 6218
+    },
+    {
+      "path": "docs/plans/governance-20261118/01-文件整理与多AI防冲突启动治理计划.md",
+      "sha256": "dff0f4009ea92af5fac7bb0f585e9f0dad493c5282d080a1a385d65bd26cfe85",
+      "bytes": 16827
+    },
+    {
+      "path": "docs/plans/governance-20261118/02-远程控制绝对稳定加固执行计划.md",
+      "sha256": "0abae48fb88b57903f95171f71bd55d291bf7c2a1aa8f96612c856f6f89e38ff",
+      "bytes": 8918
+    },
+    {
+      "path": "docs/plans/governance-20261118/03-国内优先分流与DNS根治执行计划.md",
+      "sha256": "db0ddc7c4e20de82ed5c464005d903b9a144cd6f7f4fbf3e9268302af45a67a9",
+      "bytes": 8392
+    },
+    {
+      "path": "docs/plans/governance-20261118/04-单路由器超3GB国外下载视频限速与解封执行计划.md",
+      "sha256": "d5609b904f9ad265f9187a5533e8826cc56dd65c18db24781d3fda4c308eecc4",
+      "bytes": 12234
+    },
+    {
+      "path": "docs/plans/governance-20261118/05-抗封锁加固与新协议扩展执行计划.md",
+      "sha256": "ed4a4e26703a467a3ff5f51fb95197af61eb32a20550715e3e4b7acdc75e21b3",
+      "bytes": 9870
+    },
+    {
+      "path": "docs/plans/governance-20261118/06-备用域名购买与Cloudflare绑定详细指南.md",
+      "sha256": "9cf329707a46cfa951a0185344330b034d7841e214b8a26c56d2a7de0da49007",
+      "bytes": 9878
+    },
+    {
+      "path": "docs/operations/Cloudflare多域名与源站应急切换台账-20261118.md",
+      "sha256": "089c3c54c5617a8a9b131ce9d28f461e26b003a06932b1324f69606dd845046e",
+      "bytes": 5372
+    }
+  ]
+}

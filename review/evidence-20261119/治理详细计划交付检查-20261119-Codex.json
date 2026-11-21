@@ -1,0 +1,278 @@
+{
+  "at": "2026-11-19T09:35:31+08:00",
+  "production_writes": false,
+  "checks": [
+    {
+      "name": "4份详细执行文件",
+      "pass": true
+    },
+    {
+      "name": "00-执行总纲与事实基线.md UTF8/LF与围栏",
+      "pass": true
+    },
+    {
+      "name": "00-执行总纲与事实基线.md 引用 01-备用线路验收与剩余治理执行单.md",
+      "pass": true
+    },
+    {
+      "name": "00-执行总纲与事实基线.md 引用 02-计量分类限速与解封实施手册.md",
+      "pass": true
+    },
+    {
+      "name": "00-执行总纲与事实基线.md 引用 03-给执行AI的完整提示词与验收回填表.md",
+      "pass": true
+    },
+    {
+      "name": "01-备用线路验收与剩余治理执行单.md UTF8/LF与围栏",
+      "pass": true
+    },
+    {
+      "name": "01-备用线路验收与剩余治理执行单.md 引用 00-执行总纲与事实基线.md",
+      "pass": true
+    },
+    {
+      "name": "02-计量分类限速与解封实施手册.md UTF8/LF与围栏",
+      "pass": true
+    },
+    {
+      "name": "02-计量分类限速与解封实施手册.md 引用 00-执行总纲与事实基线.md",
+      "pass": true
+    },
+    {
+      "name": "02-计量分类限速与解封实施手册.md 引用 01-备用线路验收与剩余治理执行单.md",
+      "pass": true
+    },
+    {
+      "name": "03-给执行AI的完整提示词与验收回填表.md UTF8/LF与围栏",
+      "pass": true
+    },
+    {
+      "name": "00-执行总纲与事实基线.md 无受控WS凭据原文",
+      "pass": true
+    },
+    {
+      "name": "01-备用线路验收与剩余治理执行单.md 无受控WS凭据原文",
+      "pass": true
+    },
+    {
+      "name": "02-计量分类限速与解封实施手册.md 无受控WS凭据原文",
+      "pass": true
+    },
+    {
+      "name": "03-给执行AI的完整提示词与验收回填表.md 无受控WS凭据原文",
+      "pass": true
+    },
+    {
+      "name": "治理详细计划核查依据与修订说明-20261119-Codex.md 无受控WS凭据原文",
+      "pass": true
+    },
+    {
+      "name": "governance_deep_readonly_20261119.py 无受控WS凭据原文",
+      "pass": true
+    },
+    {
+      "name": "治理详细计划只读核查与编制记录-20261119-Codex.md 无受控WS凭据原文",
+      "pass": true
+    },
+    {
+      "name": "治理详细计划现网基线-20261119-0915-Codex.json 无受控WS凭据原文",
+      "pass": true
+    },
+    {
+      "name": "治理详细计划分层诊断-20261119-0920-Codex.json 无受控WS凭据原文",
+      "pass": true
+    },
+    {
+      "name": "治理详细计划GIA补核-20261119-Codex.json 无受控WS凭据原文",
+      "pass": true
+    },
+    {
+      "name": "凌晨与上午恢复现场对拍-20261119-Codex.json 无受控WS凭据原文",
+      "pass": true
+    },
+    {
+      "name": "治理详细计划无线与游戏DNS配置只读核对-20261119-Codex.json 无受控WS凭据原文",
+      "pass": true
+    },
+    {
+      "name": "治理详细计划R9无线持久化补核-20261119-Codex.json 无受控WS凭据原文",
+      "pass": true
+    },
+    {
+      "name": "治理详细计划现网基线-20261119-0915-Codex.json JSON可解析",
+      "pass": true
+    },
+    {
+      "name": "治理详细计划现网基线-20261119-0915-Codex.json 未做生产写入",
+      "pass": true
+    },
+    {
+      "name": "治理详细计划分层诊断-20261119-0920-Codex.json JSON可解析",
+      "pass": true
+    },
+    {
+      "name": "治理详细计划分层诊断-20261119-0920-Codex.json 未做生产写入",
+      "pass": true
+    },
+    {
+      "name": "治理详细计划GIA补核-20261119-Codex.json JSON可解析",
+      "pass": true
+    },
+    {
+      "name": "治理详细计划GIA补核-20261119-Codex.json 未做生产写入",
+      "pass": true
+    },
+    {
+      "name": "凌晨与上午恢复现场对拍-20261119-Codex.json JSON可解析",
+      "pass": true
+    },
+    {
+      "name": "凌晨与上午恢复现场对拍-20261119-Codex.json 未做生产写入",
+      "pass": true
+    },
+    {
+      "name": "治理详细计划无线与游戏DNS配置只读核对-20261119-Codex.json JSON可解析",
+      "pass": true
+    },
+    {
+      "name": "治理详细计划无线与游戏DNS配置只读核对-20261119-Codex.json 未做生产写入",
+      "pass": true
+    },
+    {
+      "name": "治理详细计划R9无线持久化补核-20261119-Codex.json JSON可解析",
+      "pass": true
+    },
+    {
+      "name": "治理详细计划R9无线持久化补核-20261119-Codex.json 未做生产写入",
+      "pass": true
+    },
+    {
+      "name": "当前8台两新节点均有delay",
+      "pass": true
+    },
+    {
+      "name": "6台24次有效WS握手",
+      "pass": true
+    },
+    {
+      "name": "6台36次真实节点delay",
+      "pass": true
+    },
+    {
+      "name": "三源站均成功登录",
+      "pass": true
+    },
+    {
+      "name": "GIA站点地址已脱敏",
+      "pass": true
+    },
+    {
+      "name": "客户端WS指纹一致",
+      "pass": true
+    },
+    {
+      "name": "HK 源站WS与客户端指纹一致",
+      "pass": true
+    },
+    {
+      "name": "BWG 源站WS与客户端指纹一致",
+      "pass": true
+    },
+    {
+      "name": "GIA 源站WS与客户端指纹一致",
+      "pass": true
+    },
+    {
+      "name": "执行规格保留 3221225472",
+      "pass": true
+    },
+    {
+      "name": "执行规格保留 60000",
+      "pass": true
+    },
+    {
+      "name": "执行规格保留 100000",
+      "pass": true
+    },
+    {
+      "name": "执行规格保留 24—48",
+      "pass": true
+    },
+    {
+      "name": "执行规格保留 48小时",
+      "pass": true
+    },
+    {
+      "name": "执行规格保留 NOT_IMPLEMENTED",
+      "pass": true
+    },
+    {
+      "name": "执行规格保留 BLOCK_ENFORCE",
+      "pass": true
+    },
+    {
+      "name": "执行规格保留 R8",
+      "pass": true
+    },
+    {
+      "name": "执行规格保留 R9",
+      "pass": true
+    },
+    {
+      "name": "执行规格保留 T16",
+      "pass": true
+    },
+    {
+      "name": "执行规格保留 不完整",
+      "pass": true
+    },
+    {
+      "name": "新诊断工具Python语法",
+      "pass": true
+    }
+  ],
+  "files": [
+    {
+      "path": "docs\\plans\\governance-20261119\\00-执行总纲与事实基线.md",
+      "bytes": 15652,
+      "lines": 155,
+      "sha256": "0f2473ebccf2f749cdc46a2dcc26db3f6479a892f2d703c0bca8abf389aeffeb"
+    },
+    {
+      "path": "docs\\plans\\governance-20261119\\01-备用线路验收与剩余治理执行单.md",
+      "bytes": 16519,
+      "lines": 189,
+      "sha256": "0104358e58e94dfe509ffa9bc8d746ff0921fad7c8ff6d068661e2e66c4f57d0"
+    },
+    {
+      "path": "docs\\plans\\governance-20261119\\02-计量分类限速与解封实施手册.md",
+      "bytes": 27097,
+      "lines": 258,
+      "sha256": "97f4b93173a94c9e0fcd55f75b8183d2ac66bff4a6f702fb85662acbc4b26285"
+    },
+    {
+      "path": "docs\\plans\\governance-20261119\\03-给执行AI的完整提示词与验收回填表.md",
+      "bytes": 10097,
+      "lines": 122,
+      "sha256": "9d4fa53149dcaee5811f406af6533c93c28c083cd2bacdc73a01233bf7f36316"
+    },
+    {
+      "path": "review\\治理详细计划核查依据与修订说明-20261119-Codex.md",
+      "bytes": 6428,
+      "lines": 57,
+      "sha256": "349efc4a2e097ceb4bc68be51531ebd2ec9bb008a62de58d78accd2474a56c9a"
+    },
+    {
+      "path": "review\\governance_deep_readonly_20261119.py",
+      "bytes": 10286,
+      "lines": 215,
+      "sha256": "996fd99ab1a3eced8b8b78b8d61d5a20b56c5ea1621775eb4df97c16b922c9c1"
+    },
+    {
+      "path": "docs\\plans\\治理详细计划只读核查与编制记录-20261119-Codex.md",
+      "bytes": 2832,
+      "lines": 30,
+      "sha256": "8e27c0da0f7c55c5dc2c16317888f73b7ed3507fb822a6dd8417b2ef73f2fddd"
+    }
+  ]
+}

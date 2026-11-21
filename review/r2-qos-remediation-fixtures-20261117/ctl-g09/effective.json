@@ -1,0 +1,1 @@
+{"classes": {"video": {"state": "limited", "where": "lab", "bps": 60000, "version": 1, "evidence": "tc class 9:10 on pm-lab-ctl-g09"}, "download": {"state": "limited", "where": "lab", "bps": 60000, "version": 1, "evidence": "tc class 9:11 on pm-lab-ctl-g09"}}}

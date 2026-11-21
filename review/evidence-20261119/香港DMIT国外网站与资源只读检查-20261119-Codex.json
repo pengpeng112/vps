@@ -1,0 +1,38 @@
+{
+  "started": "2026-11-19T14:13:21+08:00",
+  "production_writes": false,
+  "server": "191.223.215.12",
+  "probes": {
+    "Google": {
+      "rc": 0,
+      "stdout": "http=200 t=0.043122",
+      "stderr": ""
+    },
+    "YouTube": {
+      "rc": 0,
+      "stdout": "http=200 t=0.227208",
+      "stderr": ""
+    },
+    "GitHub": {
+      "rc": 0,
+      "stdout": "http=200 t=0.105620",
+      "stderr": ""
+    },
+    "Microsoft": {
+      "rc": 0,
+      "stdout": "http=200 t=0.032644",
+      "stderr": ""
+    }
+  },
+  "system": {
+    "rc": 0,
+    "stdout": "2026-11-18T22:13:24-08:00\n116031.58 114476.77\n0.09 0.10 0.09 1/155 109867\nMemTotal:         979272 kB\nMemAvailable:     804632 kB\nFilesystem     1K-blocks    Used Available Use% Mounted on\n/dev/vda1       20553408 2234628  17421700  12% /\nactive\nactive\nactive\nip=191.223.215.12\ncolo=HKG\nloc=HK",
+    "stderr": ""
+  },
+  "small_download": {
+    "rc": 0,
+    "stdout": "http=200 bytes=65536 t=0.055851",
+    "stderr": ""
+  },
+  "finished": "2026-11-19T14:13:25+08:00"
+}

@@ -1,0 +1,67 @@
+{
+  "started": "2026-11-18T22:23:07+08:00",
+  "operation": "probe",
+  "devices": {
+    "R2": {
+      "samples": [
+        {
+          "rc": 0,
+          "stdout": "204 0.392867",
+          "stderr": ""
+        },
+        {
+          "rc": 0,
+          "stdout": "204 0.358272",
+          "stderr": ""
+        },
+        {
+          "rc": 0,
+          "stdout": "204 0.734471",
+          "stderr": ""
+        }
+      ],
+      "exit": {
+        "rc": 7,
+        "stdout": "",
+        "stderr": "curl: (7) Failed to connect to api.ipify.org port 443 after 62 ms: Connection refused"
+      },
+      "download": {
+        "rc": 0,
+        "stdout": "200 65536 1.176729",
+        "stderr": ""
+      },
+      "pass": false
+    },
+    "R4": {
+      "samples": [
+        {
+          "rc": 0,
+          "stdout": "204 0.370755",
+          "stderr": ""
+        },
+        {
+          "rc": 0,
+          "stdout": "204 0.368396",
+          "stderr": ""
+        },
+        {
+          "rc": 0,
+          "stdout": "204 0.372497",
+          "stderr": ""
+        }
+      ],
+      "exit": {
+        "rc": 7,
+        "stdout": "",
+        "stderr": "curl: (7) Failed to connect to api.ipify.org port 443 after 164 ms: Connection refused"
+      },
+      "download": {
+        "rc": 0,
+        "stdout": "200 65536 4.508553",
+        "stderr": ""
+      },
+      "pass": false
+    }
+  },
+  "finished": "2026-11-18T22:23:37+08:00"
+}

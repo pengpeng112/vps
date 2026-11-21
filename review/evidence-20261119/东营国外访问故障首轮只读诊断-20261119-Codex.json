@@ -1,0 +1,170 @@
+{
+  "started": "2026-11-19T16:26:15+08:00",
+  "production_writes": false,
+  "api_login": false,
+  "gz": {
+    "rc": 3,
+    "stdout": "2026-11-19T16:26:18+08:00\nBEGIN",
+    "stderr": "ERROR:  column \"service_active\" does not exist\nLINE 1: ...och FROM now()-last_heartbeat_at)),vps_limit_kbps,service_ac...\n                                                             ^"
+  },
+  "runtime": {
+    "rc": 0,
+    "stdout": "2026-11-19 16:26:19 +0800\nMediaTek MT7981 RFB\n59163.75 112457.17\n1.32 1.19 1.12 1/111 11493\nMemTotal:        1014720 kB\nMemAvailable:     795208 kB\n4086\ntcp        0      0 127.0.0.1:53            0.0.0.0:*               LISTEN      \ntcp        0      0 192.168.3.19:53         0.0.0.0:*               LISTEN      \ntcp        0      0 192.168.132.1:53        0.0.0.0:*               LISTEN      \ntcp        0      0 127.0.0.1:9090          0.0.0.0:*               LISTEN      \ntcp        0      0 :::7890                 :::*                    LISTEN      \ntcp        0      0 ::1:53                  :::*                    LISTEN      \ntcp        0      0 fe80::a6d8:caff:fe12:f780:53 :::*                    LISTEN      \ntcp        0      0 fe80::74a7:c8ff:fee0:4f29:53 :::*                    LISTEN      \ntcp        0      0 fe80::74a7:c8ff:fee0:4f39:53 :::*                    LISTEN      \ntcp        0      0 :::1053                 :::*                    LISTEN      \n1eb54b96092fd96f449d4360a7c805418d468275b8c6ec897f2bffd83a101ebb  /etc/mihomo/config.yaml\n6519a8b4e28e38f0a12932444626218d7f92bd95950a813421cca04cca11dd27  /etc/config/dhcp\n4911dbbe7962b4c8425526a23b45896732ec53fbc1539bd0f17355f5b36fad98  /etc/routermgmt/tunnel.conf\n71a5045e43c321c2a9e18599b79fb315e4c24b6ab5db3d86031a129994ebdcce  /etc/routermgmt/handlers/switch_node.sh\ndefault via 192.168.3.1 dev wan  src 192.168.3.19 \nqdisc noqueue 0: root refcnt 2",
+    "stderr": ""
+  },
+  "groups": {
+    "PROXY": {
+      "type": "Selector",
+      "now": "AUTO",
+      "all": [
+        "AUTO",
+        "BWG-HY2-JPTY-01",
+        "GIA-HY2-US-01",
+        "BWG-VLESS-JPTY-01",
+        "US666-CN2GIA-01",
+        "CF2D-HK-01",
+        "CF2D-BWG-01",
+        "CF-CDN-GIA-01",
+        "CF2-CDN-GIA-01",
+        "DIRECT"
+      ]
+    },
+    "AUTO": {
+      "type": "Fallback",
+      "now": "NODE-PICK",
+      "all": [
+        "NODE-PICK",
+        "AIRPORT",
+        "DIRECT"
+      ]
+    },
+    "NODE-PICK": {
+      "type": "Fallback",
+      "now": "BWG-HY2-JPTY-01",
+      "all": [
+        "BWG-HY2-JPTY-01",
+        "GIA-HY2-US-01",
+        "BWG-VLESS-JPTY-01",
+        "US666-CN2GIA-01",
+        "CF2D-HK-01",
+        "CF2D-BWG-01",
+        "CF-CDN-GIA-01",
+        "CF2-CDN-GIA-01"
+      ]
+    },
+    "US-MEDIA": {
+      "type": "Selector",
+      "now": "NODE-PICK",
+      "all": [
+        "NODE-PICK",
+        "AIRPORT"
+      ]
+    },
+    "DOWNLOAD": {
+      "type": "Selector",
+      "now": "DIRECT",
+      "all": [
+        "DIRECT",
+        "PROXY"
+      ]
+    }
+  },
+  "config_metadata": {
+    "mode": "rule",
+    "ipv6": false,
+    "dns": {
+      "enable": true,
+      "listen": "0.0.0.0:1053",
+      "enhanced-mode": "fake-ip",
+      "nameserver": [
+        "https://doh.pub/dns-query",
+        "https://dns.alidns.com/dns-query"
+      ],
+      "fallback": [
+        "223.5.5.5",
+        "119.29.29.29"
+      ],
+      "proxy-server-nameserver": [
+        "223.5.5.5",
+        "8.8.8.8"
+      ],
+      "respect-rules": null
+    },
+    "rules_tail": [
+      "DOMAIN-SUFFIX,githubusercontent.com,US-MEDIA",
+      "DOMAIN-SUFFIX,githubassets.com,US-MEDIA",
+      "AND,((NETWORK,UDP),(DST-PORT,443)),REJECT",
+      "GEOSITE,geolocation-!cn,PROXY",
+      "MATCH,DIRECT"
+    ],
+    "specific_rule_matches": [
+      "DOMAIN-SUFFIX,gstatic.com,PROXY",
+      "DOMAIN-SUFFIX,dl.google.com,PROXY",
+      "GEOSITE,google-cn,DIRECT",
+      "DOMAIN-SUFFIX,update.microsoft.com,DOWNLOAD",
+      "DOMAIN-SUFFIX,dl.delivery.mp.microsoft.com,DOWNLOAD",
+      "GEOSITE,youtube,US-MEDIA",
+      "DOMAIN-SUFFIX,youtube.com,US-MEDIA",
+      "DOMAIN-SUFFIX,googlevideo.com,US-MEDIA",
+      "DOMAIN-SUFFIX,githubusercontent.com,US-MEDIA",
+      "DOMAIN-SUFFIX,githubassets.com,US-MEDIA"
+    ]
+  },
+  "website_probes": {
+    "Google": {
+      "rc": 0,
+      "stdout": "http=200 t=0.586010",
+      "stderr": ""
+    },
+    "YouTube": {
+      "rc": 0,
+      "stdout": "http=200 t=1.320339",
+      "stderr": ""
+    },
+    "GitHub": {
+      "rc": 0,
+      "stdout": "http=200 t=0.793807",
+      "stderr": ""
+    },
+    "Microsoft": {
+      "rc": 0,
+      "stdout": "http=200 t=0.569530",
+      "stderr": ""
+    },
+    "gstatic": {
+      "rc": 0,
+      "stdout": "http=204 t=0.827217",
+      "stderr": ""
+    },
+    "Baidu": {
+      "rc": 0,
+      "stdout": "http=200 t=0.171734",
+      "stderr": ""
+    }
+  },
+  "exit": {
+    "rc": 0,
+    "stdout": "ip=74.82.193.113\ncolo=NRT\nloc=JP",
+    "stderr": ""
+  },
+  "nodes": {
+    "BWG-HY2-JPTY-01": {
+      "delay": 119
+    },
+    "GIA-HY2-US-01": {
+      "delay": 204
+    },
+    "CF2D-HK-01": {
+      "delay": 392
+    },
+    "CF2D-BWG-01": {
+      "delay": 399
+    }
+  },
+  "local_dns": {
+    "rc": 0,
+    "stdout": "Server:\t\t127.0.0.1\nAddress:\t127.0.0.1#53\n\nName:      www.google.com\nAddress 1: 198.18.0.115\n*** Can't find www.google.com: No answer\nServer:\t\t127.0.0.1\nAddress:\t127.0.0.1#53\n\nName:      www.youtube.com\nAddress 1: 198.18.2.66\n*** Can't find www.youtube.com: No answer\nServer:\t\t127.0.0.1\nAddress:\t127.0.0.1#53\n\nName:      www.baidu.com\nAddress 1: 198.18.0.4\n*** Can't find www.baidu.com: No answer",
+    "stderr": ""
+  },
+  "finished": "2026-11-19T16:26:32+08:00"
+}

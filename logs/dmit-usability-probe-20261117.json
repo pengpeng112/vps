@@ -1,0 +1,19 @@
+{
+  "started": "2026-11-17T22:56:00+08:00",
+  "writes": false,
+  "dmit_ip": "69.63.219.156",
+  "gz_to_dmit": {
+    "rc": 0,
+    "stdout": "3 packets transmitted, 0 received, 100% packet loss, time 2086ms\n\nssh-port fail\n",
+    "stderr": ""
+  },
+  "dmit": {
+    "error": "BadAuthenticationType: Bad authentication type; allowed types: ['publickey']"
+  },
+  "r2_to_dmit": {
+    "rc": 0,
+    "stdout": "--- 69.63.219.156 ping statistics ---\n3 packets transmitted, 0 packets received, 100% packet loss\nDMIT:443 fail\nDMIT:2053 fail\nDMIT:8443 fail\nDMIT:34567 fail\n",
+    "stderr": ""
+  },
+  "finished": "2026-11-17T22:56:15+08:00"
+}

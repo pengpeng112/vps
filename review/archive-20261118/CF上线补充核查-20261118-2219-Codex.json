@@ -1,0 +1,57 @@
+{
+  "at": "2026-11-18T22:17:35+08:00",
+  "writes": false,
+  "database": {
+    "rc": 0,
+    "stdout": "BEGIN\nrtr-101be0|6|6|6||1|0\nrtr-1eff66|8|8|8||4108694|0\nrtr-1f6f0f|9|9|9||10|0\nrtr-25730c|3|3|3||3047855|0\nrtr-354647|3|3|3||3052875|0\nrtr-37cf72|8|8|8||1482775|0\nrtr-38aa54|31|31|31||17|0\nrtr-5e1a8d|0|0|0||10|0\nrtr-673568|23|23|23||23|0\nrtr-a9bcba|40|40|40||55|0\nrtr-bf0292|0|0|0|||0\nrtr-c46a25|21|21|21||16|0\nrtr-cd473f|30|30|30||24|0\nrtr-d3847d|29|29|29|OpenWrt 21.02-SNAPSHOT|46|0\nrtr-e9ccdd|1|1|1||182708|0\nrtr-101be0|8|74.82.193.113|34567|hysteria2|ordinary|t|0|20\nrtr-101be0|16|104.18.32.7|2053|vless-ws|ordinary|f|0|-100\nrtr-101be0|17|162.159.135.42|2053|vless-ws|ordinary|f|0|-100\nrtr-1f6f0f|8|74.82.193.113|34567|hysteria2|ordinary|t|0|20\nrtr-1f6f0f|16|104.18.32.7|2053|vless-ws|ordinary|f|0|-100\nrtr-1f6f0f|17|162.159.135.42|2053|vless-ws|ordinary|f|0|-100\nrtr-37cf72|8|74.82.193.113|34567|hysteria2|ordinary|f|0|20\nrtr-38aa54|8|74.82.193.113|34567|hysteria2|ordinary|t|0|20\nrtr-38aa54|16|104.18.32.7|2053|vless-ws|ordinary|f|0|-100\nrtr-38aa54|17|162.159.135.42|2053|vless-ws|ordinary|f|0|-100\nrtr-673568|8|74.82.193.113|34567|hysteria2|ordinary|t|0|20\nrtr-673568|16|104.18.32.7|2053|vless-ws|ordinary|f|0|-100\nrtr-673568|17|162.159.135.42|2053|vless-ws|ordinary|f|0|-100\nrtr-a9bcba|8|74.82.193.113|34567|hysteria2|ordinary|t|0|20\nrtr-a9bcba|16|104.18.32.7|2053|vless-ws|ordinary|f|0|-100\nrtr-a9bcba|17|162.159.135.42|2053|vless-ws|ordinary|f|0|-100\nrtr-c46a25|8|74.82.193.113|34567|hysteria2|ordinary|t|0|20\nrtr-c46a25|16|104.18.32.7|2053|vless-ws|ordinary|f|0|-100\nrtr-c46a25|17|162.159.135.42|2053|vless-ws|ordinary|f|0|-100\nrtr-cd473f|8|74.82.193.113|34567|hysteria2|ordinary|t|0|20\nrtr-cd473f|16|104.18.32.7|2053|vless-ws|ordinary|f|0|-100\nrtr-cd473f|17|162.159.135.42|2053|vless-ws|ordinary|f|0|-100\nrtr-d3847d|8|74.82.193.113|34567|hysteria2|ordinary|t|0|20\nrtr-d3847d|16|104.18.32.7|2053|vless-ws|ordinary|f|0|-100\nrtr-d3847d|17|162.159.135.42|2053|vless-ws|ordinary|f|0|-100\nCOMMIT",
+    "stderr": ""
+  },
+  "devices": {
+    "R1": {
+      "rc": 0,
+      "stdout": "PID=5090\nName:\tmihomo\nState:\tS (sleeping)\nPid:\t5090\nPPid:\t1\nVmRSS:\t   91716 kB\n/usr/bin/mihomo -d /etc/mihomo -f /etc/mihomo/config.yaml \n/usr/bin/jsonfilter\n35588 /etc/mihomo/proxy_providers/airport-g02.yaml",
+      "stderr": ""
+    },
+    "R2": {
+      "rc": 0,
+      "stdout": "PID=30825\nName:\tmihomo\nState:\tS (sleeping)\nPid:\t30825\nPPid:\t30400\nVmRSS:\t   35200 kB\n/usr/bin/mihomo -d -f /config.yaml -t \nPID=22982\nName:\tmihomo\nState:\tS (sleeping)\nPid:\t22982\nPPid:\t1\nVmRSS:\t   77588 kB\n/usr/bin/mihomo -d /etc/mihomo -f /etc/mihomo/config.yaml \n/usr/bin/jsonfilter\n35588 /etc/mihomo/proxy_providers/airport-g02.yaml",
+      "stderr": ""
+    },
+    "R3": {
+      "rc": 0,
+      "stdout": "PID=24360\nName:\tmihomo\nState:\tS (sleeping)\nPid:\t24360\nPPid:\t23883\nVmRSS:\t   34840 kB\n/usr/bin/mihomo -d -f /config.yaml -t \nPID=10714\nName:\tmihomo\nState:\tS (sleeping)\nPid:\t10714\nPPid:\t1\nVmRSS:\t   78980 kB\n/usr/bin/mihomo -d /etc/mihomo -f /etc/mihomo/config.yaml \n/usr/bin/jsonfilter\n35588 /etc/mihomo/proxy_providers/airport-g02.yaml",
+      "stderr": ""
+    },
+    "R4": {
+      "rc": 0,
+      "stdout": "PID=13157\nName:\tmihomo\nState:\tS (sleeping)\nPid:\t13157\nPPid:\t1\nVmRSS:\t   89984 kB\n/usr/bin/mihomo -d /etc/mihomo -f /etc/mihomo/config.yaml \n/usr/bin/jsonfilter\n35588 /etc/mihomo/proxy_providers/airport-g01.yaml\n35588 /etc/mihomo/proxy_providers/airport-g02.yaml",
+      "stderr": ""
+    },
+    "R5": {
+      "rc": 0,
+      "stdout": "PID=29732\nName:\tmihomo\nState:\tS (sleeping)\nPid:\t29732\nPPid:\t1\nVmRSS:\t   66668 kB\n/usr/bin/mihomo -d /etc/mihomo -f /etc/mihomo/config.yaml \nPID=7553\nName:\tmihomo\nState:\tS (sleeping)\nPid:\t7553\nPPid:\t6970\nVmRSS:\t   14732 kB\n/usr/bin/mihomo -d -f /config.yaml -t \n/usr/bin/jsonfilter\n35588 /etc/mihomo/proxy_providers/airport-g02.yaml",
+      "stderr": ""
+    },
+    "R6": {
+      "rc": 0,
+      "stdout": "PID=17892\nName:\tmihomo\nState:\tS (sleeping)\nPid:\t17892\nPPid:\t1\nVmRSS:\t   94352 kB\n/usr/bin/mihomo -d /etc/mihomo -f /etc/mihomo/config.yaml \nPID=4901\nName:\tmihomo\nState:\tS (sleeping)\nPid:\t4901\nPPid:\t4503\nVmRSS:\t   35572 kB\n/usr/bin/mihomo -d -f /config.yaml -t \n/usr/bin/jsonfilter\n35588 /etc/mihomo/proxy_providers/airport-g02.yaml",
+      "stderr": ""
+    },
+    "R8": {
+      "rc": 0,
+      "stdout": "PID=27828\nName:\tmihomo\nState:\tS (sleeping)\nPid:\t27828\nPPid:\t1\nVmRSS:\t  104956 kB\n/usr/bin/mihomo -d /etc/mihomo -f /etc/mihomo/config.yaml \nPID=10853\nName:\tmihomo\nState:\tS (sleeping)\nPid:\t10853\nPPid:\t10221\nVmRSS:\t   35604 kB\n/usr/bin/mihomo -d -f /config.yaml -t \n/usr/bin/jsonfilter\n35584 /etc/mihomo/proxy_providers/airport-g02.yaml",
+      "stderr": ""
+    },
+    "R9": {
+      "rc": 0,
+      "stdout": "PID=32213\nName:\tmihomo\nState:\tS (sleeping)\nPid:\t32213\nPPid:\t1\nVmRSS:\t   80660 kB\n/usr/bin/mihomo -d /etc/mihomo -f /etc/mihomo/config.yaml \nPID=20705\nName:\tmihomo\nState:\tS (sleeping)\nPid:\t20705\nPPid:\t20020\nVmRSS:\t   34904 kB\n/usr/bin/mihomo -d -f /config.yaml -t \n/usr/bin/jsonfilter\n35588 /etc/mihomo/proxy_providers/airport-g02.yaml",
+      "stderr": ""
+    }
+  },
+  "local_hashes": {
+    "mgmt/agent/routermgmt-agent.sh": "ca77a1f3b4c35ed6beb3669507a80e7447943c1c33f7b300a704a0bf886a29d8",
+    "mgmt/agent/handlers/switch_node.sh": "71a5045e43c321c2a9e18599b79fb315e4c24b6ab5db3d86031a129994ebdcce",
+    "mgmt/agent/self-heal.sh": "c65d51a7066eb05a141ead4692361472c6e89a6e16327ca4dc7da356c12bfd6e",
+    "scripts/qos-r2/proxy-meter-v3.sh": "693470ef881ab21f94b0ed3a9d8dc388e3018aebe110331dfa5eb5e061b785ff"
+  }
+}

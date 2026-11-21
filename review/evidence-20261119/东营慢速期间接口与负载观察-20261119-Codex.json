@@ -1,0 +1,151 @@
+{
+  "started": "2026-11-19T16:33:35+08:00",
+  "production_writes": false,
+  "samples": [
+    {
+      "at": "2026-11-19T16:33:36+08:00",
+      "network": {
+        "rc": 0,
+        "stdout": "1795077219\nwan/rx_bytes=6193496823\nwan/tx_bytes=382368654\nwan/rx_errors=0\nwan/tx_errors=0\nwan/rx_dropped=11321\nwan/tx_dropped=0\nra0/rx_bytes=257313425\nra0/tx_bytes=5919254291\nra0/rx_errors=5543\nra0/tx_errors=0\nra0/rx_dropped=0\nra0/tx_dropped=0\nMem: 416852K used, 597868K free, 120K shrd, 87976K buff, 109672K cached\nCPU:   0% usr  10% sys   0% nic  89% idle   0% io   0% irq   0% sirq\nLoad average: 1.06 1.08 1.08 3/111 19810",
+        "stderr": ""
+      },
+      "flow_counts": [
+        {
+          "source": "192.168.132.216",
+          "chain": "DIRECT",
+          "rule": "GeoSite",
+          "count": 25
+        },
+        {
+          "source": "192.168.132.182",
+          "chain": "DIRECT",
+          "rule": "GeoIP",
+          "count": 3
+        },
+        {
+          "source": "192.168.132.216",
+          "chain": "BWG-HY2-JPTY-01 > NODE-PICK > AUTO > PROXY",
+          "rule": "GeoSite",
+          "count": 2
+        },
+        {
+          "source": "192.168.132.216",
+          "chain": "DIRECT",
+          "rule": "GeoIP",
+          "count": 4
+        },
+        {
+          "source": "192.168.132.182",
+          "chain": "DIRECT",
+          "rule": "GeoSite",
+          "count": 4
+        },
+        {
+          "source": "192.168.132.182",
+          "chain": "BWG-HY2-JPTY-01 > NODE-PICK > AUTO > PROXY",
+          "rule": "GeoSite",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "at": "2026-11-19T16:33:42+08:00",
+      "network": {
+        "rc": 0,
+        "stdout": "1795077225\nwan/rx_bytes=6193505831\nwan/tx_bytes=382405002\nwan/rx_errors=0\nwan/tx_errors=0\nwan/rx_dropped=11323\nwan/tx_dropped=0\nra0/rx_bytes=257316163\nra0/tx_bytes=5919255786\nra0/rx_errors=5543\nra0/tx_errors=0\nra0/rx_dropped=0\nra0/tx_dropped=0\nMem: 418352K used, 596368K free, 120K shrd, 87976K buff, 109676K cached\nCPU:  23% usr  42% sys   0% nic  33% idle   0% io   0% irq   0% sirq\nLoad average: 1.06 1.07 1.08 4/114 19883",
+        "stderr": ""
+      },
+      "flow_counts": [
+        {
+          "source": "192.168.132.216",
+          "chain": "DIRECT",
+          "rule": "GeoSite",
+          "count": 25
+        },
+        {
+          "source": "192.168.132.182",
+          "chain": "DIRECT",
+          "rule": "GeoIP",
+          "count": 3
+        },
+        {
+          "source": "192.168.132.216",
+          "chain": "DIRECT",
+          "rule": "GeoIP",
+          "count": 4
+        },
+        {
+          "source": "192.168.132.216",
+          "chain": "BWG-HY2-JPTY-01 > NODE-PICK > AUTO > PROXY",
+          "rule": "GeoSite",
+          "count": 1
+        },
+        {
+          "source": "192.168.132.182",
+          "chain": "DIRECT",
+          "rule": "GeoSite",
+          "count": 4
+        },
+        {
+          "source": "127.0.0.1",
+          "chain": "BWG-HY2-JPTY-01 > NODE-PICK > AUTO > PROXY",
+          "rule": "GeoSite",
+          "count": 1
+        },
+        {
+          "source": "192.168.132.182",
+          "chain": "BWG-HY2-JPTY-01 > NODE-PICK > AUTO > PROXY",
+          "rule": "GeoSite",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "at": "2026-11-19T16:33:48+08:00",
+      "network": {
+        "rc": 0,
+        "stdout": "1795077231\nwan/rx_bytes=6193525856\nwan/tx_bytes=382450810\nwan/rx_errors=0\nwan/tx_errors=0\nwan/rx_dropped=11324\nwan/tx_dropped=0\nra0/rx_bytes=257322281\nra0/tx_bytes=5919258124\nra0/rx_errors=5543\nra0/tx_errors=0\nra0/rx_dropped=0\nra0/tx_dropped=0\nMem: 417172K used, 597548K free, 120K shrd, 87976K buff, 109676K cached\nCPU:   0% usr   4% sys   0% nic  95% idle   0% io   0% irq   0% sirq\nLoad average: 1.05 1.07 1.08 2/111 20025",
+        "stderr": ""
+      },
+      "flow_counts": [
+        {
+          "source": "192.168.132.216",
+          "chain": "DIRECT",
+          "rule": "GeoSite",
+          "count": 26
+        },
+        {
+          "source": "192.168.132.182",
+          "chain": "DIRECT",
+          "rule": "GeoIP",
+          "count": 3
+        },
+        {
+          "source": "192.168.132.216",
+          "chain": "DIRECT",
+          "rule": "GeoIP",
+          "count": 4
+        },
+        {
+          "source": "192.168.132.216",
+          "chain": "BWG-HY2-JPTY-01 > NODE-PICK > AUTO > PROXY",
+          "rule": "GeoSite",
+          "count": 1
+        },
+        {
+          "source": "192.168.132.182",
+          "chain": "DIRECT",
+          "rule": "GeoSite",
+          "count": 4
+        },
+        {
+          "source": "192.168.132.182",
+          "chain": "BWG-HY2-JPTY-01 > NODE-PICK > AUTO > PROXY",
+          "rule": "GeoSite",
+          "count": 1
+        }
+      ]
+    }
+  ],
+  "finished": "2026-11-19T16:33:49+08:00"
+}

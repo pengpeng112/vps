@@ -3,9 +3,15 @@
 每分钟由 cron 调起，检查每个 132xx 端口是否有 SSH banner，
 直接更新 devices 表的 remote_ssh_alive 和 last_remote_ssh_check_at。
 """
-import subprocess, psycopg2, sys, os
+import subprocess, sys, os
 
-DB = "dbname=routermgmt user=mgmt_app password=3de2b212bb553333039f8a3901968a02 host=127.0.0.1"
+# 2026-11-19（governance-20261119/01-C6.1 安全堵洞）：移除硬编码连接串。
+# DSN 只从环境变量 ROUTERMGMT_DB_DSN 读取（cron unit / 部署侧注入），缺失立即报错退出；
+# 任何路径都不得把 DSN 原文打印到 stdout/stderr/日志。
+DB = os.environ.get("ROUTERMGMT_DB_DSN", "").strip()
+if not DB:
+    sys.stderr.write("ROUTERMGMT_DB_DSN not set; refusing to run (no fallback to hardcoded credentials)\n")
+    sys.exit(2)
 
 def get_listening_ports():
     """获取当前监听的 132xx 端口"""
@@ -75,4 +81,9 @@ def main():
     conn.close()
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except Exception as exc:
+        # Parser/driver errors may echo parts of a DSN. Never log their text.
+        sys.stderr.write("rssh-probe failed: " + type(exc).__name__ + " (details withheld)\n")
+        sys.exit(1)

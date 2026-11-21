@@ -1,0 +1,984 @@
+{
+  "started": "2026-11-18T22:14:56+08:00",
+  "production_writes": false,
+  "api_login": false,
+  "gz": {
+    "rc": 0,
+    "stdout": "2026-11-18T22:14:57+08:00\nactive\nactive\nactive\n1d0d88299ea25ba6964bcc32f4f1b01a9684282a2fb9ba5820aca03ef7a01a05  /opt/mgmt/server\nBEGIN\nschema|10\nROLLBACK",
+    "stderr": "ERROR:  column \"agent_version\" does not exist\nLINE 1: ...n,desired_config_version,highest_accepted_version,agent_vers...\n                                                             ^\nERROR:  current transaction is aborted, commands ignored until end of transaction block\nERROR:  current transaction is aborted, commands ignored until end of transaction block"
+  },
+  "devices": {
+    "R1": {
+      "name": "R1",
+      "port": 13222,
+      "runtime": {
+        "rc": 0,
+        "stdout": "2026-11-18 22:14:58 +0800\naarch64\nMihomo Meta v1.19.31 linux arm64 with go1.26.8 Mon Sep 14 13:20:46 UTC 2026\n5090\nca77a1f3b4c35ed6beb3669507a80e7447943c1c33f7b300a704a0bf886a29d8  /etc/routermgmt/routermgmt-agent.sh\n71a5045e43c321c2a9e18599b79fb315e4c24b6ab5db3d86031a129994ebdcce  /etc/routermgmt/handlers/switch_node.sh\nc65d51a7066eb05a141ead4692361472c6e89a6e16327ca4dc7da356c12bfd6e  /etc/routermgmt/self-heal.sh\nNO_PAUSE",
+        "stderr": ""
+      },
+      "config": {
+        "cf_nodes": [
+          {
+            "name": "CF2D-HK-01",
+            "server": "104.18.32.7",
+            "port": 2053,
+            "servername": "hk.6849271.xyz",
+            "udp": false
+          },
+          {
+            "name": "CF2D-BWG-01",
+            "server": "162.159.135.42",
+            "port": 2053,
+            "servername": "usbwg.6849271.xyz",
+            "udp": false
+          },
+          {
+            "name": "CF-CDN-GIA-01",
+            "server": "104.18.32.7",
+            "port": 2053,
+            "servername": "cf.k3x9m2.top",
+            "udp": false
+          },
+          {
+            "name": "CF2-CDN-GIA-01",
+            "server": "162.159.135.42",
+            "port": 2053,
+            "servername": "cf.k3x9m2.top",
+            "udp": false
+          }
+        ],
+        "cold_domain_present": false,
+        "tail": [
+          "AND,((NETWORK,UDP),(DST-PORT,443)),REJECT",
+          "GEOSITE,geolocation-!cn,PROXY",
+          "MATCH,DIRECT"
+        ],
+        "fallback": [
+          "223.5.5.5",
+          "119.29.29.29"
+        ],
+        "provider_paths": [
+          "./proxy_providers/airport-g02.yaml"
+        ]
+      },
+      "groups": {
+        "PROXY": {
+          "type": "Selector",
+          "now": "AUTO",
+          "all": [
+            "AUTO",
+            "BWG-HY2-JPTY-01",
+            "GIA-HY2-US-01",
+            "US666-CN2GIA-01",
+            "CF2D-HK-01",
+            "CF2D-BWG-01",
+            "BWG-VLESS-JPTY-01",
+            "CF-CDN-GIA-01",
+            "CF2-CDN-GIA-01",
+            "DIRECT"
+          ]
+        },
+        "NODE-PICK": {
+          "type": "Fallback",
+          "now": "BWG-HY2-JPTY-01",
+          "all": [
+            "BWG-HY2-JPTY-01",
+            "GIA-HY2-US-01",
+            "US666-CN2GIA-01",
+            "CF2D-HK-01",
+            "CF2D-BWG-01",
+            "BWG-VLESS-JPTY-01",
+            "CF-CDN-GIA-01",
+            "CF2-CDN-GIA-01"
+          ]
+        },
+        "US-MEDIA": {
+          "type": "Selector",
+          "now": "NODE-PICK",
+          "all": [
+            "NODE-PICK",
+            "AIRPORT"
+          ]
+        },
+        "DOWNLOAD": {
+          "type": "Selector",
+          "now": "DIRECT",
+          "all": [
+            "DIRECT",
+            "PROXY"
+          ]
+        }
+      },
+      "cf_delay": {
+        "CF2D-HK-01": {
+          "delay": 1334
+        },
+        "CF2D-BWG-01": {
+          "delay": 252
+        }
+      },
+      "meter": {
+        "rc": 1,
+        "stdout": "",
+        "stderr": ""
+      },
+      "protected_checks": {
+        "rc": 0,
+        "stdout": "7db2b6f1370f7119d2cdb9ba65e3b9ace49b5ddd169f1c0855dcef758d5ddbe7  /etc/config/dhcp\n13909d85cc8cefa3ac42f862c9071fc68a80aeb33210806da75b437211f47582  /etc/routermgmt/tunnel.conf\nf26fb050fbe30c8cfed523519097479fe543406a02e51ef4ebc7d75a8dea1b2e  /etc/mihomo/config.yaml\nqdisc noqueue 0: root refcnt 2 \ng204=204 t=0.361924\nbaidu=200 t=0.189047",
+        "stderr": ""
+      }
+    },
+    "R3": {
+      "name": "R3",
+      "port": 13227,
+      "runtime": {
+        "rc": 0,
+        "stdout": "2026-11-18 22:14:58 +0800\naarch64\nMihomo Meta v1.19.31 linux arm64 with go1.26.8 Mon Sep 14 13:20:46 UTC 2026\n24360 10714\nca77a1f3b4c35ed6beb3669507a80e7447943c1c33f7b300a704a0bf886a29d8  /etc/routermgmt/routermgmt-agent.sh\n71a5045e43c321c2a9e18599b79fb315e4c24b6ab5db3d86031a129994ebdcce  /etc/routermgmt/handlers/switch_node.sh\nc65d51a7066eb05a141ead4692361472c6e89a6e16327ca4dc7da356c12bfd6e  /etc/routermgmt/self-heal.sh\nNO_PAUSE",
+        "stderr": ""
+      },
+      "config": {
+        "cf_nodes": [
+          {
+            "name": "CF2D-HK-01",
+            "server": "104.18.32.7",
+            "port": 2053,
+            "servername": "hk.6849271.xyz",
+            "udp": false
+          },
+          {
+            "name": "CF2D-BWG-01",
+            "server": "162.159.135.42",
+            "port": 2053,
+            "servername": "usbwg.6849271.xyz",
+            "udp": false
+          },
+          {
+            "name": "CF-CDN-GIA-01",
+            "server": "104.18.32.7",
+            "port": 2053,
+            "servername": "cf.k3x9m2.top",
+            "udp": false
+          },
+          {
+            "name": "CF2-CDN-GIA-01",
+            "server": "162.159.135.42",
+            "port": 2053,
+            "servername": "cf.k3x9m2.top",
+            "udp": false
+          }
+        ],
+        "cold_domain_present": false,
+        "tail": [
+          "AND,((NETWORK,UDP),(DST-PORT,443)),REJECT",
+          "GEOSITE,geolocation-!cn,PROXY",
+          "MATCH,DIRECT"
+        ],
+        "fallback": [
+          "223.5.5.5",
+          "119.29.29.29"
+        ],
+        "provider_paths": [
+          "./proxy_providers/airport-g02.yaml"
+        ]
+      },
+      "groups": {
+        "PROXY": {
+          "type": "Selector",
+          "now": "AUTO",
+          "all": [
+            "AUTO",
+            "BWG-HY2-JPTY-01",
+            "GIA-HY2-US-01",
+            "US666-CN2GIA-01",
+            "CF2D-HK-01",
+            "CF2D-BWG-01",
+            "BWG-VLESS-JPTY-01",
+            "CF-CDN-GIA-01",
+            "CF2-CDN-GIA-01",
+            "DIRECT"
+          ]
+        },
+        "NODE-PICK": {
+          "type": "Fallback",
+          "now": "BWG-HY2-JPTY-01",
+          "all": [
+            "BWG-HY2-JPTY-01",
+            "GIA-HY2-US-01",
+            "US666-CN2GIA-01",
+            "CF2D-HK-01",
+            "CF2D-BWG-01",
+            "BWG-VLESS-JPTY-01",
+            "CF-CDN-GIA-01",
+            "CF2-CDN-GIA-01"
+          ]
+        },
+        "US-MEDIA": {
+          "type": "Selector",
+          "now": "NODE-PICK",
+          "all": [
+            "NODE-PICK",
+            "AIRPORT"
+          ]
+        },
+        "DOWNLOAD": {
+          "type": "Selector",
+          "now": "DIRECT",
+          "all": [
+            "DIRECT",
+            "PROXY"
+          ]
+        }
+      },
+      "cf_delay": {
+        "CF2D-HK-01": {
+          "unavailable": true,
+          "rc": 22
+        },
+        "CF2D-BWG-01": {
+          "delay": 276
+        }
+      },
+      "meter": {
+        "rc": 1,
+        "stdout": "",
+        "stderr": ""
+      },
+      "protected_checks": {
+        "rc": 0,
+        "stdout": "6519a8b4e28e38f0a12932444626218d7f92bd95950a813421cca04cca11dd27  /etc/config/dhcp\n7797dab42b34a31e86d6251b83b7ded53e536a90e42326c5e221b769b4bf6d62  /etc/routermgmt/tunnel.conf\nf26fb050fbe30c8cfed523519097479fe543406a02e51ef4ebc7d75a8dea1b2e  /etc/mihomo/config.yaml\nqdisc noqueue 0: root refcnt 2 \ng204=204 t=0.366600\nbaidu=200 t=0.185549",
+        "stderr": ""
+      }
+    },
+    "R4": {
+      "name": "R4",
+      "port": 13224,
+      "runtime": {
+        "rc": 0,
+        "stdout": "2026-11-18 22:14:58 +0800\naarch64\nMihomo Meta v1.19.31 linux arm64 with go1.26.8 Mon Sep 14 13:20:46 UTC 2026\n13157\nca77a1f3b4c35ed6beb3669507a80e7447943c1c33f7b300a704a0bf886a29d8  /etc/routermgmt/routermgmt-agent.sh\n0faf7732202232c89f4bf060affd3500ee20d6a8603390e3d5b1134e15b6cee9  /etc/routermgmt/handlers/switch_node.sh\nc65d51a7066eb05a141ead4692361472c6e89a6e16327ca4dc7da356c12bfd6e  /etc/routermgmt/self-heal.sh\nNO_PAUSE",
+        "stderr": ""
+      },
+      "config": {
+        "cf_nodes": [
+          {
+            "name": "CF2D-HK-01",
+            "server": "104.18.32.7",
+            "port": 2053,
+            "servername": "hk.6849271.xyz",
+            "udp": false
+          },
+          {
+            "name": "CF2D-BWG-01",
+            "server": "162.159.135.42",
+            "port": 2053,
+            "servername": "usbwg.6849271.xyz",
+            "udp": false
+          },
+          {
+            "name": "CF-CDN-GIA-01",
+            "server": "104.18.32.7",
+            "port": 2053,
+            "servername": "cf.k3x9m2.top",
+            "udp": false
+          },
+          {
+            "name": "CF2-CDN-GIA-01",
+            "server": "162.159.135.42",
+            "port": 2053,
+            "servername": "cf.k3x9m2.top",
+            "udp": false
+          }
+        ],
+        "cold_domain_present": false,
+        "tail": [
+          "AND,((NETWORK,UDP),(DST-PORT,443)),REJECT",
+          "GEOSITE,geolocation-!cn,PROXY",
+          "MATCH,DIRECT"
+        ],
+        "fallback": [
+          "223.5.5.5",
+          "119.29.29.29"
+        ],
+        "provider_paths": [
+          "./proxy_providers/airport-g02.yaml"
+        ]
+      },
+      "groups": {
+        "PROXY": {
+          "type": "Selector",
+          "now": "AUTO",
+          "all": [
+            "AUTO",
+            "BWG-HY2-JPTY-01",
+            "GIA-HY2-US-01",
+            "US666-CN2GIA-01",
+            "CF2D-HK-01",
+            "CF2D-BWG-01",
+            "BWG-VLESS-JPTY-01",
+            "CF-CDN-GIA-01",
+            "CF2-CDN-GIA-01",
+            "DIRECT"
+          ]
+        },
+        "NODE-PICK": {
+          "type": "Fallback",
+          "now": "BWG-HY2-JPTY-01",
+          "all": [
+            "BWG-HY2-JPTY-01",
+            "GIA-HY2-US-01",
+            "US666-CN2GIA-01",
+            "CF2D-HK-01",
+            "CF2D-BWG-01",
+            "BWG-VLESS-JPTY-01",
+            "CF-CDN-GIA-01",
+            "CF2-CDN-GIA-01"
+          ]
+        },
+        "US-MEDIA": {
+          "type": "Selector",
+          "now": "NODE-PICK",
+          "all": [
+            "NODE-PICK",
+            "AIRPORT"
+          ]
+        },
+        "DOWNLOAD": {
+          "type": "Selector",
+          "now": "DIRECT",
+          "all": [
+            "DIRECT",
+            "PROXY"
+          ]
+        }
+      },
+      "cf_delay": {
+        "CF2D-HK-01": {
+          "unavailable": true,
+          "rc": 22
+        },
+        "CF2D-BWG-01": {
+          "delay": 304
+        }
+      },
+      "meter": {
+        "rc": 1,
+        "stdout": "",
+        "stderr": ""
+      },
+      "protected_checks": {
+        "rc": 0,
+        "stdout": "6519a8b4e28e38f0a12932444626218d7f92bd95950a813421cca04cca11dd27  /etc/config/dhcp\na9d2afc592c293e09921d84d8bf17365ecbad2684a9eaccf6755f5c4ce02c28f  /etc/routermgmt/tunnel.conf\nf26fb050fbe30c8cfed523519097479fe543406a02e51ef4ebc7d75a8dea1b2e  /etc/mihomo/config.yaml\nqdisc noqueue 0: root refcnt 2 \ng204=204 t=0.371400\nbaidu=200 t=0.180575",
+        "stderr": ""
+      }
+    },
+    "R2": {
+      "name": "R2",
+      "port": 13223,
+      "runtime": {
+        "rc": 0,
+        "stdout": "2026-11-18 22:14:58 +0800\naarch64\nMihomo Meta v1.19.31 linux arm64 with go1.26.8 Mon Sep 14 13:20:46 UTC 2026\n30825 22982\nca77a1f3b4c35ed6beb3669507a80e7447943c1c33f7b300a704a0bf886a29d8  /etc/routermgmt/routermgmt-agent.sh\n0faf7732202232c89f4bf060affd3500ee20d6a8603390e3d5b1134e15b6cee9  /etc/routermgmt/handlers/switch_node.sh\nc65d51a7066eb05a141ead4692361472c6e89a6e16327ca4dc7da356c12bfd6e  /etc/routermgmt/self-heal.sh\n693470ef881ab21f94b0ed3a9d8dc388e3018aebe110331dfa5eb5e061b785ff  /etc/routermgmt/proxy-meter-v3.sh\n70a5dd07dec36d0bc03a996df53a053096d64cbe80ce730ee227c58dddf14603  /etc/routermgmt/proxy-meter-endpoints.sh\nNO_PAUSE",
+        "stderr": ""
+      },
+      "config": {
+        "cf_nodes": [
+          {
+            "name": "CF-CDN-GIA-01",
+            "server": "104.18.32.7",
+            "port": 2053,
+            "servername": "cf.k3x9m2.top",
+            "udp": false
+          },
+          {
+            "name": "CF2-CDN-GIA-01",
+            "server": "162.159.135.42",
+            "port": 2053,
+            "servername": "cf.k3x9m2.top",
+            "udp": false
+          },
+          {
+            "name": "CF2D-HK-01",
+            "server": "104.18.32.7",
+            "port": 2053,
+            "servername": "hk.6849271.xyz",
+            "udp": false
+          },
+          {
+            "name": "CF2D-BWG-01",
+            "server": "162.159.135.42",
+            "port": 2053,
+            "servername": "usbwg.6849271.xyz",
+            "udp": false
+          }
+        ],
+        "cold_domain_present": false,
+        "tail": [
+          "AND,((NETWORK,UDP),(DST-PORT,443)),REJECT",
+          "GEOSITE,geolocation-!cn,PROXY",
+          "MATCH,DIRECT"
+        ],
+        "fallback": [
+          "223.5.5.5",
+          "119.29.29.29"
+        ],
+        "provider_paths": [
+          "./proxy_providers/airport-g02.yaml"
+        ]
+      },
+      "groups": {
+        "PROXY": {
+          "type": "Selector",
+          "now": "AUTO",
+          "all": [
+            "AUTO",
+            "BWG-HY2-JPTY-01",
+            "GIA-HY2-US-01",
+            "CF-CDN-GIA-01",
+            "CF2-CDN-GIA-01",
+            "DMIT-HY2-US-01",
+            "CF2D-HK-01",
+            "CF2D-BWG-01",
+            "BWG-VLESS-JPTY-01",
+            "DIRECT"
+          ]
+        },
+        "NODE-PICK": {
+          "type": "Fallback",
+          "now": "BWG-HY2-JPTY-01",
+          "all": [
+            "BWG-HY2-JPTY-01",
+            "GIA-HY2-US-01",
+            "CF-CDN-GIA-01",
+            "CF2-CDN-GIA-01",
+            "DMIT-HY2-US-01",
+            "CF2D-HK-01",
+            "CF2D-BWG-01",
+            "BWG-VLESS-JPTY-01"
+          ]
+        },
+        "US-MEDIA": {
+          "type": "Selector",
+          "now": "NODE-PICK",
+          "all": [
+            "BULK-LAX-GIA-01",
+            "NODE-PICK",
+            "AIRPORT"
+          ]
+        },
+        "DOWNLOAD": {
+          "type": "Selector",
+          "now": "DIRECT",
+          "all": [
+            "DIRECT",
+            "PROXY"
+          ]
+        }
+      },
+      "cf_delay": {
+        "CF2D-HK-01": {
+          "unavailable": true,
+          "rc": 22
+        },
+        "CF2D-BWG-01": {
+          "delay": 410
+        }
+      },
+      "meter": {
+        "rc": 0,
+        "stdout": "#*/5 * * * * /etc/routermgmt/proxy-meter-v2.sh #proxy-meter\n*/5 * * * * /etc/routermgmt/proxy-meter-v3.sh #proxy-meter\nFILE=/etc/routermgmt/state/proxy-meter-v3.json\n{\"schema\":3,\"meter_id\":\"rtr-a9bcba\",\"seq\":296,\"boot_id\":\"56d8dc3e-af38-4d0c-b763-a4a094663c27\",\"rules_sha\":\"63b206e0d078261d\",\"continuity_id\":\"reboot-56d8dc3e-af38-4d0c-b763-a4a094663c27\",\"prev_continuity\":\"reboot-56d8dc3e-af38-4d0c-b763-a4a094663c27\",\"prev_epoch\":1795011300,\"day_key\":\"2026-11-18\",\"day_total\":3463344,\"day_first_at\":\"2026-11-18 00:00:00+0800\",\"endpoints\":{\"BWG-VLESS-JPTY-01\":0,\"CF2-CDN-GIA-01\":629833,\"CF-CDN-GIA-01\":748464,\"BULK-LAX-GIA-01\":0,\"BWG-HY2-JPTY-01\":1641464,\"DMIT-HY2-US-01\":0,\"GIA-HY2-US-01\":174828}}\nFILE=/etc/routermgmt/state/proxy-meter-daily-v3.json\n{\"day_key\":\"2026-11-18\",\"total\":3463344,\"delta_last\":211622,\"sampled_at\":\"2026-11-18 22:15:00+0800\",\"meter_id\":\"rtr-a9bcba\",\"seq\":296,\"health\":\"ok\",\"partial\":false,\"events\":\"\",\"read_fail_eps\":\"-\"}\nFILE=/etc/routermgmt/proxy-meter-rules-v3.conf\nBWG-HY2-JPTY-01|up|74.82.193.113|udp|34567\nBWG-HY2-JPTY-01|down|74.82.193.113|udp|34567\nGIA-HY2-US-01|up|154.36.139.155|udp|34568\nGIA-HY2-US-01|down|154.36.139.155|udp|34568\nCF-CDN-GIA-01|up|104.18.32.7|tcp|2053\nCF-CDN-GIA-01|down|104.18.32.7|tcp|2053\nCF2-CDN-GIA-01|up|162.159.135.42|tcp|2053\nCF2-CDN-GIA-01|down|162.159.135.42|tcp|2053\nBULK-LAX-GIA-01|up|154.36.139.155|tcp|2054\nBULK-LAX-GIA-01|down|154.36.139.155|tcp|2054\nDMIT-HY2-US-01|up|69.63.219.156|udp|34567\nDMIT-HY2-US-01|down|69.63.219.156|udp|34567\nBWG-VLESS-JPTY-01|up|74.82.193.113|tcp|443\nBWG-VLESS-JPTY-01|down|74.82.193.113|tcp|443\nFILE=/etc/routermgmt/proxy-meter-coverage-v3.json\n{\"generated_at\":\"2026-11-18 21:16:32+0800\",\"registered_rules\":14,\"proxy_nodes\":7,\"unresolved_names\":\"\",\"tuple_merged\":\"CF2D-HK-01>CF-CDN-GIA-01,CF2D-HK-01>CF-CDN-GIA-01,CF2D-BWG-01>CF2-CDN-GIA-01,CF2D-BWG-01>CF2-CDN-GIA-01\"}\n-A OUTPUT -m comment --comment pmeter-v3-restore -j PROXY_METER_OUT\n-A INPUT -m comment --comment pmeter-v3-restore -j PROXY_METER_IN\nChain PROXY_METER_OUT (1 references)\n    pkts      bytes target     prot opt in     out     source               destination         \n    4004  1346889            udp  --  *      *       0.0.0.0/0            74.82.193.113        udp dpt:34567 /* BWG-HY2-JPTY-01 */\n     639   101686            udp  --  *      *       0.0.0.0/0            154.36.139.155       udp dpt:34568 /* GIA-HY2-US-01 */\n    1790   395800            tcp  --  *      *       0.0.0.0/0            104.18.32.7          tcp dpt:2053 /* CF-CDN-GIA-01 */\n    1531   349754            tcp  --  *      *       0.0.0.0/0            162.159.135.42       tcp dpt:2053 /* CF2-CDN-GIA-01 */\n      33     1980            tcp  --  *      *       0.0.0.0/0            154.36.139.155       tcp dpt:2054 /* BULK-LAX-GIA-01 */\n     296   387168            udp  --  *      *       0.0.0.0/0            69.63.219.156        udp dpt:34567 /* DMIT-HY2-US-01 */\n      89     5340            tcp  --  *      *       0.0.0.0/0            74.82.193.113        tcp dpt:443 /* BWG-VLESS-JPTY-01 */\n    4004  1346889            udp  --  *      *       0.0.0.0/0            74.82.193.113        udp dpt:34567 /* BWG-HY2-JPTY-01 */\n     638   101633            udp  --  *      *       0.0.0.0/0            154.36.139.155       udp dpt:34568 /* GIA-HY2-US-01 */\n    1790   395800            tcp  --  *      *       0.0.0.0/0            104.18.32.7          tcp dpt:2053 /* CF-CDN-GIA-01 */\n    1531   349754            tcp  --  *      *       0.0.0.0/0            162.159.135.42       tcp dpt:2053 /* CF2-CDN-GIA-01 */\n      33     1980            tcp  --  *      *       0.0.0.0/0            154.36.139.155       tcp dpt:2054 /* BULK-LAX-GIA-01 */\n     296   387168            udp  --  *      *       0.0.0.0/0            69.63.219.156        udp dpt:34567 /* DMIT-HY2-US-01 */\n      89     5340            tcp  --  *      *       0.0.0.0/0            74.82.193.113        tcp dpt:443 /* BWG-VLESS-JPTY-01 */\n    3831  1277413            udp  --  *      *       0.0.0.0/0            74.82.193.113        udp dpt:34567 /* BWG-HY2-JPTY-01 */\n     599    95268            udp  --  *      *       0.0.0.0/0            154.36.139.155       udp dpt:34568 /* GIA-HY2-US-01 */\n    1635   361710            tcp  --  *      *       0.0.0.0/0            104.18.32.7          tcp dpt:2053 /* CF-CDN-GIA-01 */\n    1428   327256            tcp  --  *      *       0.0.0.0/0            162.159.135.42       tcp dpt:2053 /* CF2-CDN-GIA-01 */\n      33     1980            tcp  --  *      *       0.0.0.0/0            154.36.139.155       tcp dpt:2054 /* BULK-LAX-GIA-01 */\n     276   361008            udp  --  *      *       0.0.0.0/0            69.63.219.156        udp dpt:34567 /* DMIT-HY2-US-01 */\n      83     4980            tcp  --  *      *       0.0.0.0/0            74.82.193.113        tcp dpt:443 /* BWG-VLESS-JPTY-01 */\n    3506  1167411            udp  --  *      *       0.0.0.0/0            74.82.193.113        udp dpt:34567 /* BWG-HY2-JPTY-01 */\n     549    88340            udp  --  *      *       0.0.0.0/0            154.36.139.155       udp dpt:34568 /* GIA-HY2-US-01 */\n    1503   333485            tcp  --  *      *       0.0.0.0/0            104.18.32.7          tcp dpt:2053 /* CF-CDN-GIA-01 */\n    1275   291890            tcp  --  *      *       0.0.0.0/0            162.159.135.42       tcp dpt:2053 /* CF2-CDN-GIA-01 */\n      30     1800            tcp  --  *      *       0.0.0.0/0            154.36.139.155       tcp dpt:2054 /* BULK-LAX-GIA-01 */\n     256   334848            udp  --  *      *       0.0.0.0/0            69.63.219.156        udp dpt:34567 /* DMIT-HY2-US-01 */\n      77     4620            tcp  --  *      *       0.0.0.0/0            74.82.193.113        tcp dpt:443 /* BWG-VLESS-JPTY-01 */\n    3065  1048217            udp  --  *      *       0.0.0.0/0            74.82.193.113        udp dpt:34567 /* BWG-HY2-JPTY-01 */\n     491    78413            udp  --  *      *       0.0.0.0/0            154.36.139.155       udp dpt:34568 /* GIA-HY2-US-01 */\n    1321   290129            tcp  --  *      *       0.0.0.0/0            104.18.32.7          tcp dpt:2053 /* CF-CDN-GIA-01 */\n    1127   258509            tcp  --  *      *       0.0.0.0/0            162.159.135.42       tcp dpt:2053 /* CF2-CDN-GIA-01 */\n      27     1620            tcp  --  *      *       0.0.0.0/0            154.36.139.155       tcp dpt:2054 /* BULK-LAX-GIA-01 */\n     226   295608            udp  --  *      *       0.0.0.0/0            69.63.219.156        udp dpt:34567 /* DMIT-HY2-US-01 */\n      68     4080            tcp  --  *      *       0.0.0.0/0            74.82.193.113        tcp dpt:443 /* BWG-VLESS-JPTY-01 */\n    2718   933250            udp  --  *      *       0.0.0.0/0            74.82.193.113        udp dpt:34567 /* BWG-HY2-JPTY-01 */\n     443    71412            udp  --  *      *       0.0.0.0/0            154.36.139.155       udp dpt:34568 /* GIA-HY2-US-01 */\n    1197   264350            tcp  --  *      *       0.0.0.0/0            104.18.32.7          tcp dpt:2053 /* CF-CDN-GIA-01 */\n    1029   236331            tcp  --  *      *       0.0.0.0/0            162.159.135.42       tcp dpt:2053 /* CF2-CDN-GIA-01 */\n      24     1440            tcp  --  *      *       0.0.0.0/0            154.36.139.155       tcp dpt:2054 /* BULK-LAX-GIA-01 */\n     206   269448            udp  --  *      *       0.0.0.0/0            69.63.219.156        udp dpt:34567 /* DMIT-HY2-US-01 */\n      62     3720            tcp  --  *      *       0.0.0.0/0            74.82.193.113        tcp dpt:443 /* BWG-VLESS-JPTY-01 */\n    2377   821668            udp  --  *      *       0.0.0.0/0            74.82.193.113        udp dpt:34567 /* BWG-HY2-JPTY-01 */\n     386    61649            udp  --  *      *       0.0.0.0/0            154.36.139.155       udp dpt:34568 /* GIA-HY2-US-01 */\n    1042   230499            tcp  --  *      *       0.0.0.0/0            104.18.32.7          tcp dpt:2053 /* CF-CDN-GIA-01 */\n     882   201651            tcp  --  *      *       0.0.0.0/0            162.159.135.42       tcp dpt:2053 /* CF2-CDN-GIA-01 */\n      21     1260            tcp  --  *      *       0.0.0.0/0            154.36.139.155       tcp dpt:2054 /* BULK-LAX-GIA-01 */\n     176   230208            udp  --  *      *       0.0.0.0/0            69.63.219.156        udp dpt:34567 /* DMIT-HY2-US-01 */\n      53     3180            tcp  --  *      *       0.0.0.0/0            74.82.193.113        tcp dpt:443 /* BWG-VLESS-JPTY-01 */\n    2010   690811            udp  --  *      *       0.0.0.0/0            74.82.193.113        udp dpt:34567 /* BWG-HY2-JPTY-01 */\n     337    54292            udp  --  *      *       0.0.0.0/0            154.36.139.155       udp dpt:34568 /* GIA-HY2-US-01 */\n     911   203901            tcp  --  *      *       0.0.0.0/0            104.18.32.7          tcp dpt:2053 /* CF-CDN-GIA-01 */\n     782   179395            tcp  --  *      *       0.0.0.0/0            162.159.135.42       tcp dpt:2053 /* CF2-CDN-GIA-01 */\n      18     1080            tcp  --  *      *       0.0.0.0/0            154.36.139.155       tcp dpt:2054 /* BULK-LAX-GIA-01 */\n     156   204048            udp  --  *      *       0.0.0.0/0            69.63.219.156        udp dpt:34567 /* DMIT-HY2-US-01 */\n      47     2820            tcp  --  *      *       0.0.0.0/0            74.82.193.113        tcp dpt:443 /* BWG-VLESS-JPTY-01 */\n    1688   591511            udp  --  *      *       0.0.0.0/0            74.82.193.113        udp dpt:34567 /* BWG-HY2-JPTY-01 */\n     278    44410            udp  --  *      *       0.0.0.0/0            154.36.139.155       udp dpt:34568 /* GIA-HY2-US-01 */\n     730   165641            tcp  --  *      *       0.0.0.0/0            104.18.32.7          tcp dpt:2053 /* CF-CDN-GIA-01 */\n     644   147580            tcp  --  *      *       0.0.0.0/0            162.159.135.42       tcp dpt:2053 /* CF2-CDN-GIA-01 */\n      15      900            tcp  --  *      *       0.0.0.0/0            154.36.139.155       tcp dpt:2054 /* BULK-LAX-GIA-01 */\n     126   164808            udp  --  *      *       0.0.0.0/0            69.63.219.156        udp dpt:34567 /* DMIT-HY2-US-01 */\n      38     2280            tcp  --  *      *       0.0.0.0/0            74.82.193.113        tcp dpt:443 /* BWG-VLESS-JPTY-01 */\n    1390   500054            udp  --  *      *       0.0.0.0/0            74.82.193.113        udp dpt:34567 /* BWG-HY2-JPTY-01 */\n     230    37438            udp  --  *      *       0.0.0.0/0            154.36.139.155       udp dpt:34568 /* GIA-HY2-US-01 */\n     614   139096            tcp  --  *      *       0.0.0.0/0            104.18.32.7          tcp dpt:2053 /* CF-CDN-GIA-01 */\n     544   125416            tcp  --  *      *       0.0.0.0/0            162.159.135.42       tcp dpt:2053 /* CF2-CDN-GIA-01 */\n      12      720            tcp  --  *      *       0.0.0.0/0            154.36.139.155       tcp dpt:2054 /* BULK-LAX-GIA-01 */\n     106   138648            udp  --  *      *       0.0.0.0/0            69.63.219.156        udp dpt:34567 /* DMIT-HY2-US-01 */\n      32     1920            tcp  --  *      *       0.0.0.0/0            74.82.193.113        tcp dpt:443 /* BWG-VLESS-JPTY-01 */\n    1076   399371            udp  --  *      *       0.0.0.0/0            74.82.193.113        udp dpt:34567 /* BWG-HY2-JPTY-01 */\n     172    27308            udp  --  *      *       0.0.0.0/0            154.36.139.155       udp dpt:34568 /* GIA-HY2-US-01 */\n     432    97750            tcp  --  *      *       0.0.0.0/0            104.18.32.7          tcp dpt:2053 /* CF-CDN-GIA-01 */\n     394    91810            tcp  --  *      *       0.0.0.0/0            162.159.135.42       tcp dpt:2053 /* CF2-CDN-GIA-01 */\n       9      540            tcp  --  *      *       0.0.0.0/0            154.36.139.155       tcp dpt:2054 /* BULK-LAX-GIA-01 */\n      76    99408            udp  --  *      *       0.0.0.0/0            69.63.219.156        udp dpt:34567 /* DMIT-HY2-US-01 */\n      23     1380            tcp  --  *      *       0.0.0.0/0            74.82.193.113        tcp dpt:443 /* BWG-VLESS-JPTY-01 */\n     715   275771            udp  --  *      *       0.0.0.0/0            74.82.193.113        udp dpt:34567 /* BWG-HY2-JPTY-01 */\n     122    20146            udp  --  *      *       0.0.0.0/0            154.36.139.155       udp dpt:34568 /* GIA-HY2-US-01 */\n     309    71768            tcp  --  *      *       0.0.0.0/0            104.18.32.7          tcp dpt:2053 /* CF-CDN-GIA-01 */\n     296    69476            tcp  --  *      *       0.0.0.0/0            162.159.135.42       tcp dpt:2053 /* CF2-CDN-GIA-01 */\n       6      360            tcp  --  *      *       0.0.0.0/0            154.36.139.155       tcp dpt:2054 /* BULK-LAX-GIA-01 */\n      56    73248            udp  --  *      *       0.0.0.0/0            69.63.219.156        udp dpt:34567 /* DMIT-HY2-US-01 */\n      17     1020            tcp  --  *      *       0.0.0.0/0            74.82.193.113        tcp dpt:443 /* BWG-VLESS-JPTY-01 */\n     396   171779            udp  --  *      *       0.0.0.0/0            74.82.193.113        udp dpt:34567 /* BWG-HY2-JPTY-01 */\n      59     9772            udp  --  *      *       0.0.0.0/0            154.36.139.155       udp dpt:34568 /* GIA-HY2-US-01 */\n     162    39532            tcp  --  *      *       0.0.0.0/0            104.18.32.7          tcp dpt:2053 /* CF-CDN-GIA-01 */\n     145    35748            tcp  --  *      *       0.0.0.0/0            162.159.135.42       tcp dpt:2053 /* CF2-CDN-GIA-01 */\n       3      180            tcp  --  *      *       0.0.0.0/0            154.36.139.155       tcp dpt:2054 /* BULK-LAX-GIA-01 */\n      26    34008            udp  --  *      *       0.0.0.0/0            69.63.219.156        udp dpt:34567 /* DMIT-HY2-US-01 */\n       8      480            tcp  --  *      *       0.0.0.0/0            74.82.193.113        tcp dpt:443 /* BWG-VLESS-JPTY-01 */\n      23     5613            udp  --  *      *       0.0.0.0/0            74.82.193.113        udp dpt:34567 /* BWG-HY2-JPTY-01 */\n      11     2780            udp  --  *      *       0.0.0.0/0            154.36.139.155       udp dpt:34568 /* GIA-HY2-US-01 */\n      44    11038            tcp  --  *      *       0.0.0.0/0            104.18.32.7          tcp dpt:2053 /* CF-CDN-GIA-01 */\n      41    10531            tcp  --  *      *       0.0.0.0/0            162.159.135.42       tcp dpt:2053 /* CF2-CDN-GIA-01 */\n       0        0            tcp  --  *      *       0.0.0.0/0            154.36.139.155       tcp dpt:2054 /* BULK-LAX-GIA-01 */\n       6     7848            udp  --  *      *       0.0.0.0/0            69.63.219.156        udp dpt:34567 /* DMIT-HY2-US-01 */\n       2      120            tcp  --  *      *       0.0.0.0/0            74.82.193.113        tcp dpt:443 /* BWG-VLESS-JPTY-01 */\nChain PROXY_METER_IN (1 references)\n    pkts      bytes target     prot opt in     out     source               destination         \n    3722  1652154            udp  --  *      *       74.82.193.113        0.0.0.0/0            udp spt:34567 /* BWG-HY2-JPTY-01 */\n     639   180498            udp  --  *      *       154.36.139.155       0.0.0.0/0            udp spt:34568 /* GIA-HY2-US-01 */\n    1511   771276            tcp  --  *      *       104.18.32.7          0.0.0.0/0            tcp spt:2053 /* CF-CDN-GIA-01 */\n    1174   649247            tcp  --  *      *       162.159.135.42       0.0.0.0/0            tcp spt:2053 /* CF2-CDN-GIA-01 */\n       0        0            tcp  --  *      *       154.36.139.155       0.0.0.0/0            tcp spt:2054 /* BULK-LAX-GIA-01 */\n       0        0            udp  --  *      *       69.63.219.156        0.0.0.0/0            udp spt:34567 /* DMIT-HY2-US-01 */\n       0        0            tcp  --  *      *       74.82.193.113        0.0.0.0/0            tcp spt:443 /* BWG-VLESS-JPTY-01 */\n    3722  1652154            udp  --  *      *       74.82.193.113        0.0.0.0/0            udp spt:34567 /* BWG-HY2-JPTY-01 */\n     638   180442            udp  --  *      *       154.36.139.155       0.0.0.0/0            udp spt:34568 /* GIA-HY2-US-01 */\n    1511   771276            tcp  --  *      *       104.18.32.7          0.0.0.0/0            tcp spt:2053 /* CF-CDN-GIA-01 */\n    1174   649247            tcp  --  *      *       162.159.135.42       0.0.0.0/0            tcp spt:2053 /* CF2-CDN-GIA-01 */\n       0        0            tcp  --  *      *       154.36.139.155       0.0.0.0/0            tcp spt:2054 /* BULK-LAX-GIA-01 */\n       0        0            udp  --  *      *       69.63.219.156        0.0.0.0/0            udp spt:34567 /* DMIT-HY2-US-01 */\n       0        0            tcp  --  *      *       74.82.193.113        0.0.0.0/0            tcp spt:443 /* BWG-VLESS-JPTY-01 */\n    3572  1580914            udp  --  *      *       74.82.193.113        0.0.0.0/0            udp spt:34567 /* BWG-HY2-JPTY-01 */\n     598   169391            udp  --  *      *       154.36.139.155       0.0.0.0/0            udp spt:34568 /* GIA-HY2-US-01 */\n    1383   705228            tcp  --  *      *       104.18.32.7          0.0.0.0/0            tcp spt:2053 /* CF-CDN-GIA-01 */\n    1096   606738            tcp  --  *      *       162.159.135.42       0.0.0.0/0            tcp spt:2053 /* CF2-CDN-GIA-01 */\n       0        0            tcp  --  *      *       154.36.139.155       0.0.0.0/0            tcp spt:2054 /* BULK-LAX-GIA-01 */\n       0        0            udp  --  *      *       69.63.219.156        0.0.0.0/0            udp spt:34567 /* DMIT-HY2-US-01 */\n       0        0            tcp  --  *      *       74.82.193.113        0.0.0.0/0            tcp spt:443 /* BWG-VLESS-JPTY-01 */\n    3264  1456501            udp  --  *      *       74.82.193.113        0.0.0.0/0            udp spt:34567 /* BWG-HY2-JPTY-01 */\n     549   157540            udp  --  *      *       154.36.139.155       0.0.0.0/0            udp spt:34568 /* GIA-HY2-US-01 */\n    1269   648462            tcp  --  *      *       104.18.32.7          0.0.0.0/0            tcp spt:2053 /* CF-CDN-GIA-01 */\n     968   542785            tcp  --  *      *       162.159.135.42       0.0.0.0/0            tcp spt:2053 /* CF2-CDN-GIA-01 */\n       0        0            tcp  --  *      *       154.36.139.155       0.0.0.0/0            tcp spt:2054 /* BULK-LAX-GIA-01 */\n       0        0            udp  --  *      *       69.63.219.156        0.0.0.0/0            udp spt:34567 /* DMIT-HY2-US-01 */\n       0        0            tcp  --  *      *       74.82.193.113        0.0.0.0/0            tcp spt:443 /* BWG-VLESS-JPTY-01 */\n    2745  1117472            udp  --  *      *       74.82.193.113        0.0.0.0/0            udp spt:34567 /* BWG-HY2-JPTY-01 */\n     490   139204            udp  --  *      *       154.36.139.155       0.0.0.0/0            udp spt:34568 /* GIA-HY2-US-01 */\n    1126   572802            tcp  --  *      *       104.18.32.7          0.0.0.0/0            tcp spt:2053 /* CF-CDN-GIA-01 */\n     862   480119            tcp  --  *      *       162.159.135.42       0.0.0.0/0            tcp spt:2053 /* CF2-CDN-GIA-01 */\n       0        0            tcp  --  *      *       154.36.139.155       0.0.0.0/0            tcp spt:2054 /* BULK-LAX-GIA-01 */\n       0        0            udp  --  *      *       69.63.219.156        0.0.0.0/0            udp spt:34567 /* DMIT-HY2-US-01 */\n       0        0            tcp  --  *      *       74.82.193.113        0.0.0.0/0            tcp spt:443 /* BWG-VLESS-JPTY-01 */\n    2438   980228            udp  --  *      *       74.82.193.113        0.0.0.0/0            udp spt:34567 /* BWG-HY2-JPTY-01 */\n     442   126664            udp  --  *      *       154.36.139.155       0.0.0.0/0            udp spt:34568 /* GIA-HY2-US-01 */\n    1015   521330            tcp  --  *      *       104.18.32.7          0.0.0.0/0            tcp spt:2053 /* CF-CDN-GIA-01 */\n     789   437914            tcp  --  *      *       162.159.135.42       0.0.0.0/0            tcp spt:2053 /* CF2-CDN-GIA-01 */\n       0        0            tcp  --  *      *       154.36.139.155       0.0.0.0/0            tcp spt:2054 /* BULK-LAX-GIA-01 */\n       0        0            udp  --  *      *       69.63.219.156        0.0.0.0/0            udp spt:34567 /* DMIT-HY2-US-01 */\n       0        0            tcp  --  *      *       74.82.193.113        0.0.0.0/0            tcp spt:443 /* BWG-VLESS-JPTY-01 */\n    2132   854875            udp  --  *      *       74.82.193.113        0.0.0.0/0            udp spt:34567 /* BWG-HY2-JPTY-01 */\n     385   109728            udp  --  *      *       154.36.139.155       0.0.0.0/0            udp spt:34568 /* GIA-HY2-US-01 */\n     894   453165            tcp  --  *      *       104.18.32.7          0.0.0.0/0            tcp spt:2053 /* CF-CDN-GIA-01 */\n     670   374056            tcp  --  *      *       162.159.135.42       0.0.0.0/0            tcp spt:2053 /* CF2-CDN-GIA-01 */\n       0        0            tcp  --  *      *       154.36.139.155       0.0.0.0/0            tcp spt:2054 /* BULK-LAX-GIA-01 */\n       0        0            udp  --  *      *       69.63.219.156        0.0.0.0/0            udp spt:34567 /* DMIT-HY2-US-01 */\n       0        0            tcp  --  *      *       74.82.193.113        0.0.0.0/0            tcp spt:443 /* BWG-VLESS-JPTY-01 */\n    1780   686917            udp  --  *      *       74.82.193.113        0.0.0.0/0            udp spt:34567 /* BWG-HY2-JPTY-01 */\n     334    97155            udp  --  *      *       154.36.139.155       0.0.0.0/0            udp spt:34568 /* GIA-HY2-US-01 */\n     788   395302            tcp  --  *      *       104.18.32.7          0.0.0.0/0            tcp spt:2053 /* CF-CDN-GIA-01 */\n     585   331184            tcp  --  *      *       162.159.135.42       0.0.0.0/0            tcp spt:2053 /* CF2-CDN-GIA-01 */\n       0        0            tcp  --  *      *       154.36.139.155       0.0.0.0/0            tcp spt:2054 /* BULK-LAX-GIA-01 */\n       0        0            udp  --  *      *       69.63.219.156        0.0.0.0/0            udp spt:34567 /* DMIT-HY2-US-01 */\n       0        0            tcp  --  *      *       74.82.193.113        0.0.0.0/0            tcp spt:443 /* BWG-VLESS-JPTY-01 */\n    1498   581499            udp  --  *      *       74.82.193.113        0.0.0.0/0            udp spt:34567 /* BWG-HY2-JPTY-01 */\n     276    80217            udp  --  *      *       154.36.139.155       0.0.0.0/0            udp spt:34568 /* GIA-HY2-US-01 */\n     636   316659            tcp  --  *      *       104.18.32.7          0.0.0.0/0            tcp spt:2053 /* CF-CDN-GIA-01 */\n     491   273261            tcp  --  *      *       162.159.135.42       0.0.0.0/0            tcp spt:2053 /* CF2-CDN-GIA-01 */\n       0        0            tcp  --  *      *       154.36.139.155       0.0.0.0/0            tcp spt:2054 /* BULK-LAX-GIA-01 */\n       0        0            udp  --  *      *       69.63.219.156        0.0.0.0/0            udp spt:34567 /* DMIT-HY2-US-01 */\n       0        0            tcp  --  *      *       74.82.193.113        0.0.0.0/0            tcp spt:443 /* BWG-VLESS-JPTY-01 */\n    1236   492080            udp  --  *      *       74.82.193.113        0.0.0.0/0            udp spt:34567 /* BWG-HY2-JPTY-01 */\n     228    67740            udp  --  *      *       154.36.139.155       0.0.0.0/0            udp spt:34568 /* GIA-HY2-US-01 */\n     539   266703            tcp  --  *      *       104.18.32.7          0.0.0.0/0            tcp spt:2053 /* CF-CDN-GIA-01 */\n     416   230979            tcp  --  *      *       162.159.135.42       0.0.0.0/0            tcp spt:2053 /* CF2-CDN-GIA-01 */\n       0        0            tcp  --  *      *       154.36.139.155       0.0.0.0/0            tcp spt:2054 /* BULK-LAX-GIA-01 */\n       0        0            udp  --  *      *       69.63.219.156        0.0.0.0/0            udp spt:34567 /* DMIT-HY2-US-01 */\n       0        0            tcp  --  *      *       74.82.193.113        0.0.0.0/0            tcp spt:443 /* BWG-VLESS-JPTY-01 */\n     950   383920            udp  --  *      *       74.82.193.113        0.0.0.0/0            udp spt:34567 /* BWG-HY2-JPTY-01 */\n     169    49065            udp  --  *      *       154.36.139.155       0.0.0.0/0            udp spt:34568 /* GIA-HY2-US-01 */\n     381   189938            tcp  --  *      *       104.18.32.7          0.0.0.0/0            tcp spt:2053 /* CF-CDN-GIA-01 */\n     304   167655            tcp  --  *      *       162.159.135.42       0.0.0.0/0            tcp spt:2053 /* CF2-CDN-GIA-01 */\n       0        0            tcp  --  *      *       154.36.139.155       0.0.0.0/0            tcp spt:2054 /* BULK-LAX-GIA-01 */\n       0        0            udp  --  *      *       69.63.219.156        0.0.0.0/0            udp spt:34567 /* DMIT-HY2-US-01 */\n       0        0            tcp  --  *      *       74.82.193.113        0.0.0.0/0            tcp spt:443 /* BWG-VLESS-JPTY-01 */\n     609   234875            udp  --  *      *       74.82.193.113        0.0.0.0/0            udp spt:34567 /* BWG-HY2-JPTY-01 */\n     117    36648            udp  --  *      *       154.36.139.155       0.0.0.0/0            udp spt:34568 /* GIA-HY2-US-01 */\n     267   137111            tcp  --  *      *       104.18.32.7          0.0.0.0/0            tcp spt:2053 /* CF-CDN-GIA-01 */\n     225   125065            tcp  --  *      *       162.159.135.42       0.0.0.0/0            tcp spt:2053 /* CF2-CDN-GIA-01 */\n       0        0            tcp  --  *      *       154.36.139.155       0.0.0.0/0            tcp spt:2054 /* BULK-LAX-GIA-01 */\n       0        0            udp  --  *      *       69.63.219.156        0.0.0.0/0            udp spt:34567 /* DMIT-HY2-US-01 */\n       0        0            tcp  --  *      *       74.82.193.113        0.0.0.0/0            tcp spt:443 /* BWG-VLESS-JPTY-01 */\n     320   117655            udp  --  *      *       74.82.193.113        0.0.0.0/0            udp spt:34567 /* BWG-HY2-JPTY-01 */\n      59    18123            udp  --  *      *       154.36.139.155       0.0.0.0/0            udp spt:34568 /* GIA-HY2-US-01 */\n     138    72711            tcp  --  *      *       104.18.32.7          0.0.0.0/0            tcp spt:2053 /* CF-CDN-GIA-01 */\n     114    61719            tcp  --  *      *       162.159.135.42       0.0.0.0/0            tcp spt:2053 /* CF2-CDN-GIA-01 */\n       0        0            tcp  --  *      *       154.36.139.155       0.0.0.0/0            tcp spt:2054 /* BULK-LAX-GIA-01 */\n       0        0            udp  --  *      *       69.63.219.156        0.0.0.0/0            udp spt:34567 /* DMIT-HY2-US-01 */\n       0        0            tcp  --  *      *       74.82.193.113        0.0.0.0/0            tcp spt:443 /* BWG-VLESS-JPTY-01 */\n      21    10690            udp  --  *      *       74.82.193.113        0.0.0.0/0            udp spt:34567 /* BWG-HY2-JPTY-01 */\n      11     5670            udp  --  *      *       154.36.139.155       0.0.0.0/0            udp spt:34568 /* GIA-HY2-US-01 */\n      34    22812            tcp  --  *      *       104.18.32.7          0.0.0.0/0            tcp spt:2053 /* CF-CDN-GIA-01 */\n      32    19414            tcp  --  *      *       162.159.135.42       0.0.0.0/0            tcp spt:2053 /* CF2-CDN-GIA-01 */\n       0        0            tcp  --  *      *       154.36.139.155       0.0.0.0/0            tcp spt:2054 /* BULK-LAX-GIA-01 */\n       0        0            udp  --  *      *       69.63.219.156        0.0.0.0/0            udp spt:34567 /* DMIT-HY2-US-01 */\n       0        0            tcp  --  *      *       74.82.193.113        0.0.0.0/0            tcp spt:443 /* BWG-VLESS-JPTY-01 */\n2026-11-18 22:00:00 OK DELTA=270336 HEALTH=ok EVENTS=- DAY_TOTAL=2734764\n2026-11-18 22:05:00 OK DELTA=253467 HEALTH=ok EVENTS=- DAY_TOTAL=2988231\n2026-11-18 22:10:00 OK DELTA=263491 HEALTH=ok EVENTS=- DAY_TOTAL=3251722\n2026-11-18 22:15:00 OK DELTA=211622 HEALTH=ok EVENTS=- DAY_TOTAL=3463344",
+        "stderr": ""
+      },
+      "protected_checks": {
+        "rc": 0,
+        "stdout": "6519a8b4e28e38f0a12932444626218d7f92bd95950a813421cca04cca11dd27  /etc/config/dhcp\n7ed820da9a00b05438f107d52b63cfc5ad3a5f7c4170ad9b4f543503678fd61f  /etc/routermgmt/tunnel.conf\nf13d6b9dae93b5157911a6247a1b62040bec42a67871e8aa44ce430480852185  /etc/mihomo/config.yaml\nqdisc noqueue 0: root refcnt 2 \ng204=204 t=0.357212\nbaidu=200 t=0.182909",
+        "stderr": ""
+      }
+    },
+    "R5": {
+      "name": "R5",
+      "port": 13225,
+      "runtime": {
+        "rc": 0,
+        "stdout": "2026-11-18 22:15:09 +0800\naarch64\nMihomo Meta v1.19.31 linux arm64 with go1.26.8 Mon Sep 14 13:20:46 UTC 2026\n29732 7553\nca77a1f3b4c35ed6beb3669507a80e7447943c1c33f7b300a704a0bf886a29d8  /etc/routermgmt/routermgmt-agent.sh\n71a5045e43c321c2a9e18599b79fb315e4c24b6ab5db3d86031a129994ebdcce  /etc/routermgmt/handlers/switch_node.sh\nc65d51a7066eb05a141ead4692361472c6e89a6e16327ca4dc7da356c12bfd6e  /etc/routermgmt/self-heal.sh\nNO_PAUSE",
+        "stderr": ""
+      },
+      "config": {
+        "cf_nodes": [
+          {
+            "name": "CF2D-HK-01",
+            "server": "104.18.32.7",
+            "port": 2053,
+            "servername": "hk.6849271.xyz",
+            "udp": false
+          },
+          {
+            "name": "CF2D-BWG-01",
+            "server": "162.159.135.42",
+            "port": 2053,
+            "servername": "usbwg.6849271.xyz",
+            "udp": false
+          },
+          {
+            "name": "CF-CDN-GIA-01",
+            "server": "104.18.32.7",
+            "port": 2053,
+            "servername": "cf.k3x9m2.top",
+            "udp": false
+          },
+          {
+            "name": "CF2-CDN-GIA-01",
+            "server": "162.159.135.42",
+            "port": 2053,
+            "servername": "cf.k3x9m2.top",
+            "udp": false
+          }
+        ],
+        "cold_domain_present": false,
+        "tail": [
+          "AND,((NETWORK,UDP),(DST-PORT,443)),REJECT",
+          "GEOSITE,geolocation-!cn,PROXY",
+          "MATCH,DIRECT"
+        ],
+        "fallback": [
+          "223.5.5.5",
+          "119.29.29.29"
+        ],
+        "provider_paths": [
+          "./proxy_providers/airport-g02.yaml"
+        ]
+      },
+      "groups": {
+        "PROXY": {
+          "type": "Selector",
+          "now": "AUTO",
+          "all": [
+            "AUTO",
+            "BWG-HY2-JPTY-01",
+            "GIA-HY2-US-01",
+            "US666-CN2GIA-01",
+            "CF2D-HK-01",
+            "CF2D-BWG-01",
+            "BWG-VLESS-JPTY-01",
+            "CF-CDN-GIA-01",
+            "CF2-CDN-GIA-01",
+            "DIRECT"
+          ]
+        },
+        "NODE-PICK": {
+          "type": "Fallback",
+          "now": "BWG-HY2-JPTY-01",
+          "all": [
+            "BWG-HY2-JPTY-01",
+            "GIA-HY2-US-01",
+            "US666-CN2GIA-01",
+            "CF2D-HK-01",
+            "CF2D-BWG-01",
+            "BWG-VLESS-JPTY-01",
+            "CF-CDN-GIA-01",
+            "CF2-CDN-GIA-01"
+          ]
+        },
+        "US-MEDIA": {
+          "type": "Selector",
+          "now": "NODE-PICK",
+          "all": [
+            "NODE-PICK",
+            "AIRPORT"
+          ]
+        },
+        "DOWNLOAD": {
+          "type": "Selector",
+          "now": "DIRECT",
+          "all": [
+            "DIRECT",
+            "PROXY"
+          ]
+        }
+      },
+      "cf_delay": {
+        "CF2D-HK-01": {
+          "unavailable": true,
+          "rc": 22
+        },
+        "CF2D-BWG-01": {
+          "delay": 717
+        }
+      },
+      "meter": {
+        "rc": 1,
+        "stdout": "",
+        "stderr": ""
+      },
+      "protected_checks": {
+        "rc": 0,
+        "stdout": "139643e16cf8d0e744d3ee3e7d00d48cc617593f46ce28d848293f1e365853ce  /etc/config/dhcp\n16138b483c0f47464216cc8045e7f1ee555276f35571285f34cf4be7d37dad4d  /etc/routermgmt/tunnel.conf\nf26fb050fbe30c8cfed523519097479fe543406a02e51ef4ebc7d75a8dea1b2e  /etc/mihomo/config.yaml\nqdisc noqueue 0: root refcnt 2 \ng204=204 t=0.402373\nbaidu=200 t=0.193307",
+        "stderr": ""
+      }
+    },
+    "Athena": {
+      "name": "Athena",
+      "port": 13228,
+      "error_type": "AuthenticationException"
+    },
+    "R8": {
+      "name": "R8",
+      "port": 13230,
+      "runtime": {
+        "rc": 0,
+        "stdout": "2026-11-18 22:15:11 +0800\naarch64\nMihomo Meta v1.19.31 linux arm64 with go1.26.8 Mon Sep 14 13:20:46 UTC 2026\n27828 10853\na4d04c6cfad35cdc1260ab1db46e06e55e6be74b5493109b23643146f8b1a06b  /etc/routermgmt/routermgmt-agent.sh\ne9729615b01a8b0418eb852dac77deb2924a9bd2f4e9baaa60b6e0c357cdff43  /etc/routermgmt/handlers/switch_node.sh\nc65d51a7066eb05a141ead4692361472c6e89a6e16327ca4dc7da356c12bfd6e  /etc/routermgmt/self-heal.sh\nNO_PAUSE",
+        "stderr": ""
+      },
+      "config": {
+        "cf_nodes": [
+          {
+            "name": "CF2D-HK-01",
+            "server": "104.18.32.7",
+            "port": 2053,
+            "servername": "hk.6849271.xyz",
+            "udp": false
+          },
+          {
+            "name": "CF2D-BWG-01",
+            "server": "162.159.135.42",
+            "port": 2053,
+            "servername": "usbwg.6849271.xyz",
+            "udp": false
+          },
+          {
+            "name": "CF-CDN-GIA-01",
+            "server": "104.18.32.7",
+            "port": 2053,
+            "servername": "cf.k3x9m2.top",
+            "udp": false
+          },
+          {
+            "name": "CF2-CDN-GIA-01",
+            "server": "162.159.135.42",
+            "port": 2053,
+            "servername": "cf.k3x9m2.top",
+            "udp": false
+          }
+        ],
+        "cold_domain_present": false,
+        "tail": [
+          "AND,((NETWORK,UDP),(DST-PORT,443)),REJECT",
+          "GEOSITE,geolocation-!cn,PROXY",
+          "MATCH,DIRECT"
+        ],
+        "fallback": [
+          "223.5.5.5",
+          "119.29.29.29"
+        ],
+        "provider_paths": [
+          "./proxy_providers/airport-g02.yaml"
+        ]
+      },
+      "groups": {
+        "PROXY": {
+          "type": "Selector",
+          "now": "AUTO",
+          "all": [
+            "AUTO",
+            "BWG-HY2-JPTY-01",
+            "GIA-HY2-US-01",
+            "US666-CN2GIA-01",
+            "CF2D-HK-01",
+            "CF2D-BWG-01",
+            "BWG-VLESS-JPTY-01",
+            "CF-CDN-GIA-01",
+            "CF2-CDN-GIA-01",
+            "DIRECT"
+          ]
+        },
+        "NODE-PICK": {
+          "type": "Fallback",
+          "now": "BWG-HY2-JPTY-01",
+          "all": [
+            "BWG-HY2-JPTY-01",
+            "GIA-HY2-US-01",
+            "US666-CN2GIA-01",
+            "CF2D-HK-01",
+            "CF2D-BWG-01",
+            "BWG-VLESS-JPTY-01",
+            "CF-CDN-GIA-01",
+            "CF2-CDN-GIA-01"
+          ]
+        },
+        "US-MEDIA": {
+          "type": "Selector",
+          "now": "NODE-PICK",
+          "all": [
+            "NODE-PICK",
+            "AIRPORT"
+          ]
+        },
+        "DOWNLOAD": {
+          "type": "Selector",
+          "now": "DIRECT",
+          "all": [
+            "DIRECT",
+            "PROXY"
+          ]
+        }
+      },
+      "cf_delay": {
+        "CF2D-HK-01": {
+          "unavailable": true,
+          "rc": 22
+        },
+        "CF2D-BWG-01": {
+          "delay": 284
+        }
+      },
+      "meter": {
+        "rc": 1,
+        "stdout": "",
+        "stderr": ""
+      },
+      "protected_checks": {
+        "rc": 0,
+        "stdout": "6519a8b4e28e38f0a12932444626218d7f92bd95950a813421cca04cca11dd27  /etc/config/dhcp\n2db05b79cd2644b8c3570bdd970d996266f5b15f196b2d0b7610f4fc49df987a  /etc/routermgmt/tunnel.conf\nf26fb050fbe30c8cfed523519097479fe543406a02e51ef4ebc7d75a8dea1b2e  /etc/mihomo/config.yaml\nqdisc noqueue 0: root refcnt 2 \ng204=204 t=0.376144\nbaidu=200 t=0.187436",
+        "stderr": ""
+      }
+    },
+    "R9": {
+      "name": "R9",
+      "port": 13231,
+      "runtime": {
+        "rc": 0,
+        "stdout": "2026-11-18 22:15:13 +0800\naarch64\nMihomo Meta v1.19.31 linux arm64 with go1.26.8 Mon Sep 14 13:20:46 UTC 2026\n32213 20705\na4d04c6cfad35cdc1260ab1db46e06e55e6be74b5493109b23643146f8b1a06b  /etc/routermgmt/routermgmt-agent.sh\ne9729615b01a8b0418eb852dac77deb2924a9bd2f4e9baaa60b6e0c357cdff43  /etc/routermgmt/handlers/switch_node.sh\nc65d51a7066eb05a141ead4692361472c6e89a6e16327ca4dc7da356c12bfd6e  /etc/routermgmt/self-heal.sh\nNO_PAUSE",
+        "stderr": ""
+      },
+      "config": {
+        "cf_nodes": [
+          {
+            "name": "CF2D-HK-01",
+            "server": "104.18.32.7",
+            "port": 2053,
+            "servername": "hk.6849271.xyz",
+            "udp": false
+          },
+          {
+            "name": "CF2D-BWG-01",
+            "server": "162.159.135.42",
+            "port": 2053,
+            "servername": "usbwg.6849271.xyz",
+            "udp": false
+          },
+          {
+            "name": "CF-CDN-GIA-01",
+            "server": "104.18.32.7",
+            "port": 2053,
+            "servername": "cf.k3x9m2.top",
+            "udp": false
+          },
+          {
+            "name": "CF2-CDN-GIA-01",
+            "server": "162.159.135.42",
+            "port": 2053,
+            "servername": "cf.k3x9m2.top",
+            "udp": false
+          }
+        ],
+        "cold_domain_present": false,
+        "tail": [
+          "AND,((NETWORK,UDP),(DST-PORT,443)),REJECT",
+          "GEOSITE,geolocation-!cn,PROXY",
+          "MATCH,DIRECT"
+        ],
+        "fallback": [
+          "223.5.5.5",
+          "119.29.29.29"
+        ],
+        "provider_paths": [
+          "./proxy_providers/airport-g02.yaml"
+        ]
+      },
+      "groups": {
+        "PROXY": {
+          "type": "Selector",
+          "now": "AUTO",
+          "all": [
+            "AUTO",
+            "BWG-HY2-JPTY-01",
+            "GIA-HY2-US-01",
+            "BWG-VLESS-JPTY-01",
+            "US666-CN2GIA-01",
+            "CF2D-HK-01",
+            "CF2D-BWG-01",
+            "CF-CDN-GIA-01",
+            "CF2-CDN-GIA-01",
+            "DIRECT"
+          ]
+        },
+        "NODE-PICK": {
+          "type": "Fallback",
+          "now": "BWG-HY2-JPTY-01",
+          "all": [
+            "BWG-HY2-JPTY-01",
+            "GIA-HY2-US-01",
+            "BWG-VLESS-JPTY-01",
+            "US666-CN2GIA-01",
+            "CF2D-HK-01",
+            "CF2D-BWG-01",
+            "CF-CDN-GIA-01",
+            "CF2-CDN-GIA-01"
+          ]
+        },
+        "US-MEDIA": {
+          "type": "Selector",
+          "now": "NODE-PICK",
+          "all": [
+            "NODE-PICK",
+            "AIRPORT"
+          ]
+        },
+        "DOWNLOAD": {
+          "type": "Selector",
+          "now": "DIRECT",
+          "all": [
+            "DIRECT",
+            "PROXY"
+          ]
+        }
+      },
+      "cf_delay": {
+        "CF2D-HK-01": {
+          "delay": 1935
+        },
+        "CF2D-BWG-01": {
+          "delay": 435
+        }
+      },
+      "meter": {
+        "rc": 1,
+        "stdout": "",
+        "stderr": ""
+      },
+      "protected_checks": {
+        "rc": 0,
+        "stdout": "6519a8b4e28e38f0a12932444626218d7f92bd95950a813421cca04cca11dd27  /etc/config/dhcp\n4911dbbe7962b4c8425526a23b45896732ec53fbc1539bd0f17355f5b36fad98  /etc/routermgmt/tunnel.conf\n4fde341da6456cea4a98756c0565e9a0771f587bb9f67f0f69f40a23a8cd05b1  /etc/mihomo/config.yaml\nqdisc noqueue 0: root refcnt 2 \ng204=204 t=0.346117\nbaidu=200 t=0.160431",
+        "stderr": ""
+      }
+    },
+    "R6": {
+      "name": "R6",
+      "port": 13226,
+      "runtime": {
+        "rc": 0,
+        "stdout": "2026-11-18 22:15:11 +0800\naarch64\nMihomo Meta v1.19.31 linux arm64 with go1.26.8 Mon Sep 14 13:20:46 UTC 2026\n17892 4901\nca77a1f3b4c35ed6beb3669507a80e7447943c1c33f7b300a704a0bf886a29d8  /etc/routermgmt/routermgmt-agent.sh\n0faf7732202232c89f4bf060affd3500ee20d6a8603390e3d5b1134e15b6cee9  /etc/routermgmt/handlers/switch_node.sh\nc65d51a7066eb05a141ead4692361472c6e89a6e16327ca4dc7da356c12bfd6e  /etc/routermgmt/self-heal.sh\nNO_PAUSE",
+        "stderr": ""
+      },
+      "config": {
+        "cf_nodes": [
+          {
+            "name": "CF2D-HK-01",
+            "server": "104.18.32.7",
+            "port": 2053,
+            "servername": "hk.6849271.xyz",
+            "udp": false
+          },
+          {
+            "name": "CF2D-BWG-01",
+            "server": "162.159.135.42",
+            "port": 2053,
+            "servername": "usbwg.6849271.xyz",
+            "udp": false
+          },
+          {
+            "name": "CF-CDN-GIA-01",
+            "server": "104.18.32.7",
+            "port": 2053,
+            "servername": "cf.k3x9m2.top",
+            "udp": false
+          },
+          {
+            "name": "CF2-CDN-GIA-01",
+            "server": "162.159.135.42",
+            "port": 2053,
+            "servername": "cf.k3x9m2.top",
+            "udp": false
+          }
+        ],
+        "cold_domain_present": false,
+        "tail": [
+          "AND,((NETWORK,UDP),(DST-PORT,443)),REJECT",
+          "GEOSITE,geolocation-!cn,PROXY",
+          "MATCH,DIRECT"
+        ],
+        "fallback": [
+          "223.5.5.5",
+          "119.29.29.29"
+        ],
+        "provider_paths": [
+          "./proxy_providers/airport-g02.yaml"
+        ]
+      },
+      "groups": {
+        "PROXY": {
+          "type": "Selector",
+          "now": "AUTO",
+          "all": [
+            "AUTO",
+            "BWG-HY2-JPTY-01",
+            "GIA-HY2-US-01",
+            "US666-CN2GIA-01",
+            "CF2D-HK-01",
+            "CF2D-BWG-01",
+            "BWG-VLESS-JPTY-01",
+            "CF-CDN-GIA-01",
+            "CF2-CDN-GIA-01",
+            "DIRECT"
+          ]
+        },
+        "NODE-PICK": {
+          "type": "Fallback",
+          "now": "BWG-HY2-JPTY-01",
+          "all": [
+            "BWG-HY2-JPTY-01",
+            "GIA-HY2-US-01",
+            "US666-CN2GIA-01",
+            "CF2D-HK-01",
+            "CF2D-BWG-01",
+            "BWG-VLESS-JPTY-01",
+            "CF-CDN-GIA-01",
+            "CF2-CDN-GIA-01"
+          ]
+        },
+        "US-MEDIA": {
+          "type": "Selector",
+          "now": "NODE-PICK",
+          "all": [
+            "NODE-PICK",
+            "AIRPORT"
+          ]
+        },
+        "DOWNLOAD": {
+          "type": "Selector",
+          "now": "DIRECT",
+          "all": [
+            "DIRECT",
+            "PROXY"
+          ]
+        }
+      },
+      "cf_delay": {
+        "CF2D-HK-01": {
+          "delay": 1885
+        },
+        "CF2D-BWG-01": {
+          "delay": 438
+        }
+      },
+      "meter": {
+        "rc": 1,
+        "stdout": "",
+        "stderr": ""
+      },
+      "protected_checks": {
+        "rc": 28,
+        "stdout": "6519a8b4e28e38f0a12932444626218d7f92bd95950a813421cca04cca11dd27  /etc/config/dhcp\n464d1e59187d93491d2f8060667bed31ff6c72f8a95ffc88b1ecbb4b1fc00cfe  /etc/routermgmt/tunnel.conf\nf26fb050fbe30c8cfed523519097479fe543406a02e51ef4ebc7d75a8dea1b2e  /etc/mihomo/config.yaml\nqdisc noqueue 0: root refcnt 2 \ng204=204 t=0.550097\nbaidu=000 t=6.775900",
+        "stderr": "curl: (28) Failed to connect to www.baidu.com port 443 after 6775 ms: Operation timed out"
+      }
+    }
+  },
+  "finished": "2026-11-18T22:15:31+08:00"
+}

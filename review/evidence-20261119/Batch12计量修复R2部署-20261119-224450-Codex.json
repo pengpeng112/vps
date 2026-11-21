@@ -1,0 +1,10 @@
+{
+  "started": "2026-11-19T22:44:50.298960+08:00",
+  "scope": "R2 observe meter only",
+  "stage": "/tmp/batch12-meter-20261119-224450",
+  "backup": "/etc/routermgmt/backup-meter-20261119-224450-Codex",
+  "phases": [],
+  "error_type": "FileNotFoundError",
+  "result": "STOPPED_REVIEW_CHECKPOINT",
+  "finished": "2026-11-19T22:44:51.869235+08:00"
+}

@@ -24,6 +24,7 @@ docs/wg-*-qr.png
 docs/wg-peers/
 VPS远程工具包/
 网络稳定性分析材料-20260927.md
+
 # 会话与数据
 docs/会话导出/
 webprobe/*.csv
@@ -33,6 +34,7 @@ logs/node-probe/
 logs/codex-reset/
 *.sqlite
 *.db
+
 # 大体积与生成物
 mgmt/frontend/node_modules/
 firmware/
@@ -41,9 +43,40 @@ firmware/
 .video_agent/
 __pycache__/
 *.pyc
+mgmt/backend/*.exe
+
+# 2026-11-19 / 11-21：诊断产物、含密运行配置与测试夹具不入库
+logs/gz-api*
+logs/*.yaml
+logs/*-run-*.yaml
+logs/batch*.py
+logs/diag-scripts-archive/
+logs/batch12-review-*/
+logs/.pm3-iso-fixture/
+logs/meterfix-*/
+mgmt/agent/tests/.tmp/
+
+# docs/archive：默认排除早期未脱敏交接（20260906~0914、r619ac），显式放行已核归档文档与 manifest
 docs/archive/*
-!docs/archive/20261001-manifest.md
-!docs/archive/20261012-manifest.md
+!docs/archive/README.md
+!docs/archive/*-manifest.md
+!docs/archive/当前状态-*.md
+!docs/archive/现势总览时间线-*.md
 !docs/archive/20261001-完结计划/
 docs/archive/20261001-完结计划/*
 !docs/archive/20261001-完结计划/*.md
+!docs/archive/202610-架构与决策/
+docs/archive/202610-架构与决策/*
+!docs/archive/202610-架构与决策/*.md
+!docs/archive/plans-202609_10/
+docs/archive/plans-202609_10/*
+!docs/archive/plans-202609_10/*.md
+!docs/archive/plans-202611-completed/
+docs/archive/plans-202611-completed/*
+!docs/archive/plans-202611-completed/*.md
+!docs/archive/plans-202611-completed/governance-20261118/
+docs/archive/plans-202611-completed/governance-20261118/*
+!docs/archive/plans-202611-completed/governance-20261118/*.md
+!docs/archive/operations-legacy/
+docs/archive/operations-legacy/*
+!docs/archive/operations-legacy/*.md

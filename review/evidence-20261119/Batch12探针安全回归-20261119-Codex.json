@@ -1,0 +1,9 @@
+{
+  "at": "2026-11-19T23:12:17.969270+08:00",
+  "compile": "PASS",
+  "missing_DSN_exit": 2,
+  "missing_stdout_empty": true,
+  "failure_exit": 1,
+  "driver_error_text_not_logged": true,
+  "driver_error_stderr": "rssh-probe failed: RuntimeError (details withheld)"
+}

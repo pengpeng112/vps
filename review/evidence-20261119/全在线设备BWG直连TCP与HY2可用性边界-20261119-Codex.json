@@ -1,0 +1,79 @@
+{
+  "started": "2026-11-19T16:44:53+08:00",
+  "production_writes": false,
+  "devices": {
+    "R1": {
+      "vless_tcp443_https_delay": {
+        "unavailable": true,
+        "rc": 22
+      },
+      "bwg_tcp443_connected": false,
+      "tcp_error_type": "SSHException"
+    },
+    "R2": {
+      "vless_tcp443_https_delay": {
+        "unavailable": true,
+        "rc": 22
+      },
+      "bwg_tcp443_connected": false,
+      "tcp_error_type": "SSHException"
+    },
+    "R3": {
+      "vless_tcp443_https_delay": {
+        "unavailable": true,
+        "rc": 22
+      },
+      "bwg_tcp443_connected": false,
+      "tcp_error_type": "SSHException"
+    },
+    "R4": {
+      "vless_tcp443_https_delay": {
+        "unavailable": true,
+        "rc": 22
+      },
+      "bwg_tcp443_connected": false,
+      "tcp_error_type": "SSHException"
+    },
+    "R5": {
+      "vless_tcp443_https_delay": {
+        "unavailable": true,
+        "rc": 22
+      },
+      "bwg_tcp443_connected": false,
+      "tcp_error_type": "SSHException"
+    },
+    "R6": {
+      "vless_tcp443_https_delay": {
+        "unavailable": true,
+        "rc": 22
+      },
+      "bwg_tcp443_connected": false,
+      "tcp_error_type": "SSHException"
+    },
+    "R8": {
+      "vless_tcp443_https_delay": {
+        "unavailable": true,
+        "rc": 22
+      },
+      "bwg_tcp443_connected": false,
+      "tcp_error_type": "SSHException"
+    },
+    "R9": {
+      "vless_tcp443_https_delay": {
+        "unavailable": true,
+        "rc": 22
+      },
+      "bwg_tcp443_connected": false,
+      "tcp_error_type": "SSHException"
+    },
+    "Athena": {
+      "vless_tcp443_https_delay": {
+        "unavailable": true,
+        "rc": 22
+      },
+      "bwg_tcp443_connected": false,
+      "tcp_error_type": "SSHException"
+    }
+  },
+  "finished": "2026-11-19T16:45:31+08:00"
+}

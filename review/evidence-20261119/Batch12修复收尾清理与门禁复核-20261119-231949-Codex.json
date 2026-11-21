@@ -1,0 +1,26 @@
+{
+  "at": "2026-11-19T23:19:43.544856+08:00",
+  "R2": {
+    "rc": 0,
+    "stdout": "4880\n73e830e5085eb7dd2b80bbde5bd25efbb9ea19141d798cb917086ba54c584674  /etc/mihomo/config.yaml",
+    "stderr": ""
+  },
+  "meter": {
+    "seq": 600,
+    "health": "ok",
+    "partial": true,
+    "quota_eligible": false,
+    "coverage_complete": false,
+    "day_total": 904636660
+  },
+  "HK": {
+    "rc": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  "BWG": {
+    "rc": 0,
+    "stdout": "",
+    "stderr": ""
+  }
+}

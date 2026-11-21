@@ -1,0 +1,63 @@
+{
+  "from": "2026-11-19T06:20:39+08:00",
+  "to": "2026-11-19T09:14:01+08:00",
+  "production_writes": false,
+  "comparison": {
+    "R1": {
+      "config_same": true,
+      "handler_same": true,
+      "cf_metadata_same": true,
+      "main_groups_same": true,
+      "mihomo_pids_same": true
+    },
+    "R4": {
+      "config_same": true,
+      "handler_same": true,
+      "cf_metadata_same": true,
+      "main_groups_same": true,
+      "mihomo_pids_same": true
+    },
+    "R3": {
+      "config_same": true,
+      "handler_same": true,
+      "cf_metadata_same": true,
+      "main_groups_same": true,
+      "mihomo_pids_same": true
+    },
+    "R2": {
+      "config_same": true,
+      "handler_same": true,
+      "cf_metadata_same": true,
+      "main_groups_same": true,
+      "mihomo_pids_same": true
+    },
+    "R5": {
+      "config_same": true,
+      "handler_same": true,
+      "cf_metadata_same": true,
+      "main_groups_same": true,
+      "mihomo_pids_same": true
+    },
+    "R8": {
+      "config_same": true,
+      "handler_same": true,
+      "cf_metadata_same": true,
+      "main_groups_same": true,
+      "mihomo_pids_same": true
+    },
+    "R6": {
+      "config_same": true,
+      "handler_same": true,
+      "cf_metadata_same": true,
+      "main_groups_same": true,
+      "mihomo_pids_same": true
+    },
+    "R9": {
+      "config_same": true,
+      "handler_same": true,
+      "cf_metadata_same": true,
+      "main_groups_same": true,
+      "mihomo_pids_same": true
+    }
+  }
+}

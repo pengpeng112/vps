@@ -1,0 +1,6 @@
+{"ts":"2026-11-17 22:15:04+0800","request_id":"g05-em","fingerprint":"ae0719ce3a79b7b4","action":"release","outcome":"ok","detail":{"scope":"all","mode":"emergency","generation":1}}
+{"ts":"2026-11-17 22:15:05+0800","request_id":"g05-a1","fingerprint":"e1c9226957319283","action":"apply","outcome":"rejected_locked","detail":{"reason":"override"}}
+{"ts":"2026-11-17 22:15:07+0800","request_id":"g05-r4","fingerprint":"b3732ed1668a49fc","action":"resume","outcome":"ok","detail":{"what":"emergency","scope":"all"}}
+{"ts":"2026-11-17 22:15:09+0800","request_id":"g05-a2","fingerprint":"e1c9226957319283","action":"apply","outcome":"rejected_no_executor","detail":{"reason":"no_registry"}}
+{"ts":"2026-11-17 22:15:10+0800","request_id":"g05-g4","fingerprint":"1042e2f6710b8bc8","action":"apply","outcome":"rejected_generation","detail":{"expected":4}}
+{"ts":"2026-11-17 22:15:11+0800","request_id":"g05-g6","fingerprint":"2002c074f921df83","action":"apply","outcome":"rejected_generation","detail":{"expected":6}}

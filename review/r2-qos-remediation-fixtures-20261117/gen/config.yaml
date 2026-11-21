@@ -1,0 +1,14 @@
+proxies:
+  - name: "BWG-HY2-JPTY-01"
+    type: hysteria2
+    server: 74.82.193.113
+    port: 34568
+    password: x
+  - name: "BULK-LAX-GIA-01"
+    type: vless
+    server: 154.36.139.155
+    port: 2054
+    uuid: x
+proxy-groups: []
+rules:
+  - MATCH,DIRECT

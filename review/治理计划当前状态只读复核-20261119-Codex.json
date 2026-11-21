@@ -1,0 +1,984 @@
+{
+  "started": "2026-11-19T06:20:39+08:00",
+  "production_writes": false,
+  "api_login": false,
+  "gz": {
+    "rc": 0,
+    "stdout": "2026-11-19T06:20:42+08:00\nactive\nactive\nactive\n1d0d88299ea25ba6964bcc32f4f1b01a9684282a2fb9ba5820aca03ef7a01a05  /opt/mgmt/server\nBEGIN\nschema|10\nrtr-101be0|7|7|7||8|0\nrtr-1eff66|8|8|8||4137681|0\nrtr-1f6f0f|10|10|10||7|0\nrtr-25730c|3|3|3||3076842|0\nrtr-354647|3|3|3||3081862|0\nrtr-37cf72|8|8|8||1511761|0\nrtr-38aa54|32|32|32||29|0\nrtr-5e1a8d|0|0|0||5|0\nrtr-673568|24|24|24||45|0\nrtr-a9bcba|41|41|41||25|0\nrtr-bf0292|0|0|0|||0\nrtr-c46a25|22|22|22||60|0\nrtr-cd473f|31|31|31||20|0\nrtr-d3847d|30|30|30|OpenWrt 21.02-SNAPSHOT|10|0\nrtr-e9ccdd|1|1|1||211695|0\nrtr-101be0|8|74.82.193.113|34567|hysteria2|ordinary|t|0|20\nrtr-101be0|16|162.159.135.42|2053|vless-ws|ordinary|f|0|-100\nrtr-101be0|17|162.159.135.42|2053|vless-ws|ordinary|f|0|-100\nrtr-1f6f0f|8|74.82.193.113|34567|hysteria2|ordinary|t|0|20\nrtr-1f6f0f|16|162.159.135.42|2053|vless-ws|ordinary|f|0|-100\nrtr-1f6f0f|17|162.159.135.42|2053|vless-ws|ordinary|f|0|-100\nrtr-37cf72|8|74.82.193.113|34567|hysteria2|ordinary|f|0|20\nrtr-38aa54|8|74.82.193.113|34567|hysteria2|ordinary|t|0|20\nrtr-38aa54|16|162.159.135.42|2053|vless-ws|ordinary|f|0|-100\nrtr-38aa54|17|162.159.135.42|2053|vless-ws|ordinary|f|0|-100\nrtr-673568|8|74.82.193.113|34567|hysteria2|ordinary|t|0|20\nrtr-673568|16|162.159.135.42|2053|vless-ws|ordinary|f|0|-100\nrtr-673568|17|162.159.135.42|2053|vless-ws|ordinary|f|0|-100\nrtr-a9bcba|8|74.82.193.113|34567|hysteria2|ordinary|t|0|20\nrtr-a9bcba|16|162.159.135.42|2053|vless-ws|ordinary|f|0|-100\nrtr-a9bcba|17|162.159.135.42|2053|vless-ws|ordinary|f|0|-100\nrtr-c46a25|8|74.82.193.113|34567|hysteria2|ordinary|t|0|20\nrtr-c46a25|16|162.159.135.42|2053|vless-ws|ordinary|f|0|-100\nrtr-c46a25|17|162.159.135.42|2053|vless-ws|ordinary|f|0|-100\nrtr-cd473f|8|74.82.193.113|34567|hysteria2|ordinary|t|0|20\nrtr-cd473f|16|162.159.135.42|2053|vless-ws|ordinary|f|0|-100\nrtr-cd473f|17|162.159.135.42|2053|vless-ws|ordinary|f|0|-100\nrtr-d3847d|8|74.82.193.113|34567|hysteria2|ordinary|t|0|20\nrtr-d3847d|16|162.159.135.42|2053|vless-ws|ordinary|f|0|-100\nrtr-d3847d|17|162.159.135.42|2053|vless-ws|ordinary|f|0|-100\nCOMMIT",
+    "stderr": ""
+  },
+  "devices": {
+    "R2": {
+      "name": "R2",
+      "port": 13223,
+      "runtime": {
+        "rc": 0,
+        "stdout": "2026-11-19 06:20:43 +0800\naarch64\nMihomo Meta v1.19.31 linux arm64 with go1.26.8 Mon Sep 14 13:20:46 UTC 2026\n4880\nca77a1f3b4c35ed6beb3669507a80e7447943c1c33f7b300a704a0bf886a29d8  /etc/routermgmt/routermgmt-agent.sh\n71a5045e43c321c2a9e18599b79fb315e4c24b6ab5db3d86031a129994ebdcce  /etc/routermgmt/handlers/switch_node.sh\nc65d51a7066eb05a141ead4692361472c6e89a6e16327ca4dc7da356c12bfd6e  /etc/routermgmt/self-heal.sh\ne9879454d449299b06e2e6ff4006bb46bbe479d5da701a83d37284dc5fda4ada  /etc/routermgmt/proxy-meter-v3.sh\n2d8fe9618d2213092f80e555f9972214f8ec14685146b49173be704f78c667f2  /etc/routermgmt/proxy-meter-endpoints.sh\nNO_PAUSE",
+        "stderr": ""
+      },
+      "config": {
+        "cf_nodes": [
+          {
+            "name": "CF-CDN-GIA-01",
+            "server": "104.18.32.7",
+            "port": 2053,
+            "servername": "cf.k3x9m2.top",
+            "udp": false
+          },
+          {
+            "name": "CF2-CDN-GIA-01",
+            "server": "162.159.135.42",
+            "port": 2053,
+            "servername": "cf.k3x9m2.top",
+            "udp": false
+          },
+          {
+            "name": "CF2D-HK-01",
+            "server": "162.159.135.42",
+            "port": 2053,
+            "servername": "hk.6849271.xyz",
+            "udp": false
+          },
+          {
+            "name": "CF2D-BWG-01",
+            "server": "162.159.135.42",
+            "port": 2053,
+            "servername": "usbwg.6849271.xyz",
+            "udp": false
+          }
+        ],
+        "cold_domain_present": false,
+        "tail": [
+          "AND,((NETWORK,UDP),(DST-PORT,443)),REJECT",
+          "GEOSITE,geolocation-!cn,PROXY",
+          "MATCH,DIRECT"
+        ],
+        "fallback": [
+          "223.5.5.5",
+          "119.29.29.29"
+        ],
+        "provider_paths": [
+          "./proxy_providers/airport-g02.yaml"
+        ]
+      },
+      "groups": {
+        "PROXY": {
+          "type": "Selector",
+          "now": "AUTO",
+          "all": [
+            "AUTO",
+            "BWG-HY2-JPTY-01",
+            "GIA-HY2-US-01",
+            "CF-CDN-GIA-01",
+            "CF2-CDN-GIA-01",
+            "DMIT-HY2-US-01",
+            "CF2D-HK-01",
+            "CF2D-BWG-01",
+            "BWG-VLESS-JPTY-01",
+            "DIRECT"
+          ]
+        },
+        "NODE-PICK": {
+          "type": "Fallback",
+          "now": "BWG-HY2-JPTY-01",
+          "all": [
+            "BWG-HY2-JPTY-01",
+            "GIA-HY2-US-01",
+            "CF-CDN-GIA-01",
+            "CF2-CDN-GIA-01",
+            "DMIT-HY2-US-01",
+            "CF2D-HK-01",
+            "CF2D-BWG-01",
+            "BWG-VLESS-JPTY-01"
+          ]
+        },
+        "US-MEDIA": {
+          "type": "Selector",
+          "now": "NODE-PICK",
+          "all": [
+            "BULK-LAX-GIA-01",
+            "NODE-PICK",
+            "AIRPORT"
+          ]
+        },
+        "DOWNLOAD": {
+          "type": "Selector",
+          "now": "DIRECT",
+          "all": [
+            "DIRECT",
+            "PROXY"
+          ]
+        }
+      },
+      "cf_delay": {
+        "CF2D-HK-01": {
+          "delay": 415
+        },
+        "CF2D-BWG-01": {
+          "delay": 385
+        }
+      },
+      "meter": {
+        "rc": 0,
+        "stdout": "#*/5 * * * * /etc/routermgmt/proxy-meter-v2.sh #proxy-meter\n*/5 * * * * /etc/routermgmt/proxy-meter-v3.sh #proxy-meter\nFILE=/etc/routermgmt/state/proxy-meter-v3.json\n{\"schema\":3,\"counter_key_format\":\"direction-v1\",\"meter_id\":\"rtr-a9bcba\",\"seq\":395,\"boot_id\":\"b68237b9-959b-4102-a28b-22e1873e9027\",\"rules_sha\":\"63b206e0d078261d\",\"continuity_id\":\"reboot-b68237b9-959b-4102-a28b-22e1873e9027\",\"prev_continuity\":\"reboot-b68237b9-959b-4102-a28b-22e1873e9027\",\"prev_epoch\":1795040400,\"day_key\":\"2026-11-19\",\"day_total\":50349684,\"day_first_at\":\"2026-11-19 00:00:00+0800\",\"health\":\"ok\",\"partial\":true,\"quota_eligible\":false,\"read_fail_eps\":\"-\",\"endpoints\":{\"CF-CDN-GIA-01_down\":1943230,\"BWG-VLESS-JPTY-01_down\":0,\"BWG-HY2-JPTY-01_up\":8249630,\"BULK-LAX-GIA-01_down\":0,\"CF-CDN-GIA-01_up\":1028190,\"GIA-HY2-US-01_up\":615023,\"CF2-CDN-GIA-01_down\":5806121,\"CF2-CDN-GIA-01_up\":3052394,\"GIA-HY2-US-01_down\":1137942,\"BULK-LAX-GIA-01_up\":13500,\"DMIT-HY2-US-01_up\":2445960,\"BWG-HY2-JPTY-01_down\":25240069,\"BWG-VLESS-JPTY-01_up\":33660,\"DMIT-HY2-US-01_down\":0}}\nFILE=/etc/routermgmt/state/proxy-meter-daily-v3.json\n{\"day_key\":\"2026-11-19\",\"total\":50349684,\"delta_last\":354245,\"sampled_at\":\"2026-11-19 06:20:00+0800\",\"meter_id\":\"rtr-a9bcba\",\"seq\":395,\"health\":\"ok\",\"partial\":true,\"quota_eligible\":false,\"events\":\"\",\"read_fail_eps\":\"-\"}\nFILE=/etc/routermgmt/proxy-meter-rules-v3.conf\nBWG-HY2-JPTY-01|up|74.82.193.113|udp|34567\nBWG-HY2-JPTY-01|down|74.82.193.113|udp|34567\nGIA-HY2-US-01|up|154.36.139.155|udp|34568\nGIA-HY2-US-01|down|154.36.139.155|udp|34568\nCF-CDN-GIA-01|up|104.18.32.7|tcp|2053\nCF-CDN-GIA-01|down|104.18.32.7|tcp|2053\nCF2-CDN-GIA-01|up|162.159.135.42|tcp|2053\nCF2-CDN-GIA-01|down|162.159.135.42|tcp|2053\nBULK-LAX-GIA-01|up|154.36.139.155|tcp|2054\nBULK-LAX-GIA-01|down|154.36.139.155|tcp|2054\nDMIT-HY2-US-01|up|69.63.219.156|udp|34567\nDMIT-HY2-US-01|down|69.63.219.156|udp|34567\nBWG-VLESS-JPTY-01|up|74.82.193.113|tcp|443\nBWG-VLESS-JPTY-01|down|74.82.193.113|tcp|443\nFILE=/etc/routermgmt/proxy-meter-coverage-v3.json\n{\"generated_at\": \"2026-11-18 22:43:58+0800\", \"registered_rules\": 14, \"proxy_nodes\": 7, \"tuple_merged\": \"CF2D-HK-01>CF2-CDN-GIA-01,CF2D-HK-01>CF2-CDN-GIA-01,CF2D-BWG-01>CF2-CDN-GIA-01,CF2D-BWG-01>CF2-CDN-GIA-01\", \"unresolved_record_count\": 40, \"unresolved_names_withheld\": true}\n-A OUTPUT -m comment --comment rm-pm3-auto-OUTPUT -j PROXY_METER_OUT\n-A INPUT -m comment --comment rm-pm3-auto-INPUT -j PROXY_METER_IN\nChain PROXY_METER_OUT (1 references)\n    pkts      bytes target     prot opt in     out     source               destination         \n   26129  8269510            udp  --  *      *       0.0.0.0/0            74.82.193.113        udp dpt:34567 /* BWG-HY2-JPTY-01 */\n    3763   617972            udp  --  *      *       0.0.0.0/0            154.36.139.155       udp dpt:34568 /* GIA-HY2-US-01 */\n    4599  1033693            tcp  --  *      *       0.0.0.0/0            104.18.32.7          tcp dpt:2053 /* CF-CDN-GIA-01 */\n   13597  3079929            tcp  --  *      *       0.0.0.0/0            162.159.135.42       tcp dpt:2053 /* CF2-CDN-GIA-01 */\n     228    13680            tcp  --  *      *       0.0.0.0/0            154.36.139.155       tcp dpt:2054 /* BULK-LAX-GIA-01 */\n    1880  2459040            udp  --  *      *       0.0.0.0/0            69.63.219.156        udp dpt:34567 /* DMIT-HY2-US-01 */\n     564    33840            tcp  --  *      *       0.0.0.0/0            74.82.193.113        tcp dpt:443 /* BWG-VLESS-JPTY-01 */\nChain PROXY_METER_IN (1 references)\n    pkts      bytes target     prot opt in     out     source               destination         \n   33486 25264067            udp  --  *      *       74.82.193.113        0.0.0.0/0            udp spt:34567 /* BWG-HY2-JPTY-01 */\n    3956  1143673            udp  --  *      *       154.36.139.155       0.0.0.0/0            udp spt:34568 /* GIA-HY2-US-01 */\n    3797  1953891            tcp  --  *      *       104.18.32.7          0.0.0.0/0            tcp spt:2053 /* CF-CDN-GIA-01 */\n   10363  5859119            tcp  --  *      *       162.159.135.42       0.0.0.0/0            tcp spt:2053 /* CF2-CDN-GIA-01 */\n       0        0            tcp  --  *      *       154.36.139.155       0.0.0.0/0            tcp spt:2054 /* BULK-LAX-GIA-01 */\n       0        0            udp  --  *      *       69.63.219.156        0.0.0.0/0            udp spt:34567 /* DMIT-HY2-US-01 */\n       0        0            tcp  --  *      *       74.82.193.113        0.0.0.0/0            tcp spt:443 /* BWG-VLESS-JPTY-01 */\n2026-11-19 06:05:00 OK DELTA=553376 HEALTH=ok EVENTS=- DAY_TOTAL=49171142\n2026-11-19 06:10:00 OK DELTA=380058 HEALTH=ok EVENTS=- DAY_TOTAL=49551200\n2026-11-19 06:15:00 OK DELTA=444239 HEALTH=ok EVENTS=- DAY_TOTAL=49995439\n2026-11-19 06:20:00 OK DELTA=354245 HEALTH=ok EVENTS=- DAY_TOTAL=50349684",
+        "stderr": ""
+      },
+      "protected_checks": {
+        "rc": 0,
+        "stdout": "6519a8b4e28e38f0a12932444626218d7f92bd95950a813421cca04cca11dd27  /etc/config/dhcp\n7ed820da9a00b05438f107d52b63cfc5ad3a5f7c4170ad9b4f543503678fd61f  /etc/routermgmt/tunnel.conf\n73e830e5085eb7dd2b80bbde5bd25efbb9ea19141d798cb917086ba54c584674  /etc/mihomo/config.yaml\nqdisc noqueue 0: root refcnt 2 \ng204=204 t=0.425243\nbaidu=200 t=0.151204",
+        "stderr": ""
+      }
+    },
+    "R4": {
+      "name": "R4",
+      "port": 13224,
+      "runtime": {
+        "rc": 0,
+        "stdout": "2026-11-19 06:20:43 +0800\naarch64\nMihomo Meta v1.19.31 linux arm64 with go1.26.8 Mon Sep 14 13:20:46 UTC 2026\n4941\nca77a1f3b4c35ed6beb3669507a80e7447943c1c33f7b300a704a0bf886a29d8  /etc/routermgmt/routermgmt-agent.sh\n71a5045e43c321c2a9e18599b79fb315e4c24b6ab5db3d86031a129994ebdcce  /etc/routermgmt/handlers/switch_node.sh\nc65d51a7066eb05a141ead4692361472c6e89a6e16327ca4dc7da356c12bfd6e  /etc/routermgmt/self-heal.sh\nNO_PAUSE",
+        "stderr": ""
+      },
+      "config": {
+        "cf_nodes": [
+          {
+            "name": "CF2D-HK-01",
+            "server": "162.159.135.42",
+            "port": 2053,
+            "servername": "hk.6849271.xyz",
+            "udp": false
+          },
+          {
+            "name": "CF2D-BWG-01",
+            "server": "162.159.135.42",
+            "port": 2053,
+            "servername": "usbwg.6849271.xyz",
+            "udp": false
+          },
+          {
+            "name": "CF-CDN-GIA-01",
+            "server": "104.18.32.7",
+            "port": 2053,
+            "servername": "cf.k3x9m2.top",
+            "udp": false
+          },
+          {
+            "name": "CF2-CDN-GIA-01",
+            "server": "162.159.135.42",
+            "port": 2053,
+            "servername": "cf.k3x9m2.top",
+            "udp": false
+          }
+        ],
+        "cold_domain_present": false,
+        "tail": [
+          "AND,((NETWORK,UDP),(DST-PORT,443)),REJECT",
+          "GEOSITE,geolocation-!cn,PROXY",
+          "MATCH,DIRECT"
+        ],
+        "fallback": [
+          "223.5.5.5",
+          "119.29.29.29"
+        ],
+        "provider_paths": [
+          "./proxy_providers/airport-g02.yaml"
+        ]
+      },
+      "groups": {
+        "PROXY": {
+          "type": "Selector",
+          "now": "AUTO",
+          "all": [
+            "AUTO",
+            "BWG-HY2-JPTY-01",
+            "GIA-HY2-US-01",
+            "US666-CN2GIA-01",
+            "CF2D-HK-01",
+            "CF2D-BWG-01",
+            "BWG-VLESS-JPTY-01",
+            "CF-CDN-GIA-01",
+            "CF2-CDN-GIA-01",
+            "DIRECT"
+          ]
+        },
+        "NODE-PICK": {
+          "type": "Fallback",
+          "now": "BWG-HY2-JPTY-01",
+          "all": [
+            "BWG-HY2-JPTY-01",
+            "GIA-HY2-US-01",
+            "US666-CN2GIA-01",
+            "CF2D-HK-01",
+            "CF2D-BWG-01",
+            "BWG-VLESS-JPTY-01",
+            "CF-CDN-GIA-01",
+            "CF2-CDN-GIA-01"
+          ]
+        },
+        "US-MEDIA": {
+          "type": "Selector",
+          "now": "NODE-PICK",
+          "all": [
+            "NODE-PICK",
+            "AIRPORT"
+          ]
+        },
+        "DOWNLOAD": {
+          "type": "Selector",
+          "now": "DIRECT",
+          "all": [
+            "DIRECT",
+            "PROXY"
+          ]
+        }
+      },
+      "cf_delay": {
+        "CF2D-HK-01": {
+          "unavailable": true,
+          "rc": 22
+        },
+        "CF2D-BWG-01": {
+          "unavailable": true,
+          "rc": 22
+        }
+      },
+      "meter": {
+        "rc": 1,
+        "stdout": "",
+        "stderr": ""
+      },
+      "protected_checks": {
+        "rc": 0,
+        "stdout": "6519a8b4e28e38f0a12932444626218d7f92bd95950a813421cca04cca11dd27  /etc/config/dhcp\na9d2afc592c293e09921d84d8bf17365ecbad2684a9eaccf6755f5c4ce02c28f  /etc/routermgmt/tunnel.conf\ndd7c4e7b92cb59a6fcdfb4ae91d1d2999fb84b36d49d562c790ae7430093f42d  /etc/mihomo/config.yaml\nqdisc noqueue 0: root refcnt 2 \ng204=204 t=0.311819\nbaidu=200 t=0.157996",
+        "stderr": ""
+      }
+    },
+    "R1": {
+      "name": "R1",
+      "port": 13222,
+      "runtime": {
+        "rc": 0,
+        "stdout": "2026-11-19 06:20:43 +0800\naarch64\nMihomo Meta v1.19.31 linux arm64 with go1.26.8 Mon Sep 14 13:20:46 UTC 2026\n4976\nca77a1f3b4c35ed6beb3669507a80e7447943c1c33f7b300a704a0bf886a29d8  /etc/routermgmt/routermgmt-agent.sh\n71a5045e43c321c2a9e18599b79fb315e4c24b6ab5db3d86031a129994ebdcce  /etc/routermgmt/handlers/switch_node.sh\nc65d51a7066eb05a141ead4692361472c6e89a6e16327ca4dc7da356c12bfd6e  /etc/routermgmt/self-heal.sh\nNO_PAUSE",
+        "stderr": ""
+      },
+      "config": {
+        "cf_nodes": [
+          {
+            "name": "CF2D-HK-01",
+            "server": "162.159.135.42",
+            "port": 2053,
+            "servername": "hk.6849271.xyz",
+            "udp": false
+          },
+          {
+            "name": "CF2D-BWG-01",
+            "server": "162.159.135.42",
+            "port": 2053,
+            "servername": "usbwg.6849271.xyz",
+            "udp": false
+          },
+          {
+            "name": "CF-CDN-GIA-01",
+            "server": "104.18.32.7",
+            "port": 2053,
+            "servername": "cf.k3x9m2.top",
+            "udp": false
+          },
+          {
+            "name": "CF2-CDN-GIA-01",
+            "server": "162.159.135.42",
+            "port": 2053,
+            "servername": "cf.k3x9m2.top",
+            "udp": false
+          }
+        ],
+        "cold_domain_present": false,
+        "tail": [
+          "AND,((NETWORK,UDP),(DST-PORT,443)),REJECT",
+          "GEOSITE,geolocation-!cn,PROXY",
+          "MATCH,DIRECT"
+        ],
+        "fallback": [
+          "223.5.5.5",
+          "119.29.29.29"
+        ],
+        "provider_paths": [
+          "./proxy_providers/airport-g02.yaml"
+        ]
+      },
+      "groups": {
+        "PROXY": {
+          "type": "Selector",
+          "now": "AUTO",
+          "all": [
+            "AUTO",
+            "BWG-HY2-JPTY-01",
+            "GIA-HY2-US-01",
+            "US666-CN2GIA-01",
+            "CF2D-HK-01",
+            "CF2D-BWG-01",
+            "BWG-VLESS-JPTY-01",
+            "CF-CDN-GIA-01",
+            "CF2-CDN-GIA-01",
+            "DIRECT"
+          ]
+        },
+        "NODE-PICK": {
+          "type": "Fallback",
+          "now": "BWG-HY2-JPTY-01",
+          "all": [
+            "BWG-HY2-JPTY-01",
+            "GIA-HY2-US-01",
+            "US666-CN2GIA-01",
+            "CF2D-HK-01",
+            "CF2D-BWG-01",
+            "BWG-VLESS-JPTY-01",
+            "CF-CDN-GIA-01",
+            "CF2-CDN-GIA-01"
+          ]
+        },
+        "US-MEDIA": {
+          "type": "Selector",
+          "now": "NODE-PICK",
+          "all": [
+            "NODE-PICK",
+            "AIRPORT"
+          ]
+        },
+        "DOWNLOAD": {
+          "type": "Selector",
+          "now": "DIRECT",
+          "all": [
+            "DIRECT",
+            "PROXY"
+          ]
+        }
+      },
+      "cf_delay": {
+        "CF2D-HK-01": {
+          "unavailable": true,
+          "rc": 22
+        },
+        "CF2D-BWG-01": {
+          "unavailable": true,
+          "rc": 22
+        }
+      },
+      "meter": {
+        "rc": 1,
+        "stdout": "",
+        "stderr": ""
+      },
+      "protected_checks": {
+        "rc": 0,
+        "stdout": "7db2b6f1370f7119d2cdb9ba65e3b9ace49b5ddd169f1c0855dcef758d5ddbe7  /etc/config/dhcp\n13909d85cc8cefa3ac42f862c9071fc68a80aeb33210806da75b437211f47582  /etc/routermgmt/tunnel.conf\ndd7c4e7b92cb59a6fcdfb4ae91d1d2999fb84b36d49d562c790ae7430093f42d  /etc/mihomo/config.yaml\nqdisc noqueue 0: root refcnt 2 \ng204=204 t=0.309173\nbaidu=200 t=0.151741",
+        "stderr": ""
+      }
+    },
+    "R3": {
+      "name": "R3",
+      "port": 13227,
+      "runtime": {
+        "rc": 0,
+        "stdout": "2026-11-19 06:20:43 +0800\naarch64\nMihomo Meta v1.19.31 linux arm64 with go1.26.8 Mon Sep 14 13:20:46 UTC 2026\n4935\nca77a1f3b4c35ed6beb3669507a80e7447943c1c33f7b300a704a0bf886a29d8  /etc/routermgmt/routermgmt-agent.sh\n71a5045e43c321c2a9e18599b79fb315e4c24b6ab5db3d86031a129994ebdcce  /etc/routermgmt/handlers/switch_node.sh\nc65d51a7066eb05a141ead4692361472c6e89a6e16327ca4dc7da356c12bfd6e  /etc/routermgmt/self-heal.sh\nNO_PAUSE",
+        "stderr": ""
+      },
+      "config": {
+        "cf_nodes": [
+          {
+            "name": "CF2D-HK-01",
+            "server": "162.159.135.42",
+            "port": 2053,
+            "servername": "hk.6849271.xyz",
+            "udp": false
+          },
+          {
+            "name": "CF2D-BWG-01",
+            "server": "162.159.135.42",
+            "port": 2053,
+            "servername": "usbwg.6849271.xyz",
+            "udp": false
+          },
+          {
+            "name": "CF-CDN-GIA-01",
+            "server": "104.18.32.7",
+            "port": 2053,
+            "servername": "cf.k3x9m2.top",
+            "udp": false
+          },
+          {
+            "name": "CF2-CDN-GIA-01",
+            "server": "162.159.135.42",
+            "port": 2053,
+            "servername": "cf.k3x9m2.top",
+            "udp": false
+          }
+        ],
+        "cold_domain_present": false,
+        "tail": [
+          "AND,((NETWORK,UDP),(DST-PORT,443)),REJECT",
+          "GEOSITE,geolocation-!cn,PROXY",
+          "MATCH,DIRECT"
+        ],
+        "fallback": [
+          "223.5.5.5",
+          "119.29.29.29"
+        ],
+        "provider_paths": [
+          "./proxy_providers/airport-g02.yaml"
+        ]
+      },
+      "groups": {
+        "PROXY": {
+          "type": "Selector",
+          "now": "AUTO",
+          "all": [
+            "AUTO",
+            "BWG-HY2-JPTY-01",
+            "GIA-HY2-US-01",
+            "US666-CN2GIA-01",
+            "CF2D-HK-01",
+            "CF2D-BWG-01",
+            "BWG-VLESS-JPTY-01",
+            "CF-CDN-GIA-01",
+            "CF2-CDN-GIA-01",
+            "DIRECT"
+          ]
+        },
+        "NODE-PICK": {
+          "type": "Fallback",
+          "now": "BWG-HY2-JPTY-01",
+          "all": [
+            "BWG-HY2-JPTY-01",
+            "GIA-HY2-US-01",
+            "US666-CN2GIA-01",
+            "CF2D-HK-01",
+            "CF2D-BWG-01",
+            "BWG-VLESS-JPTY-01",
+            "CF-CDN-GIA-01",
+            "CF2-CDN-GIA-01"
+          ]
+        },
+        "US-MEDIA": {
+          "type": "Selector",
+          "now": "NODE-PICK",
+          "all": [
+            "NODE-PICK",
+            "AIRPORT"
+          ]
+        },
+        "DOWNLOAD": {
+          "type": "Selector",
+          "now": "DIRECT",
+          "all": [
+            "DIRECT",
+            "PROXY"
+          ]
+        }
+      },
+      "cf_delay": {
+        "CF2D-HK-01": {
+          "unavailable": true,
+          "rc": 22
+        },
+        "CF2D-BWG-01": {
+          "unavailable": true,
+          "rc": 22
+        }
+      },
+      "meter": {
+        "rc": 1,
+        "stdout": "",
+        "stderr": ""
+      },
+      "protected_checks": {
+        "rc": 0,
+        "stdout": "6519a8b4e28e38f0a12932444626218d7f92bd95950a813421cca04cca11dd27  /etc/config/dhcp\n7797dab42b34a31e86d6251b83b7ded53e536a90e42326c5e221b769b4bf6d62  /etc/routermgmt/tunnel.conf\ndd7c4e7b92cb59a6fcdfb4ae91d1d2999fb84b36d49d562c790ae7430093f42d  /etc/mihomo/config.yaml\nqdisc noqueue 0: root refcnt 2 \ng204=204 t=0.296811\nbaidu=200 t=0.161721",
+        "stderr": ""
+      }
+    },
+    "R9": {
+      "name": "R9",
+      "port": 13231,
+      "runtime": {
+        "rc": 0,
+        "stdout": "2026-11-19 06:21:00 +0800\naarch64\nMihomo Meta v1.19.31 linux arm64 with go1.26.8 Mon Sep 14 13:20:46 UTC 2026\n4086\na4d04c6cfad35cdc1260ab1db46e06e55e6be74b5493109b23643146f8b1a06b  /etc/routermgmt/routermgmt-agent.sh\n71a5045e43c321c2a9e18599b79fb315e4c24b6ab5db3d86031a129994ebdcce  /etc/routermgmt/handlers/switch_node.sh\nc65d51a7066eb05a141ead4692361472c6e89a6e16327ca4dc7da356c12bfd6e  /etc/routermgmt/self-heal.sh\nNO_PAUSE",
+        "stderr": ""
+      },
+      "config": {
+        "cf_nodes": [
+          {
+            "name": "CF2D-HK-01",
+            "server": "162.159.135.42",
+            "port": 2053,
+            "servername": "hk.6849271.xyz",
+            "udp": false
+          },
+          {
+            "name": "CF2D-BWG-01",
+            "server": "162.159.135.42",
+            "port": 2053,
+            "servername": "usbwg.6849271.xyz",
+            "udp": false
+          },
+          {
+            "name": "CF-CDN-GIA-01",
+            "server": "104.18.32.7",
+            "port": 2053,
+            "servername": "cf.k3x9m2.top",
+            "udp": false
+          },
+          {
+            "name": "CF2-CDN-GIA-01",
+            "server": "162.159.135.42",
+            "port": 2053,
+            "servername": "cf.k3x9m2.top",
+            "udp": false
+          }
+        ],
+        "cold_domain_present": false,
+        "tail": [
+          "AND,((NETWORK,UDP),(DST-PORT,443)),REJECT",
+          "GEOSITE,geolocation-!cn,PROXY",
+          "MATCH,DIRECT"
+        ],
+        "fallback": [
+          "223.5.5.5",
+          "119.29.29.29"
+        ],
+        "provider_paths": [
+          "./proxy_providers/airport-g02.yaml"
+        ]
+      },
+      "groups": {
+        "PROXY": {
+          "type": "Selector",
+          "now": "AUTO",
+          "all": [
+            "AUTO",
+            "BWG-HY2-JPTY-01",
+            "GIA-HY2-US-01",
+            "BWG-VLESS-JPTY-01",
+            "US666-CN2GIA-01",
+            "CF2D-HK-01",
+            "CF2D-BWG-01",
+            "CF-CDN-GIA-01",
+            "CF2-CDN-GIA-01",
+            "DIRECT"
+          ]
+        },
+        "NODE-PICK": {
+          "type": "Fallback",
+          "now": "BWG-HY2-JPTY-01",
+          "all": [
+            "BWG-HY2-JPTY-01",
+            "GIA-HY2-US-01",
+            "BWG-VLESS-JPTY-01",
+            "US666-CN2GIA-01",
+            "CF2D-HK-01",
+            "CF2D-BWG-01",
+            "CF-CDN-GIA-01",
+            "CF2-CDN-GIA-01"
+          ]
+        },
+        "US-MEDIA": {
+          "type": "Selector",
+          "now": "NODE-PICK",
+          "all": [
+            "NODE-PICK",
+            "AIRPORT"
+          ]
+        },
+        "DOWNLOAD": {
+          "type": "Selector",
+          "now": "DIRECT",
+          "all": [
+            "DIRECT",
+            "PROXY"
+          ]
+        }
+      },
+      "cf_delay": {
+        "CF2D-HK-01": {
+          "delay": 345
+        },
+        "CF2D-BWG-01": {
+          "delay": 412
+        }
+      },
+      "meter": {
+        "rc": 1,
+        "stdout": "",
+        "stderr": ""
+      },
+      "protected_checks": {
+        "rc": 0,
+        "stdout": "6519a8b4e28e38f0a12932444626218d7f92bd95950a813421cca04cca11dd27  /etc/config/dhcp\n4911dbbe7962b4c8425526a23b45896732ec53fbc1539bd0f17355f5b36fad98  /etc/routermgmt/tunnel.conf\n1eb54b96092fd96f449d4360a7c805418d468275b8c6ec897f2bffd83a101ebb  /etc/mihomo/config.yaml\nqdisc noqueue 0: root refcnt 2 \ng204=204 t=0.421238\nbaidu=200 t=0.191966",
+        "stderr": ""
+      }
+    },
+    "R6": {
+      "name": "R6",
+      "port": 13226,
+      "runtime": {
+        "rc": 0,
+        "stdout": "2026-11-19 06:21:00 +0800\naarch64\nMihomo Meta v1.19.31 linux arm64 with go1.26.8 Mon Sep 14 13:20:46 UTC 2026\n4697\nca77a1f3b4c35ed6beb3669507a80e7447943c1c33f7b300a704a0bf886a29d8  /etc/routermgmt/routermgmt-agent.sh\n71a5045e43c321c2a9e18599b79fb315e4c24b6ab5db3d86031a129994ebdcce  /etc/routermgmt/handlers/switch_node.sh\nc65d51a7066eb05a141ead4692361472c6e89a6e16327ca4dc7da356c12bfd6e  /etc/routermgmt/self-heal.sh\nNO_PAUSE",
+        "stderr": ""
+      },
+      "config": {
+        "cf_nodes": [
+          {
+            "name": "CF2D-HK-01",
+            "server": "162.159.135.42",
+            "port": 2053,
+            "servername": "hk.6849271.xyz",
+            "udp": false
+          },
+          {
+            "name": "CF2D-BWG-01",
+            "server": "162.159.135.42",
+            "port": 2053,
+            "servername": "usbwg.6849271.xyz",
+            "udp": false
+          },
+          {
+            "name": "CF-CDN-GIA-01",
+            "server": "104.18.32.7",
+            "port": 2053,
+            "servername": "cf.k3x9m2.top",
+            "udp": false
+          },
+          {
+            "name": "CF2-CDN-GIA-01",
+            "server": "162.159.135.42",
+            "port": 2053,
+            "servername": "cf.k3x9m2.top",
+            "udp": false
+          }
+        ],
+        "cold_domain_present": false,
+        "tail": [
+          "AND,((NETWORK,UDP),(DST-PORT,443)),REJECT",
+          "GEOSITE,geolocation-!cn,PROXY",
+          "MATCH,DIRECT"
+        ],
+        "fallback": [
+          "223.5.5.5",
+          "119.29.29.29"
+        ],
+        "provider_paths": [
+          "./proxy_providers/airport-g02.yaml"
+        ]
+      },
+      "groups": {
+        "PROXY": {
+          "type": "Selector",
+          "now": "AUTO",
+          "all": [
+            "AUTO",
+            "BWG-HY2-JPTY-01",
+            "GIA-HY2-US-01",
+            "US666-CN2GIA-01",
+            "CF2D-HK-01",
+            "CF2D-BWG-01",
+            "BWG-VLESS-JPTY-01",
+            "CF-CDN-GIA-01",
+            "CF2-CDN-GIA-01",
+            "DIRECT"
+          ]
+        },
+        "NODE-PICK": {
+          "type": "Fallback",
+          "now": "BWG-HY2-JPTY-01",
+          "all": [
+            "BWG-HY2-JPTY-01",
+            "GIA-HY2-US-01",
+            "US666-CN2GIA-01",
+            "CF2D-HK-01",
+            "CF2D-BWG-01",
+            "BWG-VLESS-JPTY-01",
+            "CF-CDN-GIA-01",
+            "CF2-CDN-GIA-01"
+          ]
+        },
+        "US-MEDIA": {
+          "type": "Selector",
+          "now": "NODE-PICK",
+          "all": [
+            "NODE-PICK",
+            "AIRPORT"
+          ]
+        },
+        "DOWNLOAD": {
+          "type": "Selector",
+          "now": "DIRECT",
+          "all": [
+            "DIRECT",
+            "PROXY"
+          ]
+        }
+      },
+      "cf_delay": {
+        "CF2D-HK-01": {
+          "delay": 413
+        },
+        "CF2D-BWG-01": {
+          "delay": 415
+        }
+      },
+      "meter": {
+        "rc": 1,
+        "stdout": "",
+        "stderr": ""
+      },
+      "protected_checks": {
+        "rc": 0,
+        "stdout": "6519a8b4e28e38f0a12932444626218d7f92bd95950a813421cca04cca11dd27  /etc/config/dhcp\n464d1e59187d93491d2f8060667bed31ff6c72f8a95ffc88b1ecbb4b1fc00cfe  /etc/routermgmt/tunnel.conf\ndd7c4e7b92cb59a6fcdfb4ae91d1d2999fb84b36d49d562c790ae7430093f42d  /etc/mihomo/config.yaml\nqdisc noqueue 0: root refcnt 2 \ng204=204 t=0.407866\nbaidu=200 t=0.170323",
+        "stderr": ""
+      }
+    },
+    "R5": {
+      "name": "R5",
+      "port": 13225,
+      "runtime": {
+        "rc": 0,
+        "stdout": "2026-11-19 06:20:53 +0800\naarch64\nMihomo Meta v1.19.31 linux arm64 with go1.26.8 Mon Sep 14 13:20:46 UTC 2026\n3477\nca77a1f3b4c35ed6beb3669507a80e7447943c1c33f7b300a704a0bf886a29d8  /etc/routermgmt/routermgmt-agent.sh\n71a5045e43c321c2a9e18599b79fb315e4c24b6ab5db3d86031a129994ebdcce  /etc/routermgmt/handlers/switch_node.sh\nc65d51a7066eb05a141ead4692361472c6e89a6e16327ca4dc7da356c12bfd6e  /etc/routermgmt/self-heal.sh\nNO_PAUSE",
+        "stderr": ""
+      },
+      "config": {
+        "cf_nodes": [
+          {
+            "name": "CF2D-HK-01",
+            "server": "162.159.135.42",
+            "port": 2053,
+            "servername": "hk.6849271.xyz",
+            "udp": false
+          },
+          {
+            "name": "CF2D-BWG-01",
+            "server": "162.159.135.42",
+            "port": 2053,
+            "servername": "usbwg.6849271.xyz",
+            "udp": false
+          },
+          {
+            "name": "CF-CDN-GIA-01",
+            "server": "104.18.32.7",
+            "port": 2053,
+            "servername": "cf.k3x9m2.top",
+            "udp": false
+          },
+          {
+            "name": "CF2-CDN-GIA-01",
+            "server": "162.159.135.42",
+            "port": 2053,
+            "servername": "cf.k3x9m2.top",
+            "udp": false
+          }
+        ],
+        "cold_domain_present": false,
+        "tail": [
+          "AND,((NETWORK,UDP),(DST-PORT,443)),REJECT",
+          "GEOSITE,geolocation-!cn,PROXY",
+          "MATCH,DIRECT"
+        ],
+        "fallback": [
+          "223.5.5.5",
+          "119.29.29.29"
+        ],
+        "provider_paths": [
+          "./proxy_providers/airport-g02.yaml"
+        ]
+      },
+      "groups": {
+        "PROXY": {
+          "type": "Selector",
+          "now": "AUTO",
+          "all": [
+            "AUTO",
+            "BWG-HY2-JPTY-01",
+            "GIA-HY2-US-01",
+            "US666-CN2GIA-01",
+            "CF2D-HK-01",
+            "CF2D-BWG-01",
+            "BWG-VLESS-JPTY-01",
+            "CF-CDN-GIA-01",
+            "CF2-CDN-GIA-01",
+            "DIRECT"
+          ]
+        },
+        "NODE-PICK": {
+          "type": "Fallback",
+          "now": "BWG-HY2-JPTY-01",
+          "all": [
+            "BWG-HY2-JPTY-01",
+            "GIA-HY2-US-01",
+            "US666-CN2GIA-01",
+            "CF2D-HK-01",
+            "CF2D-BWG-01",
+            "BWG-VLESS-JPTY-01",
+            "CF-CDN-GIA-01",
+            "CF2-CDN-GIA-01"
+          ]
+        },
+        "US-MEDIA": {
+          "type": "Selector",
+          "now": "NODE-PICK",
+          "all": [
+            "NODE-PICK",
+            "AIRPORT"
+          ]
+        },
+        "DOWNLOAD": {
+          "type": "Selector",
+          "now": "DIRECT",
+          "all": [
+            "DIRECT",
+            "PROXY"
+          ]
+        }
+      },
+      "cf_delay": {
+        "CF2D-HK-01": {
+          "unavailable": true,
+          "rc": 22
+        },
+        "CF2D-BWG-01": {
+          "unavailable": true,
+          "rc": 22
+        }
+      },
+      "meter": {
+        "rc": 1,
+        "stdout": "",
+        "stderr": ""
+      },
+      "protected_checks": {
+        "rc": 0,
+        "stdout": "139643e16cf8d0e744d3ee3e7d00d48cc617593f46ce28d848293f1e365853ce  /etc/config/dhcp\n16138b483c0f47464216cc8045e7f1ee555276f35571285f34cf4be7d37dad4d  /etc/routermgmt/tunnel.conf\ndd7c4e7b92cb59a6fcdfb4ae91d1d2999fb84b36d49d562c790ae7430093f42d  /etc/mihomo/config.yaml\nqdisc noqueue 0: root refcnt 2 \ng204=204 t=0.316881\nbaidu=200 t=0.163335",
+        "stderr": ""
+      }
+    },
+    "R8": {
+      "name": "R8",
+      "port": 13230,
+      "runtime": {
+        "rc": 0,
+        "stdout": "2026-11-19 06:21:00 +0800\naarch64\nMihomo Meta v1.19.31 linux arm64 with go1.26.8 Mon Sep 14 13:20:46 UTC 2026\n4276\na4d04c6cfad35cdc1260ab1db46e06e55e6be74b5493109b23643146f8b1a06b  /etc/routermgmt/routermgmt-agent.sh\n71a5045e43c321c2a9e18599b79fb315e4c24b6ab5db3d86031a129994ebdcce  /etc/routermgmt/handlers/switch_node.sh\nc65d51a7066eb05a141ead4692361472c6e89a6e16327ca4dc7da356c12bfd6e  /etc/routermgmt/self-heal.sh\nNO_PAUSE",
+        "stderr": ""
+      },
+      "config": {
+        "cf_nodes": [
+          {
+            "name": "CF2D-HK-01",
+            "server": "162.159.135.42",
+            "port": 2053,
+            "servername": "hk.6849271.xyz",
+            "udp": false
+          },
+          {
+            "name": "CF2D-BWG-01",
+            "server": "162.159.135.42",
+            "port": 2053,
+            "servername": "usbwg.6849271.xyz",
+            "udp": false
+          },
+          {
+            "name": "CF-CDN-GIA-01",
+            "server": "104.18.32.7",
+            "port": 2053,
+            "servername": "cf.k3x9m2.top",
+            "udp": false
+          },
+          {
+            "name": "CF2-CDN-GIA-01",
+            "server": "162.159.135.42",
+            "port": 2053,
+            "servername": "cf.k3x9m2.top",
+            "udp": false
+          }
+        ],
+        "cold_domain_present": false,
+        "tail": [
+          "AND,((NETWORK,UDP),(DST-PORT,443)),REJECT",
+          "GEOSITE,geolocation-!cn,PROXY",
+          "MATCH,DIRECT"
+        ],
+        "fallback": [
+          "223.5.5.5",
+          "119.29.29.29"
+        ],
+        "provider_paths": [
+          "./proxy_providers/airport-g02.yaml"
+        ]
+      },
+      "groups": {
+        "PROXY": {
+          "type": "Selector",
+          "now": "AUTO",
+          "all": [
+            "AUTO",
+            "BWG-HY2-JPTY-01",
+            "GIA-HY2-US-01",
+            "US666-CN2GIA-01",
+            "CF2D-HK-01",
+            "CF2D-BWG-01",
+            "BWG-VLESS-JPTY-01",
+            "CF-CDN-GIA-01",
+            "CF2-CDN-GIA-01",
+            "DIRECT"
+          ]
+        },
+        "NODE-PICK": {
+          "type": "Fallback",
+          "now": "BWG-HY2-JPTY-01",
+          "all": [
+            "BWG-HY2-JPTY-01",
+            "GIA-HY2-US-01",
+            "US666-CN2GIA-01",
+            "CF2D-HK-01",
+            "CF2D-BWG-01",
+            "BWG-VLESS-JPTY-01",
+            "CF-CDN-GIA-01",
+            "CF2-CDN-GIA-01"
+          ]
+        },
+        "US-MEDIA": {
+          "type": "Selector",
+          "now": "NODE-PICK",
+          "all": [
+            "NODE-PICK",
+            "AIRPORT"
+          ]
+        },
+        "DOWNLOAD": {
+          "type": "Selector",
+          "now": "DIRECT",
+          "all": [
+            "DIRECT",
+            "PROXY"
+          ]
+        }
+      },
+      "cf_delay": {
+        "CF2D-HK-01": {
+          "unavailable": true,
+          "rc": 22
+        },
+        "CF2D-BWG-01": {
+          "unavailable": true,
+          "rc": 22
+        }
+      },
+      "meter": {
+        "rc": 1,
+        "stdout": "",
+        "stderr": ""
+      },
+      "protected_checks": {
+        "rc": 0,
+        "stdout": "6519a8b4e28e38f0a12932444626218d7f92bd95950a813421cca04cca11dd27  /etc/config/dhcp\n2db05b79cd2644b8c3570bdd970d996266f5b15f196b2d0b7610f4fc49df987a  /etc/routermgmt/tunnel.conf\ndd7c4e7b92cb59a6fcdfb4ae91d1d2999fb84b36d49d562c790ae7430093f42d  /etc/mihomo/config.yaml\nqdisc noqueue 0: root refcnt 2 \ng204=204 t=0.304756\nbaidu=200 t=0.157827",
+        "stderr": ""
+      }
+    }
+  },
+  "finished": "2026-11-19T06:21:16+08:00"
+}

@@ -1,0 +1,31 @@
+{
+  "started": "2026-11-19T14:01:01+08:00",
+  "production_writes": false,
+  "node": {
+    "name": "CF2D-HK-01",
+    "server": "162.159.135.42",
+    "port": 2053,
+    "servername": "hk.6849271.xyz",
+    "type": "vless",
+    "network": "ws"
+  },
+  "R2_authenticated_https_delay": {
+    "delay": 408
+  },
+  "athena_ws": {
+    "edge": "162.159.135.42",
+    "domain": "hk.6849271.xyz",
+    "status": "101",
+    "accept_valid": true,
+    "curl_rc": 28,
+    "error_category": "timeout",
+    "strict_tls": true
+  },
+  "athena_has_new_hk_node": false,
+  "athena_current": {
+    "rc": 0,
+    "stdout": "BWG-HY2-JPTY-01\nip=74.82.193.113\nloc=JP",
+    "stderr": ""
+  },
+  "finished": "2026-11-19T14:01:12+08:00"
+}

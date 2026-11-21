@@ -1,0 +1,394 @@
+{
+  "started": "2026-11-19T21:24:03.300798+08:00",
+  "scope": "read-only production checks; no API login, task or config writes",
+  "GZ": {
+    "rc": 0,
+    "stdout": "2026-11-19T21:24:07+08:00\nactive\nactive\nactive\n1d0d88299ea25ba6964bcc32f4f1b01a9684282a2fb9ba5820aca03ef7a01a05  /opt/mgmt/server\nBEGIN\n10\nrtr-a9bcba|41|41|41|74.82.193.113|0|rule|all\nCOMMIT",
+    "stderr": ""
+  },
+  "R2": {
+    "name": "R2",
+    "port": 13223,
+    "runtime": {
+      "rc": 0,
+      "stdout": "2026-11-19 21:24:08 +0800\naarch64\nMihomo Meta v1.19.31 linux arm64 with go1.26.8 Mon Sep 14 13:20:46 UTC 2026\n4880\nca77a1f3b4c35ed6beb3669507a80e7447943c1c33f7b300a704a0bf886a29d8  /etc/routermgmt/routermgmt-agent.sh\n71a5045e43c321c2a9e18599b79fb315e4c24b6ab5db3d86031a129994ebdcce  /etc/routermgmt/handlers/switch_node.sh\nc65d51a7066eb05a141ead4692361472c6e89a6e16327ca4dc7da356c12bfd6e  /etc/routermgmt/self-heal.sh\n4d7705b0c52ee11eec894a798f11b96efd85a27d15bd22af4a89d4576b46e85d  /etc/routermgmt/proxy-meter-v3.sh\n23b6b2f6681207f0e0d64854b83d744863cdad84fa1c2473cec636c13dbfe6b7  /etc/routermgmt/proxy-meter-endpoints.sh\nNO_PAUSE",
+      "stderr": ""
+    },
+    "config": {
+      "cf_nodes": [
+        {
+          "name": "CF-CDN-GIA-01",
+          "server": "104.18.32.7",
+          "port": 2053,
+          "servername": "cf.k3x9m2.top",
+          "udp": false
+        },
+        {
+          "name": "CF2-CDN-GIA-01",
+          "server": "162.159.135.42",
+          "port": 2053,
+          "servername": "cf.k3x9m2.top",
+          "udp": false
+        },
+        {
+          "name": "CF2D-HK-01",
+          "server": "162.159.135.42",
+          "port": 2053,
+          "servername": "hk.6849271.xyz",
+          "udp": false
+        },
+        {
+          "name": "CF2D-BWG-01",
+          "server": "162.159.135.42",
+          "port": 2053,
+          "servername": "usbwg.6849271.xyz",
+          "udp": false
+        }
+      ],
+      "cold_domain_present": false,
+      "tail": [
+        "AND,((NETWORK,UDP),(DST-PORT,443)),REJECT",
+        "GEOSITE,geolocation-!cn,PROXY",
+        "MATCH,DIRECT"
+      ],
+      "fallback": [
+        "223.5.5.5",
+        "119.29.29.29"
+      ],
+      "provider_paths": [
+        "./proxy_providers/airport-g02.yaml"
+      ]
+    },
+    "groups": {
+      "PROXY": {
+        "type": "Selector",
+        "now": "AUTO",
+        "all": [
+          "AUTO",
+          "BWG-HY2-JPTY-01",
+          "GIA-HY2-US-01",
+          "CF-CDN-GIA-01",
+          "CF2-CDN-GIA-01",
+          "DMIT-HY2-US-01",
+          "CF2D-HK-01",
+          "CF2D-BWG-01",
+          "BWG-VLESS-JPTY-01",
+          "DIRECT"
+        ]
+      },
+      "NODE-PICK": {
+        "type": "Fallback",
+        "now": "BWG-HY2-JPTY-01",
+        "all": [
+          "BWG-HY2-JPTY-01",
+          "GIA-HY2-US-01",
+          "CF-CDN-GIA-01",
+          "CF2-CDN-GIA-01",
+          "DMIT-HY2-US-01",
+          "CF2D-HK-01",
+          "CF2D-BWG-01",
+          "BWG-VLESS-JPTY-01"
+        ]
+      },
+      "US-MEDIA": {
+        "type": "Selector",
+        "now": "NODE-PICK",
+        "all": [
+          "BULK-LAX-GIA-01",
+          "NODE-PICK",
+          "AIRPORT"
+        ]
+      },
+      "DOWNLOAD": {
+        "type": "Selector",
+        "now": "DIRECT",
+        "all": [
+          "DIRECT",
+          "PROXY"
+        ]
+      }
+    },
+    "cf_delay": {
+      "CF2D-HK-01": {
+        "delay": 1020
+      },
+      "CF2D-BWG-01": {
+        "delay": 399
+      }
+    },
+    "meter": {
+      "rc": 0,
+      "stdout": "#*/5 * * * * /etc/routermgmt/proxy-meter-v2.sh #proxy-meter\n*/5 * * * * /etc/routermgmt/proxy-meter-v3.sh #proxy-meter\nFILE=/etc/routermgmt/state/proxy-meter-v3.json\n{\"schema\":3,\"counter_key_format\":\"direction-v1\",\"meter_id\":\"rtr-a9bcba\",\"seq\":576,\"boot_id\":\"b68237b9-959b-4102-a28b-22e1873e9027\",\"rules_sha\":\"63b206e0d078261d\",\"continuity_id\":\"reboot-b68237b9-959b-4102-a28b-22e1873e9027\",\"prev_continuity\":\"reboot-b68237b9-959b-4102-a28b-22e1873e9027\",\"prev_epoch\":1795094400,\"day_key\":\"2026-11-19\",\"day_total\":881810914,\"day_first_at\":\"2026-11-19 00:00:00+0800\",\"health\":\"ok\",\"partial\":true,\"quota_eligible\":false,\"read_fail_eps\":\"-\",\"endpoints\":{\"CF-CDN-GIA-01_down\":7731988,\"BWG-VLESS-JPTY-01_down\":0,\"BWG-HY2-JPTY-01_up\":79824935,\"BULK-LAX-GIA-01_down\":0,\"CF-CDN-GIA-01_up\":3987987,\"GIA-HY2-US-01_up\":2211568,\"CF2-CDN-GIA-01_down\":20740845,\"CF2-CDN-GIA-01_up\":10921522,\"GIA-HY2-US-01_down\":4001720,\"BULK-LAX-GIA-01_up\":47340,\"DMIT-HY2-US-01_up\":8580480,\"BWG-HY2-JPTY-01_down\":742860124,\"BWG-VLESS-JPTY-01_up\":118440,\"DMIT-HY2-US-01_down\":0}}\nFILE=/etc/routermgmt/state/proxy-meter-daily-v3.json\n{\"day_key\":\"2026-11-19\",\"total\":881810914,\"delta_last\":299635,\"sampled_at\":\"2026-11-19 21:20:00+0800\",\"meter_id\":\"rtr-a9bcba\",\"seq\":576,\"health\":\"ok\",\"partial\":true,\"quota_eligible\":false,\"events\":\"\",\"read_fail_eps\":\"-\"}\nFILE=/etc/routermgmt/proxy-meter-rules-v3.conf\nBWG-HY2-JPTY-01|up|74.82.193.113|udp|34567\nBWG-HY2-JPTY-01|down|74.82.193.113|udp|34567\nGIA-HY2-US-01|up|154.36.139.155|udp|34568\nGIA-HY2-US-01|down|154.36.139.155|udp|34568\nCF-CDN-GIA-01|up|104.18.32.7|tcp|2053\nCF-CDN-GIA-01|down|104.18.32.7|tcp|2053\nCF2-CDN-GIA-01|up|162.159.135.42|tcp|2053\nCF2-CDN-GIA-01|down|162.159.135.42|tcp|2053\nBULK-LAX-GIA-01|up|154.36.139.155|tcp|2054\nBULK-LAX-GIA-01|down|154.36.139.155|tcp|2054\nDMIT-HY2-US-01|up|69.63.219.156|udp|34567\nDMIT-HY2-US-01|down|69.63.219.156|udp|34567\nBWG-VLESS-JPTY-01|up|74.82.193.113|tcp|443\nBWG-VLESS-JPTY-01|down|74.82.193.113|tcp|443\nFILE=/etc/routermgmt/proxy-meter-coverage-v3.json\n{\"generated_at\": \"2026-11-18 22:43:58+0800\", \"registered_rules\": 14, \"proxy_nodes\": 7, \"tuple_merged\": \"CF2D-HK-01>CF2-CDN-GIA-01,CF2D-HK-01>CF2-CDN-GIA-01,CF2D-BWG-01>CF2-CDN-GIA-01,CF2D-BWG-01>CF2-CDN-GIA-01\", \"unresolved_record_count\": 40, \"unresolved_names_withheld\": true}\n-A OUTPUT -m comment --comment rm-pm3-auto-OUTPUT -j PROXY_METER_OUT\n-A INPUT -m comment --comment rm-pm3-auto-INPUT -j PROXY_METER_IN\nChain PROXY_METER_OUT (1 references)\n    pkts      bytes target     prot opt in     out     source               destination         \n  354892 79885047            udp  --  *      *       0.0.0.0/0            74.82.193.113        udp dpt:34567 /* BWG-HY2-JPTY-01 */\n   13261  2218690            udp  --  *      *       0.0.0.0/0            154.36.139.155       udp dpt:34568 /* GIA-HY2-US-01 */\n   18198  3996673            tcp  --  *      *       0.0.0.0/0            104.18.32.7          tcp dpt:2053 /* CF-CDN-GIA-01 */\n   48537 10965750            tcp  --  *      *       0.0.0.0/0            162.159.135.42       tcp dpt:2053 /* CF2-CDN-GIA-01 */\n     792    47520            tcp  --  *      *       0.0.0.0/0            154.36.139.155       tcp dpt:2054 /* BULK-LAX-GIA-01 */\n    6580  8606640            udp  --  *      *       0.0.0.0/0            69.63.219.156        udp dpt:34567 /* DMIT-HY2-US-01 */\n    1980   118800            tcp  --  *      *       0.0.0.0/0            74.82.193.113        tcp dpt:443 /* BWG-VLESS-JPTY-01 */\nChain PROXY_METER_IN (1 references)\n    pkts      bytes target     prot opt in     out     source               destination         \n  607161 743116580            udp  --  *      *       74.82.193.113        0.0.0.0/0            udp spt:34567 /* BWG-HY2-JPTY-01 */\n   14006  4013870            udp  --  *      *       154.36.139.155       0.0.0.0/0            udp spt:34568 /* GIA-HY2-US-01 */\n   15815  7747868            tcp  --  *      *       104.18.32.7          0.0.0.0/0            tcp spt:2053 /* CF-CDN-GIA-01 */\n   37189 20825124            tcp  --  *      *       162.159.135.42       0.0.0.0/0            tcp spt:2053 /* CF2-CDN-GIA-01 */\n       0        0            tcp  --  *      *       154.36.139.155       0.0.0.0/0            tcp spt:2054 /* BULK-LAX-GIA-01 */\n       0        0            udp  --  *      *       69.63.219.156        0.0.0.0/0            udp spt:34567 /* DMIT-HY2-US-01 */\n       0        0            tcp  --  *      *       74.82.193.113        0.0.0.0/0            tcp spt:443 /* BWG-VLESS-JPTY-01 */\n2026-11-19 21:05:01 OK DELTA=380684 HEALTH=ok EVENTS=- DAY_TOTAL=880766358\n2026-11-19 21:10:01 OK DELTA=297385 HEALTH=ok EVENTS=- DAY_TOTAL=881063743\n2026-11-19 21:15:01 OK DELTA=447536 HEALTH=ok EVENTS=- DAY_TOTAL=881511279\n2026-11-19 21:20:01 OK DELTA=299635 HEALTH=ok EVENTS=- DAY_TOTAL=881810914",
+      "stderr": ""
+    },
+    "protected_checks": {
+      "rc": 0,
+      "stdout": "6519a8b4e28e38f0a12932444626218d7f92bd95950a813421cca04cca11dd27  /etc/config/dhcp\n7ed820da9a00b05438f107d52b63cfc5ad3a5f7c4170ad9b4f543503678fd61f  /etc/routermgmt/tunnel.conf\n73e830e5085eb7dd2b80bbde5bd25efbb9ea19141d798cb917086ba54c584674  /etc/mihomo/config.yaml\nqdisc noqueue 0: root refcnt 2 \ng204=204 t=1.094193\nbaidu=200 t=0.152994",
+      "stderr": ""
+    }
+  },
+  "R2_extra": {
+    "rc": 0,
+    "stdout": "2026-11-19 21:24:24 +0800\nb68237b9-959b-4102-a28b-22e1873e9027\n0 0 * * * /sbin/reboot #routermgmt-reboot\n#*/5 * * * * /etc/routermgmt/proxy-meter-v2.sh #proxy-meter\n*/5 * * * * /etc/routermgmt/proxy-meter-v3.sh #proxy-meter\nPOC_DIR_ABSENT\n-rwxr-xr-x    1 root     root          6498 Nov 18 22:30 proxy-meter-endpoints.sh\n-rwxr-xr-x    1 root     root         17620 Nov 18 22:30 proxy-meter-v3.sh\n2d8fe9618d2213092f80e555f9972214f8ec14685146b49173be704f78c667f2  /etc/routermgmt/backup-meter-20261119/proxy-meter-endpoints.sh\ne9879454d449299b06e2e6ff4006bb46bbe479d5da701a83d37284dc5fda4ada  /etc/routermgmt/backup-meter-20261119/proxy-meter-v3.sh\n2026-11-19 20:45:01 OK DELTA=398105 HEALTH=ok EVENTS=- DAY_TOTAL=879205635\n2026-11-19 20:50:01 OK DELTA=295048 HEALTH=ok EVENTS=- DAY_TOTAL=879500683\n2026-11-19 20:55:01 OK DELTA=553199 HEALTH=ok EVENTS=- DAY_TOTAL=880053882\n2026-11-19 21:00:01 OK DELTA=331792 HEALTH=ok EVENTS=- DAY_TOTAL=880385674\n2026-11-19 21:05:01 OK DELTA=380684 HEALTH=ok EVENTS=- DAY_TOTAL=880766358\n2026-11-19 21:10:01 OK DELTA=297385 HEALTH=ok EVENTS=- DAY_TOTAL=881063743\n2026-11-19 21:15:01 OK DELTA=447536 HEALTH=ok EVENTS=- DAY_TOTAL=881511279\n2026-11-19 21:20:01 OK DELTA=299635 HEALTH=ok EVENTS=- DAY_TOTAL=881810914",
+    "stderr": ""
+  },
+  "archive": [
+    {
+      "old": "review/path_a_gz_probe_20261118.py",
+      "new": "review/archive-20261118/path_a_gz_probe_20261118.py",
+      "exists": true,
+      "sha_ok": true,
+      "size_ok": true,
+      "old_exists": false
+    },
+    {
+      "old": "review/path_a_gz_arch_probe.py",
+      "new": "review/archive-20261118/path_a_gz_arch_probe.py",
+      "exists": true,
+      "sha_ok": true,
+      "size_ok": true,
+      "old_exists": false
+    },
+    {
+      "old": "review/path_a_cf01_backup.py",
+      "new": "review/archive-20261118/path_a_cf01_backup.py",
+      "exists": true,
+      "sha_ok": true,
+      "size_ok": true,
+      "old_exists": false
+    },
+    {
+      "old": "review/path_a_gz_api.py",
+      "new": "review/archive-20261118/path_a_gz_api.py",
+      "exists": true,
+      "sha_ok": true,
+      "size_ok": true,
+      "old_exists": false
+    },
+    {
+      "old": "review/path_a_03b_rehearsal_step1.py",
+      "new": "review/archive-20261118/path_a_03b_rehearsal_step1.py",
+      "exists": true,
+      "sha_ok": true,
+      "size_ok": true,
+      "old_exists": false
+    },
+    {
+      "old": "review/path_a_03b_rehearsal_step2.py",
+      "new": "review/archive-20261118/path_a_03b_rehearsal_step2.py",
+      "exists": true,
+      "sha_ok": true,
+      "size_ok": true,
+      "old_exists": false
+    },
+    {
+      "old": "review/path_a_03b_rehearsal_step2b.py",
+      "new": "review/archive-20261118/path_a_03b_rehearsal_step2b.py",
+      "exists": true,
+      "sha_ok": true,
+      "size_ok": true,
+      "old_exists": false
+    },
+    {
+      "old": "review/path_a_03c_deploy.py",
+      "new": "review/archive-20261118/path_a_03c_deploy.py",
+      "exists": true,
+      "sha_ok": true,
+      "size_ok": true,
+      "old_exists": false
+    },
+    {
+      "old": "review/path_a_cf02_preview_gate.py",
+      "new": "review/archive-20261118/path_a_cf02_preview_gate.py",
+      "exists": true,
+      "sha_ok": true,
+      "size_ok": true,
+      "old_exists": false
+    },
+    {
+      "old": "review/path_a_cf03_tls_ws.py",
+      "new": "review/archive-20261118/path_a_cf03_tls_ws.py",
+      "exists": true,
+      "sha_ok": true,
+      "size_ok": true,
+      "old_exists": false
+    },
+    {
+      "old": "review/path_a_cf04_cf05.py",
+      "new": "review/archive-20261118/path_a_cf04_cf05.py",
+      "exists": true,
+      "sha_ok": true,
+      "size_ok": true,
+      "old_exists": false
+    },
+    {
+      "old": "review/path_a_cf06_stage1.py",
+      "new": "review/archive-20261118/path_a_cf06_stage1.py",
+      "exists": true,
+      "sha_ok": true,
+      "size_ok": true,
+      "old_exists": false
+    },
+    {
+      "old": "review/path_a_cf06_stage2_apply.py",
+      "new": "review/archive-20261118/path_a_cf06_stage2_apply.py",
+      "exists": true,
+      "sha_ok": true,
+      "size_ok": true,
+      "old_exists": false
+    },
+    {
+      "old": "review/path_a_cf07_cf08_forced_path.py",
+      "new": "review/archive-20261118/path_a_cf07_cf08_forced_path.py",
+      "exists": true,
+      "sha_ok": true,
+      "size_ok": true,
+      "old_exists": false
+    },
+    {
+      "old": "review/path_a_cf09_lan_test.py",
+      "new": "review/archive-20261118/path_a_cf09_lan_test.py",
+      "exists": true,
+      "sha_ok": true,
+      "size_ok": true,
+      "old_exists": false
+    },
+    {
+      "old": "review/path_a_cf09_rest.py",
+      "new": "review/archive-20261118/path_a_cf09_rest.py",
+      "exists": true,
+      "sha_ok": true,
+      "size_ok": true,
+      "old_exists": false
+    },
+    {
+      "old": "review/path_a_cf11_rollout.py",
+      "new": "review/archive-20261118/path_a_cf11_rollout.py",
+      "exists": true,
+      "sha_ok": true,
+      "size_ok": true,
+      "old_exists": false
+    },
+    {
+      "old": "review/cf_repair_tools_20261118.py",
+      "new": "review/archive-20261118/cf_repair_tools_20261118.py",
+      "exists": true,
+      "sha_ok": true,
+      "size_ok": true,
+      "old_exists": false
+    },
+    {
+      "old": "review/deploy_meter_repair_20261118.py",
+      "new": "review/archive-20261118/deploy_meter_repair_20261118.py",
+      "exists": true,
+      "sha_ok": true,
+      "size_ok": true,
+      "old_exists": false
+    },
+    {
+      "old": "review/fleet-foreign-access-20261118.py",
+      "new": "review/archive-20261118/fleet-foreign-access-20261118.py",
+      "exists": true,
+      "sha_ok": true,
+      "size_ok": true,
+      "old_exists": false
+    },
+    {
+      "old": "review/dmit-usability-probe-20261117.py",
+      "new": "review/archive-20261118/dmit-usability-probe-20261117.py",
+      "exists": true,
+      "sha_ok": true,
+      "size_ok": true,
+      "old_exists": false
+    },
+    {
+      "old": "review/AUTO恢复处理器隔离测试-20261118-Codex.json",
+      "new": "review/archive-20261118/AUTO恢复处理器隔离测试-20261118-Codex.json",
+      "exists": true,
+      "sha_ok": true,
+      "size_ok": true,
+      "old_exists": false
+    },
+    {
+      "old": "review/CF上线独立复核-20261118-2215-Codex.json",
+      "new": "review/archive-20261118/CF上线独立复核-20261118-2215-Codex.json",
+      "exists": true,
+      "sha_ok": true,
+      "size_ok": true,
+      "old_exists": false
+    },
+    {
+      "old": "review/CF上线补充核查-20261118-2219-Codex.json",
+      "new": "review/archive-20261118/CF上线补充核查-20261118-2219-Codex.json",
+      "exists": true,
+      "sha_ok": true,
+      "size_ok": true,
+      "old_exists": false
+    },
+    {
+      "old": "review/CF修复-probe-20261118-Codex.json",
+      "new": "review/archive-20261118/CF修复-probe-20261118-Codex.json",
+      "exists": true,
+      "sha_ok": true,
+      "size_ok": true,
+      "old_exists": false
+    },
+    {
+      "old": "review/CF修复-probe-20261118-Codex-1795011817.json",
+      "new": "review/archive-20261118/CF修复-probe-20261118-Codex-1795011817.json",
+      "exists": true,
+      "sha_ok": true,
+      "size_ok": true,
+      "old_exists": false
+    },
+    {
+      "old": "review/CF修复-probe-20261118-Codex-1795011927.json",
+      "new": "review/archive-20261118/CF修复-probe-20261118-Codex-1795011927.json",
+      "exists": true,
+      "sha_ok": true,
+      "size_ok": true,
+      "old_exists": false
+    },
+    {
+      "old": "review/治理计划修订一致性检查-20261118-Codex.json",
+      "new": "review/archive-20261118/治理计划修订一致性检查-20261118-Codex.json",
+      "exists": true,
+      "sha_ok": true,
+      "size_ok": true,
+      "old_exists": false
+    },
+    {
+      "old": "review/计量修复隔离测试-20261118-Codex.json",
+      "new": "review/archive-20261118/计量修复隔离测试-20261118-Codex.json",
+      "exists": true,
+      "sha_ok": true,
+      "size_ok": true,
+      "old_exists": false
+    },
+    {
+      "old": "review/配额启用门禁隔离测试-20261118-Codex.json",
+      "new": "review/archive-20261118/配额启用门禁隔离测试-20261118-Codex.json",
+      "exists": true,
+      "sha_ok": true,
+      "size_ok": true,
+      "old_exists": false
+    },
+    {
+      "old": "logs/fleet_nodes_20261119.py",
+      "new": "logs/diag-scripts-archive/fleet_nodes_20261119.py",
+      "exists": true,
+      "sha_ok": true,
+      "size_ok": true,
+      "old_exists": false
+    },
+    {
+      "old": "logs/nodes_redo_20261119.py",
+      "new": "logs/diag-scripts-archive/nodes_redo_20261119.py",
+      "exists": true,
+      "sha_ok": true,
+      "size_ok": true,
+      "old_exists": false
+    }
+  ],
+  "finished": "2026-11-19T21:24:20.702598+08:00"
+}

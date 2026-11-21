@@ -1,0 +1,129 @@
+{
+  "started": "2026-11-17T22:02:21+08:00",
+  "production_state_writes": false,
+  "scratch_db": "routermgmt_migtest_20261117",
+  "hosts": {
+    "GZ": {
+      "health": {
+        "rc": 0,
+        "stdout": "2026-11-17T22:02:24+08:00\nactive\nactive\nactive\n{\"db\":true,\"status\":\"ok\"}",
+        "stderr": ""
+      },
+      "db_readonly": {
+        "rc": 0,
+        "stdout": "migrations|1,2,3,4,5,6,7,8,9\nr2tasks|0|\nnode14bind|rtr-a9bcba|f\npurpose14|4|BWG-VLESS-JPTY-01|ordinary\npurpose14|7|US666-CN2GIA-01|ordinary\npurpose14|8|BWG-HY2-JPTY-01|ordinary\npurpose14|9|GIA-HY2-US-01|ordinary\npurpose14|10|CF-CDN-GIA-01|ordinary\npurpose14|11|CF2-CDN-GIA-01|ordinary\npurpose14|14|BULK-LAX-GIA-01|video\n",
+        "stderr": "ERROR:  column \"config_version\" does not exist\nLINE 1: SELECT 'r2row', id, config_version, highest_accepted, lifecy...\n                            ^\n"
+      }
+    },
+    "R2": {
+      "basics": {
+        "rc": 0,
+        "stdout": "2026-11-17T22:02:30+08:00\n 22:02:30 up 22:02,  load average: 1.07, 1.06, 1.01\noverlayfs:/overlay      940.0M    317.1M    622.9M  34% /\nb3883a56-53ac-402f-af6f-5478316d1d03\n/usr/bin/python3\n/usr/bin/jsonfilter\nCST +0800\nCST-8\nlrwxrwxrwx    1 root     root            14 Oct 25  2024 /etc/localtime -> /tmp/localtime\n",
+        "stderr": ""
+      },
+      "cron": {
+        "rc": 0,
+        "stdout": "*/5 * * * * /etc/routermgmt/netprobe.sh #routermgmt-netprobe\n* * * * * /etc/routermgmt/mgmt-port-discovery.sh #mgmt-port\n*/5 * * * * /etc/routermgmt/connlog.sh #routermgmt-connlog\n* * * * * /etc/routermgmt/self-heal.sh #self-heal\n0 0 * * * /sbin/reboot #routermgmt-reboot\n*/5 * * * * /etc/routermgmt/proxy-meter-v2.sh #proxy-meter\n",
+        "stderr": ""
+      },
+      "trigger_refs": {
+        "rc": 0,
+        "stdout": "/etc/crontabs/root:6:*/5 * * * * /etc/routermgmt/proxy-meter-v2.sh #proxy-meter\n/etc/routermgmt/routermgmt-agent.sh\n311:        apply_policy|set_ratelimit|set_reboot_schedule|set_license)\nno-process\n",
+        "stderr": ""
+      },
+      "meter_state": {
+        "rc": 0,
+        "stdout": "drwx------    7 root     root          3488 Nov 17 11:01 .\ndrwxr-xr-x    1 root     root          3488 Nov 17 00:01 ..\n-rwxr-xr-x    1 root     root          2573 Oct 25  2024 access-fw.sh\n-rw-r--r--    1 root     root         17008 Sep 28 20:21 agent-bak-20260928202107.tar.gz\n-rw-r--r--    1 root     root         17293 Sep 28 20:30 agent-bak-20260928203058.tar.gz\n-rw-r--r--    1 root     root         17442 Sep 28 20:36 agent-bak-20260928203609.tar.gz\n-rw-r--r--    1 root     root         28031 Oct 29 13:27 agent-bak-20261029132759.tar.gz\n-rw-------    1 root     root           243 Oct 25  2024 agent.conf\n-rwxr-xr-x    1 root     root          1519 Oct 23 20:43 connlog.sh\ndrwxr-xr-x    2 root     root          3488 Oct  1 12:38 corrupt-bak-20261001-123815\ndrwxr-xr-x    2 root     root          3488 Oct 29 13:27 handlers\n-rw-------    1 root     root           805 Oct 25  2024 id_dropbear_mgmt\ndrwxr-xr-x    2 root     root          3488 Nov 17 18:31 logs\n-rw-r--r--    1 root     root          3070 Nov  8 09:29 mgmt-port-discovery.sh\n-rwxr-xr-x    1 root     root          2598 Oct 28 10:09 mgmt-port-discovery.sh.bak-guardfix-20261108\n-rwxr-xr-x    1 root     root          3945 Oct  1 11:49 netprobe.sh\n-rw-r--r--    1 root     root           884 Nov 17 10:59 proxy-meter-rules.conf\n-rwx------    1 root     root          5119 Nov 17 10:58 proxy-meter-v2.sh\n-rwx------    1 root     root          3114 Nov 17 07:04 proxy-meter.sh\ndrwxr-xr-x    2 root     root          3488 Nov 17 11:04 ratelimit\n-rwx------    1 root     root          8292 Nov 17 11:04 ratelimit-ctl\n-rwx------    1 root     root         16646 Oct 29 13:27 routermgmt-agent.sh\n-rwx------    1 root     root         16646 Oct  1 15:11 routermgmt-agent.sh.bak-20261001-151112\n-rw-r--r--    1 root     root          3291 Oct 30 19:46 self-heal.sh\n-rwxr-xr-x    1 root     root          2410 Oct 30 19:46 self-heal.sh.bak-v4-1030\n-rw-r--r--    1 root     root           113 Oct 25  2024 sign_pub.pem\ndrwx------    6 root     root          3488 Nov 17 22:00 state\n-rw-------    1 root     root           588 Oct 30 09:18 tunnel.conf\n-rw-------    1 root     root           586 Oct 30 09:18 tunnel.conf.bak\n-rw-------    1 root     root           259 Oct  1 11:48 tunnel.conf.bak-20261001-114837\n40b79770aab4d127baf6bf91f6d5a3e38709d4e05a53bddf04737e3d85b05a6a  /etc/routermgmt/proxy-meter-v2.sh\nbf9f00d44d82631a5d96459518793fce8cdd8f4d6128cf744b385de9ecf7b289  /etc/routermgmt/ratelimit-ctl\n7deed3e44b811b0f677b85e47b16672ab4a775a25db9cb2da0e6d5d56649a562  /etc/routermgmt/proxy-meter-rules.conf\n{\"schema\":2,\"seq\":135,\"boot_id\":\"b3883a56\",\"continuity_id\":\"cont-b3883a56-cont\",\"prev_continuity_id\":\"cont-b3883a56-cont\",\"sampled_at\":\"2026-11-17 22:00:00+0800\",\"read_fail_eps\":\"\",\"endpoints\":{\"pm_bwg_hy2_up\":85127489,\"pm_bwg_hy2_down\":445043545,\"pm_bwg_vless_up\":1703845,\"pm_bwg_vless_down\":4009030,\"pm_gia_vless_up\":18548,\"pm_gia_vless_down\":46708,\"pm_gia_hy2_up\":7277,\"pm_gia_hy2_down\":13082,\"pm_cf1_up\":11118,\"pm_cf1_down\":21196,\"pm_cf2_up\":11042,\"pm_cf2_down\":21185,\"BULK-GIA-up\":74792,\"BULK-GIA-down\":108432,\"BULK-BWG-up\":0,\"BULK-BWG-down\":0}}\n\n{\"day_key\":\"2026-11-17\",\"total\":0,\"delta_last\":0,\"sampled_at\":\"2026-11-17 22:00:00+0800\"}\n\n19 /etc/routermgmt/proxy-meter-rules.conf\n",
+        "stderr": ""
+      },
+      "iptables": {
+        "rc": 0,
+        "stdout": "-N PROXY_METER_OUT\n-A PROXY_METER_OUT -d 74.82.193.113/32 -p tcp -m tcp --dport 443 -m comment --comment pm_bwg_vless_up\n-A PROXY_METER_OUT -d 74.82.193.113/32 -p udp -m udp --dport 34567 -m comment --comment pm_bwg_hy2_up\n-A PROXY_METER_OUT -d 154.36.139.155/32 -p tcp -m tcp --dport 443 -m comment --comment pm_gia_vless_up\n-A PROXY_METER_OUT -d 154.36.139.155/32 -p udp -m udp --dport 34568 -m comment --comment pm_gia_hy2_up\n-A PROXY_METER_OUT -d 104.18.32.7/32 -p tcp -m tcp --dport 2053 -m comment --comment pm_cf1_up\n-A PROXY_METER_OUT -d 162.159.135.42/32 -p tcp -m tcp --dport 2053 -m comment --comment pm_cf2_up\n-A PROXY_METER_OUT -d 154.36.139.155/32 -p tcp -m tcp --dport 2054 -m comment --comment BULK-GIA-up\n-A PROXY_METER_OUT -d 74.82.193.113/32 -p tcp -m tcp --dport 2054 -m comment --comment BULK-BWG-up\n-A PROXY_METER_OUT -d 154.36.139.155/32 -p udp -m udp --dport 34568 -m comment --comment GIA-HY2-up\n-N PROXY_METER_IN\n-A PROXY_METER_IN -s 74.82.193.113/32 -p tcp -m tcp --sport 443 -m comment --comment pm_bwg_vless_down\n-A PROXY_METER_IN -s 74.82.193.113/32 -p udp -m udp --sport 34567 -m comment --comment pm_bwg_hy2_down\n-A PROXY_METER_IN -s 154.36.139.155/32 -p tcp -m tcp --sport 443 -m comment --comment pm_gia_vless_down\n-A PROXY_METER_IN -s 154.36.139.155/32 -p udp -m udp --sport 34568 -m comment --comment pm_gia_hy2_down\n-A PROXY_METER_IN -s 104.18.32.7/32 -p tcp -m tcp --sport 2053 -m comment --comment pm_cf1_down\n-A PROXY_METER_IN -s 162.159.135.42/32 -p tcp -m tcp --sport 2053 -m comment --comment pm_cf2_down\n-A PROXY_METER_IN -s 154.36.139.155/32 -p tcp -m tcp --sport 2054 -m comment --comment BULK-GIA-down\n-A PROXY_METER_IN -s 74.82.193.113/32 -p tcp -m tcp --sport 2054 -m comment --comment BULK-BWG-down\n-A PROXY_METER_IN -s 154.36.139.155/32 -p udp -m udp --sport 34568 -m comment --comment GIA-HY2-down\n22\nChain PROXY_METER_OUT (1 references)\n    pkts      bytes target     prot opt in     out     source               destination         \n    8449  1704265            tcp  --  *      *       0.0.0.0/0            74.82.193.113        tcp dpt:443 /* pm_bwg_vless_up */\n  278000 85215798            udp  --  *      *       0.0.0.0/0            74.82.193.113        udp dpt:34567 /* pm_bwg_hy2_up */\n      74    18548            tcp  --  *      *       0.0.0.0/0            154.36.139.155       tcp dpt:443 /* pm_gia_vless_up */\n      48     7277            udp  --  *      *       0.0.0.0/0            154.36.139.155       udp dpt:34568 /* pm_gia_hy2_up */\n      50    11118            tcp  --  *      *       0.0.0.0/0            104.18.32.7          tcp dpt:2053 /* pm_cf1_up */\n      51    11042            tcp  --  *      *       0.0.0.0/0            162.159.135.42       tcp dpt:2053 /* pm_cf2_up */\n     721    74972            tcp  --  *      *       0.0.0.0/0            154.36.139.155       tcp dpt:2054 /* BULK-GIA-up */\n       0        0            tcp  --  *      *       0.0.0.0/0            74.82.193.113        tcp dpt:2054 /* BULK-BWG-up */\n       0        0            udp  --  *      *       0.0.0.0/0            154.36.139.155       udp dpt:34568 /* GIA-HY2-up */\n",
+        "stderr": ""
+      },
+      "groups": {
+        "rc": 0,
+        "stdout": "PROXY=AUTO\nUS-MEDIA=NODE-PICK\nNODE-PICK=BWG-HY2-JPTY-01\nAUTO=NODE-PICK\nAIRPORT=AP | 🇯🇵三网优化日本\n",
+        "stderr": ""
+      },
+      "mihomo_files": {
+        "rc": 0,
+        "stdout": "6\nairport-g02.yaml\n",
+        "stderr": ""
+      },
+      "generator_preview": {
+        "rc": 0,
+        "stdout": "generated_at=2026-11-17 22:02:33+0800 registered_rules=6 proxy_nodes=3 unresolved=none\ne41e869ce2a8e2c824714c8a99dbb8ad49fc12fca02223a1ace9ca5e53105775  /tmp/pm3-preview/rules.conf\n52816c14dd9e02aaa185ff58dd200ece3519ca4e60ecfb3922e9b317f806b103  /tmp/pm3-preview/coverage.json\nOK rules=/tmp/pm3-preview/rules.conf cover=/tmp/pm3-preview/coverage.json\n---preview---\nBWG-HY2-JPTY-01|up|74.82.193.113|udp|34567\nBWG-HY2-JPTY-01|down|74.82.193.113|udp|34567\nBULK-LAX-GIA-01|up|154.36.139.155|tcp|2054\nBULK-LAX-GIA-01|down|154.36.139.155|tcp|2054\nBWG-VLESS-JPTY-01|up|74.82.193.113|tcp|443\nBWG-VLESS-JPTY-01|down|74.82.193.113|tcp|443\n{\"generated_at\":\"2026-11-17 22:02:33+0800\",\"registered_rules\":6,\"proxy_nodes\":3,\"unresolved_names\":\"\"}\n6 /tmp/pm3-preview/rules.conf\n",
+        "stderr": ""
+      }
+    }
+  },
+  "scratch_create": {
+    "rc": 0,
+    "stdout": "",
+    "stderr": "NOTICE:  database \"routermgmt_migtest_20261117\" does not exist, skipping\n"
+  },
+  "scratch_migrations": [
+    {
+      "file": "0001_init.sql",
+      "rc": 0,
+      "err": ""
+    },
+    {
+      "file": "0002_grants.sql",
+      "rc": 0,
+      "err": ""
+    },
+    {
+      "file": "0003_device_policy.sql",
+      "rc": 0,
+      "err": ""
+    },
+    {
+      "file": "0004_proxy_access_mode.sql",
+      "rc": 0,
+      "err": ""
+    },
+    {
+      "file": "0005_device_online_term.sql",
+      "rc": 0,
+      "err": ""
+    },
+    {
+      "file": "0006_remote_ssh_health.sql",
+      "rc": 0,
+      "err": ""
+    },
+    {
+      "file": "0007_device_mac.sql",
+      "rc": 0,
+      "err": ""
+    },
+    {
+      "file": "0008_device_traffic_alert.sql",
+      "rc": 0,
+      "err": ""
+    },
+    {
+      "file": "0009_node_purpose.sql",
+      "rc": 0,
+      "err": ""
+    },
+    {
+      "file": "0010_node_purpose_constraints.sql",
+      "rc": 0,
+      "err": ""
+    }
+  ],
+  "scratch_asserts": {
+    "rc": 0,
+    "stdout": "---seed\nINSERT 0 1\nINSERT 0 1\nINSERT 0 1\n---bad_purpose_should_fail\n---video_primary_should_fail\n---ordinary_primary_should_ok\nINSERT 0 1\n",
+    "stderr": "ERROR:  new row for relation \"nodes\" violates check constraint \"chk_node_purpose\"\nDETAIL:  Failing row contains (3, t-bad, 203.0.113.12, 443, vless-reality, , 0, t, unknown, null, null, 2026-11-17 22:02:28.757487+08, bulk).\nERROR:  primary 绑定必须 purpose=ordinary (node_id=2)\nCONTEXT:  PL/pgSQL function routermgmt_assert_primary_ordinary() line 5 at RAISE\n"
+  },
+  "scratch_drop": {
+    "rc": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  "finished": "2026-11-17T22:02:30+08:00"
+}

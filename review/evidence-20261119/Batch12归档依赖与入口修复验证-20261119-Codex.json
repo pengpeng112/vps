@@ -1,0 +1,28 @@
+{
+  "at": "2026-11-19T22:58:13.296767+08:00",
+  "local_import_paths": [
+    {
+      "caller": "repair_cf_edge_and_handlers_20261118.py",
+      "module": "cf_repair_tools_20261118",
+      "exists": true
+    },
+    {
+      "caller": "path_a_cf11_rollout.py",
+      "module": "path_a_gz_api",
+      "exists": true
+    },
+    {
+      "caller": "path_a_cf11_rollout.py",
+      "module": "path_a_cf06_stage1",
+      "exists": true
+    },
+    {
+      "caller": "path_a_cf06_stage1.py",
+      "module": "path_a_gz_api",
+      "exists": true
+    }
+  ],
+  "ai_entries_each_15_lines": true,
+  "manifest_no_longer_ignored": true,
+  "repair_entry_executed": false
+}

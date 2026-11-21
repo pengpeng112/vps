@@ -1,0 +1,172 @@
+{
+  "started": "2026-11-18T05:43:41+08:00",
+  "writes": false,
+  "devices": {
+    "R1": {
+      "reachable": true,
+      "groups": {
+        "AIRPORT": "AP | 🇯🇵三网优化日本",
+        "AUTO": "NODE-PICK",
+        "CN-MEDIA": "DIRECT",
+        "DOWNLOAD": "DIRECT",
+        "NODE-PICK": "BWG-HY2-JPTY-01",
+        "PROXY": "BWG-HY2-JPTY-01",
+        "US-MEDIA": "NODE-PICK"
+      },
+      "node_count": 6,
+      "google_userpath": "204 0.312367s",
+      "nodes": {
+        "BWG-HY2-JPTY-01": "53ms",
+        "BWG-VLESS-JPTY-01": "FAIL",
+        "CF-CDN-GIA-01": "221ms",
+        "CF2-CDN-GIA-01": "354ms",
+        "GIA-HY2-US-01": "159ms",
+        "US666-CN2GIA-01": "FAIL",
+        "AIRPORT(机场)": "FAIL"
+      }
+    },
+    "R2": {
+      "reachable": true,
+      "groups": {
+        "AIRPORT": "AP | 🇯🇵日本NET",
+        "AUTO": "NODE-PICK",
+        "CN-MEDIA": "DIRECT",
+        "DOWNLOAD": "DIRECT",
+        "NODE-PICK": "BWG-HY2-JPTY-01",
+        "PROXY": "AUTO",
+        "US-MEDIA": "NODE-PICK"
+      },
+      "node_count": 6,
+      "google_userpath": "204 0.429693s",
+      "nodes": {
+        "BULK-LAX-GIA-01": "FAIL",
+        "BWG-HY2-JPTY-01": "295ms",
+        "BWG-VLESS-JPTY-01": "FAIL",
+        "CF-CDN-GIA-01": "288ms",
+        "CF2-CDN-GIA-01": "318ms",
+        "DMIT-HY2-US-01": "FAIL",
+        "AIRPORT(机场)": "77ms"
+      }
+    },
+    "R3": {
+      "reachable": true,
+      "groups": {
+        "AIRPORT": "AP | 🇯🇵日本NET",
+        "AUTO": "NODE-PICK",
+        "CN-MEDIA": "DIRECT",
+        "DOWNLOAD": "DIRECT",
+        "NODE-PICK": "BWG-HY2-JPTY-01",
+        "PROXY": "BWG-HY2-JPTY-01",
+        "US-MEDIA": "NODE-PICK"
+      },
+      "node_count": 6,
+      "google_userpath": "204 0.309845s",
+      "nodes": {
+        "BWG-HY2-JPTY-01": "51ms",
+        "BWG-VLESS-JPTY-01": "FAIL",
+        "CF-CDN-GIA-01": "188ms",
+        "CF2-CDN-GIA-01": "352ms",
+        "GIA-HY2-US-01": "149ms",
+        "US666-CN2GIA-01": "FAIL",
+        "AIRPORT(机场)": "58ms"
+      }
+    },
+    "R4": {
+      "reachable": true,
+      "groups": {
+        "AIRPORT": "AP | 🇯🇵日本NET",
+        "AUTO": "AIRPORT",
+        "CN-MEDIA": "DIRECT",
+        "DOWNLOAD": "DIRECT",
+        "NODE-PICK": "GIA-HY2-US-01",
+        "PROXY": "BWG-HY2-JPTY-01",
+        "US-MEDIA": "AIRPORT"
+      },
+      "node_count": 7,
+      "google_userpath": "204 0.327918s",
+      "nodes": {
+        "BWG-HY2-JPTY-01": "52ms",
+        "BWG-VLESS-JPTY-01": "FAIL",
+        "CF-CDN-GIA-01": "210ms",
+        "CF-WORKERS-01": "196ms",
+        "CF2-CDN-GIA-01": "376ms",
+        "GIA-HY2-US-01": "154ms",
+        "US666-CN2GIA-01": "FAIL",
+        "AIRPORT(机场)": "52ms"
+      }
+    },
+    "R5": {
+      "reachable": true,
+      "groups": {
+        "AIRPORT": "AP | 🇯🇵日本NET",
+        "AUTO": "NODE-PICK",
+        "CN-MEDIA": "DIRECT",
+        "DOWNLOAD": "DIRECT",
+        "NODE-PICK": "BWG-HY2-JPTY-01",
+        "PROXY": "BWG-HY2-JPTY-01",
+        "US-MEDIA": "NODE-PICK"
+      },
+      "node_count": 6,
+      "google_userpath": "204 0.317841s",
+      "nodes": {
+        "BWG-HY2-JPTY-01": "57ms",
+        "BWG-VLESS-JPTY-01": "FAIL",
+        "CF-CDN-GIA-01": "214ms",
+        "CF2-CDN-GIA-01": "393ms",
+        "GIA-HY2-US-01": "157ms",
+        "US666-CN2GIA-01": "FAIL",
+        "AIRPORT(机场)": "56ms"
+      }
+    },
+    "R6": {
+      "reachable": true,
+      "groups": {
+        "AIRPORT": "AP | 🇭🇰香港NET",
+        "AUTO": "NODE-PICK",
+        "CN-MEDIA": "DIRECT",
+        "DOWNLOAD": "DIRECT",
+        "NODE-PICK": "BWG-HY2-JPTY-01",
+        "PROXY": "BWG-HY2-JPTY-01",
+        "US-MEDIA": "NODE-PICK"
+      },
+      "node_count": 6,
+      "google_userpath": "204 0.431693s",
+      "nodes": {
+        "BWG-HY2-JPTY-01": "90ms",
+        "BWG-VLESS-JPTY-01": "FAIL",
+        "CF-CDN-GIA-01": "268ms",
+        "CF2-CDN-GIA-01": "330ms",
+        "GIA-HY2-US-01": "162ms",
+        "US666-CN2GIA-01": "FAIL",
+        "AIRPORT(机场)": "FAIL"
+      }
+    },
+    "R8": {
+      "reachable": false
+    },
+    "R9": {
+      "reachable": true,
+      "groups": {
+        "AIRPORT": "AP | 🇯🇵日本NET",
+        "AUTO": "NODE-PICK",
+        "CN-MEDIA": "DIRECT",
+        "DOWNLOAD": "DIRECT",
+        "NODE-PICK": "BWG-HY2-JPTY-01",
+        "PROXY": "BWG-HY2-JPTY-01",
+        "US-MEDIA": "NODE-PICK"
+      },
+      "node_count": 6,
+      "google_userpath": "204 0.611437s",
+      "nodes": {
+        "BWG-HY2-JPTY-01": "115ms",
+        "BWG-VLESS-JPTY-01": "FAIL",
+        "CF-CDN-GIA-01": "258ms",
+        "CF2-CDN-GIA-01": "349ms",
+        "GIA-HY2-US-01": "199ms",
+        "US666-CN2GIA-01": "FAIL",
+        "AIRPORT(机场)": "64ms"
+      }
+    }
+  },
+  "finished": "2026-11-18T05:46:09+08:00"
+}

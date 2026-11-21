@@ -1,0 +1,176 @@
+{
+  "started": "2026-11-18T22:36:59+08:00",
+  "devices": {
+    "R2": {
+      "handler_sha256": "71a5045e43c321c2a9e18599b79fb315e4c24b6ab5db3d86031a129994ebdcce",
+      "agent_only_restart": true,
+      "endpoint_direct_rule_updates": 1,
+      "version": 41,
+      "task_id": "t-4b9e513931e2",
+      "task_status": "ok",
+      "auto_restored_by_handler": true,
+      "config_sha256": "73e830e5085eb7dd2b80bbde5bd25efbb9ea19141d798cb917086ba54c584674",
+      "hk_delay": [
+        353,
+        339
+      ],
+      "business_health": {
+        "rc": 0,
+        "stdout": "g204=204\nbaidu=200",
+        "stderr": ""
+      },
+      "pass": true
+    },
+    "R1": {
+      "handler_sha256": "71a5045e43c321c2a9e18599b79fb315e4c24b6ab5db3d86031a129994ebdcce",
+      "agent_only_restart": true,
+      "endpoint_direct_rule_updates": 1,
+      "version": 30,
+      "task_id": "t-3aa664a8e0cb",
+      "task_status": "ok",
+      "auto_restored_by_handler": true,
+      "config_sha256": "dd7c4e7b92cb59a6fcdfb4ae91d1d2999fb84b36d49d562c790ae7430093f42d",
+      "hk_delay": [
+        225,
+        249
+      ],
+      "business_health": {
+        "rc": 0,
+        "stdout": "g204=204\nbaidu=200",
+        "stderr": ""
+      },
+      "pass": true
+    },
+    "R3": {
+      "handler_sha256": "71a5045e43c321c2a9e18599b79fb315e4c24b6ab5db3d86031a129994ebdcce",
+      "agent_only_restart": true,
+      "endpoint_direct_rule_updates": 1,
+      "version": 32,
+      "task_id": "t-9f571723da3f",
+      "task_status": "ok",
+      "auto_restored_by_handler": true,
+      "config_sha256": "dd7c4e7b92cb59a6fcdfb4ae91d1d2999fb84b36d49d562c790ae7430093f42d",
+      "hk_delay": [
+        266,
+        237
+      ],
+      "business_health": {
+        "rc": 0,
+        "stdout": "g204=204\nbaidu=200",
+        "stderr": ""
+      },
+      "pass": true
+    },
+    "R4": {
+      "handler_sha256": "71a5045e43c321c2a9e18599b79fb315e4c24b6ab5db3d86031a129994ebdcce",
+      "agent_only_restart": true,
+      "endpoint_direct_rule_updates": 1,
+      "version": 31,
+      "task_id": "t-f94077836ca3",
+      "task_status": "ok",
+      "auto_restored_by_handler": true,
+      "config_sha256": "dd7c4e7b92cb59a6fcdfb4ae91d1d2999fb84b36d49d562c790ae7430093f42d",
+      "hk_delay": [
+        270,
+        255
+      ],
+      "business_health": {
+        "rc": 0,
+        "stdout": "g204=204\nbaidu=200",
+        "stderr": ""
+      },
+      "pass": true
+    },
+    "R5": {
+      "handler_sha256": "71a5045e43c321c2a9e18599b79fb315e4c24b6ab5db3d86031a129994ebdcce",
+      "agent_only_restart": true,
+      "endpoint_direct_rule_updates": 1,
+      "version": 22,
+      "task_id": "t-7a2578574e71",
+      "task_status": "ok",
+      "auto_restored_by_handler": true,
+      "config_sha256": "dd7c4e7b92cb59a6fcdfb4ae91d1d2999fb84b36d49d562c790ae7430093f42d",
+      "hk_delay": [
+        202,
+        248
+      ],
+      "business_health": {
+        "rc": 0,
+        "stdout": "g204=204\nbaidu=200",
+        "stderr": ""
+      },
+      "pass": true
+    },
+    "R6": {
+      "handler_sha256": "71a5045e43c321c2a9e18599b79fb315e4c24b6ab5db3d86031a129994ebdcce",
+      "agent_only_restart": true,
+      "endpoint_direct_rule_updates": 1,
+      "version": 24,
+      "task_id": "t-fc18ab2b27be",
+      "task_status": "ok",
+      "auto_restored_by_handler": true,
+      "config_sha256": "dd7c4e7b92cb59a6fcdfb4ae91d1d2999fb84b36d49d562c790ae7430093f42d",
+      "hk_delay": [
+        382,
+        382
+      ],
+      "business_health": {
+        "rc": 0,
+        "stdout": "g204=204\nbaidu=200",
+        "stderr": ""
+      },
+      "pass": true
+    },
+    "R8": {
+      "handler_sha256": "71a5045e43c321c2a9e18599b79fb315e4c24b6ab5db3d86031a129994ebdcce",
+      "agent_only_restart": true,
+      "endpoint_direct_rule_updates": 1,
+      "version": 10,
+      "task_id": "t-c23e6d398a8d",
+      "task_status": "ok",
+      "auto_restored_by_handler": true,
+      "config_sha256": "dd7c4e7b92cb59a6fcdfb4ae91d1d2999fb84b36d49d562c790ae7430093f42d",
+      "hk_delay": [
+        273,
+        261
+      ],
+      "business_health": {
+        "rc": 0,
+        "stdout": "g204=204\nbaidu=200",
+        "stderr": ""
+      },
+      "pass": true
+    },
+    "R9": {
+      "handler_sha256": "71a5045e43c321c2a9e18599b79fb315e4c24b6ab5db3d86031a129994ebdcce",
+      "agent_only_restart": true,
+      "endpoint_direct_rule_updates": 1,
+      "version": 7,
+      "task_id": "t-2b6db80713ab",
+      "task_status": "ok",
+      "auto_restored_by_handler": true,
+      "config_sha256": "1eb54b96092fd96f449d4360a7c805418d468275b8c6ec897f2bffd83a101ebb",
+      "hk_delay": [
+        369,
+        359
+      ],
+      "business_health": {
+        "rc": 0,
+        "stdout": "g204=204\nbaidu=200",
+        "stderr": ""
+      },
+      "pass": true
+    }
+  },
+  "firmware_changed": false,
+  "qos_enabled": false,
+  "node_patch": {
+    "id": 16,
+    "old_host": "104.18.32.7",
+    "new_host": "162.159.135.42",
+    "sni": "hk.6849271.xyz",
+    "primary_unchanged": true
+  },
+  "success": true,
+  "finished": "2026-11-18T22:41:35+08:00"
+}

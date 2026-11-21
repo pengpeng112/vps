@@ -1,0 +1,2 @@
+{"ts":"2026-11-17 22:15:40+0800","request_id":"g11-a","fingerprint":"f55fa97346d95b23","action":"apply","outcome":"rejected_lab","detail":{"reason":"lab_root_conflict"}}
+{"ts":"2026-11-17 22:15:41+0800","request_id":"g11-r","fingerprint":"2847cb2d45a0eaf5","action":"release","outcome":"ok","detail":{"scope":"video","mode":"manual","generation":1}}

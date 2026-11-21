@@ -1,0 +1,182 @@
+{
+  "at": "2026-11-19T21:38:56.594335+08:00",
+  "isolated_workspace": "logs\\batch12-review-n5e89jtw",
+  "go_regression_returncode": 1,
+  "go_regression_output": "=== RUN   TestReviewEmergencySurvivesReload\n    review_regression_test.go:12: release -> reload: emergency=false, disk_emergency=true response=map[ok:true rates:map[foreign_download:60000 video:60000] reloaded:true]\n--- FAIL: TestReviewEmergencySurvivesReload (0.03s)\n=== RUN   TestReviewEmergencySurvivesSetRate\n    review_regression_test.go:16: release -> set-rate silently reinstates cap without clear-emergency\n--- FAIL: TestReviewEmergencySurvivesSetRate (0.01s)\n=== RUN   TestReviewGenerationSurvivesRestart\n2026/11/19 21:38:42 state: emergency persisted since  gen=77, buckets stay unlimited\n    review_regression_test.go:21: persisted generation rolled back from 77 to 2\n--- FAIL: TestReviewGenerationSurvivesRestart (0.01s)\n=== RUN   TestReviewHalfCloseStillReceivesResponse\n    review_regression_test.go:34: half-close discarded response: got \"\"\n--- FAIL: TestReviewHalfCloseStillReceivesResponse (0.00s)\n=== RUN   TestReviewReleaseTestActuallyWaits\n    review_regression_test.go:39: existing release-test Take already finished before release; 20ms is token wait, not release latency\n--- FAIL: TestReviewReleaseTestActuallyWaits (0.20s)\n=== RUN   TestReviewCorruptStateCannotReinstateCap\n    review_regression_test.go:45: corrupt persistent state silently defaults emergency=false and enables cap\n--- FAIL: TestReviewCorruptStateCannotReinstateCap (0.01s)\nFAIL\nFAIL\tqosgate\t0.638s\nFAIL\n",
+  "meter_cases": {
+    "cross_2357_to_0002": {
+      "rc": 0,
+      "stdout": [
+        "OK DELTA=349700 HEALTH=ok EVENTS=rollover_clean DAY_TOTAL=349700"
+      ],
+      "stderr_head": "",
+      "state": {
+        "schema": 3,
+        "counter_key_format": "direction-v1",
+        "meter_id": "rtr-test",
+        "seq": 11,
+        "boot_id": "BOOT-A",
+        "rules_sha": "13f80f8755e6d0cb",
+        "continuity_id": "cont-A",
+        "prev_continuity": "cont-A",
+        "prev_epoch": 1795104120,
+        "day_key": "2026-11-20",
+        "day_total": 349700,
+        "day_first_at": "2026-11-20 00:02:00+0800",
+        "health": "ok",
+        "partial": false,
+        "quota_eligible": true,
+        "read_fail_eps": "-",
+        "endpoints": {
+          "EP1_down": 200000,
+          "EP1_up": 150000
+        }
+      },
+      "daily": {
+        "day_key": "2026-11-20",
+        "total": 349700,
+        "delta_last": 349700,
+        "sampled_at": "2026-11-20 00:02:00+0800",
+        "meter_id": "rtr-test",
+        "seq": 11,
+        "health": "ok",
+        "partial": false,
+        "quota_eligible": true,
+        "events": "rollover_clean",
+        "read_fail_eps": "-"
+      }
+    },
+    "new_endpoint_unknown_previous_bytes": {
+      "rc": 0,
+      "stdout": [
+        "OK DELTA=149900 HEALTH=ok EVENTS=new_ep DAY_TOTAL=150900"
+      ],
+      "stderr_head": "",
+      "state": {
+        "schema": 3,
+        "counter_key_format": "direction-v1",
+        "meter_id": "rtr-test",
+        "seq": 11,
+        "boot_id": "BOOT-A",
+        "rules_sha": "13f80f8755e6d0cb",
+        "continuity_id": "cont-A",
+        "prev_continuity": "cont-A",
+        "prev_epoch": 1795104600,
+        "day_key": "2026-11-20",
+        "day_total": 150900,
+        "day_first_at": "2026-11-20 00:00:00+0800",
+        "health": "ok",
+        "partial": false,
+        "quota_eligible": true,
+        "read_fail_eps": "-",
+        "endpoints": {
+          "EP1_down": 200000,
+          "EP1_up": 150000
+        }
+      },
+      "daily": {
+        "day_key": "2026-11-20",
+        "total": 150900,
+        "delta_last": 149900,
+        "sampled_at": "2026-11-20 00:10:00+0800",
+        "meter_id": "rtr-test",
+        "seq": 11,
+        "health": "ok",
+        "partial": false,
+        "quota_eligible": true,
+        "events": "",
+        "read_fail_eps": "-"
+      }
+    },
+    "inconsistent_day_key": {
+      "rc": 0,
+      "stdout": [
+        "OK DELTA=349700 HEALTH=ok EVENTS=rollover_clean DAY_TOTAL=349700"
+      ],
+      "stderr_head": "",
+      "state": {
+        "schema": 3,
+        "counter_key_format": "direction-v1",
+        "meter_id": "rtr-test",
+        "seq": 11,
+        "boot_id": "BOOT-A",
+        "rules_sha": "13f80f8755e6d0cb",
+        "continuity_id": "cont-A",
+        "prev_continuity": "cont-A",
+        "prev_epoch": 1795104600,
+        "day_key": "2026-11-20",
+        "day_total": 349700,
+        "day_first_at": "2026-11-20 00:10:00+0800",
+        "health": "ok",
+        "partial": false,
+        "quota_eligible": true,
+        "read_fail_eps": "-",
+        "endpoints": {
+          "EP1_down": 200000,
+          "EP1_up": 150000
+        }
+      },
+      "daily": {
+        "day_key": "2026-11-20",
+        "total": 349700,
+        "delta_last": 349700,
+        "sampled_at": "2026-11-20 00:10:00+0800",
+        "meter_id": "rtr-test",
+        "seq": 11,
+        "health": "ok",
+        "partial": false,
+        "quota_eligible": true,
+        "events": "rollover_clean",
+        "read_fail_eps": "-"
+      }
+    },
+    "corrupt_coverage_json_with_working_api": {
+      "rc": 3,
+      "stdout": [
+        "OK DELTA=349700 HEALTH=degraded EVENTS=cover_api_unreachable DAY_TOTAL=350700"
+      ],
+      "stderr_head": "",
+      "state": {
+        "schema": 3,
+        "counter_key_format": "direction-v1",
+        "meter_id": "rtr-test",
+        "seq": 11,
+        "boot_id": "BOOT-A",
+        "rules_sha": "13f80f8755e6d0cb",
+        "continuity_id": "cont-A",
+        "prev_continuity": "cont-A",
+        "prev_epoch": 1795104600,
+        "day_key": "2026-11-20",
+        "day_total": 350700,
+        "day_first_at": "2026-11-20 00:00:00+0800",
+        "health": "degraded",
+        "partial": true,
+        "quota_eligible": false,
+        "read_fail_eps": "-",
+        "endpoints": {
+          "EP1_down": 200000,
+          "EP1_up": 150000
+        }
+      },
+      "daily": {
+        "day_key": "2026-11-20",
+        "total": 350700,
+        "delta_last": 349700,
+        "sampled_at": "2026-11-20 00:10:00+0800",
+        "meter_id": "rtr-test",
+        "seq": 11,
+        "health": "degraded",
+        "partial": true,
+        "quota_eligible": false,
+        "events": "",
+        "read_fail_eps": "-"
+      }
+    }
+  },
+  "production_touched": false,
+  "meter_required_assertions": {
+    "cross_2357_to_0002": false,
+    "new_endpoint_unknown_previous_bytes": false,
+    "inconsistent_day_key": false
+  }
+}
